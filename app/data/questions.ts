@@ -2970,6 +2970,36 @@ export const questions: Question[] = [
     category: "PACKAGES"
   },
   {
+    id: "pkg16",
+    question: "Show enabled APT repositories",
+    answer: "grep -R '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/*.list",
+    explanation: "APT repositories are configured in /etc/apt/sources.list and the .list files under /etc/apt/sources.list.d.",
+    usage: "View which repositories your system uses to download packages.",
+    examples: [
+      "grep -R '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/*.list  # Show enabled repos",
+      "cat /etc/apt/sources.list  # View main repository list",
+      "ls /etc/apt/sources.list.d/  # View additional source files"
+    ],
+    memoryTip: "Repositories live in /etc/apt. Think of them as the stores your package manager shops from.",
+    outputExample: "$ grep -R '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/*.list\n/etc/apt/sources.list:deb http://archive.ubuntu.com/ubuntu focal main restricted\n/etc/apt/sources.list.d/google-chrome.list:deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg17",
+    question: "Read a command manual page",
+    answer: "man command",
+    explanation: "The man command shows the manual page for a command and its available options.",
+    usage: "Use built-in documentation to learn Linux commands and syntax.",
+    examples: [
+      "man ls  # View ls manual page",
+      "man grep  # Read grep documentation",
+      "man bash  # Read the bash shell manual"
+    ],
+    memoryTip: "man = manual. Like opening a command's helpbook when you are learning Linux.",
+    outputExample: "$ man ls\nLS(1) User Commands\nName: ls - list directory contents\nSynopsis: ls [OPTION]... [FILE]...",
+    category: "PACKAGES"
+  },
+  {
     id: "pkg14",
     question: "Check for broken dependencies",
     answer: "apt-get check",
@@ -3641,7 +3671,7 @@ export const categories = [
   { id: "PIPES & REDIRECT", name: "Pipes & Redirect", count: 20 },
   { id: "PROCESSES", name: "Processes", count: 20 },
   { id: "NETWORKING", name: "Networking", count: 20 },
-  { id: "PACKAGES", name: "Packages", count: 15 },
+  { id: "PACKAGES", name: "Packages", count: 17 },
   { id: "TEXT PROCESSING", name: "Text Processing", count: 20 },
   { id: "SYSTEM INFO", name: "System Info", count: 20 },
   { id: "BASH SCRIPTING", name: "Bash Scripting", count: 20 },
