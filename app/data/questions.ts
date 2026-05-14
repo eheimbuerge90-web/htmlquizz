@@ -3660,6 +3660,231 @@ export const questions: Question[] = [
     memoryTip: "ss -tlnp = Modern socket 'ss' statistics (replaces netstat)",
     outputExample: "$ ss -tlnp\nListen Local Address:Port     Process\nTCP   0.0.0.0:80        nginx",
     category: "DAILY TIPS"
+  },
+  {
+    id: "daily26",
+    question: "Run two commands sequentially regardless of success",
+    answer: "command1 ; command2",
+    explanation: "The semicolon ';' separates commands so each runs in sequence, even if the previous one fails.",
+    usage: "Use when you want multiple commands to run one after another without conditional logic.",
+    examples: [
+      "echo first ; echo second  # Run both commands",
+      "cd /tmp ; ls  # Change directory then list files",
+      "mkdir test ; cd test  # Create directory, then enter it"
+    ],
+    memoryTip: "';' = do this, then do that, no matter what.",
+    outputExample: "$ echo first ; echo second\nfirst\nsecond",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily27",
+    question: "Run the second command only if the first succeeds",
+    answer: "command1 && command2",
+    explanation: "The '&&' operator runs the second command only when the first command exits successfully (status 0).",
+    usage: "Use for chains where later commands should run only if earlier ones succeed.",
+    examples: [
+      "mkdir project && cd project  # Only cd if mkdir succeeds",
+      "git pull && npm install  # Install deps only after update succeeds",
+      "test -f file && echo exists  # Echo only if file exists"
+    ],
+    memoryTip: "'&&' = and then, only if the first one works.",
+    outputExample: "$ mkdir project && cd project\n$ pwd\n/home/user/project",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily28",
+    question: "Run the second command only if the first fails",
+    answer: "command1 || command2",
+    explanation: "The '||' operator runs the second command only when the first command exits with an error (non-zero status).",
+    usage: "Use for fallback or recovery commands when the first command fails.",
+    examples: [
+      "cat missing.txt || echo 'File missing'  # Fallback message if cat fails",
+      "grep foo file || echo 'No match'  # Handle no results",
+      "cd /doesnotexist || mkdir /doesnotexist  # Create only if change dir fails"
+    ],
+    memoryTip: "'||' = or else, do this if the first fails.",
+    outputExample: "$ cat missing.txt || echo 'File missing'\ncat: missing.txt: No such file or directory\nFile missing",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily29",
+    question: "Pipe output from one command into another",
+    answer: "command1 | command2",
+    explanation: "The pipe '|' sends the stdout of the first command as stdin to the second command.",
+    usage: "Use when you want to filter or process output from one command with another.",
+    examples: [
+      "ps aux | grep ssh  # Find ssh processes",
+      "cat file.txt | sort | uniq  # Sort and deduplicate lines",
+      "ls -la | less  # View directory listing page-by-page"
+    ],
+    memoryTip: "'|' = pipe output from one tool into the next.",
+    outputExample: "$ echo -e 'c\nb\na' | sort\na\nb\nc",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily30",
+    question: "Send a command to run in the background",
+    answer: "command &",
+    explanation: "Appending '&' runs a command in the background so the shell prompt returns immediately.",
+    usage: "Use for long-running tasks you want to continue while doing other work.",
+    examples: [
+      "sleep 60 &  # Run sleep in background",
+      "./server &  # Start server in background",
+      "tail -f logfile &  # Follow log without blocking shell"
+    ],
+    memoryTip: "'&' = run it in the background and keep working.",
+    outputExample: "$ sleep 60 &\n[1] 12345",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily31",
+    question: "Redirect standard output to a file",
+    answer: "command > file.txt",
+    explanation: "The '>' operator sends a command's stdout to a file, replacing its contents.",
+    usage: "Capture command output into a file instead of printing it on screen.",
+    examples: [
+      "ls > files.txt  # Save listing to file",
+      "echo hello > greeting.txt  # Write text to file",
+      "date > today.txt  # Save current date"
+    ],
+    memoryTip: "'>' = overwrite the file with command output.",
+    outputExample: "$ echo hello > greeting.txt\n$ cat greeting.txt\nhello",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily32",
+    question: "Append standard output to a file",
+    answer: "command >> file.txt",
+    explanation: "The '>>' operator appends stdout to the end of a file instead of replacing it.",
+    usage: "Add new output to a file without losing existing content.",
+    examples: [
+      "echo more >> notes.txt  # Append text",
+      "date >> history.log  # Add timestamp without erasing old ones",
+      "printf 'next\n' >> list.txt  # Append a line"
+    ],
+    memoryTip: "'>>' = add output to the end of the file.",
+    outputExample: "$ echo first > log.txt\n echo second >> log.txt\n$ cat log.txt\nfirst\nsecond",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily33",
+    question: "Redirect standard error to a file",
+    answer: "command 2> error.log",
+    explanation: "The '2>' operator sends stderr (error messages) to a file, keeping stdout separate.",
+    usage: "Capture errors in a separate file for troubleshooting.",
+    examples: [
+      "ls missing 2> errors.txt  # Save error output",
+      "grep foo file 2> grep-errors.log  # Log grep errors",
+      "command 2> /dev/null  # Discard error output"
+    ],
+    memoryTip: "'2>' = send error output (stderr) to a file.",
+    outputExample: "$ ls missing 2> errors.txt\n$ cat errors.txt\nls: cannot access 'missing': No such file or directory",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily34",
+    question: "Redirect both standard output and error to the same file",
+    answer: "command &> output.log",
+    explanation: "The '&>' operator sends both stdout and stderr to the same file in bash.",
+    usage: "Capture all command output in one place for debugging or logging.",
+    examples: [
+      "make &> build.log  # Save all build output",
+      "./script.sh &> script.log  # Capture success and errors",
+      "command &> /dev/null  # Discard all output"
+    ],
+    memoryTip: "'&>' = everything goes into the same file.",
+    outputExample: "$ ls missing &> output.log\n$ cat output.log\nls: cannot access 'missing': No such file or directory",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily35",
+    question: "Read the manual page for a command",
+    answer: "man command",
+    explanation: "The 'man' command opens the manual page for a command, showing usage, options, and examples.",
+    usage: "Use 'man' whenever you need documentation for a command or its options.",
+    examples: [
+      "man ls  # Read the ls manual",
+      "man grep  # Read grep documentation",
+      "man bash  # Read shell manual"
+    ],
+    memoryTip: "man = manual page. It's the first place to look for command help.",
+    outputExample: "$ man ls\nLS(1) User Commands\nName: ls - list directory contents\nSynopsis: ls [OPTION]... [FILE]...",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily36",
+    question: "Find the path to a command executable",
+    answer: "which command",
+    explanation: "The 'which' command shows the path to the executable that will run when you type a command.",
+    usage: "Use it to verify which binary is used in your current PATH.",
+    examples: [
+      "which python  # Show python location",
+      "which ls  # Show ls executable location",
+      "which git  # Show git path"
+    ],
+    memoryTip: "which = which command will run. It points to the actual executable.",
+    outputExample: "$ which ls\n/bin/ls",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily37",
+    question: "Search your command history for a previous command",
+    answer: "history | grep keyword",
+    explanation: "This command searches your shell history for commands containing the keyword.",
+    usage: "Use it to find and reuse previously entered commands quickly.",
+    examples: [
+      "history | grep ssh  # Find ssh-related commands",
+      "history | grep npm  # Find npm commands",
+      "history | grep apt  # Find package commands"
+    ],
+    memoryTip: "history | grep = search your past commands like a logbook.",
+    outputExample: "$ history | grep git\n  102  git status\n  113  git pull",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily38",
+    question: "Run the last command again with sudo",
+    answer: "sudo !!",
+    explanation: "The 'sudo !!' shortcut reruns the previous command with sudo, useful when you forgot permissions.",
+    usage: "Use it to quickly retry a command that failed due to lack of privileges.",
+    examples: [
+      "apt update  # Run command and see permission error",
+      "sudo !!  # Retry the last command with sudo",
+      "mkdir /usr/local/bin  # Need sudo if permission denied"
+    ],
+    memoryTip: "sudo !! = run the last command again as root.",
+    outputExample: "$ apt update\nE: Could not open lock file\n$ sudo !!\n[sudo] password for user:\nHit:1 ...",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily39",
+    question: "Reload shell configuration without restarting the terminal",
+    answer: "source ~/.bashrc",
+    explanation: "The 'source' command reloads shell configuration files so new aliases and environment variables take effect immediately.",
+    usage: "Use it after editing ~/.bashrc or other shell setup files.",
+    examples: [
+      "source ~/.bashrc  # Reload bash settings",
+      ". ~/.bashrc  # Equivalent reload command",
+      "source ~/.profile  # Reload profile settings"
+    ],
+    memoryTip: "source = read and apply this file now.",
+    outputExample: "$ source ~/.bashrc\n$ alias ll\nll='ls -la'",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily40",
+    question: "Create a quick alias for a common command",
+    answer: "alias ll='ls -la'",
+    explanation: "Aliases let you create shortcuts for longer commands so you can type them faster.",
+    usage: "Use aliases for commands you run often, like listing directory contents.",
+    examples: [
+      "alias ll='ls -la'  # Set alias for detailed listing",
+      "alias gs='git status'  # Create git status shortcut",
+      "alias c='clear'  # Clear terminal screen quickly"
+    ],
+    memoryTip: "alias = make a shorthand for long commands.",
+    outputExample: "$ alias ll='ls -la'\n$ ll\ndrwxr-xr-x  2 user group 4096 May 14 10:00 .",
+    category: "DAILY TIPS"
   }
 ];
 
@@ -3676,5 +3901,5 @@ export const categories = [
   { id: "SYSTEM INFO", name: "System Info", count: 20 },
   { id: "BASH SCRIPTING", name: "Bash Scripting", count: 20 },
   { id: "ARCHIVES & COMPRESS", name: "Archives & Compress", count: 15 },
-  { id: "DAILY TIPS", name: "Daily Linux Tips", count: 25 }
+  { id: "DAILY TIPS", name: "Daily Linux Tips", count: 40 }
 ];
