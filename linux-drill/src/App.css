@@ -1,0 +1,62 @@
+
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #060d06 60%, #1a1f1a 100%);
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(12px + 2vmin);
+  color: #00ff41;
+  border: 2px solid #00ff41;
+  background: linear-gradient(135deg, #060d06 60%, #1a1f1a 100%);
+  box-shadow: 0 0 24px #00ff4144;
+  border-radius: 18px;
+  margin: 2rem auto;
+  padding: 2rem;
+  max-width: 600px;
+}
+
+.App-link {
+  color: #00ff41;
+  background: #131f13;
+  border: 1px solid #00ff41;
+  border-radius: 8px;
+  padding: 0.7em 1.5em;
+  font-weight: bold;
+  text-decoration: none;
+  margin: 0.5em;
+  display: inline-block;
+  box-shadow: 0 0 8px #00ff4144;
+  transition: background 0.2s, color 0.2s;
+}
+.App-link:hover {
+  background: #00ff41;
+  color: #060d06;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
