@@ -3885,21 +3885,2495 @@ export const questions: Question[] = [
     memoryTip: "alias = make a shorthand for long commands.",
     outputExample: "$ alias ll='ls -la'\n$ ll\ndrwxr-xr-x  2 user group 4096 May 14 10:00 .",
     category: "DAILY TIPS"
+  },
+
+  // NAVIGATION — extended
+  {
+    id: "nav21",
+    question: "Push the current directory onto the stack and switch to /tmp",
+    answer: "pushd /tmp",
+    explanation: "pushd remembers where you are by pushing the current directory onto a stack, then switches to the target. Pair it with popd to return.",
+    usage: "When you need to briefly jump elsewhere and come back without retyping the original path.",
+    examples: [
+      "pushd /tmp  # Jump to /tmp, remembering where you were",
+      "pushd +1  # Rotate to the second entry in the stack",
+      "pushd  # No args: swap top two entries"
+    ],
+    memoryTip: "pushd = push directory (onto a bookmark stack).",
+    outputExample: "$ pushd /tmp\n/tmp ~/projects",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav22",
+    question: "Return to the previous directory saved on the stack",
+    answer: "popd",
+    explanation: "popd pops the top entry off the directory stack and cd's into it. It's the counterpart to pushd.",
+    usage: "Unwind a pushd jump and get back to where you started.",
+    examples: [
+      "popd  # Go back to the previous pushd location",
+      "popd +1  # Remove the second stack entry without changing dir",
+      "dirs -c  # Clear the whole stack"
+    ],
+    memoryTip: "popd = pop directory off the stack and land on it.",
+    outputExample: "$ popd\n~/projects",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav23",
+    question: "Show the directory stack with numbered entries",
+    answer: "dirs -v",
+    explanation: "dirs prints the directory stack; -v shows one entry per line with stack indices so you can pushd/popd by number.",
+    usage: "Inspect what pushd has remembered before jumping around.",
+    examples: [
+      "dirs -v  # Verbose listing",
+      "dirs -c  # Clear the stack",
+      "pushd +2  # Rotate using an index from dirs -v"
+    ],
+    memoryTip: "dirs -v = view the stack of dirs.",
+    outputExample: "$ dirs -v\n 0  ~/projects\n 1  /tmp\n 2  /var/log",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav24",
+    question: "Change into another user's home directory",
+    answer: "cd ~user",
+    explanation: "The tilde with a username expands to that user's home directory, e.g. ~root → /root, ~alice → /home/alice.",
+    usage: "Quickly jump to someone else's home without typing the full path.",
+    examples: [
+      "cd ~alice  # Go to alice's home",
+      "cd ~root  # Go to root's home (/root)",
+      "echo ~alice  # Print the path without cd-ing"
+    ],
+    memoryTip: "~ = home, ~user = that user's home.",
+    outputExample: "$ cd ~alice\n$ pwd\n/home/alice",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav25",
+    question: "Print the absolute, canonical path of a file",
+    answer: "realpath filename",
+    explanation: "realpath resolves all symlinks and relative segments and prints the final, absolute path.",
+    usage: "Use in scripts when you need a stable reference to a file regardless of where the script was launched.",
+    examples: [
+      "realpath ./config.yml  # Absolute path",
+      "realpath --relative-to=/etc /etc/nginx/nginx.conf  # nginx/nginx.conf",
+      "realpath -e missing  # Error if path doesn't exist"
+    ],
+    memoryTip: "realpath = the real, fully resolved path.",
+    outputExample: "$ realpath ./config.yml\n/home/user/project/config.yml",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav26",
+    question: "Follow a symlink to its final target",
+    answer: "readlink -f symlink",
+    explanation: "readlink -f recursively resolves symlinks until it reaches a real file, then prints that path.",
+    usage: "Find out where a /usr/bin/foo or /etc/alternatives entry actually points.",
+    examples: [
+      "readlink -f /usr/bin/vi  # Final resolved binary",
+      "readlink /usr/bin/vi  # Only one hop",
+      "readlink -e /usr/bin/vi  # Error if any link is broken"
+    ],
+    memoryTip: "readlink -f = follow the link, fully.",
+    outputExample: "$ readlink -f /usr/bin/vi\n/usr/bin/vim.basic",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav27",
+    question: "List only subdirectories of the current directory",
+    answer: "ls -d */",
+    explanation: "The trailing /*/ glob matches only directories, and -d tells ls to show the directory entries themselves instead of their contents.",
+    usage: "Get a clean listing of folders without files cluttering it.",
+    examples: [
+      "ls -d */  # Visible directories",
+      "ls -d .*/ */  # Include hidden directories",
+      "ls -ld */  # Long format, directories only"
+    ],
+    memoryTip: "-d = don't descend; */ = pattern matches dirs only.",
+    outputExample: "$ ls -d */\napp/  docs/  node_modules/  src/",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav28",
+    question: "List entries one per line for scripting",
+    answer: "ls -1",
+    explanation: "ls -1 prints one entry per line, which is the easy form to pipe into other commands.",
+    usage: "When feeding filenames to a loop or another program and you need a clean newline-separated list.",
+    examples: [
+      "ls -1  # One per line",
+      "ls -1 *.log | wc -l  # Count logs",
+      "ls -1 | grep '^test_'  # Filter results"
+    ],
+    memoryTip: "-1 (one) = one per line.",
+    outputExample: "$ ls -1\nREADME.md\napp\npackage.json",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav29",
+    question: "Show only directories two levels deep",
+    answer: "find . -maxdepth 2 -type d",
+    explanation: "find walks the tree; -maxdepth 2 stops two levels down and -type d restricts results to directories.",
+    usage: "Get a quick overview of project layout without descending into deeply nested folders like node_modules.",
+    examples: [
+      "find . -maxdepth 2 -type d  # Shallow dir tree",
+      "find . -maxdepth 1 -type d -not -path .  # Just direct children",
+      "find . -maxdepth 3 -name node_modules -prune -o -type d -print  # Skip node_modules"
+    ],
+    memoryTip: "maxdepth caps how deep find walks; -type d = directories only.",
+    outputExample: "$ find . -maxdepth 2 -type d\n.\n./src\n./src/lib\n./docs",
+    category: "NAVIGATION"
+  },
+  {
+    id: "nav30",
+    question: "Run a command in a different directory without permanently changing yours",
+    answer: "(cd /tmp && command)",
+    explanation: "Parentheses run the commands inside a subshell, so the cd only affects that subshell — your interactive shell stays where it was.",
+    usage: "Run a one-off command somewhere else without remembering to cd back, especially handy in scripts.",
+    examples: [
+      "(cd /tmp && ls)  # ls /tmp but stay where you are",
+      "(cd build && make)  # Build without polluting CWD",
+      "(cd $(mktemp -d) && wget url)  # Download in a throwaway dir"
+    ],
+    memoryTip: "Parens = subshell sandbox; the cd dies with it.",
+    outputExample: "$ (cd /tmp && pwd) ; pwd\n/tmp\n/home/user",
+    category: "NAVIGATION"
+  },
+
+  // FILE OPS — extended
+  {
+    id: "file26",
+    question: "Install a script into /usr/local/bin with executable permissions",
+    answer: "install -m 755 script.sh /usr/local/bin/",
+    explanation: "install copies files and sets permissions, ownership, and timestamps in one step. -m sets the mode directly.",
+    usage: "Use in Makefiles and install scripts when you want the right permissions in one atomic step.",
+    examples: [
+      "install -m 755 script.sh /usr/local/bin/",
+      "install -d -m 750 /opt/myapp  # Create dir with perms",
+      "install -o root -g root -m 644 conf /etc/conf"
+    ],
+    memoryTip: "install = cp + chmod + chown in one shot.",
+    outputExample: "$ sudo install -m 755 script.sh /usr/local/bin/\n$ ls -l /usr/local/bin/script.sh\n-rwxr-xr-x 1 root root 421 May 14 script.sh",
+    category: "FILE OPS"
+  },
+  {
+    id: "file27",
+    question: "Empty a file without deleting it",
+    answer: "truncate -s 0 filename",
+    explanation: "truncate -s 0 sets the file size to zero bytes, preserving the inode, permissions, and ownership.",
+    usage: "Clear a log that an open process is still writing to without breaking its file handle.",
+    examples: [
+      "truncate -s 0 app.log  # Empty the log",
+      ": > app.log  # Same idea with shell redirection",
+      "truncate -s 1G blob  # Grow/shrink to exact size"
+    ],
+    memoryTip: "truncate -s 0 = chop the file down to 0 bytes.",
+    outputExample: "$ truncate -s 0 app.log\n$ wc -c app.log\n0 app.log",
+    category: "FILE OPS"
+  },
+  {
+    id: "file28",
+    question: "Create a 10 MiB file of zeros for testing",
+    answer: "dd if=/dev/zero of=test.bin bs=1M count=10",
+    explanation: "dd copies bs-sized blocks from input to output. /dev/zero supplies endless null bytes; here we write 10 blocks of 1 MiB each.",
+    usage: "Generate test files, scratch disks, swap files, or measure I/O speed.",
+    examples: [
+      "dd if=/dev/zero of=test.bin bs=1M count=10",
+      "dd if=/dev/urandom of=random.bin bs=1M count=5  # Random data",
+      "dd if=image.iso of=/dev/sdX bs=4M status=progress  # Write ISO to USB"
+    ],
+    memoryTip: "dd = 'data duplicator' (or, jokingly, 'disk destroyer' — double-check of=).",
+    outputExample: "$ dd if=/dev/zero of=test.bin bs=1M count=10\n10+0 records in\n10+0 records out\n10485760 bytes (10 MB) copied, 0.012 s, 874 MB/s",
+    category: "FILE OPS"
+  },
+  {
+    id: "file29",
+    question: "Create nested directories app/{logs,data}/2026 in one go",
+    answer: "mkdir -p app/{logs,data}/2026",
+    explanation: "-p makes parents as needed and the brace expansion app/{logs,data}/2026 expands to two paths before mkdir runs.",
+    usage: "Scaffold a directory layout in one command.",
+    examples: [
+      "mkdir -p app/{logs,data}/2026",
+      "mkdir -p {dev,staging,prod}/{config,secrets}",
+      "mkdir -p project/src/{lib,tests}"
+    ],
+    memoryTip: "Brace expansion = combinations; -p = make parents.",
+    outputExample: "$ mkdir -p app/{logs,data}/2026\n$ tree app\napp\n├── data\n│   └── 2026\n└── logs\n    └── 2026",
+    category: "FILE OPS"
+  },
+  {
+    id: "file30",
+    question: "Make a quick backup copy of config.yml as config.yml.bak",
+    answer: "cp config.yml{,.bak}",
+    explanation: "Brace expansion expands config.yml{,.bak} into two arguments — the original and original+.bak — which cp then uses as src and dst.",
+    usage: "Snapshot a config before editing.",
+    examples: [
+      "cp config.yml{,.bak}  # Quick backup",
+      "mv file{,.old}  # Same trick to rename",
+      "cp -a /etc/nginx{,.bak}  # Recursive copy with attrs"
+    ],
+    memoryTip: "{,.bak} = expand to '' and '.bak' — instant backup.",
+    outputExample: "$ cp config.yml{,.bak}\n$ ls\nconfig.yml  config.yml.bak",
+    category: "FILE OPS"
+  },
+  {
+    id: "file31",
+    question: "Find and delete all .tmp files under the current directory",
+    answer: "find . -name '*.tmp' -delete",
+    explanation: "find walks the tree, matches *.tmp, and -delete removes each match without spawning rm.",
+    usage: "Clean up scratch files before committing.",
+    examples: [
+      "find . -name '*.tmp' -delete",
+      "find /var/cache -mtime +30 -delete  # Old cache files",
+      "find . -type d -empty -delete  # Drop empty dirs"
+    ],
+    memoryTip: "find ... -delete = filter then remove, no rm pipe needed.",
+    outputExample: "$ find . -name '*.tmp' -delete\n$ find . -name '*.tmp'\n(none)",
+    category: "FILE OPS"
+  },
+  {
+    id: "file32",
+    question: "Show detailed metadata (size, blocks, inode, timestamps) for a file",
+    answer: "stat filename",
+    explanation: "stat prints inode-level info: device, inode, links, mode, owner, size, allocated blocks, and atime/mtime/ctime.",
+    usage: "Debug permission issues, see when a file was last modified, or check hard-link counts.",
+    examples: [
+      "stat config.yml  # Full metadata",
+      "stat -c '%n %s %y' *.log  # Custom format",
+      "stat -c '%a' file  # Octal permissions only"
+    ],
+    memoryTip: "stat = file statistics from the inode.",
+    outputExample: "$ stat config.yml\n  File: config.yml\n  Size: 421       Blocks: 8\nAccess: (0644/-rw-r--r--)",
+    category: "FILE OPS"
+  },
+  {
+    id: "file33",
+    question: "Force-replace an existing symlink to point somewhere new",
+    answer: "ln -sf newtarget linkname",
+    explanation: "-s makes it symbolic and -f removes any existing destination first, so the link is recreated to the new target.",
+    usage: "Atomically retarget a 'current' symlink during a deploy.",
+    examples: [
+      "ln -sf /opt/app/releases/v2 /opt/app/current",
+      "ln -sfn /target /linkname  # -n: don't follow if linkname is itself a dir",
+      "ln -sf ../shared/log logs"
+    ],
+    memoryTip: "-s symbolic, -f force-replace.",
+    outputExample: "$ ln -sf /opt/app/v2 /opt/app/current\n$ readlink /opt/app/current\n/opt/app/v2",
+    category: "FILE OPS"
+  },
+  {
+    id: "file34",
+    question: "Extract just the filename from a full path",
+    answer: "basename /var/log/syslog.1",
+    explanation: "basename strips the leading directory components from a path and (optionally) a suffix.",
+    usage: "In scripts when you need to derive output names from input paths.",
+    examples: [
+      "basename /var/log/syslog.1  # syslog.1",
+      "basename /tmp/a.txt .txt  # a",
+      "for f in *.md; do echo \"$(basename \"$f\" .md).html\"; done"
+    ],
+    memoryTip: "basename = the 'base' name with no directory.",
+    outputExample: "$ basename /var/log/syslog.1\nsyslog.1",
+    category: "FILE OPS"
+  },
+  {
+    id: "file35",
+    question: "Extract the directory portion of a path",
+    answer: "dirname /var/log/syslog.1",
+    explanation: "dirname strips the last path component, returning everything up to (but not including) the final slash.",
+    usage: "Pair with basename in scripts to split a path into folder and filename.",
+    examples: [
+      "dirname /var/log/syslog.1  # /var/log",
+      "cd \"$(dirname \"$0\")\"  # cd to the script's own dir",
+      "mkdir -p \"$(dirname output/sub/file.txt)\""
+    ],
+    memoryTip: "dirname = the 'dir' portion of the name.",
+    outputExample: "$ dirname /var/log/syslog.1\n/var/log",
+    category: "FILE OPS"
+  },
+
+  // VIEWING TEXT — extended
+  {
+    id: "view21",
+    question: "Display a CSV file aligned into pretty columns",
+    answer: "column -t -s, file.csv",
+    explanation: "column -t formats input into a table; -s, sets the input field separator to a comma.",
+    usage: "Make CSV or other delimited data readable on the terminal.",
+    examples: [
+      "column -t -s, users.csv  # Comma separated",
+      "mount | column -t  # Tabular mount info",
+      "column -t -s$'\\t' tsvfile  # Tab separated"
+    ],
+    memoryTip: "column -t = tabular; -s = separator.",
+    outputExample: "$ column -t -s, users.csv\nid  name   role\n1   alice  admin\n2   bob    user",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view22",
+    question: "View a binary file as a hex dump",
+    answer: "xxd filename",
+    explanation: "xxd renders bytes as side-by-side hex and ASCII columns, useful for inspecting binary data and file headers.",
+    usage: "Identify file formats by magic bytes or debug binary protocols.",
+    examples: [
+      "xxd image.png | head  # First 256 bytes",
+      "xxd -s 0x10 -l 32 file  # 32 bytes starting at offset 16",
+      "xxd -r dump.hex > file  # Reverse a hex dump back to binary"
+    ],
+    memoryTip: "xxd = hex dump (think 'eXamine heX Dump').",
+    outputExample: "$ xxd hello.png | head -1\n00000000: 8950 4e47 0d0a 1a0a 0000 000d 4948 4452  .PNG........IHDR",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view23",
+    question: "Show non-printing characters and line endings in a file",
+    answer: "cat -E filename",
+    explanation: "cat -E appends a $ at the end of each line, making trailing spaces and missing final newlines visible.",
+    usage: "Debug invisible whitespace issues that break configs or scripts.",
+    examples: [
+      "cat -E file.txt  # End-of-line markers",
+      "cat -A file.txt  # Show tabs, EOLs, and non-print chars",
+      "cat -T file.txt  # Tabs as ^I"
+    ],
+    memoryTip: "-E = End-of-line $ marker.",
+    outputExample: "$ cat -E sample.txt\nhello $\nworld   $",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view24",
+    question: "Page through a file with line numbers visible in less",
+    answer: "less -N filename",
+    explanation: "less is a forward/backward pager; -N adds line numbers on the left.",
+    usage: "Reading logs or source files where you want to reference specific lines.",
+    examples: [
+      "less -N server.log  # Paged with line numbers",
+      "less +F server.log  # Follow mode like tail -f",
+      "less +/error server.log  # Jump to first match"
+    ],
+    memoryTip: "-N = numbered lines in less.",
+    outputExample: "$ less -N server.log\n      1 [INFO] starting...\n      2 [WARN] cache miss\n      3 [ERR] timeout",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view25",
+    question: "Print every line except the last 5 of a file",
+    answer: "head -n -5 filename",
+    explanation: "Negative -n with head means 'all lines except the last N'.",
+    usage: "Trim a trailer (signatures, copyright blocks) before processing.",
+    examples: [
+      "head -n -5 report.txt  # Skip last 5 lines",
+      "head -n -1 csv  # Drop the trailer row",
+      "head -c -100 file  # All but the last 100 bytes"
+    ],
+    memoryTip: "head -n -N = head excluding the last N lines.",
+    outputExample: "$ head -n -2 file\nline 1\nline 2\nline 3",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view26",
+    question: "Print a file starting from line 5",
+    answer: "tail -n +5 filename",
+    explanation: "tail -n +N means 'starting at line N', useful for skipping headers.",
+    usage: "Strip header rows from CSV exports before piping to awk or sort.",
+    examples: [
+      "tail -n +2 users.csv  # Skip CSV header",
+      "tail -n +10 file  # From line 10 onward",
+      "tail -n +5 file | head -n 3  # Lines 5-7"
+    ],
+    memoryTip: "tail -n +N = tail starting at line N (the + means 'from').",
+    outputExample: "$ tail -n +2 users.csv\n1,alice,admin\n2,bob,user",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view27",
+    question: "Print lines 10 through 20 of a file using sed",
+    answer: "sed -n '10,20p' filename",
+    explanation: "sed -n suppresses default output; the '10,20p' command prints only the lines in that range.",
+    usage: "Slice a specific window out of a big file without loading it all into a pager.",
+    examples: [
+      "sed -n '10,20p' file",
+      "sed -n '/START/,/END/p' file  # Between patterns",
+      "sed -n '50p' file  # Just line 50"
+    ],
+    memoryTip: "-n + Np = quiet, then print only line N (or range).",
+    outputExample: "$ sed -n '2,3p' file\nline 2\nline 3",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view28",
+    question: "Print the 5th line of a file using awk",
+    answer: "awk 'NR==5' filename",
+    explanation: "NR is awk's built-in record number. Matching NR==5 prints only that line.",
+    usage: "Quick one-liner when you know the exact line number you want.",
+    examples: [
+      "awk 'NR==5' file",
+      "awk 'NR>=10 && NR<=20' file  # Range",
+      "awk 'NR%10==0' file  # Every 10th line"
+    ],
+    memoryTip: "NR = number of records (lines) so far.",
+    outputExample: "$ awk 'NR==5' file\nfifth line content",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view29",
+    question: "Compare two sorted files and show lines unique to each plus common",
+    answer: "comm file1 file2",
+    explanation: "comm reads two sorted files and prints three columns: lines only in file1, lines only in file2, lines in both.",
+    usage: "Diff word lists, sorted IDs, or quick set comparisons.",
+    examples: [
+      "comm sorted1 sorted2",
+      "comm -12 a b  # Lines in both",
+      "comm -23 a b  # Only in a"
+    ],
+    memoryTip: "comm = common; suppress columns with -1/-2/-3.",
+    outputExample: "$ comm a.txt b.txt\napple\n\tbanana\n\t\tcherry",
+    category: "VIEWING TEXT"
+  },
+  {
+    id: "view30",
+    question: "Check whether two files are byte-for-byte identical",
+    answer: "cmp file1 file2",
+    explanation: "cmp does a byte-level compare and prints the first byte where they differ — silent and exit 0 if identical.",
+    usage: "Lightweight binary equality check; faster than diff for big files.",
+    examples: [
+      "cmp build/a.out backup/a.out  # Quick equality check",
+      "cmp -l a b  # List every differing byte",
+      "cmp -s a b && echo same  # Silent for use in scripts"
+    ],
+    memoryTip: "cmp = compare bytes; silent = identical.",
+    outputExample: "$ cmp a.bin b.bin\na.bin b.bin differ: byte 42, line 3",
+    category: "VIEWING TEXT"
+  },
+
+  // PERMISSIONS — extended
+  {
+    id: "perm21",
+    question: "Set the setuid bit on an executable so it runs as the file's owner",
+    answer: "chmod u+s /usr/local/bin/tool",
+    explanation: "u+s adds the setuid bit, making the program execute with the privileges of its owner (often root). Use with extreme caution.",
+    usage: "Rare — only for trusted binaries that need elevated privileges (e.g. passwd).",
+    examples: [
+      "chmod u+s tool  # Setuid",
+      "chmod 4755 tool  # Same thing in octal (the 4)",
+      "find / -perm -4000 -type f  # Audit setuid binaries"
+    ],
+    memoryTip: "u+s = setUid; the 4 in 4755 is the SUID octal bit.",
+    outputExample: "$ ls -l tool\n-rwsr-xr-x 1 root root 12K tool",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm22",
+    question: "Set the setgid bit on a directory so new files inherit its group",
+    answer: "chmod g+s directory",
+    explanation: "g+s on a directory makes every file created inside inherit the directory's group instead of the creator's primary group.",
+    usage: "Shared project directories where all files should belong to a 'dev' group.",
+    examples: [
+      "chmod g+s /srv/shared",
+      "chmod 2775 /srv/shared  # 2 = setgid octal",
+      "find / -perm -2000 -type d  # Audit setgid dirs"
+    ],
+    memoryTip: "g+s on a dir = group-inherit-sticky; 2 is the SGID bit.",
+    outputExample: "$ ls -ld shared\ndrwxr-sr-x 2 user dev 4096 shared",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm23",
+    question: "Show your user id, group id, and group memberships",
+    answer: "id",
+    explanation: "id prints uid, gid, and the list of supplementary groups for the current (or given) user.",
+    usage: "Verify which groups a user is in before granting access.",
+    examples: [
+      "id  # Current user",
+      "id alice  # Specific user",
+      "id -nG  # Just group names"
+    ],
+    memoryTip: "id = identity (uid + gids).",
+    outputExample: "$ id\nuid=1000(alice) gid=1000(alice) groups=1000(alice),27(sudo),130(docker)",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm24",
+    question: "Start a new shell with a different primary group",
+    answer: "newgrp groupname",
+    explanation: "newgrp launches a subshell where the named group becomes your effective primary group, so newly created files belong to it.",
+    usage: "Switch to a project group temporarily without logging out.",
+    examples: [
+      "newgrp docker  # Use docker group without re-login",
+      "newgrp dev  # Files you create now belong to 'dev'",
+      "exit  # Leave the newgrp shell"
+    ],
+    memoryTip: "newgrp = new (primary) group for this shell.",
+    outputExample: "$ newgrp docker\n$ id -gn\ndocker",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm25",
+    question: "Change the current user's password",
+    answer: "passwd",
+    explanation: "passwd prompts for the current password, then the new one twice; with sudo and a username, root can change any user's password.",
+    usage: "Rotate your password periodically or after a leak.",
+    examples: [
+      "passwd  # Change your own",
+      "sudo passwd alice  # As root, change alice's",
+      "sudo passwd -l alice  # Lock an account"
+    ],
+    memoryTip: "passwd = the password utility.",
+    outputExample: "$ passwd\nChanging password for alice.\nCurrent password: \nNew password:",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm26",
+    question: "Safely edit the sudoers file",
+    answer: "sudo visudo",
+    explanation: "visudo locks the sudoers file, opens it in your editor, and validates the syntax before saving — preventing a broken sudo.",
+    usage: "Any time you grant or revoke sudo rights.",
+    examples: [
+      "sudo visudo  # Edit /etc/sudoers",
+      "sudo visudo -f /etc/sudoers.d/alice  # Edit a drop-in",
+      "sudo visudo -c  # Just syntax-check existing file"
+    ],
+    memoryTip: "visudo = vi for sudoers, with safety checks.",
+    outputExample: "$ sudo visudo\n# (editor opens with /etc/sudoers; saves only if syntax is valid)",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm27",
+    question: "Generate a modern SSH keypair (ed25519)",
+    answer: "ssh-keygen -t ed25519",
+    explanation: "ssh-keygen creates an asymmetric keypair; -t ed25519 picks the small, fast modern algorithm preferred over older RSA defaults.",
+    usage: "Set up passwordless SSH and signing.",
+    examples: [
+      "ssh-keygen -t ed25519 -C 'work@laptop'  # With a comment",
+      "ssh-keygen -t ed25519 -f ~/.ssh/work  # Custom filename",
+      "ssh-keygen -p -f ~/.ssh/id_ed25519  # Change passphrase"
+    ],
+    memoryTip: "ssh-keygen -t ed25519 = generate modern SSH key.",
+    outputExample: "$ ssh-keygen -t ed25519\nGenerating public/private ed25519 key pair.\nEnter file in which to save the key (~/.ssh/id_ed25519):",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm28",
+    question: "Show password-aging info for a user",
+    answer: "sudo chage -l alice",
+    explanation: "chage manages password aging; -l lists the current settings (last change, expiry, warning days).",
+    usage: "Audit compliance with password rotation policies.",
+    examples: [
+      "sudo chage -l alice",
+      "sudo chage -M 90 alice  # Force rotation every 90 days",
+      "sudo chage -E 2026-12-31 alice  # Set account expiry"
+    ],
+    memoryTip: "chage = change age (password lifetime).",
+    outputExample: "$ sudo chage -l alice\nLast password change                : May 14, 2026\nPassword expires                    : never",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm29",
+    question: "Show your umask in symbolic (rwx) form",
+    answer: "umask -S",
+    explanation: "umask without args shows the octal mask; -S prints the implied permissions in symbolic form for readability.",
+    usage: "Confirm what permissions new files will get in the current shell.",
+    examples: [
+      "umask -S  # u=rwx,g=rx,o=rx",
+      "umask  # Octal form (e.g. 0022)",
+      "umask 027  # Tighten to no world access"
+    ],
+    memoryTip: "-S = Symbolic umask display.",
+    outputExample: "$ umask -S\nu=rwx,g=rx,o=rx",
+    category: "PERMISSIONS"
+  },
+  {
+    id: "perm30",
+    question: "Run a single command as another user",
+    answer: "sudo -u alice command",
+    explanation: "sudo -u runs the command as the specified user instead of root, useful for testing as an unprivileged account.",
+    usage: "Run scripts or web requests as the service user without logging out.",
+    examples: [
+      "sudo -u www-data php artisan migrate",
+      "sudo -u postgres psql",
+      "sudo -u alice -i  # Interactive login shell"
+    ],
+    memoryTip: "sudo -u USER = substitute user.",
+    outputExample: "$ sudo -u www-data whoami\nwww-data",
+    category: "PERMISSIONS"
+  },
+
+  // PIPES & REDIRECT — extended
+  {
+    id: "pipe21",
+    question: "Pipe both stdout and stderr from a command into grep",
+    answer: "command 2>&1 | grep error",
+    explanation: "2>&1 duplicates stderr onto stdout so the pipe carries both streams, then grep filters the combined output.",
+    usage: "Search the full output of a chatty command for a keyword without missing errors.",
+    examples: [
+      "make 2>&1 | grep -i error",
+      "command 2>&1 | tee build.log",
+      "{ cmd1; cmd2; } 2>&1 | less"
+    ],
+    memoryTip: "2>&1 = redirect fd 2 (stderr) into fd 1 (stdout).",
+    outputExample: "$ make 2>&1 | grep -i error\nerror: missing semicolon at line 42",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe22",
+    question: "Make a pipeline fail if any stage fails, not just the last",
+    answer: "set -o pipefail",
+    explanation: "Normally a pipeline's exit code is the last command's. pipefail changes it to the rightmost non-zero exit code, so early failures aren't masked.",
+    usage: "Always set in scripts that pipe through grep/awk/head where you care if upstream broke.",
+    examples: [
+      "set -o pipefail",
+      "set -euo pipefail  # Strict mode bundle",
+      "trap 'echo failed at $LINENO' ERR"
+    ],
+    memoryTip: "pipefail = the pipe's exit code reflects any stage that failed.",
+    outputExample: "$ set -o pipefail; false | true; echo $?\n1",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe23",
+    question: "Run one command for each line of a file, substituting it into a placeholder",
+    answer: "xargs -I {} cmd {} < list.txt",
+    explanation: "xargs -I {} replaces {} with each input token; cmd is invoked once per line with that argument in place of the placeholder.",
+    usage: "Apply an arbitrary command to a list of inputs that you can't just append.",
+    examples: [
+      "cat urls.txt | xargs -I {} curl -O {}",
+      "find . -name '*.bak' | xargs -I {} mv {} /tmp/",
+      "xargs -I {} echo 'processing {}' < jobs.txt"
+    ],
+    memoryTip: "-I {} = the placeholder gets each input substituted in.",
+    outputExample: "$ echo -e 'a\\nb' | xargs -I {} echo hi {}\nhi a\nhi b",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe24",
+    question: "Run up to 4 commands in parallel from a list of inputs",
+    answer: "xargs -P 4 -n 1 cmd < list.txt",
+    explanation: "-P 4 runs four xargs children at once; -n 1 passes one input per invocation. Together you get a quick parallel pool.",
+    usage: "Speed up an embarrassingly-parallel batch job like downloading many URLs.",
+    examples: [
+      "cat urls.txt | xargs -P 8 -n 1 wget",
+      "ls *.flac | xargs -P 4 -I {} ffmpeg -i {} -codec:a libmp3lame {}.mp3",
+      "seq 1 100 | xargs -P 16 -n 1 -I {} curl -s api/{}"
+    ],
+    memoryTip: "-P = parallel workers; -n = inputs per call.",
+    outputExample: "$ time seq 1 4 | xargs -P 4 -n 1 sleep\nreal    0m1.012s",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe25",
+    question: "Create a named pipe (FIFO) called /tmp/myfifo",
+    answer: "mkfifo /tmp/myfifo",
+    explanation: "A named pipe (FIFO) lives in the filesystem; writers and readers can connect to it asynchronously without sharing a parent process.",
+    usage: "Stream data between unrelated programs without a temp file.",
+    examples: [
+      "mkfifo /tmp/myfifo",
+      "cat file > /tmp/myfifo &  # Writer",
+      "grep error < /tmp/myfifo  # Reader"
+    ],
+    memoryTip: "mkfifo = make a named (filesystem-visible) FIFO pipe.",
+    outputExample: "$ mkfifo /tmp/myfifo\n$ ls -l /tmp/myfifo\nprw-r--r-- 1 user user 0 May 14 myfifo",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe26",
+    question: "Send all output from the rest of a script to a log file",
+    answer: "exec > script.log 2>&1",
+    explanation: "exec without a command redirects the current shell's file descriptors, so every command after that line writes to the log.",
+    usage: "Top of a cron or systemd script to capture everything in one place.",
+    examples: [
+      "exec > /var/log/job.log 2>&1",
+      "exec >> /var/log/job.log 2>&1  # Append",
+      "exec > >(tee -a log) 2>&1  # And to terminal too"
+    ],
+    memoryTip: "exec > file = from now on, stdout goes here.",
+    outputExample: "$ cat job.sh\nexec > job.log 2>&1\necho 'running'\n$ ./job.sh\n$ cat job.log\nrunning",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe27",
+    question: "Truncate (or create) a file via redirection",
+    answer: ": > filename",
+    explanation: "The colon is a no-op command that produces no output; redirecting its output to a file opens it for writing, which truncates or creates it.",
+    usage: "Clear a log file without rm or truncate.",
+    examples: [
+      ": > app.log  # Truncate",
+      "> app.log  # Some shells allow this shorthand",
+      ": >> file  # Just ensure file exists (touch alternative)"
+    ],
+    memoryTip: "Colon = silent true; > = open empty for writing.",
+    outputExample: "$ : > app.log\n$ wc -c app.log\n0 app.log",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe28",
+    question: "Suppress just stderr from a noisy command",
+    answer: "command 2>/dev/null",
+    explanation: "Redirecting fd 2 to /dev/null silently discards error messages while leaving stdout intact.",
+    usage: "Hide expected 'permission denied' noise from find without losing real output.",
+    examples: [
+      "find / -name target 2>/dev/null",
+      "command 2>/dev/null | grep something",
+      "command 2>>error.log  # Or capture them instead"
+    ],
+    memoryTip: "2>/dev/null = drop stderr into the void.",
+    outputExample: "$ find / -name passwd 2>/dev/null | head -1\n/etc/passwd",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe29",
+    question: "Append a command's output to a log via tee, while still seeing it",
+    answer: "command | tee -a app.log",
+    explanation: "tee writes to both stdout and a file; -a appends instead of overwriting.",
+    usage: "Watch live output and keep a copy for later.",
+    examples: [
+      "make 2>&1 | tee -a build.log",
+      "tail -f /var/log/syslog | tee saved.log",
+      "echo hi | tee -a a.log b.log"
+    ],
+    memoryTip: "tee = T-junction in the pipe; -a = append.",
+    outputExample: "$ echo hello | tee -a hi.log\nhello\n$ cat hi.log\nhello",
+    category: "PIPES & REDIRECT"
+  },
+  {
+    id: "pipe30",
+    question: "Capture stdout into a variable in bash",
+    answer: "var=$(command)",
+    explanation: "Command substitution $(...) runs the command and returns its stdout (trailing newlines stripped) as a string for assignment.",
+    usage: "Use a command's output as input to another step in a script.",
+    examples: [
+      "now=$(date +%F)",
+      "files=$(ls *.log)  # Word-split-prone; prefer arrays",
+      "mapfile -t lines < <(grep error log)  # Better for multi-line"
+    ],
+    memoryTip: "$(...) = capture command stdout into a value.",
+    outputExample: "$ user=$(whoami) && echo $user\nalice",
+    category: "PIPES & REDIRECT"
+  },
+
+  // PROCESSES — extended
+  {
+    id: "proc21",
+    question: "Run a long process that survives logout",
+    answer: "nohup command &",
+    explanation: "nohup ignores SIGHUP (sent when the controlling terminal closes); & puts the job in the background. stdout/stderr go to nohup.out by default.",
+    usage: "Start a long-running task over SSH without losing it when you disconnect.",
+    examples: [
+      "nohup ./backup.sh &",
+      "nohup python serve.py > serve.log 2>&1 &",
+      "nohup make all >log 2>&1 & disown"
+    ],
+    memoryTip: "nohup = no hangup signal will kill it.",
+    outputExample: "$ nohup ./backup.sh &\n[1] 12345\nnohup: ignoring input and appending output to 'nohup.out'",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc22",
+    question: "Detach a background job from the shell so closing it won't kill it",
+    answer: "disown %1",
+    explanation: "disown removes a job from the shell's job table, so it stops receiving SIGHUP when the shell exits. %1 refers to job number 1.",
+    usage: "Forgot nohup? Background the job, then disown.",
+    examples: [
+      "command &",
+      "disown %1",
+      "disown -a  # All jobs"
+    ],
+    memoryTip: "disown = the shell forgets about this job.",
+    outputExample: "$ sleep 1000 &\n[1] 4567\n$ disown %1\n$ jobs\n(empty)",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc23",
+    question: "Start a new tmux session named 'work'",
+    answer: "tmux new -s work",
+    explanation: "tmux is a terminal multiplexer: detach (Ctrl-b d), reconnect later with the same shell, splits, and windows intact.",
+    usage: "Persistent terminal sessions on remote servers across disconnects.",
+    examples: [
+      "tmux new -s work",
+      "tmux attach -t work  # Reconnect",
+      "tmux ls  # List sessions"
+    ],
+    memoryTip: "tmux new -s NAME = new session with a name.",
+    outputExample: "$ tmux new -s work\n# (tmux session opens; detach with Ctrl-b d)",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc24",
+    question: "List every signal the system understands",
+    answer: "kill -l",
+    explanation: "kill -l prints the signal table — numbers and names like 1) SIGHUP, 9) SIGKILL, 15) SIGTERM.",
+    usage: "Look up the right signal number/name before sending it.",
+    examples: [
+      "kill -l",
+      "kill -l 15  # Look up signal 15",
+      "kill -l TERM  # Look up the number for SIGTERM"
+    ],
+    memoryTip: "kill -l = list signals.",
+    outputExample: "$ kill -l\n 1) SIGHUP\t 2) SIGINT\t 3) SIGQUIT\t 9) SIGKILL\n15) SIGTERM\t...",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc25",
+    question: "Lower the priority of a running process by 5 nice units",
+    answer: "sudo renice -n 5 -p 1234",
+    explanation: "renice changes the nice value of an existing process; positive nice means lower priority. Root can also raise priority.",
+    usage: "Throttle a CPU-greedy backup or compile so it doesn't choke interactive apps.",
+    examples: [
+      "sudo renice -n 5 -p 1234",
+      "sudo renice -n 10 -u alice  # Every process by alice",
+      "nice -n 19 ./backup.sh  # Start low-priority"
+    ],
+    memoryTip: "renice = re-set the nice value; higher = nicer (yielding).",
+    outputExample: "$ sudo renice -n 5 -p 1234\n1234 (process ID) old priority 0, new priority 5",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc26",
+    question: "Measure how long a command takes to run",
+    answer: "time command",
+    explanation: "The shell built-in time prints real, user, and sys CPU times after the command finishes.",
+    usage: "Quick benchmarks of scripts or commands.",
+    examples: [
+      "time ./build.sh",
+      "time { cmd1; cmd2; }  # Group",
+      "/usr/bin/time -v cmd  # More detailed (GNU time)"
+    ],
+    memoryTip: "time = how long did it take?",
+    outputExample: "$ time sleep 1\nreal    0m1.012s\nuser    0m0.001s\nsys     0m0.003s",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc27",
+    question: "Find which process is listening on port 8080",
+    answer: "sudo lsof -i :8080",
+    explanation: "lsof -i :PORT lists open network sockets bound to that port, including the owning process and user.",
+    usage: "Discover what's holding a port hostage so you can kill or reconfigure it.",
+    examples: [
+      "sudo lsof -i :8080",
+      "sudo lsof -i tcp:443",
+      "sudo lsof -nP -iTCP -sTCP:LISTEN  # All listeners"
+    ],
+    memoryTip: "lsof -i :PORT = list open sockets on that port.",
+    outputExample: "$ sudo lsof -i :8080\nCOMMAND  PID USER FD TYPE NAME\nnode    8421 app 22u IPv4 *:8080 (LISTEN)",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc28",
+    question: "Trace the system calls a running process is making",
+    answer: "sudo strace -p 1234",
+    explanation: "strace attaches to a process and prints every system call (open, read, write, etc.) with arguments and return values.",
+    usage: "Debug why a program is hanging, missing a file, or failing silently.",
+    examples: [
+      "sudo strace -p 1234",
+      "strace -e openat ./prog  # Only file opens",
+      "strace -c ./prog  # Summary counts"
+    ],
+    memoryTip: "strace = system call trace.",
+    outputExample: "$ sudo strace -p 4567\nrecvfrom(8, ...) = 0\nepoll_wait(7, ...)",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc29",
+    question: "Show the top CPU-consuming processes",
+    answer: "ps -eo pid,user,%cpu,cmd --sort=-%cpu | head",
+    explanation: "ps -eo selects custom columns; --sort=-%cpu sorts descending by CPU. head trims to the worst offenders.",
+    usage: "Snapshot of who's hogging the CPU without launching top.",
+    examples: [
+      "ps -eo pid,user,%cpu,cmd --sort=-%cpu | head",
+      "ps -eo pid,%mem,cmd --sort=-%mem | head  # By memory",
+      "ps -eo pid,etime,cmd --sort=etime | head  # Oldest"
+    ],
+    memoryTip: "ps -eo COLUMNS --sort=KEY = custom ranking.",
+    outputExample: "$ ps -eo pid,%cpu,cmd --sort=-%cpu | head -3\n PID %CPU CMD\n2412 14.0 firefox\n1822  8.3 node server.js",
+    category: "PROCESSES"
+  },
+  {
+    id: "proc30",
+    question: "Reload a daemon's config without restarting it",
+    answer: "sudo kill -HUP pid",
+    explanation: "Many daemons re-read their configuration on SIGHUP (signal 1) instead of restarting, preserving open connections.",
+    usage: "Apply nginx/sshd/rsyslog config changes with zero downtime.",
+    examples: [
+      "sudo kill -HUP $(pidof nginx)",
+      "sudo killall -HUP rsyslogd",
+      "sudo systemctl reload nginx  # Higher-level equivalent"
+    ],
+    memoryTip: "SIGHUP = 'hang up the phone, re-read your notes.'",
+    outputExample: "$ sudo kill -HUP $(pidof nginx)\n$ tail nginx/error.log\n[notice] reloading configuration",
+    category: "PROCESSES"
+  },
+
+  // NETWORKING — extended
+  {
+    id: "net21",
+    question: "Download a file with curl, saving it with the server-suggested name",
+    answer: "curl -O https://example.com/file.tar.gz",
+    explanation: "-O writes the downloaded body to a local file using the URL's basename. Use -o NAME for an explicit name.",
+    usage: "Quick CLI download without launching wget.",
+    examples: [
+      "curl -O https://example.com/file.tar.gz",
+      "curl -L -O url  # Follow redirects",
+      "curl -fsSL url | sh  # Pipe an install script (carefully!)"
+    ],
+    memoryTip: "-O = save as Original filename.",
+    outputExample: "$ curl -O https://example.com/file.tar.gz\n  % Total    % Received   Time\n100  1.2M  100  1.2M     0:02",
+    category: "NETWORKING"
+  },
+  {
+    id: "net22",
+    question: "Send a POST request with a JSON body using curl",
+    answer: "curl -X POST -H 'Content-Type: application/json' -d '{\"k\":\"v\"}' https://api/x",
+    explanation: "-X sets the method, -H adds headers, -d supplies the body. curl handles the rest of the HTTP framing.",
+    usage: "Test REST endpoints from the command line or in scripts.",
+    examples: [
+      "curl -X POST -H 'Content-Type: application/json' -d '{\"id\":1}' https://api/x",
+      "curl -X POST --data-urlencode 'q=hello' https://api/x",
+      "curl -X POST -d @body.json -H 'CT: application/json' url  # body from file"
+    ],
+    memoryTip: "-X method, -H header, -d data.",
+    outputExample: "$ curl -X POST -d '{\"k\":\"v\"}' https://httpbin.org/post\n{ \"json\": {\"k\":\"v\"}, ... }",
+    category: "NETWORKING"
+  },
+  {
+    id: "net23",
+    question: "Forward localhost:8080 through an SSH server to an internal host",
+    answer: "ssh -L 8080:internal:80 user@gateway",
+    explanation: "-L LOCAL:HOST:REMOTE opens a tunnel: traffic to your local port is forwarded over SSH to host:remote from the gateway's perspective.",
+    usage: "Reach a service behind a bastion without VPN.",
+    examples: [
+      "ssh -L 8080:internal:80 user@gateway",
+      "ssh -L 5432:db.internal:5432 user@bastion",
+      "ssh -L 8080:localhost:80 user@webhost  # Tunnel to webhost's own port 80"
+    ],
+    memoryTip: "-L = Local forward; localport:targethost:targetport.",
+    outputExample: "$ ssh -L 8080:internal:80 user@gateway\n$ curl localhost:8080  # Hits internal:80 via the gateway",
+    category: "NETWORKING"
+  },
+  {
+    id: "net24",
+    question: "Open a reverse tunnel exposing your local service on a remote host",
+    answer: "ssh -R 9000:localhost:3000 user@remote",
+    explanation: "-R reverses the direction: remote:9000 forwards back to your laptop's :3000. Often used for demos behind NAT.",
+    usage: "Let a teammate hit your dev server through a server they can reach.",
+    examples: [
+      "ssh -R 9000:localhost:3000 user@remote",
+      "ssh -R 0.0.0.0:9000:localhost:3000 user@remote  # Bind on all interfaces (needs GatewayPorts)",
+      "ssh -N -R 9000:localhost:3000 user@remote  # No interactive shell"
+    ],
+    memoryTip: "-R = Reverse forward; the remote opens the listening port.",
+    outputExample: "$ ssh -R 9000:localhost:3000 user@remote\nremote$ curl localhost:9000  # Hits your laptop's :3000",
+    category: "NETWORKING"
+  },
+  {
+    id: "net25",
+    question: "Install your SSH public key on a remote host",
+    answer: "ssh-copy-id user@host",
+    explanation: "ssh-copy-id appends your default public key to the remote user's ~/.ssh/authorized_keys after one interactive password.",
+    usage: "Switch from password auth to key-based auth in one step.",
+    examples: [
+      "ssh-copy-id user@host",
+      "ssh-copy-id -i ~/.ssh/work.pub user@host",
+      "ssh-copy-id -p 2222 user@host"
+    ],
+    memoryTip: "ssh-copy-id = copy your identity (public key) to the host.",
+    outputExample: "$ ssh-copy-id user@host\nNumber of key(s) added: 1\nNow try logging into the machine.",
+    category: "NETWORKING"
+  },
+  {
+    id: "net26",
+    question: "Run a continuous traceroute that updates loss/latency per hop",
+    answer: "mtr hostname",
+    explanation: "mtr combines traceroute and ping into one live display, refreshing every second so flaky hops become obvious.",
+    usage: "Diagnose where packet loss or latency spikes appear along a route.",
+    examples: [
+      "mtr example.com",
+      "mtr --report --report-cycles 10 host  # Snapshot report",
+      "mtr -4 host  # Force IPv4"
+    ],
+    memoryTip: "mtr = 'my traceroute' (continuous).",
+    outputExample: "$ mtr example.com\n  Host                Loss   Avg\n1. router.local      0.0%   1ms\n2. isp.gw            0.0%   8ms\n3. example.com       0.0%   25ms",
+    category: "NETWORKING"
+  },
+  {
+    id: "net27",
+    question: "Get just the IP address(es) for a hostname",
+    answer: "dig +short example.com",
+    explanation: "+short trims dig's verbose output to only the answer values, perfect for scripts.",
+    usage: "Pipe IPs to scripts or quickly check DNS without parsing.",
+    examples: [
+      "dig +short example.com",
+      "dig +short AAAA example.com  # IPv6",
+      "dig +short MX example.com  # Mail servers"
+    ],
+    memoryTip: "+short = compact DNS answers only.",
+    outputExample: "$ dig +short example.com\n93.184.216.34",
+    category: "NETWORKING"
+  },
+  {
+    id: "net28",
+    question: "Show per-interface receive/transmit statistics",
+    answer: "ip -s link",
+    explanation: "ip -s link adds statistics (packets, bytes, errors, drops) to the standard link listing.",
+    usage: "Spot interfaces with high error or drop counts.",
+    examples: [
+      "ip -s link",
+      "ip -s link show eth0",
+      "ip -s -s link  # Even more detail"
+    ],
+    memoryTip: "-s = statistics for the link output.",
+    outputExample: "$ ip -s link show eth0\neth0: ...\n    RX: bytes packets errors\n    12345  100      0\n    TX: bytes packets errors\n    98765  80       0",
+    category: "NETWORKING"
+  },
+  {
+    id: "net29",
+    question: "Look up domain registration details",
+    answer: "whois example.com",
+    explanation: "whois queries registry servers for ownership, nameservers, creation/expiry dates of a domain.",
+    usage: "Investigate ownership or expiration when troubleshooting DNS or domain takeover.",
+    examples: [
+      "whois example.com",
+      "whois 8.8.8.8  # IP ownership",
+      "whois -h whois.arin.net 8.8.8.8  # Specific server"
+    ],
+    memoryTip: "whois = 'who is registered as owner?'",
+    outputExample: "$ whois example.com\nDomain Name: EXAMPLE.COM\nRegistrar: IANA\nUpdated Date: 2026-01-08",
+    category: "NETWORKING"
+  },
+  {
+    id: "net30",
+    question: "Show the local ARP / neighbor table",
+    answer: "ip neigh",
+    explanation: "ip neigh prints the kernel's neighbor cache mapping IPs to MAC addresses on the local segment.",
+    usage: "Verify a device is actually reachable on the LAN and confirm its MAC.",
+    examples: [
+      "ip neigh",
+      "ip neigh show dev eth0",
+      "ip neigh flush all  # Wipe and re-resolve"
+    ],
+    memoryTip: "ip neigh = neighbor (ARP) table.",
+    outputExample: "$ ip neigh\n192.168.1.1 dev eth0 lladdr aa:bb:cc:dd:ee:ff REACHABLE",
+    category: "NETWORKING"
+  },
+
+  // PACKAGES — extended (Debian/Ubuntu)
+  {
+    id: "pkg18",
+    question: "List all currently installed packages",
+    answer: "apt list --installed",
+    explanation: "apt list shows packages with their versions; --installed restricts the output to those actually present.",
+    usage: "Inventory a system or grep for a specific name.",
+    examples: [
+      "apt list --installed",
+      "apt list --installed | grep nginx",
+      "dpkg-query -W -f='${binary:Package}\\n'  # Scripts-friendly"
+    ],
+    memoryTip: "apt list --installed = roll call of packages.",
+    outputExample: "$ apt list --installed | head\nLikely (only just looked at: ...) accountsservice/now 22.07.5-2 amd64 [installed]\n...",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg19",
+    question: "Show which packages have updates available",
+    answer: "apt list --upgradable",
+    explanation: "After apt update refreshes indexes, --upgradable lists packages whose installed version is older than what's in the repos.",
+    usage: "Preview pending upgrades before running apt upgrade.",
+    examples: [
+      "sudo apt update && apt list --upgradable",
+      "apt list --upgradable 2>/dev/null | wc -l",
+      "apt-mark showhold  # Anything you've pinned"
+    ],
+    memoryTip: "apt list --upgradable = what's behind the latest.",
+    outputExample: "$ apt list --upgradable\nnginx/now 1.24.0 amd64 [upgradable from: 1.22.0]",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg20",
+    question: "List every file a package installs",
+    answer: "dpkg -L package_name",
+    explanation: "dpkg -L queries the local package database and prints the full file list installed by the named package.",
+    usage: "Find configs, binaries, and docs shipped by a package.",
+    examples: [
+      "dpkg -L nginx",
+      "dpkg -L curl | grep bin",
+      "dpkg -L nginx | xargs ls -ld 2>/dev/null"
+    ],
+    memoryTip: "dpkg -L = list files of a package.",
+    outputExample: "$ dpkg -L curl | head\n/.\n/usr\n/usr/bin\n/usr/bin/curl",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg21",
+    question: "Find which package owns /usr/bin/curl",
+    answer: "dpkg -S /usr/bin/curl",
+    explanation: "dpkg -S searches the database for the package that installed a given path.",
+    usage: "Track a mystery file back to its source package.",
+    examples: [
+      "dpkg -S /usr/bin/curl",
+      "dpkg -S libssl",
+      "apt-file search /usr/bin/foo  # For non-installed packages"
+    ],
+    memoryTip: "dpkg -S = search for the package owning a path.",
+    outputExample: "$ dpkg -S /usr/bin/curl\ncurl: /usr/bin/curl",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg22",
+    question: "Fix a half-configured package state",
+    answer: "sudo dpkg --configure -a",
+    explanation: "If an install was interrupted, packages may sit in 'half-configured' state; --configure -a runs post-install scripts for all such packages.",
+    usage: "Recover from an aborted apt upgrade.",
+    examples: [
+      "sudo dpkg --configure -a",
+      "sudo apt --fix-broken install",
+      "sudo apt-get -f install  # Same thing, classic"
+    ],
+    memoryTip: "dpkg --configure -a = finish configuring all pending packages.",
+    outputExample: "$ sudo dpkg --configure -a\nSetting up nginx (1.22.0) ...",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg23",
+    question: "Show which packages are pinned to their current version",
+    answer: "apt-mark showhold",
+    explanation: "apt-mark showhold lists packages that are held back from automatic upgrades.",
+    usage: "Audit which packages won't move during a routine upgrade.",
+    examples: [
+      "apt-mark showhold",
+      "sudo apt-mark hold nginx  # Pin it",
+      "sudo apt-mark unhold nginx  # Release it"
+    ],
+    memoryTip: "showhold = show held packages.",
+    outputExample: "$ apt-mark showhold\nnginx\npostgresql-14",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg24",
+    question: "Remove a hold so a package can upgrade again",
+    answer: "sudo apt-mark unhold package_name",
+    explanation: "unhold reverses a hold, restoring the package to normal upgrade flow.",
+    usage: "After verifying you no longer need to pin a version.",
+    examples: [
+      "sudo apt-mark unhold nginx",
+      "sudo apt-mark unhold $(apt-mark showhold)",
+      "apt-mark showhold  # Confirm it's gone"
+    ],
+    memoryTip: "unhold = lift the pin.",
+    outputExample: "$ sudo apt-mark unhold nginx\nCanceled hold on nginx.",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg25",
+    question: "Download the source code for a package",
+    answer: "apt source package_name",
+    explanation: "apt source fetches and unpacks the upstream source plus Debian packaging. Requires deb-src lines enabled in sources.list.",
+    usage: "Inspect or patch a package before rebuilding it.",
+    examples: [
+      "apt source curl",
+      "sudo apt build-dep curl  # Install build deps first",
+      "apt source --compile curl  # Source + build"
+    ],
+    memoryTip: "apt source = fetch the source tree.",
+    outputExample: "$ apt source curl\nReading package lists... Done\ndpkg-source: extracting curl in curl-7.81.0",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg26",
+    question: "Remove a PPA you previously added",
+    answer: "sudo add-apt-repository --remove ppa:user/ppa-name",
+    explanation: "--remove deletes the matching deb line from /etc/apt/sources.list.d so the PPA no longer contributes packages.",
+    usage: "Clean up after testing an unofficial repository.",
+    examples: [
+      "sudo add-apt-repository --remove ppa:deadsnakes/ppa",
+      "sudo rm /etc/apt/sources.list.d/deadsnakes*.list  # Manual alt.",
+      "sudo apt update  # Refresh after removal"
+    ],
+    memoryTip: "--remove = take that PPA back out.",
+    outputExample: "$ sudo add-apt-repository --remove ppa:deadsnakes/ppa\n$ ls /etc/apt/sources.list.d/\n# (deadsnakes file gone)",
+    category: "PACKAGES"
+  },
+  {
+    id: "pkg27",
+    question: "Show detailed info about a single package",
+    answer: "apt show package_name",
+    explanation: "apt show prints version, dependencies, description, size, and homepage for a package.",
+    usage: "Inspect what a package brings before installing.",
+    examples: [
+      "apt show nginx",
+      "apt show -a nginx  # All candidate versions",
+      "apt show $(apt-cache --names-only search '^lib.*-dev$' | head)"
+    ],
+    memoryTip: "apt show = the package's full data sheet.",
+    outputExample: "$ apt show nginx\nPackage: nginx\nVersion: 1.24.0-1\nPriority: optional\nDescription: small, powerful, scalable web/proxy server",
+    category: "PACKAGES"
+  },
+
+  // TEXT PROCESSING — extended
+  {
+    id: "text21",
+    question: "Print only the second comma-separated field of a CSV file",
+    answer: "awk -F, '{print $2}' file.csv",
+    explanation: "-F, sets the field separator to comma so $1, $2... reference CSV columns.",
+    usage: "Quick CSV column extraction without spinning up Python.",
+    examples: [
+      "awk -F, '{print $2}' file.csv",
+      "awk -F, 'NR>1{print $1}' file.csv  # Skip header",
+      "awk -F'\\t' '{print $3}' tsvfile  # Tab-separated"
+    ],
+    memoryTip: "-F = input field separator.",
+    outputExample: "$ cat users.csv\nid,name\n1,alice\n2,bob\n$ awk -F, 'NR>1{print $2}' users.csv\nalice\nbob",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text22",
+    question: "Sum the numbers in the first column of a file",
+    answer: "awk '{sum+=$1} END {print sum}' file",
+    explanation: "awk accumulates $1 across all lines; the END block runs after the last line and prints the total.",
+    usage: "Quick aggregations without exporting to a spreadsheet.",
+    examples: [
+      "awk '{sum+=$1} END {print sum}' bytes.txt",
+      "awk -F, '{s+=$3} END {printf \"%.2f\\n\", s}' file",
+      "awk '{c++; s+=$1} END {print s/c}' file  # Average"
+    ],
+    memoryTip: "{accumulate} END {print} = streaming reduce.",
+    outputExample: "$ printf '10\\n20\\n30\\n' | awk '{s+=$1} END {print s}'\n60",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text23",
+    question: "Replace every occurrence of 'old' with 'new' in place, keeping a .bak",
+    answer: "sed -i.bak 's/old/new/g' file",
+    explanation: "-i edits the file in place; the optional suffix .bak makes sed save the original to file.bak first.",
+    usage: "Safe scripted edits where you want a rollback file.",
+    examples: [
+      "sed -i.bak 's/old/new/g' config.yml",
+      "sed -i 's/foo/bar/g' *.txt  # No backup",
+      "sed -i -e 's/a/b/' -e 's/c/d/' file  # Multiple substitutions"
+    ],
+    memoryTip: "-i.bak = in-place edit with a .bak safety net.",
+    outputExample: "$ sed -i.bak 's/old/new/g' file\n$ ls\nfile  file.bak",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text24",
+    question: "Delete every line containing 'DEBUG' from a file",
+    answer: "sed '/DEBUG/d' file",
+    explanation: "The /pattern/d sed command deletes any line that matches the pattern.",
+    usage: "Strip debug noise from logs or sample configs.",
+    examples: [
+      "sed '/DEBUG/d' app.log",
+      "sed -i '/^#/d' config  # Delete comment lines",
+      "sed '/^$/d' file  # Drop blank lines"
+    ],
+    memoryTip: "/pattern/d = delete (don't print) matching lines.",
+    outputExample: "$ printf 'INFO ok\\nDEBUG hi\\nWARN slow\\n' | sed '/DEBUG/d'\nINFO ok\nWARN slow",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text25",
+    question: "Show three lines after each grep match (context)",
+    answer: "grep -A 3 pattern file",
+    explanation: "-A N prints N lines after each match. Pair with -B (before) or -C (both) for full context windows.",
+    usage: "See surrounding lines when investigating logs.",
+    examples: [
+      "grep -A 3 'error' app.log",
+      "grep -B 2 -A 5 'panic' kernel.log",
+      "grep -C 1 'TODO' src/*.py"
+    ],
+    memoryTip: "-A After, -B Before, -C Context (both).",
+    outputExample: "$ grep -A 1 hi sample\nhi there\nfollowing line",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text26",
+    question: "List only the filenames where grep found a match",
+    answer: "grep -l pattern *.txt",
+    explanation: "-l (lowercase L) prints just the names of files that contained at least one match, no matched lines.",
+    usage: "Find which configs reference a deprecated setting.",
+    examples: [
+      "grep -l TODO src/*.py",
+      "grep -rl 'secret_key' .  # Recursive",
+      "grep -L 'license' *.md  # Files WITHOUT a match"
+    ],
+    memoryTip: "-l = list matching files only.",
+    outputExample: "$ grep -l error *.log\napp.log\ndb.log",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text27",
+    question: "Print only the matching part of each line",
+    answer: "grep -o pattern file",
+    explanation: "-o (only-matching) prints just the substrings that match, one per line.",
+    usage: "Extract values like IPs, IDs, or URLs out of free-form text.",
+    examples: [
+      "grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' access.log  # IPs",
+      "grep -o 'href=\"[^\"]*\"' index.html",
+      "grep -oP '\\bUUID-\\w+\\b' file"
+    ],
+    memoryTip: "-o = output only the match.",
+    outputExample: "$ echo 'visit 1.2.3.4 and 5.6.7.8' | grep -oE '[0-9.]+'\n1.2.3.4\n5.6.7.8",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text28",
+    question: "Use Perl-compatible regex with grep",
+    answer: "grep -P 'regex' file",
+    explanation: "-P enables PCRE features like \\d, \\w, lookaheads, and non-greedy quantifiers.",
+    usage: "When basic and extended regex aren't expressive enough.",
+    examples: [
+      "grep -P '\\d{3}-\\d{4}' file  # Phone-like patterns",
+      "grep -P '(?<=Bearer )\\S+' headers  # Lookbehind",
+      "grep -Pi '\\bemail\\b.*@' file"
+    ],
+    memoryTip: "-P = Perl regex flavor.",
+    outputExample: "$ echo abc123 | grep -P '\\d+'\nabc123",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text29",
+    question: "Strip all whitespace characters from a string",
+    answer: "tr -d '[:space:]'",
+    explanation: "tr -d deletes any character in the set; [:space:] matches spaces, tabs, newlines.",
+    usage: "Sanitize tokens or generate compact identifiers from messy input.",
+    examples: [
+      "echo ' a b c ' | tr -d '[:space:]'  # abc",
+      "tr -d '\\r' < windows.txt > unix.txt  # Strip CR",
+      "echo 'Hi!' | tr -d '[:punct:]'  # Hi"
+    ],
+    memoryTip: "-d = delete; [:space:] = POSIX whitespace class.",
+    outputExample: "$ echo ' a b c ' | tr -d '[:space:]'\nabc",
+    category: "TEXT PROCESSING"
+  },
+  {
+    id: "text30",
+    question: "Convert a UTF-8 file to ASCII, transliterating special chars",
+    answer: "iconv -f UTF-8 -t ASCII//TRANSLIT file",
+    explanation: "iconv converts between character encodings; //TRANSLIT approximates characters that can't be represented (e.g. é → e).",
+    usage: "Sanitize filenames or text exports that downstream tools can't render.",
+    examples: [
+      "iconv -f UTF-8 -t ASCII//TRANSLIT file > out.txt",
+      "iconv -f WINDOWS-1252 -t UTF-8 legacy.txt",
+      "iconv -l | head  # List encodings"
+    ],
+    memoryTip: "iconv -f FROM -t TO; //TRANSLIT = best-effort.",
+    outputExample: "$ echo 'café' | iconv -f UTF-8 -t ASCII//TRANSLIT\ncafe",
+    category: "TEXT PROCESSING"
+  },
+
+  // SYSTEM INFO — extended
+  {
+    id: "sys21",
+    question: "Print full distro release info",
+    answer: "lsb_release -a",
+    explanation: "lsb_release prints distributor info (ID, release, codename); -a shows all of it. Not installed everywhere — /etc/os-release is the modern fallback.",
+    usage: "Identify which distro and version you're on in scripts.",
+    examples: [
+      "lsb_release -a",
+      "lsb_release -cs  # Just the codename (e.g. jammy)",
+      "cat /etc/os-release  # Modern equivalent"
+    ],
+    memoryTip: "lsb_release = Linux Standard Base release info.",
+    outputExample: "$ lsb_release -a\nDistributor ID: Ubuntu\nDescription:    Ubuntu 24.04 LTS\nCodename:       noble",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys22",
+    question: "List block devices in a tree view",
+    answer: "lsblk",
+    explanation: "lsblk shows disks, partitions, and LVM/mount mappings as a tree, with sizes and mountpoints.",
+    usage: "Quick visual of storage layout before partitioning or mounting.",
+    examples: [
+      "lsblk",
+      "lsblk -f  # Include filesystem types/UUIDs",
+      "lsblk -o NAME,SIZE,MOUNTPOINT,FSTYPE"
+    ],
+    memoryTip: "lsblk = list block devices.",
+    outputExample: "$ lsblk\nNAME   SIZE TYPE MOUNTPOINT\nsda    500G disk\n├─sda1   1G part /boot\n└─sda2 499G part /",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys23",
+    question: "Show filesystem UUIDs and types",
+    answer: "blkid",
+    explanation: "blkid reads block devices and prints their UUID, TYPE, and LABEL — exactly what you need for /etc/fstab.",
+    usage: "Build a stable fstab entry that doesn't depend on /dev/sdX ordering.",
+    examples: [
+      "sudo blkid",
+      "sudo blkid /dev/sda1",
+      "blkid -o export /dev/sda1  # Shell-friendly"
+    ],
+    memoryTip: "blkid = block ID (UUID/label).",
+    outputExample: "$ sudo blkid\n/dev/sda1: UUID=\"abcd-1234\" TYPE=\"ext4\"",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys24",
+    question: "Find the mount info for a given path",
+    answer: "findmnt /var",
+    explanation: "findmnt walks the mount table and prints the matching entry — source device, mountpoint, filesystem, options.",
+    usage: "Diagnose mount issues or confirm a bind mount target.",
+    examples: [
+      "findmnt /var",
+      "findmnt -t ext4  # All ext4 mounts",
+      "findmnt --target /  # Tree view from root"
+    ],
+    memoryTip: "findmnt = find mount entry.",
+    outputExample: "$ findmnt /var\nTARGET SOURCE FSTYPE OPTIONS\n/var   /dev/sda3 ext4  rw,relatime",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys25",
+    question: "Show the history of logins on this machine",
+    answer: "last",
+    explanation: "last reads /var/log/wtmp and prints user logins with source IP and durations.",
+    usage: "Audit who logged in and when, especially after a suspected incident.",
+    examples: [
+      "last",
+      "last -n 10  # Last 10 entries",
+      "last alice  # Only one user"
+    ],
+    memoryTip: "last = last logins.",
+    outputExample: "$ last -n 3\nalice  pts/0  192.168.1.10  Sat May 14 09:00   still logged in\nbob    pts/1  10.0.0.5      Sat May 14 08:42 - 09:15  (00:33)",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys26",
+    question: "Show virtual memory, IO, and CPU stats every second",
+    answer: "vmstat 1",
+    explanation: "vmstat prints aggregate system stats. The trailing number is the refresh interval in seconds.",
+    usage: "Identify whether a slowdown is CPU, memory pressure, or IO bound.",
+    examples: [
+      "vmstat 1",
+      "vmstat 1 5  # 5 samples then exit",
+      "vmstat -SM 1  # Memory in MiB"
+    ],
+    memoryTip: "vmstat = virtual memory + system stats.",
+    outputExample: "$ vmstat 1\nprocs ---memory---  ---cpu---\n r b   free buff cache  us sy id\n 1 0   123M  10M  500M  10  2 85",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys27",
+    question: "Show per-device I/O statistics",
+    answer: "iostat -xz 1",
+    explanation: "iostat reports CPU and per-device disk activity. -x = extended stats; -z hides idle devices; 1 = refresh every second.",
+    usage: "Spot which disk is bottlenecking the system.",
+    examples: [
+      "iostat -xz 1",
+      "iostat -d 2 3  # Disks only, 3 samples, 2s apart",
+      "iostat -m  # MB/s instead of KB/s"
+    ],
+    memoryTip: "iostat = I/O statistics.",
+    outputExample: "$ iostat -xz 1\nDevice  r/s  w/s rkB/s wkB/s %util\nsda    1.0  3.2 16    256   2.1",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys28",
+    question: "Show a concise hardware summary",
+    answer: "sudo lshw -short",
+    explanation: "lshw queries firmware and the kernel for installed hardware. -short prints a compact table.",
+    usage: "Quick overview of CPUs, memory, disks, and NICs.",
+    examples: [
+      "sudo lshw -short",
+      "sudo lshw -C network  # Just NICs",
+      "sudo lshw -html > hw.html  # HTML report"
+    ],
+    memoryTip: "lshw = list hardware.",
+    outputExample: "$ sudo lshw -short\nH/W path        Device     Class       Description\n/0/100/2.0/0    eth0       network     Ethernet Controller I219-LM",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys29",
+    question: "View detailed memory usage from the kernel",
+    answer: "cat /proc/meminfo",
+    explanation: "/proc/meminfo is the kernel's authoritative memory breakdown: total, free, cached, buffers, slab, dirty pages, swap, etc.",
+    usage: "Investigate memory leaks or unexpected caching beyond what free shows.",
+    examples: [
+      "cat /proc/meminfo",
+      "grep -E 'MemTotal|MemAvailable|Cached' /proc/meminfo",
+      "awk '/MemAvailable/ {print $2/1024 \" MB\"}' /proc/meminfo"
+    ],
+    memoryTip: "/proc/meminfo = the kernel's memory page.",
+    outputExample: "$ head -3 /proc/meminfo\nMemTotal:       16384000 kB\nMemFree:         1024000 kB\nMemAvailable:    8192000 kB",
+    category: "SYSTEM INFO"
+  },
+  {
+    id: "sys30",
+    question: "Show only error-level entries in the system journal",
+    answer: "journalctl -p err",
+    explanation: "-p priority filters by syslog severity (emerg…debug); err shows level 3 and above.",
+    usage: "Skim a noisy journal for actual problems.",
+    examples: [
+      "journalctl -p err -b  # Errors since current boot",
+      "journalctl -p warning..err",
+      "journalctl -p err --since '1 hour ago'"
+    ],
+    memoryTip: "-p = priority level filter.",
+    outputExample: "$ journalctl -p err -b -n 3\nMay 14 10:12 host kernel: usb 1-2: error",
+    category: "SYSTEM INFO"
+  },
+
+  // BASH SCRIPTING — extended (practical workflows)
+  {
+    id: "bash11",
+    question: "Enable strict mode at the top of a bash script",
+    answer: "set -euo pipefail",
+    explanation: "Combines three safety options: -e exit on error, -u error on unset variables, -o pipefail catch failures in any pipe stage.",
+    usage: "Default first line of any non-trivial script — turns silent failures into loud ones.",
+    examples: [
+      "#!/usr/bin/env bash\nset -euo pipefail",
+      "set -euo pipefail\nIFS=$'\\n\\t'  # Safer word splitting",
+      "set +e  # Locally disable -e for a risky block"
+    ],
+    memoryTip: "EUO pipefail = exit on Error, Undefined, broken pipeline.",
+    outputExample: "$ bash -c 'set -e; false; echo unreached'\n# (exits with non-zero before 'unreached')",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash12",
+    question: "Run cleanup code automatically when a script exits",
+    answer: "trap 'cleanup' EXIT",
+    explanation: "trap registers a handler for signals/events; EXIT fires when the shell exits for any reason — success, error, or signal.",
+    usage: "Delete temp files, release locks, or send notifications no matter how the script ends.",
+    examples: [
+      "trap 'rm -f \"$tmp\"' EXIT",
+      "trap 'echo failed at $LINENO' ERR",
+      "trap '' INT  # Ignore Ctrl-C"
+    ],
+    memoryTip: "trap CMD EVENT = run CMD when EVENT fires.",
+    outputExample: "$ bash -c 'trap \"echo cleaning up\" EXIT; echo work'\nwork\ncleaning up",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash13",
+    question: "Parse a -f flag in a script using getopts",
+    answer: "while getopts \"f:\" opt; do case $opt in f) file=$OPTARG;; esac; done",
+    explanation: "getopts walks $@ looking for the listed short options; the colon means -f takes a value, exposed in $OPTARG.",
+    usage: "Quick POSIX-friendly flag parsing without external deps.",
+    examples: [
+      "while getopts 'f:v' opt; do ... done",
+      "shift $((OPTIND-1))  # Drop parsed opts",
+      "getopts 'hf:' opt; case $opt in h) usage;; esac"
+    ],
+    memoryTip: "getopts = the built-in for short flags.",
+    outputExample: "$ cat script.sh\nwhile getopts 'f:' opt; do case $opt in f) echo \"file=$OPTARG\";; esac; done\n$ ./script.sh -f hi\nfile=hi",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash14",
+    question: "Use a default value if a variable is unset or empty",
+    answer: "${var:-default}",
+    explanation: "Parameter expansion: if $var is unset or empty, the whole expression evaluates to 'default' (without assigning).",
+    usage: "Make scripts resilient when env vars or args aren't provided.",
+    examples: [
+      "echo \"${NAME:-world}\"",
+      "port=\"${PORT:-8080}\"",
+      ": \"${HOME:?HOME must be set}\""
+    ],
+    memoryTip: ":- = use-if-empty default.",
+    outputExample: "$ unset NAME; echo \"${NAME:-world}\"\nworld",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash15",
+    question: "Hard-fail the script if a required variable is missing",
+    answer: "${var:?missing var}",
+    explanation: "Parameter expansion :? exits the shell (or returns the error in scripts) with the message if the variable is unset/empty.",
+    usage: "Make sure callers passed required env or args before doing destructive work.",
+    examples: [
+      ": \"${API_TOKEN:?API_TOKEN is required}\"",
+      "TARGET=\"${1:?usage: $0 <target>}\"",
+      "DB=\"${DB:?set DB env var}\""
+    ],
+    memoryTip: ":? = error-if-empty (loud).",
+    outputExample: "$ bash -c ': \"${X:?X is required}\"'\nbash: X: X is required",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash16",
+    question: "Replace all occurrences of a substring in a variable",
+    answer: "${var//search/replace}",
+    explanation: "Double slash means replace every match; a single / replaces only the first.",
+    usage: "Sanitize or transform string variables inside scripts without sed.",
+    examples: [
+      "path=/home/alice; echo \"${path//alice/bob}\"",
+      "echo \"${file// /_}\"  # Spaces to underscores",
+      "echo \"${s/foo/bar}\"  # First occurrence only"
+    ],
+    memoryTip: "// = global replace.",
+    outputExample: "$ s='one two three'; echo \"${s// /-}\"\none-two-three",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash17",
+    question: "Match a value against several options with a case statement",
+    answer: "case \"$1\" in start) ... ;; stop) ... ;; *) usage;; esac",
+    explanation: "case/esac selects the first matching pattern. * is the default; ;; ends each branch.",
+    usage: "Dispatch script subcommands cleanly.",
+    examples: [
+      "case \"$mode\" in dev|test) ...;; prod) ...;; *) echo bad;; esac",
+      "case \"$file\" in *.md) ... ;; *.txt) ...;; esac",
+      "case $? in 0) echo ok;; *) echo fail;; esac"
+    ],
+    memoryTip: "case = labeled branches; *) is the catch-all.",
+    outputExample: "$ x=hi; case $x in hi) echo greet;; bye) echo leave;; esac\ngreet",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash18",
+    question: "Declare an associative array in bash",
+    answer: "declare -A map",
+    explanation: "-A creates an associative array (string keys). Requires bash 4+; not available in pure sh.",
+    usage: "Lookup tables — e.g., mapping environment names to URLs.",
+    examples: [
+      "declare -A url=([dev]=https://dev.x [prod]=https://x)",
+      "url[staging]=https://staging.x",
+      "for k in \"${!url[@]}\"; do echo \"$k -> ${url[$k]}\"; done"
+    ],
+    memoryTip: "-A = associative; -a = indexed.",
+    outputExample: "$ declare -A m=([a]=1 [b]=2); echo \"${m[a]}\"\n1",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash19",
+    question: "Read every line of a file into an array",
+    answer: "mapfile -t lines < file.txt",
+    explanation: "mapfile (alias readarray) reads lines into the named array; -t strips the trailing newline from each element.",
+    usage: "When you need indexed access to file contents.",
+    examples: [
+      "mapfile -t lines < users.txt",
+      "echo \"${lines[0]}\"",
+      "mapfile -t < <(grep error log)  # Default array MAPFILE"
+    ],
+    memoryTip: "mapfile -t = each line becomes an element, no trailing \\n.",
+    outputExample: "$ printf 'a\\nb\\nc\\n' > f; mapfile -t lines < f; echo \"${lines[1]}\"\nb",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash20",
+    question: "Increment a counter using arithmetic syntax",
+    answer: "(( i++ ))",
+    explanation: "(( ... )) is bash's arithmetic expression context; it supports C-like ops without needing $ on variable names.",
+    usage: "Counters in loops, simple math without invoking expr.",
+    examples: [
+      "(( i++ ))",
+      "(( total += $val ))",
+      "if (( a > b )); then echo bigger; fi"
+    ],
+    memoryTip: "(( math )) = C-style integer arithmetic.",
+    outputExample: "$ i=0; (( i++ )); echo $i\n1",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash21",
+    question: "Create a timestamped tarball backup of /data",
+    answer: "tar -czf \"backup-$(date +%F).tar.gz\" /data",
+    explanation: "$(date +%F) expands to YYYY-MM-DD, so the archive name carries the date. tar -czf gzip-compresses /data into it.",
+    usage: "Nightly cron backup pattern — newest archive named by the day it ran.",
+    examples: [
+      "tar -czf \"backup-$(date +%F).tar.gz\" /data",
+      "tar -czf \"snap-$(date +%F-%H%M).tgz\" /etc",
+      "tar -czf - /data | ssh backup@host 'cat > backup.tgz'"
+    ],
+    memoryTip: "Backup name = base + $(date +%F).",
+    outputExample: "$ tar -czf \"backup-$(date +%F).tar.gz\" /data\n$ ls\nbackup-2026-05-15.tar.gz",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash22",
+    question: "Delete log files older than 7 days",
+    answer: "find /var/log -name '*.log' -mtime +7 -delete",
+    explanation: "-mtime +7 matches files modified more than 7 days ago; -delete removes them in place.",
+    usage: "Log rotation / cron cleanup of old artifacts.",
+    examples: [
+      "find /var/log -name '*.log' -mtime +7 -delete",
+      "find /tmp -mindepth 1 -mtime +30 -delete",
+      "find . -name '*.bak' -mtime +14 -print  # Dry-run first"
+    ],
+    memoryTip: "-mtime +N = older than N days.",
+    outputExample: "$ find /var/log -name '*.log' -mtime +7 -delete\n# (silently removes matching old logs)",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash23",
+    question: "Batch-rename every .txt file to .md in the current directory",
+    answer: "for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done",
+    explanation: "Loop over the glob; ${f%.txt} strips the .txt suffix using parameter expansion, then .md is appended.",
+    usage: "Quick mass rename without external tools.",
+    examples: [
+      "for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done",
+      "for f in IMG_*.jpg; do mv \"$f\" \"photo-${f#IMG_}\"; done",
+      "rename 's/\\.txt$/.md/' *.txt  # If 'rename' is installed"
+    ],
+    memoryTip: "${name%suffix} = chop suffix; loop + mv = batch rename.",
+    outputExample: "$ touch a.txt b.txt; for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done; ls\na.md  b.md",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash24",
+    question: "Send all script output to both the terminal and a log file",
+    answer: "exec > >(tee -a script.log) 2>&1",
+    explanation: "Process substitution >(...) launches tee, and exec redirects the script's stdout/stderr into it — so every later command is mirrored.",
+    usage: "Cron and deploy scripts where you want a permanent log without losing live visibility when run interactively.",
+    examples: [
+      "exec > >(tee -a script.log) 2>&1",
+      "exec > >(tee -a \"$LOG\") 2> >(tee -a \"$LOG\" >&2)",
+      "{ stuff; } | tee -a script.log  # Per-block alternative"
+    ],
+    memoryTip: ">(tee -a) = process sub that tees output.",
+    outputExample: "$ bash -c 'exec > >(tee -a /tmp/o); echo hi'\nhi\n$ cat /tmp/o\nhi",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash25",
+    question: "Run a fallback action when a command fails",
+    answer: "command || { echo failed; exit 1; }",
+    explanation: "|| runs the right side only if the left exits non-zero. The braces group multiple statements as a single conditional block.",
+    usage: "Inline error handling without writing a separate if/else.",
+    examples: [
+      "curl -fsS url || { echo 'fetch failed'; exit 1; }",
+      "mkdir -p dir || exit 1",
+      "command && echo ok || echo fail"
+    ],
+    memoryTip: "|| = 'else' for a single command.",
+    outputExample: "$ false || echo recovered\nrecovered",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash26",
+    question: "Schedule a script to run daily at 2:30 AM in cron",
+    answer: "30 2 * * * /usr/local/bin/job.sh",
+    explanation: "Cron syntax: minute hour day month weekday command. * means 'every'. 30 2 * * * fires at 02:30 every day.",
+    usage: "Backups, cleanup, log rotation — anything you want on a schedule.",
+    examples: [
+      "30 2 * * * /usr/local/bin/backup.sh",
+      "0 * * * * /usr/local/bin/heartbeat.sh  # Hourly",
+      "*/5 * * * * /opt/check.sh  # Every 5 minutes"
+    ],
+    memoryTip: "5 fields: m h dom mon dow.",
+    outputExample: "$ crontab -l\n30 2 * * * /usr/local/bin/job.sh",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash27",
+    question: "Run a job every 15 minutes via cron",
+    answer: "*/15 * * * * /path/to/cmd",
+    explanation: "*/N in a cron field means 'every N units'. */15 in the minute slot fires at :00, :15, :30, :45.",
+    usage: "Health checks, polling jobs, frequent syncs.",
+    examples: [
+      "*/15 * * * * /opt/healthcheck.sh",
+      "*/2 * * * * /opt/sync.sh  # Every 2 minutes",
+      "0 */6 * * * /opt/longjob.sh  # Every 6 hours"
+    ],
+    memoryTip: "*/N = step every N in that field.",
+    outputExample: "$ crontab -l\n*/15 * * * * /opt/healthcheck.sh",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash28",
+    question: "Sync a source dir to a remote host, deleting extras at the destination",
+    answer: "rsync -avz --delete src/ user@host:/dst/",
+    explanation: "-a archive (perms/symlinks/etc), -v verbose, -z compress, --delete makes the destination a mirror by removing files no longer in src/.",
+    usage: "Deploys, snapshots, and one-way mirrors.",
+    examples: [
+      "rsync -avz --delete src/ user@host:/dst/",
+      "rsync -av --dry-run src/ host:/dst/  # Preview",
+      "rsync -avzP --exclude '*.log' src/ host:/dst/"
+    ],
+    memoryTip: "-a archive, -z zip, --delete mirror.",
+    outputExample: "$ rsync -avz --delete src/ user@host:/dst/\nsending incremental file list\n./\nfile1\n...",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash29",
+    question: "Iterate over positional arguments while consuming them",
+    answer: "while [[ $# -gt 0 ]]; do echo \"$1\"; shift; done",
+    explanation: "$# is the arg count; $1 is the next arg. shift drops $1 and renumbers, so the loop walks through all of them.",
+    usage: "Manual flag parsing when getopts isn't expressive enough.",
+    examples: [
+      "while [[ $# -gt 0 ]]; do case $1 in --name) name=$2; shift 2;; *) shift;; esac; done",
+      "while [[ $# -gt 0 ]]; do echo \"arg=$1\"; shift; done",
+      "for arg in \"$@\"; do echo \"$arg\"; done  # Read-only variant"
+    ],
+    memoryTip: "shift = pop $1, renumber the rest.",
+    outputExample: "$ set -- a b c; while [[ $# -gt 0 ]]; do echo $1; shift; done\na\nb\nc",
+    category: "BASH SCRIPTING"
+  },
+  {
+    id: "bash30",
+    question: "Log a message to the system log (syslog/journal)",
+    answer: "logger \"deploy completed\"",
+    explanation: "logger writes a message to syslog so it shows up in journalctl alongside service logs.",
+    usage: "Audit trails from cron jobs and deploy scripts.",
+    examples: [
+      "logger \"deploy completed\"",
+      "logger -t mydeploy -p user.warning \"oops\"",
+      "logger -f /var/log/myapp.log  # Forward a file"
+    ],
+    memoryTip: "logger = log to syslog from the shell.",
+    outputExample: "$ logger \"hello from script\"\n$ journalctl -n 1\nMay 14 12:00 host alice: hello from script",
+    category: "BASH SCRIPTING"
+  },
+
+  // ARCHIVES & COMPRESS — extended
+  {
+    id: "arch8",
+    question: "Compress a file with xz (high compression ratio)",
+    answer: "xz file.txt",
+    explanation: "xz produces .xz archives with much better compression than gzip, at the cost of CPU. The original file is replaced.",
+    usage: "Distributing large source tarballs where size matters more than CPU.",
+    examples: [
+      "xz file.txt  # Creates file.txt.xz",
+      "xz -k file.txt  # Keep original",
+      "xz -T0 file.txt  # Multi-threaded"
+    ],
+    memoryTip: "xz = stronger but slower than gzip.",
+    outputExample: "$ xz file.txt && ls\nfile.txt.xz",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch9",
+    question: "Decompress an .xz file",
+    answer: "unxz file.txt.xz",
+    explanation: "unxz reverses xz compression; equivalent to xz -d.",
+    usage: "Open an .xz archive.",
+    examples: [
+      "unxz file.txt.xz",
+      "xz -d file.txt.xz  # Same thing",
+      "xzcat file.txt.xz  # View without extracting"
+    ],
+    memoryTip: "unxz = un-xz.",
+    outputExample: "$ unxz file.txt.xz && ls\nfile.txt",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch10",
+    question: "Create an xz-compressed tarball",
+    answer: "tar -cJf archive.tar.xz directory/",
+    explanation: "-c create, -J use xz, -f filename. The capital J distinguishes xz from gzip (z) and bzip2 (j).",
+    usage: "Pack a folder with xz's tight compression in one step.",
+    examples: [
+      "tar -cJf archive.tar.xz dir/",
+      "tar -cvJf snap.tar.xz src/",
+      "XZ_OPT=-9 tar -cJf big.tar.xz dir/  # Max compression"
+    ],
+    memoryTip: "tar zJf = xz; lowercase j = bzip2; z = gzip.",
+    outputExample: "$ tar -cJf archive.tar.xz dir/\n$ ls\narchive.tar.xz",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch11",
+    question: "List the contents of a tarball without extracting",
+    answer: "tar -tf archive.tar.gz",
+    explanation: "-t lists; -f names the archive. tar auto-detects the compression for listing.",
+    usage: "Inspect what's in an archive before unpacking somewhere risky.",
+    examples: [
+      "tar -tf archive.tar.gz",
+      "tar -tvf archive.tar.gz | head  # Verbose with sizes",
+      "tar -tzf archive.tar.gz | wc -l  # Count files"
+    ],
+    memoryTip: "-t = table of contents.",
+    outputExample: "$ tar -tf archive.tar.gz\ndir/\ndir/file1.txt\ndir/file2.txt",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch12",
+    question: "Extract a tarball into a specific directory",
+    answer: "tar -xzf archive.tar.gz -C /tmp/restore",
+    explanation: "-C changes to the target directory before extracting, so files land there instead of the current directory.",
+    usage: "Restore a backup into a sandbox without polluting your cwd.",
+    examples: [
+      "tar -xzf archive.tar.gz -C /tmp/restore",
+      "mkdir -p out && tar -xzf a.tar.gz -C out",
+      "tar -xJf src.tar.xz -C ~/src"
+    ],
+    memoryTip: "-C dir = change directory before extracting.",
+    outputExample: "$ mkdir restore && tar -xzf a.tar.gz -C restore\n$ ls restore\n(extracted files)",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch13",
+    question: "Extract just one file from a tarball",
+    answer: "tar -xzf archive.tar.gz path/to/file.txt",
+    explanation: "Pass the archive-relative path as an extra argument; tar pulls only that file (and required parent dirs).",
+    usage: "Recover a single config from a large backup.",
+    examples: [
+      "tar -xzf backup.tar.gz etc/nginx/nginx.conf",
+      "tar -xzf src.tar.gz src/main.py",
+      "tar --wildcards -xzf big.tgz '*.yml'  # Glob"
+    ],
+    memoryTip: "Pass the path inside the archive as args.",
+    outputExample: "$ tar -xzf backup.tar.gz etc/nginx/nginx.conf\n$ ls etc/nginx/\nnginx.conf",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch14",
+    question: "Create a .zip archive of a directory",
+    answer: "zip -r archive.zip directory/",
+    explanation: "-r recurses into subfolders. zip is widely compatible with non-Unix systems.",
+    usage: "Sharing files with Windows/macOS users who don't have tar handy.",
+    examples: [
+      "zip -r project.zip project/",
+      "zip -er secrets.zip secrets/  # Encrypted",
+      "zip -9 -r tight.zip dir/  # Max compression"
+    ],
+    memoryTip: "zip -r = recursive zip.",
+    outputExample: "$ zip -r project.zip project/\n  adding: project/ (stored 0%)\n  adding: project/main.py (deflated 65%)",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch15",
+    question: "Extract a .zip archive",
+    answer: "unzip archive.zip",
+    explanation: "unzip extracts contents into the current directory (or -d target).",
+    usage: "Open a .zip you downloaded.",
+    examples: [
+      "unzip archive.zip",
+      "unzip archive.zip -d /tmp/dest",
+      "unzip -l archive.zip  # List contents"
+    ],
+    memoryTip: "unzip archive.zip = unpack it.",
+    outputExample: "$ unzip archive.zip\nArchive:  archive.zip\n inflating: file1.txt\n inflating: file2.txt",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch16",
+    question: "Create a .7z archive (high compression)",
+    answer: "7z a archive.7z directory/",
+    explanation: "7z 'a' adds files to an archive; .7z uses LZMA2 and often beats gzip/xz on text-heavy data.",
+    usage: "Maximum compression when CPU time is cheap and bandwidth isn't.",
+    examples: [
+      "7z a archive.7z dir/",
+      "7z a -mx=9 tight.7z dir/  # Max compression",
+      "7z x archive.7z  # Extract"
+    ],
+    memoryTip: "7z a = add (create). 7z x = extract.",
+    outputExample: "$ 7z a archive.7z dir/\nCreating archive: archive.7z\nEverything is Ok",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch17",
+    question: "View the contents of a gzipped text file without extracting",
+    answer: "zcat file.txt.gz",
+    explanation: "zcat decompresses on the fly to stdout, like cat for .gz files.",
+    usage: "Inspect compressed logs without ever writing the plaintext to disk.",
+    examples: [
+      "zcat app.log.gz | head",
+      "zcat *.log.gz | grep error",
+      "zless file.gz  # Pager version"
+    ],
+    memoryTip: "z* = compressed-aware variants (zcat, zless, zgrep).",
+    outputExample: "$ zcat sample.txt.gz\nhello\nworld",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch18",
+    question: "Grep inside a .gz log file without extracting",
+    answer: "zgrep pattern file.log.gz",
+    explanation: "zgrep wraps grep over a transparently decompressed stream so you can search archives directly.",
+    usage: "Hunt errors in rotated logs that have been gzipped.",
+    examples: [
+      "zgrep error /var/log/syslog.1.gz",
+      "zgrep -h -E 'panic|oops' *.log.gz",
+      "zgrep -c failed *.log.gz  # Count per file"
+    ],
+    memoryTip: "zgrep = grep on a .gz file.",
+    outputExample: "$ zgrep error app.log.gz\n[ERR] timeout reaching upstream",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch19",
+    question: "Tar a directory while excluding *.log files",
+    answer: "tar --exclude='*.log' -czf archive.tar.gz directory/",
+    explanation: "--exclude patterns are evaluated relative to the archive contents; matching files are skipped.",
+    usage: "Backup a project without bloating it with rotating logs.",
+    examples: [
+      "tar --exclude='*.log' -czf archive.tar.gz dir/",
+      "tar --exclude-from=ignore.txt -czf a.tgz dir/",
+      "tar --exclude='node_modules' -czf src.tar.gz project/"
+    ],
+    memoryTip: "--exclude = skip matching paths.",
+    outputExample: "$ tar --exclude='*.log' -czf a.tar.gz dir/ && tar -tzf a.tar.gz | grep -c '.log'\n0",
+    category: "ARCHIVES & COMPRESS"
+  },
+  {
+    id: "arch20",
+    question: "Compress a file with parallel gzip for speed",
+    answer: "pigz file",
+    explanation: "pigz is a drop-in gzip that uses every CPU core; produces a standard .gz file.",
+    usage: "Compress big files quickly on multi-core machines.",
+    examples: [
+      "pigz bigfile",
+      "tar -c dir | pigz > dir.tar.gz",
+      "pigz -d file.gz  # Decompress (also parallel)"
+    ],
+    memoryTip: "pigz = parallel gzip (every core helps).",
+    outputExample: "$ time pigz huge.txt\nreal    0m2.011s  # vs. gzip's 0m8s",
+    category: "ARCHIVES & COMPRESS"
+  },
+
+  // DAILY TIPS — extended
+  {
+    id: "daily41",
+    question: "Search backwards through your shell history interactively",
+    answer: "Ctrl+R",
+    explanation: "Ctrl+R starts an incremental reverse search of command history; keep typing to refine, press Enter to run or Esc/Ctrl+G to cancel.",
+    usage: "Find a long command you ran earlier without scrolling.",
+    examples: [
+      "(press Ctrl+R, type 'ssh', press Enter)",
+      "Ctrl+R again to step to older matches",
+      "history | grep ssh  # Non-interactive alternative"
+    ],
+    memoryTip: "Ctrl+R = reverse-search history.",
+    outputExample: "(reverse-i-search)`ssh': ssh user@host",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily42",
+    question: "Reuse the last argument of the previous command",
+    answer: "!$",
+    explanation: "!$ expands to the last argument of the previous command — saves retyping long paths.",
+    usage: "After ls /long/path you can mkdir !$ to create the same path.",
+    examples: [
+      "mkdir /tmp/new && cd !$",
+      "vim /etc/hosts; sudo cp !$ !$.bak",
+      "!!  # Whole last command; sudo !! to retry as root"
+    ],
+    memoryTip: "!$ = the last word of the last command.",
+    outputExample: "$ ls /var/log\n$ cd !$\ncd /var/log",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily43",
+    question: "Clear the terminal screen",
+    answer: "Ctrl+L",
+    explanation: "Ctrl+L is a readline shortcut that clears the screen without dropping your current command line.",
+    usage: "Tidy the screen mid-command without losing what you've typed.",
+    examples: [
+      "Ctrl+L  # Clear screen",
+      "clear  # Equivalent command",
+      "reset  # Full terminal reset if it's mangled"
+    ],
+    memoryTip: "Ctrl+L = Lift the screen clean.",
+    outputExample: "(screen clears, prompt re-renders at top)",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily44",
+    question: "Jump to the start of the command line",
+    answer: "Ctrl+A",
+    explanation: "Ctrl+A moves the cursor to the beginning of the line; Ctrl+E goes to the end.",
+    usage: "Edit the front of a long command without arrow-spamming.",
+    examples: [
+      "Ctrl+A  # Beginning",
+      "Ctrl+E  # End",
+      "Alt+B / Alt+F  # Move by word"
+    ],
+    memoryTip: "A = start (Alpha), E = End.",
+    outputExample: "(cursor jumps to the prompt)",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily45",
+    question: "Search the manual pages for a keyword",
+    answer: "apropos keyword",
+    explanation: "apropos searches short man-page descriptions for a keyword and prints matches.",
+    usage: "Find the right command when you only know what it should do.",
+    examples: [
+      "apropos compress",
+      "apropos -e socket  # Exact whole-word match",
+      "man -k keyword  # Same thing"
+    ],
+    memoryTip: "apropos = 'about' that topic.",
+    outputExample: "$ apropos compress\ngzip (1)  - compress or expand files\nbzip2 (1) - block-sorting file compressor",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily46",
+    question: "Portably check whether a command exists",
+    answer: "command -v git",
+    explanation: "command -v prints the path (or alias) if the command exists and exits non-zero otherwise — works in POSIX sh, unlike which.",
+    usage: "In scripts, gate behavior on whether a tool is installed.",
+    examples: [
+      "command -v git >/dev/null || { echo install git; exit 1; }",
+      "if command -v nvim; then EDITOR=nvim; fi",
+      "type git  # Bash-only alternative"
+    ],
+    memoryTip: "command -v = the POSIX-correct 'which'.",
+    outputExample: "$ command -v git\n/usr/bin/git",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily47",
+    question: "Re-run a command repeatedly to watch its output change",
+    answer: "watch -n 1 'ls -l file.log'",
+    explanation: "watch re-runs a command every N seconds (default 2) and displays the latest output, highlighting differences.",
+    usage: "Monitor a queue, a growing file, or a deploy.",
+    examples: [
+      "watch -n 1 'kubectl get pods'",
+      "watch -d 'free -h'  # Highlight diffs",
+      "watch 'date; uptime'  # Multi-command"
+    ],
+    memoryTip: "watch = re-run on a clock.",
+    outputExample: "$ watch -n 1 date\nEvery 1.0s: date\nSat May 14 10:30:01 UTC 2026",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily48",
+    question: "Show a progress bar for a pipe of unknown duration",
+    answer: "pv file.iso | dd of=/dev/sdX",
+    explanation: "pv (pipe viewer) sits inside a pipe and prints throughput, ETA, and a progress bar based on the input file size.",
+    usage: "Watch a long-running copy/transform finish.",
+    examples: [
+      "pv file.iso | dd of=/dev/sdX bs=4M",
+      "pv -s 100M < /dev/urandom > random.bin",
+      "tar -czf - dir/ | pv | ssh host 'cat > dir.tgz'"
+    ],
+    memoryTip: "pv = pipe viewer (progress bar in pipes).",
+    outputExample: "$ pv file.iso > /dev/null\n 1.2GB 0:00:08 [ 150MB/s] [============>     ] 62%",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily49",
+    question: "Sort the current directory's children by total size",
+    answer: "du -sh * | sort -h",
+    explanation: "du -sh prints human-readable sizes per entry; -h on sort understands the K/M/G suffixes for a correct numeric sort.",
+    usage: "Find the heavy folders eating your disk.",
+    examples: [
+      "du -sh * | sort -h",
+      "du -sh .[!.]* * | sort -h  # Include hidden",
+      "du -sh */ | sort -h  # Directories only"
+    ],
+    memoryTip: "sort -h = human-readable numeric sort.",
+    outputExample: "$ du -sh * | sort -h\n4.0K  README.md\n12M   src\n840M  node_modules",
+    category: "DAILY TIPS"
+  },
+  {
+    id: "daily50",
+    question: "Open the last command in your editor to tweak and re-run it",
+    answer: "fc",
+    explanation: "fc (fix command) pulls the previous command into $EDITOR; on save, the edited command runs.",
+    usage: "Fix a typo or refactor a long pipeline without retyping it.",
+    examples: [
+      "fc  # Edit last command",
+      "fc -l  # List recent history with numbers",
+      "fc 100 105  # Edit commands 100-105 as a block"
+    ],
+    memoryTip: "fc = fix command (open in editor).",
+    outputExample: "$ fc\n# (editor opens with previous command; save+quit to run it)",
+    category: "DAILY TIPS"
+  },
+
+  // RHEL / FEDORA
+  {
+    id: "rhel1",
+    question: "Install a package on Fedora/RHEL",
+    answer: "sudo dnf install package_name",
+    explanation: "dnf is the modern package manager on Fedora/RHEL 8+, replacing yum. It resolves dependencies and installs from configured repos.",
+    usage: "Add software to a Fedora/RHEL system.",
+    examples: [
+      "sudo dnf install nginx",
+      "sudo dnf install -y vim git  # Multiple, no prompt",
+      "sudo dnf install /path/to/pkg.rpm  # Local RPM"
+    ],
+    memoryTip: "dnf install = the apt install equivalent on Fedora/RHEL.",
+    outputExample: "$ sudo dnf install nginx\nDependencies resolved.\nInstalling: nginx-1.24.0-1.fc40",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel2",
+    question: "Remove a package on Fedora/RHEL",
+    answer: "sudo dnf remove package_name",
+    explanation: "dnf remove uninstalls a package and its no-longer-needed dependencies (you'll be prompted).",
+    usage: "Uninstall software cleanly.",
+    examples: [
+      "sudo dnf remove nginx",
+      "sudo dnf autoremove  # Drop orphans",
+      "sudo dnf history undo last  # Roll back the last txn"
+    ],
+    memoryTip: "dnf remove = apt remove on the Red Hat side.",
+    outputExample: "$ sudo dnf remove nginx\nRemoving:\n nginx  x86_64  1.24.0-1.fc40\nComplete!",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel3",
+    question: "Upgrade all installed packages on Fedora/RHEL",
+    answer: "sudo dnf upgrade",
+    explanation: "dnf upgrade updates every package to the newest available version in the enabled repositories.",
+    usage: "Routine system maintenance.",
+    examples: [
+      "sudo dnf upgrade",
+      "sudo dnf upgrade --refresh  # Force metadata refresh first",
+      "sudo dnf upgrade nginx  # Just one package"
+    ],
+    memoryTip: "dnf upgrade = apt upgrade on Fedora/RHEL.",
+    outputExample: "$ sudo dnf upgrade\nUpgrading:\n kernel-core   6.8.5  -> 6.8.9",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel4",
+    question: "Search for a package by keyword on Fedora/RHEL",
+    answer: "dnf search keyword",
+    explanation: "dnf search matches the keyword against package names and short descriptions in the repo metadata.",
+    usage: "Discover available packages before installing.",
+    examples: [
+      "dnf search editor",
+      "dnf search --all 'web server'  # Match against full description too",
+      "dnf list 'python3-*'  # List by glob"
+    ],
+    memoryTip: "dnf search = apt search.",
+    outputExample: "$ dnf search nginx\n=== Name & Summary Matched: nginx ===\nnginx.x86_64 : A high performance web server",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel5",
+    question: "Show detailed info about a package",
+    answer: "dnf info package_name",
+    explanation: "dnf info prints version, architecture, repo, size, and description for a package.",
+    usage: "Inspect before installing or filing a bug.",
+    examples: [
+      "dnf info nginx",
+      "dnf info --installed nginx  # Only the installed version",
+      "dnf list --installed nginx"
+    ],
+    memoryTip: "dnf info = apt show.",
+    outputExample: "$ dnf info nginx\nName    : nginx\nVersion : 1.24.0\nRelease : 1.fc40\nSummary : A high performance web server",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel6",
+    question: "View the dnf transaction history",
+    answer: "dnf history",
+    explanation: "dnf history lists every install/upgrade/remove transaction with timestamps and IDs you can roll back.",
+    usage: "Trace when a package changed or undo a bad upgrade.",
+    examples: [
+      "dnf history",
+      "sudo dnf history info 42  # Details of txn 42",
+      "sudo dnf history undo 42  # Roll back that txn"
+    ],
+    memoryTip: "dnf history = a log of package changes.",
+    outputExample: "$ dnf history\nID | Date | Action(s) | Altered\n42 | May 14 | Install | 3",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel7",
+    question: "Find which package provides /usr/bin/curl",
+    answer: "dnf provides /usr/bin/curl",
+    explanation: "dnf provides searches repo metadata for the package that ships a given path or capability.",
+    usage: "Track unknown binaries back to their packages.",
+    examples: [
+      "dnf provides /usr/bin/curl",
+      "dnf provides '*/nginx.conf'  # Glob",
+      "rpm -qf /usr/bin/curl  # Local DB equivalent"
+    ],
+    memoryTip: "dnf provides = the dpkg -S of the RPM world.",
+    outputExample: "$ dnf provides /usr/bin/curl\ncurl-8.6.0-1.fc40.x86_64 : ...",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel8",
+    question: "Clean the dnf cache",
+    answer: "sudo dnf clean all",
+    explanation: "Removes cached repo metadata and packages from /var/cache/dnf, forcing fresh downloads next time.",
+    usage: "Free space or resolve flaky metadata after switching repos.",
+    examples: [
+      "sudo dnf clean all",
+      "sudo dnf clean metadata  # Only repo data",
+      "sudo dnf makecache  # Re-prime cache"
+    ],
+    memoryTip: "dnf clean all = nuke the cached metadata + rpms.",
+    outputExample: "$ sudo dnf clean all\n12 files removed",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel9",
+    question: "Install a package group like 'Development Tools'",
+    answer: "sudo dnf group install \"Development Tools\"",
+    explanation: "Groups are curated sets of packages (build tools, dev libs, etc.) installable as one unit.",
+    usage: "Bring up a dev environment in one command.",
+    examples: [
+      "sudo dnf group install \"Development Tools\"",
+      "dnf group list  # Show available groups",
+      "sudo dnf group install --with-optional \"GNOME Desktop\""
+    ],
+    memoryTip: "dnf group install = the meta-package install.",
+    outputExample: "$ sudo dnf group install \"Development Tools\"\nInstalling Groups:\n Development Tools\nTransaction Summary: Install 47 packages",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel10",
+    question: "List all installed RPM packages",
+    answer: "rpm -qa",
+    explanation: "rpm -qa queries the local RPM database for All installed packages.",
+    usage: "Generate an inventory for compliance or migration.",
+    examples: [
+      "rpm -qa | wc -l",
+      "rpm -qa | grep nginx",
+      "rpm -qa --queryformat '%{NAME}\\n' | sort"
+    ],
+    memoryTip: "rpm -qa = query all.",
+    outputExample: "$ rpm -qa | head -3\nbasesystem-11-15.fc40\nlibgcc-13.2.1-7.fc40\nfilesystem-3.18-7.fc40",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel11",
+    question: "Find which RPM owns /etc/nginx/nginx.conf",
+    answer: "rpm -qf /etc/nginx/nginx.conf",
+    explanation: "rpm -qf (query file) returns the package that installed the given path.",
+    usage: "Identify which package to investigate when a config behaves oddly.",
+    examples: [
+      "rpm -qf /etc/nginx/nginx.conf",
+      "rpm -qf $(which curl)",
+      "dnf provides /etc/nginx/nginx.conf  # Repo-side equivalent"
+    ],
+    memoryTip: "rpm -qf = query owner file.",
+    outputExample: "$ rpm -qf /etc/nginx/nginx.conf\nnginx-1.24.0-1.fc40.x86_64",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel12",
+    question: "List every file installed by the nginx package",
+    answer: "rpm -ql nginx",
+    explanation: "-q query, -l list files, NAME = nginx — prints everything in the package payload.",
+    usage: "Locate binaries, configs, and docs shipped with a package.",
+    examples: [
+      "rpm -ql nginx",
+      "rpm -ql nginx | grep /etc",
+      "rpm -qc nginx  # Config files only"
+    ],
+    memoryTip: "rpm -ql = query list-files.",
+    outputExample: "$ rpm -ql nginx | head -3\n/etc/logrotate.d/nginx\n/etc/nginx/conf.d\n/usr/sbin/nginx",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel13",
+    question: "Start a systemd service",
+    answer: "sudo systemctl start nginx",
+    explanation: "systemctl is the systemd manager. start launches a unit immediately without changing whether it's enabled at boot.",
+    usage: "Bring a service up after install or config changes.",
+    examples: [
+      "sudo systemctl start nginx",
+      "sudo systemctl restart nginx",
+      "sudo systemctl stop nginx"
+    ],
+    memoryTip: "systemctl start = run the service now.",
+    outputExample: "$ sudo systemctl start nginx\n$ systemctl is-active nginx\nactive",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel14",
+    question: "Enable a service to start on boot, and start it now",
+    answer: "sudo systemctl enable --now nginx",
+    explanation: "--now combines enable (start at boot) with start (start now), so you don't have to run two commands.",
+    usage: "Wire up a fresh install in one step.",
+    examples: [
+      "sudo systemctl enable --now nginx",
+      "sudo systemctl disable --now nginx  # Reverse",
+      "sudo systemctl is-enabled nginx  # Check"
+    ],
+    memoryTip: "enable --now = persist boot + start immediately.",
+    outputExample: "$ sudo systemctl enable --now nginx\nCreated symlink /etc/systemd/system/multi-user.target.wants/nginx.service",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel15",
+    question: "Re-read systemd unit files after editing one",
+    answer: "sudo systemctl daemon-reload",
+    explanation: "After changing a unit file, systemd needs to re-parse it. daemon-reload reloads its in-memory view without restarting running units.",
+    usage: "Always run after editing a .service file before restarting it.",
+    examples: [
+      "sudo systemctl daemon-reload",
+      "sudo systemctl daemon-reexec  # Re-exec systemd itself",
+      "sudo systemctl edit nginx  # Drop-in override + auto-reload"
+    ],
+    memoryTip: "daemon-reload = reload the unit files into systemd.",
+    outputExample: "$ sudo systemctl daemon-reload\n# (silent on success)",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel16",
+    question: "Tail the live journal of a specific service",
+    answer: "journalctl -xeu nginx",
+    explanation: "-u limits to a unit; -e jumps to the end; -x adds explanatory hints for errors when available.",
+    usage: "Diagnose why a service failed to start or is misbehaving.",
+    examples: [
+      "sudo journalctl -xeu nginx",
+      "sudo journalctl -fu nginx  # Follow live",
+      "sudo journalctl --since '10 min ago' -u nginx"
+    ],
+    memoryTip: "journalctl -xeu = explain + end + unit filter.",
+    outputExample: "$ sudo journalctl -xeu nginx -n 3\nnginx[1234]: starting...\nsystemd[1]: Started nginx.service",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel17",
+    question: "Show all active firewalld rules",
+    answer: "sudo firewall-cmd --list-all",
+    explanation: "firewalld groups rules into zones; --list-all on the default zone prints everything currently allowed.",
+    usage: "Audit what's open on a server.",
+    examples: [
+      "sudo firewall-cmd --list-all",
+      "sudo firewall-cmd --list-all --zone=public",
+      "sudo firewall-cmd --get-active-zones"
+    ],
+    memoryTip: "--list-all = everything in the current zone.",
+    outputExample: "$ sudo firewall-cmd --list-all\npublic (active)\n  services: ssh dhcpv6-client\n  ports: 8080/tcp",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel18",
+    question: "Persistently allow TCP port 8080 through firewalld",
+    answer: "sudo firewall-cmd --add-port=8080/tcp --permanent",
+    explanation: "--permanent writes to the on-disk config; without it the rule only lasts until reboot. Follow up with --reload to apply.",
+    usage: "Open a port for a new service.",
+    examples: [
+      "sudo firewall-cmd --add-port=8080/tcp --permanent",
+      "sudo firewall-cmd --reload",
+      "sudo firewall-cmd --add-service=http --permanent"
+    ],
+    memoryTip: "--permanent then --reload = real rules saved + applied.",
+    outputExample: "$ sudo firewall-cmd --add-port=8080/tcp --permanent\nsuccess\n$ sudo firewall-cmd --reload\nsuccess",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel19",
+    question: "Check the current SELinux enforcement mode",
+    answer: "getenforce",
+    explanation: "Prints Enforcing, Permissive, or Disabled — the runtime state of SELinux's policy engine.",
+    usage: "Quickly check why a service might be getting blocked.",
+    examples: [
+      "getenforce",
+      "sestatus  # More detailed",
+      "sudo setenforce 0  # Switch to permissive (temporary)"
+    ],
+    memoryTip: "getenforce = is SELinux locking the door right now?",
+    outputExample: "$ getenforce\nEnforcing",
+    category: "RHEL/FEDORA"
+  },
+  {
+    id: "rhel20",
+    question: "Restore SELinux file contexts under a directory",
+    answer: "sudo restorecon -Rv /var/www/html",
+    explanation: "restorecon resets each file's SELinux context to the policy default. -R recurses, -v reports changes.",
+    usage: "Fix 403/permission-denied weirdness after moving files around with cp/tar that didn't preserve contexts.",
+    examples: [
+      "sudo restorecon -Rv /var/www/html",
+      "sudo restorecon -v /etc/nginx/nginx.conf",
+      "matchpathcon /var/www/html  # See expected context"
+    ],
+    memoryTip: "restorecon = restore SELinux context.",
+    outputExample: "$ sudo restorecon -Rv /var/www/html\nrelabeled /var/www/html/index.html from unconfined_u:... to system_u:object_r:httpd_sys_content_t:s0",
+    category: "RHEL/FEDORA"
   }
 ];
 
 export const categories = [
-  { id: "NAVIGATION", name: "Navigation", count: 20 },
-  { id: "FILE OPS", name: "File Operations", count: 25 },
-  { id: "VIEWING TEXT", name: "Viewing Text", count: 20 },
-  { id: "PERMISSIONS", name: "Permissions", count: 20 },
-  { id: "PIPES & REDIRECT", name: "Pipes & Redirect", count: 20 },
-  { id: "PROCESSES", name: "Processes", count: 20 },
-  { id: "NETWORKING", name: "Networking", count: 20 },
-  { id: "PACKAGES", name: "Packages", count: 17 },
-  { id: "TEXT PROCESSING", name: "Text Processing", count: 20 },
-  { id: "SYSTEM INFO", name: "System Info", count: 20 },
-  { id: "BASH SCRIPTING", name: "Bash Scripting", count: 20 },
-  { id: "ARCHIVES & COMPRESS", name: "Archives & Compress", count: 15 },
-  { id: "DAILY TIPS", name: "Daily Linux Tips", count: 40 }
+  { id: "NAVIGATION", name: "Navigation", count: 30 },
+  { id: "FILE OPS", name: "File Operations", count: 35 },
+  { id: "VIEWING TEXT", name: "Viewing Text", count: 30 },
+  { id: "PERMISSIONS", name: "Permissions", count: 30 },
+  { id: "PIPES & REDIRECT", name: "Pipes & Redirect", count: 30 },
+  { id: "PROCESSES", name: "Processes", count: 30 },
+  { id: "NETWORKING", name: "Networking", count: 30 },
+  { id: "PACKAGES", name: "Packages (Debian/Ubuntu)", count: 27 },
+  { id: "RHEL/FEDORA", name: "RHEL / Fedora", count: 20 },
+  { id: "TEXT PROCESSING", name: "Text Processing", count: 30 },
+  { id: "SYSTEM INFO", name: "System Info", count: 30 },
+  { id: "BASH SCRIPTING", name: "Bash Scripting & Practice", count: 30 },
+  { id: "ARCHIVES & COMPRESS", name: "Archives & Compress", count: 20 },
+  { id: "DAILY TIPS", name: "Daily Linux Tips", count: 50 }
 ];
