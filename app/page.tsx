@@ -289,6 +289,34 @@ export default function Home() {
     });
   };
 
+  const revealAnswer = () => {
+    const question = currentQuestions[currentQuestionIndex];
+    if (!question || !selectedCategory) return;
+
+    setIsCorrect(false);
+    setShowExplanation(true);
+    setUserAnswer('(revealed)');
+
+    const nextStreak = 0;
+    const nextTotalAnswered = totalAnswered + 1;
+    const alreadyQueued = wrongQueue.some((q) => q.id === question.id);
+    const nextWrong = alreadyQueued ? wrongQueue : [...wrongQueue, question];
+
+    setStreak(nextStreak);
+    setTotalAnswered(nextTotalAnswered);
+    setWrongQueue(nextWrong);
+
+    writeResume(selectedCategory, {
+      list: currentQuestions,
+      index: currentQuestionIndex,
+      score,
+      totalAnswered: nextTotalAnswered,
+      streak: nextStreak,
+      bestStreak,
+      wrong: nextWrong,
+    });
+  };
+
   const nextQuestion = () => {
     if (!selectedCategory) return;
     if (currentQuestionIndex < currentQuestions.length - 1) {
@@ -554,6 +582,18 @@ export default function Home() {
                 style={{ background: '#38bdf8', color: '#111827', border: '1px solid #38bdf8' }}
               >
                 Check Answer
+              </button>
+              <button
+                onClick={revealAnswer}
+                className="w-full py-3 rounded-lg transition-colors text-sm font-semibold"
+                style={{
+                  background: 'transparent',
+                  color: '#fbbf24',
+                  border: '1px dashed #fbbf24',
+                }}
+                title="Show the answer and add this question to the repetition queue"
+              >
+                👁 Reveal Answer (adds to repetition queue)
               </button>
             </div>
           ) : (
