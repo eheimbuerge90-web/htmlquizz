@@ -5391,7 +5391,7 @@ export const questions: Question[] = [
   },
   {
     id: "net22",
-    question: "Send a POST request to `https://api.example.com/data` with a JSON body `{"key":"value"}`",
+    question: "Send a POST request to `https://api.example.com/data` with a JSON body `{\"key\":\"value\"}`",
     answer: "curl -X POST -H 'Content-Type: application/json' -d '{\"k\":\"v\"}' https://api/x",
     explanation: "-X sets the method, -H adds headers, -d supplies the body. curl handles the rest of the HTTP framing.",
     usage: "Test REST endpoints from the command line or in scripts.",
@@ -6239,7 +6239,7 @@ export const questions: Question[] = [
   {
     id: "bash23",
     question: "Rename all `.txt` files in the current directory to `.md` files using a loop and parameter expansion",
-    answer: "for f in *.txt; do mv "$f" "${f%.txt}.md"; done",
+    answer: "for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done",
     explanation: "The loop globs every `.txt` file in the current directory and runs `mv` on each. The trick is `${f%.txt}`: bash parameter expansion `${var%pattern}` strips the SHORTEST matching SUFFIX. So if `f=notes.txt`, `${f%.txt}` is `notes`, and `${f%.txt}.md` becomes `notes.md`. Use `%%` instead of `%` for the LONGEST match (greedy). Use `#`/`##` for PREFIX stripping (`${f#prefix}` / `${f##prefix}`). ALWAYS quote `\"$f\"` and `\"${f%.txt}.md\"` — filenames with spaces would break the `mv` otherwise. If you want to rename WITHIN names (not just suffix), use the substitution form `${f//search/replace}`: `for f in IMG_*.jpg; do mv \"$f\" \"${f/IMG_/photo-}\"; done`. The Perl-based `rename` command (in `rename` or `prename` packages) does this with full regex, but isn't installed everywhere. Foot-gun: if NO files match the glob, the loop still runs ONCE with the literal `*.txt` as `$f` — set `shopt -s nullglob` at the top of the script to make non-matching globs produce an empty list instead.",
     usage: "Renaming a batch of files after a project rename, swapping extensions after a format conversion, adding a prefix/suffix to a series, or fixing inconsistent naming.",
     examples: [
@@ -6274,7 +6274,7 @@ export const questions: Question[] = [
   },
   {
     id: "bash25",
-    question: "Run `./deploy.sh` and if it fails, print "failed" and exit the script immediately",
+    question: "Run `./deploy.sh` and if it fails, print \"failed\" and exit the script immediately",
     answer: "./deploy.sh || { echo failed; exit 1; }",
     explanation: "The `||` (logical OR) operator short-circuits: it runs the RIGHT side ONLY IF the left side exited NON-ZERO (failure). Its sibling `&&` runs the right side only on SUCCESS. Together they let you write inline error handling without a full `if/then/else`. The `{ ... ; }` braces group multiple commands into ONE conditional block — note the required SPACES after `{` and before `}`, and the required `;` (or newline) before the closing brace. Without the braces, only the very next command would be conditional. The classic chain `cmd && echo ok || echo fail` is SUBTLY BROKEN: if `echo ok` itself fails (rare but possible), `echo fail` also fires. Safer: `if cmd; then echo ok; else echo fail; fi`. Common patterns: `curl -fsS URL || die 'fetch failed'` (require a successful fetch), `mkdir -p dir || exit 1` (bail if directory creation fails), `[ -f file ] || { echo missing; exit 2; }` (precondition). Under `set -e`, the LEFT side of `||` is excluded from auto-exit-on-error, which is how you opt out of strict mode for one command: `risky_cmd || true`.",
     usage: "Inline error handling, preflight checks, graceful fallback paths, or short-circuit logic in scripts.",
@@ -6347,7 +6347,7 @@ export const questions: Question[] = [
   {
     id: "bash29",
     question: "Process and consume all positional arguments one by one in a script, shifting through them until none remain",
-    answer: "while [[ $# -gt 0 ]]; do echo "$1"; shift; done",
+    answer: "while [[ $# -gt 0 ]]; do echo \"$1\"; shift; done",
     explanation: "When you need flag parsing more flexible than `getopts` (especially LONG flags like `--name VALUE` or `--name=VALUE`), the standard pattern is a manual loop. `$#` is the count of positional arguments remaining; `$1` is the next one in line. The `shift` builtin DROPS `$1` and renumbers — `$2` becomes the new `$1`, `$3` the new `$2`, etc. — and decrements `$#`. So the loop continues until all arguments are consumed. Inside the loop you typically use a `case` on `$1` to decide what each flag means and call `shift` (or `shift 2` for flags with a value) to advance. The bash-only `[[ ... ]]` is preferred over `[ ... ]` here because it doesn't word-split and has nicer syntax — fall back to `[ \"$#\" -gt 0 ]` for POSIX `sh`. To avoid clobbering the original args (which functions can do), save them first with `args=(\"$@\")` then iterate `for a in \"${args[@]}\"; do ...`. For READ-ONLY iteration without consuming, just `for arg in \"$@\"; do ...; done`. ALWAYS quote `\"$@\"` and `\"$1\"` — otherwise spaces in arg values get split into multiple words.",
     usage: "Parsing scripts with long flags (`--config FILE`, `--verbose`), implementing subcommand dispatch, or pre-processing args before passing remaining ones to another tool.",
     examples: [
