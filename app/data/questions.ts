@@ -1499,9 +1499,7 @@ export const questions: Question[] = [
   {
     id: "pipe7",
     question: "Feed a multi-line block of literal text into a command's stdin using a `<< EOF ... EOF` here-document — pass multi-line input to `cat`",
-    answer: "cat << EOF
-hello
-EOF",
+    answer: "cat << EOF\nhello\nEOF",
     explanation: "A 'here-document' (heredoc) is bash syntax for INLINING multi-line input into a command without making a temp file. Syntax: `command << MARKER` on one line, then any number of lines, then `MARKER` ALONE on its own line ends the block. The MARKER is conventionally `EOF` but can be any unquoted word — `END`, `SQL`, `_FIN`. Variable expansion happens inside ($vars and command substitution work) — to DISABLE that and get literal text, QUOTE the marker on the first line: `<< 'EOF'`. The variant `<<-` (dash) STRIPS leading TABS from each line, which lets you indent a heredoc inside an indented script. Use case overlap with `echo` and `cat << EOF > file` is huge — heredocs replace 'awkward escape-everything echo strings'.",
     usage: "Writing config files from a script (`cat << EOF > /etc/myapp.conf ...`). Embedding SQL queries (`mysql -u user db << SQL ... SQL`). Passing multi-line input to `ssh server bash << SCRIPT ... SCRIPT`.",
     examples: [
@@ -1654,9 +1652,7 @@ EOF",
   {
     id: "pipe16",
     question: "Pass multi-line input directly to `cat` using a here document (type lines then EOF to finish)",
-    answer: "cat << EOF
-hello
-EOF",
+    answer: "cat << EOF\nhello\nEOF",
     explanation: "'<< EOF' creates a here document, feeding multiple lines as input until EOF marker.",
     usage: "Provide multi-line input to commands that read from stdin.",
     examples: [
