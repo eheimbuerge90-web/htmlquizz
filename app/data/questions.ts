@@ -101,8 +101,8 @@ export const questions: Question[] = [
   },
   {
     id: "nav6",
-    question: "Change into a specific folder by absolute or relative path",
-    answer: "cd /path/to/directory",
+    question: "Change into the directory `/var/log/nginx`",
+    answer: "cd /var/log/nginx",
     explanation: "`cd` followed by a path moves you there. Two kinds of paths: ABSOLUTE (starts with `/`, e.g. `/var/log`) is interpreted from the filesystem root and works from anywhere; RELATIVE (everything else, e.g. `Documents` or `../sibling`) is interpreted from your current directory. The shell also expands a few shortcuts: `~` becomes your home, `~user` becomes that user's home, `-` is the previous directory, `..` is the parent. If the destination doesn't exist or isn't a directory, `cd` prints an error and leaves you where you are. Many shells (Bash, Zsh) have an `autocd` option that lets you skip typing `cd` entirely — just type the directory name. Tab completion (press Tab after typing a few letters) auto-completes paths and saves enormous time.",
     usage: "Jumping to a project folder. Diving into `/etc` to read configs. Navigating into a subdirectory you just listed with `ls`.",
     examples: [
@@ -572,8 +572,8 @@ export const questions: Question[] = [
   },
   {
     id: "file13",
-    question: "Copy recursively — copy `source_dir/` into `dest_dir/`",
-    answer: "cp -r source_dir/ dest_dir/",
+    question: "Copy the entire `projects/` directory and all its contents into `backup/`",
+    answer: "cp -r projects/ backup/",
     explanation: "'cp -r' copies directories and their contents recursively.",
     usage: "Duplicate entire directory trees for backup or project copying.",
     examples: [
@@ -3475,7 +3475,7 @@ export const questions: Question[] = [
   {
     id: "bash6",
     question: "Access command-line arguments passed to a script using `$1`, `$2`, ..., `$@`, and `$#`",
-    answer: "echo \"First arg: $1\"",
+    answer: "echo $1",
     explanation: "When you invoke a script as `./myscript foo bar baz`, bash makes the arguments available as POSITIONAL PARAMETERS: `$0` = the script's own name/path, `$1` = `foo`, `$2` = `bar`, `$3` = `baz`. `$#` is the COUNT of arguments (3 in this example — note `$0` does NOT count). `$@` and `$*` both mean 'all arguments' but differ when quoted: `\"$@\"` expands to `\"$1\" \"$2\" \"$3\"` (each arg preserved as a separate word — what you almost always want), while `\"$*\"` expands to `\"$1 $2 $3\"` as a single string joined by the first character of `$IFS`. For argument numbers > 9 you MUST use braces: `${10}`, `${11}` — `$10` is actually `$1` followed by literal `0`. The `shift` builtin drops `$1` and renumbers the rest (shift N drops the first N). Critical: ALWAYS quote `\"$1\"`, `\"$2\"`, `\"$@\"` to handle args with spaces. For real flag parsing (`-v`, `--help`) use `getopts` (POSIX, short flags only) or write a `while case` loop. Foot-gun: defining a function changes `$1`, `$2`, etc. to the FUNCTION's args, hiding the script's args.",
     usage: "Making scripts accept input — filenames to process, options like `--verbose`, target hosts to ssh into. Foundational pattern for any reusable script.",
     examples: [
@@ -5072,8 +5072,8 @@ export const questions: Question[] = [
   },
   {
     id: "pipe23",
-    question: "Run one command for each line of a file, substituting it into a placeholder",
-    answer: "xargs -I {} cmd {} < list.txt",
+    question: "Run `echo` on each line of `urls.txt`, substituting each line into the command",
+    answer: "xargs -I {} echo {} < urls.txt",
     explanation: "xargs -I {} replaces {} with each input token; cmd is invoked once per line with that argument in place of the placeholder.",
     usage: "Apply an arbitrary command to a list of inputs that you can't just append.",
     examples: [
@@ -5087,8 +5087,8 @@ export const questions: Question[] = [
   },
   {
     id: "pipe24",
-    question: "Run up to 4 commands in parallel from a list of inputs",
-    answer: "xargs -P 4 -n 1 cmd < list.txt",
+    question: "Run `echo` on each line of `urls.txt` using up to 4 parallel processes",
+    answer: "xargs -P 4 -n 1 echo < urls.txt",
     explanation: "-P 4 runs four xargs children at once; -n 1 passes one input per invocation. Together you get a quick parallel pool.",
     usage: "Speed up an embarrassingly-parallel batch job like downloading many URLs.",
     examples: [
@@ -6310,8 +6310,8 @@ export const questions: Question[] = [
   },
   {
     id: "bash27",
-    question: "Schedule a cron job to run every 15 minutes using the step syntax",
-    answer: "*/15 * * * * /path/to/cmd",
+    question: "Schedule `/usr/local/bin/backup.sh` to run every 15 minutes as a cron job",
+    answer: "*/15 * * * * /usr/local/bin/backup.sh",
     explanation: "The `*/N` syntax in any cron field means 'every N units, starting at 0'. Put `*/15` in the minute field and the job fires at minute 0, 15, 30, and 45 of every hour — four times per hour, 96 times per day. Replace the slash with a list to fire at specific minutes only: `0,15,30,45 * * * *` is equivalent but more verbose. The same works in the hour field: `0 */6 * * *` runs at 00:00, 06:00, 12:00, 18:00. For sub-minute precision (e.g., every 30 seconds) classic cron CAN'T do it — you'd run a script every minute that itself sleeps for 30s and runs the work twice, OR use `systemd timers` which support sub-minute precision, OR a long-running daemon. Two important foot-guns: (1) very frequent jobs that take LONGER than their interval can pile up — wrap with `flock` (`/usr/bin/flock -n /var/lock/myjob.lock /path/job.sh`) to prevent overlap, and (2) the OUTPUT of frequent cron jobs gets emailed to the user EVERY TIME by default — always redirect `>> log 2>&1` or `>/dev/null 2>&1` to silence. As with all cron, use absolute paths and don't rely on shell aliases or `.bashrc` setup.",
     usage: "Health checks, monitoring polls, periodic syncs, queue drainers, near-real-time data ingestion.",
     examples: [
@@ -6852,8 +6852,8 @@ export const questions: Question[] = [
   },
   {
     id: "rhel4",
-    question: "Search the repositories for packages matching a keyword (RHEL/Fedora)",
-    answer: "dnf search keyword",
+    question: "Search the repositories for packages matching the keyword `http` (RHEL/Fedora)",
+    answer: "dnf search http",
     explanation: "`dnf search` queries the metadata of every enabled repository for packages whose NAME or SUMMARY (short description) contains the keyword. The output is grouped into two sections: 'Name & Summary Matched' (strong hits) and just 'Name Matched' or 'Summary Matched' (weaker). Add `--all` (or `search all`) to also search the long DESCRIPTION field — slower but catches more. No `sudo` needed; this is a read-only operation against cached metadata, although the very first run after install may trigger a metadata download. If your search returns nothing, try a broader term or run `sudo dnf makecache` to refresh the cache. For exact-name listings use `dnf list` with a glob (`dnf list 'python3-*'`). To see WHICH packages provide a specific file or capability, use `dnf provides` instead.",
     usage: "Finding a tool when you only remember roughly what it does (`dnf search markdown`), discovering plugins for an installed package, or browsing what's available in a new repo.",
     examples: [
