@@ -330,8 +330,8 @@ export const questions: Question[] = [
   },
   {
     id: "nav19",
-    question: "Show ONE total disk-usage number for a directory in human-readable form",
-    answer: "du -sh directory",
+    question: "Show the total disk usage of the `projects/` directory in human-readable form (KB/MB/GB)",
+    answer: "du -sh projects/",
     explanation: "`du` ('disk usage') walks a directory recursively, but plain `du` prints a line for every subdirectory inside — overwhelming output. `-s` ('summary') collapses that into a SINGLE number per argument: the total size of the entire tree. `-h` ('human') converts bytes into `1.5G`, `12M`, `800K`. Without `-s`, you get hundreds of lines; with it, one. The size is DISK SPACE used (includes filesystem overhead like inode blocks) — not the same as 'sum of file sizes'. For apparent file size use `--apparent-size`. `du -sh *` is the workhorse pattern: one summary per top-level item in the current directory. Note `du` is SLOW on huge trees because it stats every file — for interactive disk hunting install `ncdu` (`sudo apt install ncdu`).",
     usage: "Finding out how big a project folder is. Comparing two directories' sizes. Hunting the space hog in `/var` or `~/`.",
     examples: [
@@ -1144,8 +1144,8 @@ export const questions: Question[] = [
   },
   {
     id: "perm5",
-    question: "Set permissions recursively",
-    answer: "chmod -R 755 directory",
+    question: "Set permissions to 755 recursively on the `projects/` directory and everything inside it",
+    answer: "chmod -R 755 projects/",
     explanation: "'chmod -R' applies permissions recursively to all files and subdirectories.",
     usage: "Set permissions for entire directory trees consistently.",
     examples: [
@@ -1349,8 +1349,8 @@ export const questions: Question[] = [
   },
   {
     id: "perm18",
-    question: "Change ownership recursively",
-    answer: "sudo chown -R user:group directory/",
+    question: "Recursively change ownership of `projects/` to user `alice` and group `developers`",
+    answer: "sudo chown -R alice:developers projects/",
     explanation: "'chown -R' changes ownership of directory and all contents recursively.",
     usage: "Transfer ownership of entire directory trees to different users or groups.",
     examples: [
@@ -1364,8 +1364,8 @@ export const questions: Question[] = [
   },
   {
     id: "perm19",
-    question: "Set sticky bit on directory",
-    answer: "chmod +t directory/",
+    question: "Set the sticky bit on the `/tmp/shared/` directory so only file owners can delete their own files",
+    answer: "chmod +t /tmp/shared/",
     explanation: "'chmod +t' sets the sticky bit, allowing only file owners to delete their own files.",
     usage: "Create shared directories where users can only delete their own files.",
     examples: [
@@ -1396,8 +1396,8 @@ export const questions: Question[] = [
   // PIPES & REDIRECT
   {
     id: "pipe1",
-    question: "Save a command's stdout to a file (overwriting any existing content)",
-    answer: "command > file.txt",
+    question: "Save the output of `ls -la` to `listing.txt`, overwriting any existing content",
+    answer: "ls -la > listing.txt",
     explanation: "Every Unix process has three default channels: stdin (0, where input comes from), stdout (1, where normal output goes), stderr (2, where errors go). The `>` operator redirects stdout from your terminal into a FILE — the file is created if it doesn't exist, and TRUNCATED to zero bytes if it does. Important: `>` only captures stdout (channel 1); error messages on stderr still print to your terminal. Common foot-gun: `cat file > file` empties the file because the shell opens-and-truncates `> file` BEFORE `cat` starts reading. Use `>|` to override `set -o noclobber` if your shell is set to refuse overwriting existing files.",
     usage: "Capturing a command's output for later (`ls > filelist.txt`), generating a config file from a template, or dumping query results to a file.",
     examples: [
@@ -1413,8 +1413,8 @@ export const questions: Question[] = [
   },
   {
     id: "pipe2",
-    question: "Append a command's stdout to a file (preserving existing content)",
-    answer: "command >> file.txt",
+    question: "Append the output of `date` to `log.txt` without overwriting existing content",
+    answer: "date >> log.txt",
     explanation: "Same as `>` but the file is opened in APPEND mode: new output is added to the END of whatever was already there, instead of replacing it. If the file doesn't exist it's created empty first. Like `>`, it only captures stdout — use `2>>` to append stderr. Appending is the right pattern for log files: many writers can append to the same log without stepping on each other (kernel guarantees atomic appends below the pipe-buffer size, usually 4096 bytes per line). Note `>>` does NOT lock the file across processes — if two scripts append giant blobs simultaneously, they can interleave.",
     usage: "Building a log file across many runs of a script. Appending a new line to your `~/.bashrc`. Accumulating timestamps in a daily journal.",
     examples: [
@@ -1430,8 +1430,8 @@ export const questions: Question[] = [
   },
   {
     id: "pipe3",
-    question: "Feed a file as stdin to a command using `<` (input redirection)",
-    answer: "command < input.txt",
+    question: "Feed `names.txt` as stdin to `sort` using input redirection",
+    answer: "sort < names.txt",
     explanation: "`<` is the mirror of `>`: it sends the contents of a file INTO a command's stdin. Most commands accept a filename as an argument (`sort file.txt`), making `<` redundant in those cases. But some commands ONLY read stdin (no filename arg), like `mail` or `tr`, and `<` is how you give them a file. Subtle but useful difference: `wc file.txt` prints `42 file.txt` (with the name); `wc < file.txt` prints `42` (just the number) because `wc` only knows about a stream, not a filename. You can chain redirections: `command < input.txt > output.txt 2> errors.txt` sets all three channels at once.",
     usage: "Sending an email body from a file (`mail -s subj you@example.com < body.txt`). Feeding a SQL script into `mysql` or `psql`. Getting `wc` output without a filename suffix for use in scripts.",
     examples: [
@@ -1515,8 +1515,8 @@ export const questions: Question[] = [
   },
   {
     id: "pipe8",
-    question: "Throw away a command's output by redirecting it to the special device `/dev/null`",
-    answer: "command > /dev/null",
+    question: "Run `make` and throw away all its stdout output by redirecting to `/dev/null`",
+    answer: "make > /dev/null",
     explanation: "`/dev/null` is a special character device that accepts any amount of input and produces nothing — the universal black hole / 'bit bucket'. Redirecting to it discards the data. `command > /dev/null` silences stdout only. `command 2> /dev/null` silences only errors (useful with `find` to drop 'Permission denied' spam). `command > /dev/null 2>&1` (or the shorter `command &> /dev/null`) silences EVERYTHING. The COMMAND still runs and still returns its exit code — only the visible output is suppressed. Reading FROM `/dev/null` gives instant EOF (zero bytes), useful as 'no input' for tools that demand stdin. Don't confuse `/dev/null` (discard) with `/dev/zero` (infinite zero-bytes source).",
     usage: "Silencing chatty commands in scripts. Suppressing 'Permission denied' noise from `find`. Background daemons that you only care about by exit-code, not their banter.",
     examples: [
@@ -1617,8 +1617,8 @@ export const questions: Question[] = [
   },
   {
     id: "pipe14",
-    question: "Use the `tee` command to view output on the screen AND save it to a file at the same time",
-    answer: "command | tee file.txt",
+    question: "Run `ls -la` and simultaneously display the output on screen AND save it to `listing.txt`",
+    answer: "ls -la | tee listing.txt",
     explanation: "`tee` reads stdin and writes to BOTH stdout AND each file argument — like a T-junction in plumbing. So `command | tee log.txt` shows the output live while also saving it. Without tee, redirecting to a file (`> log.txt`) hides the output; with tee, you see and save simultaneously. Useful flags: `-a` ('append') so the file isn't truncated on each run. To pipe further AFTER tee, just add more pipes: `command | tee log.txt | grep ERROR` lets the full log save while grep filters for the screen. Killer trick: `sudo` doesn't propagate through `>` — `sudo command > /etc/protected.file` FAILS because the redirect is done by your shell, not sudo. Workaround: `command | sudo tee /etc/protected.file`.",
     usage: "Watching a long build's output live while keeping a copy. Saving a session log without losing the on-screen feedback. The `sudo tee` trick for writing to root-owned files.",
     examples: [
@@ -2047,8 +2047,8 @@ export const questions: Question[] = [
   },
   {
     id: "proc19",
-    question: "Launch a command with a friendlier (lower) CPU priority",
-    answer: "nice -n 10 command",
+    question: "Run `make` with a lower CPU priority (niceness 10) so it does not slow down other processes",
+    answer: "nice -n 10 make",
     explanation: "Every process has a NICENESS VALUE — an integer from -20 (highest priority, greedy) to +19 (lowest priority, very 'nice' to others) that hints to the kernel scheduler how aggressively to give it CPU time. Default is 0. POSITIVE niceness means 'be nice — let other processes run first when there's contention'. NEGATIVE niceness means 'I'm important — preempt others'. `nice -n 10 cmd` STARTS a new command with niceness +10. CRUCIAL GOTCHA: only root can SET niceness BELOW 0 (raise priority); regular users can only LOWER priority (positive values) or keep it the same. Once a process is running, use `renice` (proc25) to change its niceness. Niceness only matters under CPU contention — on an idle system it's invisible. Cousin: I/O scheduling priority with `ionice` (separate dimension — a process can be CPU-nice but I/O-greedy). View current niceness as the `NI` column in `top` or `ps -o ni`.",
     usage: "Running a backup at night that competes with daytime workloads — `nice -n 19 backup.sh` so it yields whenever something more important needs CPU. Heavy `make -j8` compile is slowing your editor — relaunch with `nice -n 10 make -j8`. Encoding a video in the background without making the system feel laggy: `nice -n 15 ffmpeg ...`.",
     examples: [
@@ -2221,8 +2221,8 @@ export const questions: Question[] = [
   },
   {
     id: "net9",
-    question: "Test whether a specific TCP port on a host is reachable (or modern `nc -zv host port`)",
-    answer: "telnet host port",
+    question: "Test whether TCP port `80` on `google.com` is reachable (classic tool or modern `nc -zv`)",
+    answer: "telnet google.com 80",
     explanation: "`telnet` was originally an interactive remote-login protocol (predecessor of SSH, unencrypted, never use it for actual logins). Today its main use is as a 'is this TCP port open?' probe: `telnet host 80` either connects (port is listening — you'll see 'Connected to host') or fails (refused/timeout = port is closed or firewalled). Once connected you can type literal protocol commands — useful for poking at HTTP, SMTP, IMAP servers manually. Caveats: not always installed (`sudo apt install telnet` / `sudo dnf install telnet`); to QUIT once connected, press `Ctrl+]` then type `quit`. Modern preferred tool: `nc -zv host port` ('netcat zero-IO verbose') — does the connection check and reports without going interactive, exits with success/failure. Even more modern: `curl -v telnet://host:port` works too.",
     usage: "Quick port-open check from a server (does the firewall block 443?). Manually crafting an HTTP request to debug a misbehaving web server. Confirming an SMTP relay accepts connections.",
     examples: [
@@ -2437,8 +2437,8 @@ export const questions: Question[] = [
   // TEXT PROCESSING
   {
     id: "text1",
-    question: "Find lines containing a pattern",
-    answer: "grep pattern file",
+    question: "Find all lines containing the word `error` in `server.log`",
+    answer: "grep error server.log",
     explanation: "'grep' searches for lines matching a pattern. It's one of the most powerful text processing tools.",
     usage: "Search through files for specific content, filter output, or find configuration entries.",
     examples: [
@@ -2535,7 +2535,7 @@ export const questions: Question[] = [
   {
     id: "text7",
     question: "With `-d:` (delimiter) and `-f1` to extract just the first colon-separated field",
-    answer: "cut -d: -f1 file",
+    answer: "cut -d: -f1 /etc/passwd",
     explanation: "`cut` extracts COLUMNS from each line. Two modes: by FIELD (split on a delimiter) or by CHARACTER position. Field mode: `-d X` sets the delimiter (one character: `,`, `:`, tab, etc.), `-f N` picks field number N (1-indexed), `-f 1,3` picks several, `-f 2-` picks 2-to-end. Character mode: `-c 1-10` keeps columns 1-10 of each line. CAVEAT: `cut` cannot handle multi-char delimiters or quoted CSV fields — for those use `awk` or a real CSV tool like `csvkit`. Typical victim is `/etc/passwd` which is `name:x:uid:gid:gecos:home:shell` — `cut -d: -f1` extracts just usernames.",
     usage: "Pulling one column out of a structured file. Getting just usernames from `/etc/passwd`, just IPs from a log, or just one field from a TSV report.",
     examples: [
@@ -2587,8 +2587,8 @@ export const questions: Question[] = [
   },
   {
     id: "text10",
-    question: "Count words/lines/characters",
-    answer: "wc file",
+    question: "Count the number of lines, words, and characters in `notes.txt`",
+    answer: "wc notes.txt",
     explanation: "'wc' counts lines, words, and characters in files.",
     usage: "Get statistics about file contents or check file sizes.",
     examples: [
@@ -2647,7 +2647,7 @@ export const questions: Question[] = [
   },
   {
     id: "text14",
-    question: "Extract using field separator",
+    question: "Extract the first colon-delimited field from each line of `/etc/passwd`",
     answer: "cut -d: -f1 file",
     explanation: "'cut' extracts specific fields from each line using a delimiter.",
     usage: "Extract columns from CSV, passwd, or other delimited files.",
@@ -2707,8 +2707,8 @@ export const questions: Question[] = [
   },
   {
     id: "text18",
-    question: "Filter with regular expressions",
-    answer: "grep -E 'regex' file",
+    question: "Filter lines in `server.log` that match the extended regex `error|warn`",
+    answer: "grep -E 'error|warn' server.log",
     explanation: "'grep -E' uses extended regular expressions for powerful pattern matching.",
     usage: "Find complex patterns, validate formats, or extract specific data.",
     examples: [
@@ -2722,8 +2722,8 @@ export const questions: Question[] = [
   },
   {
     id: "text19",
-    question: "Reverse the characters on each line of a file",
-    answer: "rev file",
+    question: "Reverse the characters on each line of `notes.txt`",
+    answer: "rev notes.txt",
     explanation: "`rev` flips each line CHARACTER by character: `hello world` becomes `dlrow olleh`. It works line-by-line, so multi-line files keep their line order — only the contents of each line are reversed. `rev` is rarely used alone; it shines in clever pipes. Classic trick: sort by SUFFIX by doing `rev | sort | rev` (reverse, do normal sort which now compares suffixes-as-prefixes, reverse back). Another: extract the LAST field of an unknown-delimiter line by `rev | cut -d: -f1 | rev` — flips the line, takes what's now the first field, flips back. NOT to be confused with `tac` (text/cat backwards), which reverses LINE ORDER but keeps each line intact.",
     usage: "Sorting by file extension (suffix-based sort). Extracting the last field when you don't know the field count. Toy obfuscation. Comparing palindromes (`[ \"$x\" = \"$(echo $x | rev)\" ]`).",
     examples: [
@@ -3331,8 +3331,8 @@ export const questions: Question[] = [
   },
   {
     id: "pkg17",
-    question: "Read the offline manual page for any command",
-    answer: "man command",
+    question: "Read the offline manual page for the `ls` command",
+    answer: "man ls",
     explanation: "`man` (short for 'manual') opens the offline documentation for a command, function, file format, or system call — every Linux box ships with hundreds of these. Pages are organized into numbered SECTIONS: 1 = user commands (most common), 2 = system calls, 3 = library functions, 4 = device files, 5 = file formats and configs, 6 = games, 7 = misc/overview, 8 = sysadmin commands. So `man 5 passwd` gives the FILE FORMAT for `/etc/passwd`, while `man 1 passwd` gives the password-changing COMMAND. Inside the pager use `/text` to search forward, `n`/`N` to jump between hits, `space`/`b` to page down/up, `q` to quit. If no page exists, install `man-db` and the package's docs (some distros split docs out — `apt install nginx-doc`). For a one-line summary, `whatis cmd`; to search descriptions, `apropos keyword` (same as `man -k`). `--help` after a command (e.g., `ls --help`) gives a quick flag list — much shorter than the man page. The modern friendlier alternative is `tldr CMD` (separate package `tldr-pages`).",
     usage: "Learning a command's options the first time you use it, looking up an obscure flag, or reading config-file formats like `man 5 sshd_config` and `man 5 crontab`.",
     examples: [
@@ -3988,8 +3988,8 @@ export const questions: Question[] = [
   },
   {
     id: "daily18",
-    question: "Search recursively through all files in a directory for a text pattern",
-    answer: "grep -r \"pattern\" .",
+    question: "Search recursively through all files in the current directory for the word `error`",
+    answer: "grep -r \"error\" .",
     explanation: "`grep` (Globally search a Regular Expression and Print) is the everyday text search tool. By default it searches ONE file (or stdin); `-r` ('recursive') makes it walk into subdirectories. The pattern is by default a Basic Regular Expression (BRE); use `-E` for Extended (`grep -E 'a|b'`) or `-F` for FIXED strings (no regex — faster and safer for literal searches). `-i` case-insensitive. `-n` show line numbers. `-l` list ONLY filenames (no matching lines). `-L` opposite — files WITHOUT a match. `-c` count of matches per file. `-w` whole-word match. `-A 2` / `-B 2` / `-C 2` show 2 lines of After/Before/Context around matches. `-v` invert — show lines that DON'T match. `--include='*.py'` limit to matching filenames; `--exclude-dir=node_modules` skip dirs. By default grep follows symlinks; add `-R` (capital) to do that explicitly. The output format is `filename:line` (path:matchline). Modern faster alternatives: `ripgrep` (`rg`) is much faster, respects `.gitignore` by default, and is now the default in many editors; `ag` (the_silver_searcher) is similar. Install with `apt install ripgrep`.",
     usage: "Finding every reference to a variable or function across a codebase, locating a config value, hunting TODO comments, or searching log files for an error pattern.",
     examples: [
@@ -4204,8 +4204,8 @@ export const questions: Question[] = [
   },
   {
     id: "daily30",
-    question: "Run a command in the background so the shell prompt returns immediately by appending `&`",
-    answer: "command &",
+    question: "Run `./build.sh` in the background so the shell prompt returns immediately",
+    answer: "./build.sh &",
     explanation: "Appending `&` to a command launches it as a background JOB and returns control to the shell right away. Bash prints `[N] PID` where N is the job number (per-shell) and PID is the process ID. The background job inherits the shell's stdin/stdout/stderr, so its output STILL APPEARS in your terminal unless you redirect (`command > out.log 2>&1 &` is the polite form). Manage background jobs: `jobs` lists them, `fg %N` brings job N to the foreground (or `fg` for the most recent), `bg %N` resumes a STOPPED job in the background, `kill %N` sends SIGTERM to the job. A foreground job can be paused with Ctrl-Z (sends SIGTSTP) and resumed in background with `bg`. WARNING: when you LOG OUT or close the terminal, child processes typically receive SIGHUP and die. To survive logout, use `nohup cmd &` (ignores SIGHUP, redirects to `nohup.out`), `disown %N` after `&` (removes from shell's job table), or a proper detached tool like `tmux`/`screen`/`systemd-run`. For long-lived services, write a systemd unit instead — that's what it's for. `&` is for quick concurrent runs in interactive shells; not a substitute for service management.",
     usage: "Running long tasks while keeping the terminal usable, kicking off several parallel jobs, or starting a quick local dev server in the foreground console.",
     examples: [
@@ -4222,8 +4222,8 @@ export const questions: Question[] = [
   },
   {
     id: "daily31",
-    question: "Save a command's normal output to a file, overwriting it,",
-    answer: "command > file.txt",
+    question: "Save the output of `ls -la` to `listing.txt`, overwriting any existing content (second form)",
+    answer: "ls -la > listing.txt",
     explanation: "The `>` operator redirects the LEFT command's stdout (FD 1) into the FILE on the right, TRUNCATING (emptying) the file first if it exists, or creating it if it doesn't. Stderr is unaffected and still prints to the terminal — to capture errors too, use `2>` (errors to file) or `&>` (both, bash shorthand) or `> file 2>&1` (POSIX). Critically, `>` SILENTLY DESTROYS the previous contents of the file — if you meant to append, use `>>` instead. To prevent accidents, enable `set -o noclobber` in your shell which makes `>` REFUSE to overwrite an existing file (use `>|` to override per-command). To DISCARD output entirely, redirect to `/dev/null` (the bit-bucket): `noisy_cmd > /dev/null`. The redirection happens BEFORE the command runs: `> file cmd` is identical to `cmd > file`. Foot-gun: `cmd > file` with file == an INPUT FILE truncates the input before cmd reads it, leaving you with an empty file. Workaround: `cmd file > tmp && mv tmp file`, or use `sponge` (from `moreutils`): `cmd file | sponge file`.",
     usage: "Capturing a command's output for later, generating files from script output, saving snapshots, or writing the output of one tool that another will read.",
     examples: [
@@ -4240,8 +4240,8 @@ export const questions: Question[] = [
   },
   {
     id: "daily32",
-    question: "Append a command's output to a file (without overwriting)",
-    answer: "command >> file.txt",
+    question: "Append the output of `date` to `events.log` without overwriting existing content",
+    answer: "date >> events.log",
     explanation: "The double-arrow `>>` operator is the APPEND form of `>`: instead of truncating the destination file, it writes new output AT THE END, preserving existing contents. If the file doesn't exist, `>>` creates it (just like `>`). This is the operator you want for LOG files, history captures, and any case where successive runs should accumulate rather than overwrite. The stderr-append equivalent is `2>>` (append stderr to file). To append BOTH stdout and stderr to the same file: `cmd >> all.log 2>&1` (the ordering matters — `2>&1` AFTER `>> log`). Common usage in scripts: `echo \"[$(date)] event happened\" >> /var/log/myapp.log` for ad-hoc logging. There's no append protection equivalent to `noclobber` — appends are always allowed. For a thread-safe atomic append across processes use `flock`: `flock /tmp/lock.lock -c 'echo line >> file'`. The system `logger` command (see bash30) is a more durable alternative because it goes through syslog/journal with proper rotation and timestamping.",
     usage: "Building log files over time, accumulating output from a loop, appending entries to a manifest or report, adding lines to a config file from a script.",
     examples: [
@@ -4294,8 +4294,8 @@ export const questions: Question[] = [
   },
   {
     id: "daily35",
-    question: "Open the offline manual page for any command",
-    answer: "man command",
+    question: "Open the offline manual page for the `grep` command",
+    answer: "man grep",
     explanation: "`man` is the offline documentation viewer that ships with every Linux system. Each command/file format/library function has a 'man page' — a structured document with NAME, SYNOPSIS, DESCRIPTION, OPTIONS, EXAMPLES, SEE ALSO, and AUTHOR sections. Pages are organized into 9 numbered SECTIONS: 1 user commands, 2 system calls, 3 library functions, 4 special files (in /dev), 5 file formats (like `/etc/passwd`, `crontab`), 6 games, 7 misc (overviews like `signal(7)`, `regex(7)`), 8 sysadmin commands, 9 kernel routines. When names collide (e.g., `passwd` exists as both a COMMAND in section 1 and a FILE FORMAT in section 5), specify the section: `man 5 passwd`. Navigation inside the pager (less): `/text` search forward, `?text` search backward, `n`/`N` next/prev match, `space`/`b` page down/up, `g`/`G` go to start/end, `q` quit. Useful related tools: `man -k 'word'` (a.k.a. `apropos`) searches descriptions; `man -f cmd` (a.k.a. `whatis`) gives a one-line summary; `info cmd` is GNU's alternative format with more depth (but few people use it); `tldr cmd` is a community-driven cheat-sheet alternative — `sudo apt install tldr` to install. For a quick flag list without the man page formality, most commands also support `--help`.",
     usage: "Reading a command's documentation the first time you use it, looking up an obscure flag, or learning the format of a config file (section 5).",
     examples: [
@@ -4458,8 +4458,8 @@ export const questions: Question[] = [
   },
   {
     id: "nav24",
-    question: "Jump into another user's home directory using tilde + username syntax",
-    answer: "cd ~user",
+    question: "Jump into the home directory of the user `alice` using the tilde shortcut",
+    answer: "cd ~alice",
     explanation: "The shell performs 'tilde expansion' on any word starting with `~`. By itself `~` becomes YOUR home directory (the value of `$HOME`). Followed by a username (`~alice`, `~root`) it becomes THAT user's home — the shell looks up the user in `/etc/passwd` to find where they live. Conventionally normal users live in `/home/USERNAME` and the root user in `/root`, but `~user` works regardless of the actual path. If the user doesn't exist, the `~user` is left unchanged (no error). Whether you can actually `cd` into someone else's home depends on permissions — most users keep their home `drwx------` (700), so only the owner and root can enter. Even when you can't `cd` in, `echo ~alice` still prints the path (it's pure shell expansion, no filesystem check).",
     usage: "Jumping to another user's home as root or sudoer. Looking up a user's home path (`echo ~alice`). Writing scripts that reference home directories by username.",
     examples: [
@@ -4905,8 +4905,8 @@ export const questions: Question[] = [
   },
   {
     id: "perm22",
-    question: "Set the setgid bit on a directory so new files inherit its group",
-    answer: "chmod g+s directory",
+    question: "Set the setgid bit on `shared/` so all new files inside inherit its group automatically",
+    answer: "chmod g+s shared/",
     explanation: "g+s on a directory makes every file created inside inherit the directory's group instead of the creator's primary group.",
     usage: "Shared project directories where all files should belong to a 'dev' group.",
     examples: [
@@ -5025,8 +5025,8 @@ export const questions: Question[] = [
   },
   {
     id: "perm30",
-    question: "Run a single command as another user",
-    answer: "sudo -u alice command",
+    question: "Run `whoami` as the user `alice` using sudo",
+    answer: "sudo -u alice whoami",
     explanation: "sudo -u runs the command as the specified user instead of root, useful for testing as an unprivileged account.",
     usage: "Run scripts or web requests as the service user without logging out.",
     examples: [
@@ -5147,8 +5147,8 @@ export const questions: Question[] = [
   },
   {
     id: "pipe28",
-    question: "Suppress just stderr from a noisy command",
-    answer: "command 2>/dev/null",
+    question: "Run `find /` and suppress all its error messages, showing only valid results",
+    answer: "find / 2>/dev/null",
     explanation: "Redirecting fd 2 to /dev/null silently discards error messages while leaving stdout intact.",
     usage: "Hide expected 'permission denied' noise from find without losing real output.",
     examples: [
@@ -5162,8 +5162,8 @@ export const questions: Question[] = [
   },
   {
     id: "pipe29",
-    question: "Append a command's output to a log via tee, while still seeing it",
-    answer: "command | tee -a app.log",
+    question: "Run `./deploy.sh` and append all its output to `app.log` while still seeing it on screen",
+    answer: "./deploy.sh | tee -a app.log",
     explanation: "tee writes to both stdout and a file; -a appends instead of overwriting.",
     usage: "Watch live output and keep a copy for later.",
     examples: [
@@ -5725,8 +5725,8 @@ export const questions: Question[] = [
   },
   {
     id: "text22",
-    question: "Sum the numbers in the first column of a file",
-    answer: "awk '{sum+=$1} END {print sum}' file",
+    question: "Sum all numbers in the first column of `scores.txt` and print the total",
+    answer: "awk '{sum+=$1} END {print sum}' scores.txt",
     explanation: "awk accumulates $1 across all lines; the END block runs after the last line and prints the total.",
     usage: "Quick aggregations without exporting to a spreadsheet.",
     examples: [
@@ -5740,8 +5740,8 @@ export const questions: Question[] = [
   },
   {
     id: "text23",
-    question: "Replace every occurrence of 'old' with 'new' in place, keeping a .bak",
-    answer: "sed -i.bak 's/old/new/g' file",
+    question: "Replace every occurrence of 'old' with 'new' directly in `notes.txt`, keeping a `notes.txt.bak` backup",
+    answer: "sed -i.bak 's/old/new/g' notes.txt",
     explanation: "-i edits the file in place; the optional suffix .bak makes sed save the original to file.bak first.",
     usage: "Safe scripted edits where you want a rollback file.",
     examples: [
@@ -5755,8 +5755,8 @@ export const questions: Question[] = [
   },
   {
     id: "text24",
-    question: "Delete every line containing 'DEBUG' from a file",
-    answer: "sed '/DEBUG/d' file",
+    question: "Print `app.log` with every line containing 'DEBUG' removed",
+    answer: "sed '/DEBUG/d' app.log",
     explanation: "The /pattern/d sed command deletes any line that matches the pattern.",
     usage: "Strip debug noise from logs or sample configs.",
     examples: [
@@ -5845,8 +5845,8 @@ export const questions: Question[] = [
   },
   {
     id: "text30",
-    question: "Convert a UTF-8 file to ASCII, transliterating special chars",
-    answer: "iconv -f UTF-8 -t ASCII//TRANSLIT file",
+    question: "Convert `report.txt` from UTF-8 to ASCII, replacing any special characters with close ASCII equivalents",
+    answer: "iconv -f UTF-8 -t ASCII//TRANSLIT report.txt",
     explanation: "iconv converts between character encodings; //TRANSLIT approximates characters that can't be represented (e.g. é → e).",
     usage: "Sanitize filenames or text exports that downstream tools can't render.",
     examples: [
@@ -6418,8 +6418,8 @@ export const questions: Question[] = [
   },
   {
     id: "arch10",
-    question: "Create an xz-compressed tarball of a directory",
-    answer: "tar -cJf archive.tar.xz directory/",
+    question: "Create an xz-compressed tarball of the `projects/` directory, saving it as `archive.tar.xz`",
+    answer: "tar -cJf archive.tar.xz projects/",
     explanation: "This is arch5's cousin but using xz instead of gzip for tighter (but slower) compression. Decode the flags: `c`=Create, `J`=use xz (CAPITAL J — the most-forgotten letter in all of tar), `f`=Filename follows. The result is a `.tar.xz` file: tar bundles all the files, then xz compresses the whole bundle as a single stream. Compare the three compressors for a folder: `-z` makes `.tar.gz` (fastest), `-j` makes `.tar.bz2` (middle), `-J` makes `.tar.xz` (smallest). To speed up xz inside tar, export `XZ_OPT='-T0'` so xz uses all CPU threads, or `XZ_OPT='-9 -T0'` for maximum compression in parallel. Extracting is `tar -xJf` (or just `tar -xf` on modern tar — auto-detection works). `.tar.xz` is the default for Linux kernel source releases and many distro source packages.",
     usage: "Packaging a release tarball to upload to a release page or mirror. Creating a long-term backup destined for slow/expensive storage. Sharing a folder with someone over a slow link.",
     examples: [
@@ -6488,8 +6488,8 @@ export const questions: Question[] = [
   },
   {
     id: "arch14",
-    question: "Create a `.zip` archive of a directory tree",
-    answer: "zip -r archive.zip directory/",
+    question: "Create a `.zip` archive of the entire `projects/` directory tree",
+    answer: "zip -r archive.zip projects/",
     explanation: "`zip` produces the universal `.zip` format that Windows, macOS, mobile devices, and email clients all open natively without extra software — making it the default choice for files you'll share off Linux. Crucially, `zip` does NOT recurse by default; you must pass `-r` (recursive) to include directory contents. Without `-r`, zip just stores the empty directory and skips its contents. Other useful flags: `-9` MAXIMUM compression (slowest), `-1` FASTEST (worst compression), `-e` (encrypt with a password prompt — uses ZipCrypto, the old format that's weak; use `7z` for serious encryption), `-x 'PATTERN'` exclude files (`-x '*.log' '*.tmp'`), `-X` skip extended attributes for cleaner cross-platform archives, `-q` quiet, `-FS` 'filesystem sync' mode (update archive to MATCH the filesystem, removing entries for files that no longer exist). NOT pre-installed on minimal Debian — `sudo apt install zip unzip`. Compared to `tar`: ZIP preserves Unix permissions less faithfully and stores compressed entries individually (no shared dictionary), so it usually compresses slightly worse than `.tar.gz` on text. For Linux-to-Linux, prefer tar; for sharing, prefer zip.",
     usage: "Bundling files to email/upload, sharing with Windows/macOS coworkers, producing a release asset that anyone can open, or zipping logs for a support ticket.",
     examples: [
@@ -6524,8 +6524,8 @@ export const questions: Question[] = [
   },
   {
     id: "arch16",
-    question: "Create a `.7z` archive (often tightest compression, supports strong encryption)",
-    answer: "7z a archive.7z directory/",
+    question: "Create a `.7z` archive of the `projects/` directory (tightest compression, supports strong encryption)",
+    answer: "7z a archive.7z projects/",
     explanation: "`7z` (from `p7zip-full` on Debian/Ubuntu, `p7zip-plugins` on Fedora) supports the `.7z` format which usually compresses tighter than gzip and bzip2 — comparable to xz — using LZMA/LZMA2. It also handles many OTHER formats (`.zip`, `.tar`, `.rar` read-only, `.iso`, etc.) so it's a Swiss Army knife. The command verbs are SHORT and unusual: `a` (ADD/create), `x` (eXtract preserving paths — most common), `e` (extract IGNORING paths — flat), `l` (LIST), `t` (TEST integrity), `d` (DELETE files from existing archive), `u` (UPDATE existing). Compression level: `-mx=N` where N is 0 (store) to 9 (ultra) — default is `-mx=5`. ENCRYPTION: `-p` prompts for password and encrypts content; add `-mhe=on` to also encrypt the FILE NAMES (otherwise they're visible even with a password) — `7z a -p -mhe=on secret.7z private/`. Solid mode (`-ms=on`, the default) treats all files as one stream for better compression; downside: extracting one file requires decompressing everything before it. Foot-gun: 7z does NOT preserve Unix permissions/ownership well — for Linux backups stick with `tar -cJf`.",
     usage: "Distributing a large release where every byte matters, strong-encrypted file sharing, or extracting weird formats other tools can't open.",
     examples: [
@@ -6578,8 +6578,8 @@ export const questions: Question[] = [
   },
   {
     id: "arch19",
-    question: "Skip patterns when creating a tarball",
-    answer: "tar --exclude='*.log' -czf archive.tar.gz directory/",
+    question: "Create a gzip tarball of `projects/` called `archive.tar.gz`, skipping all `.log` files",
+    answer: "tar --exclude='*.log' -czf archive.tar.gz projects/",
     explanation: "`--exclude='PATTERN'` tells tar to skip any path matching the glob — saves space and time when you don't need junk files (logs, caches, `node_modules`, `.git`, build artifacts) in your archive. CRUCIAL: place `--exclude` BEFORE the source directory in the command, and ALWAYS quote the pattern so the shell doesn't expand it before tar sees it. Multiple `--exclude` flags can be stacked. For a long list of patterns, use `--exclude-from=ignore.txt` (one pattern per line, blank lines and `#` comments OK). Patterns match against the archive-internal path, anchored anywhere — `--exclude='*.log'` excludes files at any depth. To exclude an entire DIRECTORY use `--exclude='node_modules'` (matches the directory name itself, so its contents are skipped wholesale). `.gitignore`-style respect: `--exclude-vcs` automatically skips `.git`, `.svn`, `.hg`, etc. — handy for source code releases. Combine with `-czf`/`-cJf` to compress as you exclude. Verify with `tar -tzf archive.tar.gz | grep PATTERN` afterwards.",
     usage: "Producing a source-only project archive (no logs, no node_modules, no build/), creating a slimmed-down backup, or building a deployment artifact.",
     examples: [
