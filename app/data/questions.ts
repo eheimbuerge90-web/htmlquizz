@@ -121,7 +121,7 @@ export const questions: Question[] = [
   {
     id: "nav6",
     question: "You want to navigate directly to /etc/nginx without stepping through each parent folder one level at a time. What command jumps you there in a single step?",
-    answer: "cd /path/to/directory",
+    answer: "cd /etc/nginx",
     explanation: `## Plain English Instead of walking a route step by step (go to the street, then the block, then the building), you're giving your shell a complete address and asking it to take you directly there. You can give either a complete address from the top of the system, or a shorthand starting from where you already are.
 
 ## Technical cd followed by a path argument changes the shell's current working directory to that path. Two types of paths exist: absolute paths start with / (the filesystem root) and are interpreted from the top of the directory hierarchy — for example /etc/nginx works the same no matter where you currently are; relative paths do not start with / and are resolved from the current working directory ($PWD) — for example logs/ means the logs subdirectory of wherever you are now. The shell also expands special tokens before passing the path to cd: ~ expands to $HOME, ~username expands to that user's home, - refers to $OLDPWD (previous directory), and .. means parent directory. If the target path does not exist or is not a directory, cd prints an error and leaves $PWD unchanged. Tab completion (pressing Tab after partially typing a path) auto-completes filenames and dramatically reduces typing and typos.
@@ -380,7 +380,7 @@ export const questions: Question[] = [
   {
     id: "nav18",
     question: "You start typing 'cd /usr/lo' and don't want to type the rest of the path by hand. What key do you press to have the shell automatically complete the path for you?",
-    answer: "cd Doc<TAB>",
+    answer: "<TAB>",
     explanation: `## Plain English Instead of typing every letter of a long path, you type just enough to identify what you mean and then press a special key. The shell fills in the rest automatically, like a search engine autocompleting your query. If there are multiple possible completions, pressing the key twice shows you all the options.
 
 ## Technical Tab completion is a feature implemented by the shell (bash, zsh, fish, etc.) that completes partially typed tokens when you press the Tab key. The shell inspects the characters you've typed, determines the context (command name, file path, environment variable, etc.), and searches for matching entries. For file paths, it scans the filesystem; for command names, it searches directories listed in $PATH (the environment variable containing a colon-separated list of directories where executables are found). If exactly one match exists, the shell inserts the remaining characters. If multiple matches exist, the first Tab press does nothing (or emits a bell character); pressing Tab a second time prints all matching completions. Programmable completion (provided by the bash-completion or zsh-completions packages) extends this to understand subcommands and flags for specific tools — for example, completing git checkout branch names or apt install package names. If Tab completion isn't working as expected, bash-completion may not be installed (sudo apt install bash-completion) or may not be sourced in your shell's startup file (.bashrc or .bash_profile).
@@ -2155,7 +2155,7 @@ export const questions: Question[] = [
   {
     id: "pipe19",
     question: "You want to read names from names.txt, sort them alphabetically, and save the sorted result to sorted-names.txt — all in one command that reads from one file and writes to another. What command combines both input and output redirection?",
-    answer: "command < input.txt > output.txt",
+    answer: "sort < names.txt > sorted.txt",
     explanation: `## Plain English You can combine the input-from-file and output-to-file redirects in a single command. The file on the left of < feeds in the data to be processed, and the file on the right of > receives the processed output. Think of the command sitting in the middle of a pipeline: data flows in from one file, gets transformed, and flows out to another.
 
 ## Technical Multiple redirections can be combined on a single command line. command < input.txt > output.txt sets up two file descriptor redirections simultaneously: stdin (fd 0) reads from input.txt and stdout (fd 1) writes to output.txt. The redirection operators can appear in any order on the command line — the shell processes them all before running the command. Adding stderr redirection: command < input.txt > output.txt 2> errors.txt sets all three standard streams independently. A subtle point: > output.txt is processed before the command runs, which truncates the output file immediately. For commands that read and write the same file (like sort -o file file), use the command's built-in output option (-o) rather than shell redirection, which would truncate the input before it's read.
@@ -2260,7 +2260,7 @@ export const questions: Question[] = [
   {
     id: "proc4",
     question: "You want to start a long-running build script that may take an hour, but you don't want to sit watching it — you want your terminal prompt back immediately so you can do other work while it runs. What shell syntax starts a command without waiting for it to finish?",
-    answer: "command &",
+    answer: "./build.sh &",
     explanation: `## Plain English Normally when you run a command, your terminal freezes until it finishes — you can't type anything or run other commands. Adding this symbol at the end of a command changes that: the command starts running, but you get your prompt back immediately. The command runs "in the background" simultaneously with whatever else you do in the terminal.
 
 ## Technical The & operator at the end of a command line instructs the shell to fork and exec the command as a child process without waiting for it to complete (not blocking on the child's exit status). The shell immediately prints [N] PID where N is the job number (a shell-local identifier for managing background jobs via the fg, bg, jobs, and kill %N commands) and PID is the kernel process ID. The background job remains a child of the current shell and is still attached to the terminal's signal group — closing the terminal or logging out typically sends SIGHUP (hangup signal) to all child processes, terminating them. To make a background job survive logout: prefix with nohup (which redirects output to nohup.out and ignores SIGHUP), use disown after backgrounding, or use tmux or screen for fully detachable sessions. Background jobs' stdout and stderr still write to the terminal by default — redirect to a file to avoid interleaving: command > output.log 2>&1 &.
@@ -4502,7 +4502,7 @@ export const questions: Question[] = [
   {
     id: "pkg17",
     question: "You encounter the 'rsync' command but don't know what flags it accepts. What command opens its offline manual page?",
-    answer: "man command",
+    answer: "man rsync",
     explanation: `## Plain English Every command on a Linux system comes with a built-in instruction manual. This command opens that manual in a pager so you can read the full documentation, including every flag, configuration option, and usage example — without needing an internet connection.
 
 ## Technical \`man\` (manual) opens a formatted manual page in the \`less\` pager. Pages are organized into numbered sections: 1 = user commands (most used), 2 = system calls, 3 = library functions, 5 = file formats, 8 = admin commands. Specify a section: \`man 5 crontab\` vs \`man 1 crontab\`. Navigation inside man/less: \`/TEXT\` search forward, \`n\`/\`N\` next/previous hit, \`Space\`/\`b\` page down/up, \`q\` quit. For a one-line summary: \`whatis CMD\`. Search by topic: \`apropos KEYWORD\` (same as \`man -k\`). Quicker flag summary: \`CMD --help\`. Install from package: \`sudo apt install man-db\` and optionally the package's doc package.
@@ -5783,7 +5783,7 @@ export const questions: Question[] = [
   {
     id: "daily30",
     question: "You need to kick off a 20-minute database reindex operation on a remote server but want the terminal prompt back immediately so you can do other work while it runs. How do you start the command so it runs in the background?",
-    answer: "command &",
+    answer: "nohup database-reindex.sh &",
     explanation: `## Plain English Adding an ampersand at the end of a command immediately returns your prompt, while the command continues running in the background. The shell prints a job number and process ID so you can refer to it later. Be aware: the command's output will still appear in your terminal interleaved with whatever else you type, so redirect it to a log file to keep things tidy.
 
 ## Technical \`&\` instructs bash to fork and exec the command in a background process and return immediately. Bash prints \`[N] PID\` where N is the shell job number. Background jobs are tracked in the shell's job table: \`jobs\` lists them, \`fg %N\` brings job N foreground, \`bg %N\` resumes a stopped job in background, \`kill %N\` terminates it. A foreground job can be paused with Ctrl-Z (SIGTSTP) then continued in background with \`bg\`. Critical caveat: background processes receive SIGHUP when the terminal closes (they die). To survive logout: \`nohup cmd &\` (ignores SIGHUP, stdout/stderr redirect to \`nohup.out\`), or \`disown %N\` after starting (removes from job table), or run inside \`tmux\`/\`screen\`. For true persistent services, write a systemd unit. Always redirect output when backgrounding: \`cmd > /var/log/cmd.log 2>&1 &\`.
@@ -5915,7 +5915,7 @@ export const questions: Question[] = [
   {
     id: "daily35",
     question: "You want to understand every flag that `rsync` accepts but have no internet access. What command opens the offline documentation page for `rsync` right in your terminal?",
-    answer: "man command",
+    answer: "man rsync",
     explanation: `## Plain English Every command on Linux ships with a built-in help page — the manual page — that lives on your own system. This command opens that page in a scrollable viewer (like a simple e-reader). Press space to page down, Q to quit, and forward-slash followed by a word to search. No internet required.
 
 ## Technical \`man\` reads documentation files from \`/usr/share/man/\` and renders them through a pager (usually \`less\`). Pages are organized into nine numbered sections: 1 = user commands, 2 = system calls, 3 = library functions, 4 = special files (\`/dev/\`), 5 = file formats (e.g., \`/etc/passwd\`, \`crontab\`), 6 = games, 7 = miscellaneous (overviews: \`signal(7)\`, \`regex(7)\`, \`hier(7)\`), 8 = sysadmin commands, 9 = kernel routines. When a name exists in multiple sections (e.g., \`passwd\` is both a command (1) and a file format (5)), specify the section: \`man 5 passwd\`. Navigation inside the pager: \`/text\` search forward, \`n\`/\`N\` next/previous match, \`space\`/\`b\` page down/up, \`g\`/\`G\` go to start/end, \`q\` quit. Related: \`man -k keyword\` (same as \`apropos\`) searches descriptions; \`man -f cmd\` (same as \`whatis\`) gives a one-line summary; \`tldr cmd\` is a community cheat-sheet (install with \`sudo apt install tldr\`).
@@ -5941,7 +5941,7 @@ export const questions: Question[] = [
   {
     id: "daily36",
     question: "You have both system Python and a pyenv-managed Python installed. You want to confirm which `python` executable will actually run when you type `python`, and also see all other `python` executables in your PATH. What command shows the full resolution including any aliases or functions, and all alternatives?",
-    answer: "command -v git",
+    answer: "which python",
     explanation: `## Plain English When you type a command name, the shell searches through a list of directories to find the right executable to run. This command answers "where exactly will that search stop and what will it run?" — including whether the name is an alias, a shell function, or an actual binary on disk. The version shown here also finds ALL matches, not just the first winner.
 
 ## Technical Three tools resolve command names, with important differences: \`command -v CMD\` is POSIX-portable, works in scripts, exits non-zero if not found, prints the path or alias definition — the standard "is this installed?" check. \`type CMD\` is a bash builtin that also reports aliases, shell functions, and shell builtins (which \`command -v\` may omit). \`which CMD\` is an external binary that only looks at PATH; it misses aliases and functions and has historically varying behavior across distros. \`type -a CMD\` shows ALL matches in PATH order — useful for seeing that \`/home/alice/.pyenv/shims/python\` wins over \`/usr/bin/python\`. \`whereis CMD\` additionally finds man pages and source directories. For scripts, always use \`command -v CMD >/dev/null\` as the "is this tool installed?" check: \`command -v jq >/dev/null || { echo 'install jq first' >&2; exit 1; }\`.
@@ -7302,7 +7302,7 @@ export const questions: Question[] = [
   {
     id: "pipe30",
     question: "Your bash script needs to capture the output of `hostname -f` into a variable called `FQDN` so you can use it later in log messages and config file paths. What syntax captures a command's stdout into a variable?",
-    answer: "var=$(command)",
+    answer: "FQDN=$(hostname -f)",
     explanation: `## Plain English The \`$()\` syntax runs a command inside the parentheses and captures everything it prints to stdout. That captured output becomes the value you assign to the variable. It's one of the most common patterns in bash scripting — almost every non-trivial script uses it to capture command output for later use.
 
 ## Technical \`$(...)\` is called command substitution. Bash forks a subshell, runs the command inside, captures its stdout, strips any trailing newlines, and substitutes the result in place of the \`$(...)\` expression. No spaces around \`=\` in assignment — \`var=$(cmd)\` is correct; \`var = $(cmd)\` is a syntax error. Trailing newlines are stripped (feature, not bug — \`\$(printf 'line1\\nline2\\n')\` loses the trailing newline but keeps the embedded one). The older backtick syntax \`\`cmd\`\` does the same but doesn't nest cleanly. For multiline output, capture into an array: \`mapfile -t lines < <(command)\` — this avoids word splitting on spaces.
@@ -7457,7 +7457,7 @@ export const questions: Question[] = [
   {
     id: "proc26",
     question: "You're comparing two implementations of a function and want to know which one finishes faster, including how much CPU time each uses. What built-in shell command measures wall-clock time, user CPU time, and system CPU time for any command?",
-    answer: "time command",
+    answer: "time ./function1.sh",
     explanation: `## Plain English Wrapping any command with \`time\` prints three numbers when it finishes: how long it took by the clock on the wall ("real"), how many CPU seconds your program's own code consumed ("user"), and how many CPU seconds the operating system spent on its behalf doing kernel work ("sys"). Comparing "real" vs "user+sys" reveals whether the program was waiting (real > user+sys) or running in parallel on multiple cores (user+sys > real).
 
 ## Technical The bash builtin \`time cmd\` measures wall-clock elapsed time (\`real\`), time in user-space code (\`user\`), and time in kernel code on behalf of this process (\`sys\`). \`user+sys\` is total CPU consumed. If \`user+sys < real\`: process spent time waiting (I/O, network, sleep). If \`user+sys > real\`: process used multiple CPU cores. The external \`/usr/bin/time\` program supports \`-v\` for verbose output including peak RSS memory, context switches, and page faults — use the full path to bypass the builtin. Custom format: \`/usr/bin/time -f 'elapsed=%E peak-rss=%M kb' cmd\`. Time compound statements: \`time { cmd1; cmd2; }\` or \`time (cmd1 | cmd2)\`.
