@@ -10,11 +10,6 @@ export interface Question {
   category: string;
 }
 
-export interface Category {
-  name: string;
-  description: string;
-}
-
 export const questions: Question[] = [
   {
     "id": "nav1",
@@ -31,7 +26,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`cd` = 'change directory'. With nothing after it, think of it as 'come down' to home base. Tilde `~` always means 'my home' — like `~/Documents` is `/home/me/Documents`.",
     "outputExample": "$ pwd\n/var/log/nginx\n$ cd\n$ pwd\n/home/alice",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav2",
@@ -48,7 +43,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "One dot `.` = here. Two dots `..` = up one. Think of `..` as a tiny staircase — two steps means 'one floor up'. This is universal: every Linux path supports it.",
     "outputExample": "$ pwd\n/home/alice/projects/myapp\n$ cd ..\n$ pwd\n/home/alice/projects\n$ cd ../..\n$ pwd\n/home",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav3",
@@ -66,7 +61,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ls` = LiSt. You'll type it more than any other command. Most distros pre-define `ll` as an alias for `ls -l` — try it in your shell.",
     "outputExample": "$ ls\nDesktop  Documents  Downloads  Music  Pictures  Videos  notes.txt  todo.md\n$ ls /etc | head -3\nadduser.conf\nalternatives\napt",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav4",
@@ -84,7 +79,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-l` = Long. Pair it with `-h` for human sizes and `-a` for hidden files: `ls -lah` is the everyday Swiss-army combo. Memorize the seven columns: perms, links, owner, group, size, date, name.",
     "outputExample": "$ ls -l\ntotal 24\n-rw-r--r-- 1 alice alice 4096 May 17 09:12 README.md\ndrwxr-xr-x 2 alice alice 4096 May 16 18:30 docs\n-rwxr-xr-x 1 alice alice 1240 May 15 10:02 deploy.sh\nlrwxrwxrwx 1 alice alice    9 May 14 11:00 current -> v2.0.1",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav5",
@@ -101,7 +96,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`pwd` = Print Working Directory. Three letters, one job. Pair it with `cd` in your mind: `cd` SETS the working directory, `pwd` SHOWS it.",
     "outputExample": "$ pwd\n/home/alice/projects/myapp\n$ cd /var/log && pwd\n/var/log",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav6",
@@ -119,7 +114,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`cd` = Change Directory. Slash-leading = absolute (whole address), no slash = relative (from where you are). Use Tab compulsively — Linux folks rarely type a full path by hand.",
     "outputExample": "$ pwd\n/home/alice\n$ cd projects/myapp\n$ pwd\n/home/alice/projects/myapp\n$ cd /etc/ssh\n$ pwd\n/etc/ssh",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav7",
@@ -136,7 +131,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`cd -` = back button. Mental model: dash means 'last one'. For a STACK of previous dirs (more than one), graduate to `pushd`/`popd`.",
     "outputExample": "$ pwd\n/home/alice\n$ cd /var/log\n$ pwd\n/var/log\n$ cd -\n/home/alice\n$ cd -\n/var/log",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav8",
@@ -154,7 +149,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Lowercase `-a` = ALL, including `.` and `..`. Capital `-A` = Almost all (no `.` / `..`). For everyday browsing, `-A` is cleaner; for forensic 'what's REALLY here?', use `-a`.",
     "outputExample": "$ ls -a\n.   .bashrc   .config  .git      .profile  Documents  notes.txt\n..  .cache    .gitconfig  .ssh    Desktop   Downloads",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav9",
@@ -172,7 +167,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-lh` = Long + Human. Memorize `ls -lah` (Long, All, Human) — covers 95% of daily `ls` use. For 'biggest first' add `S`: `ls -lahS`.",
     "outputExample": "$ ls -lh\ntotal 1.3M\n-rw-r--r-- 1 alice alice 1.2M May 17 09:55 screenshot.png\n-rw-r--r-- 1 alice alice  82K May 16 18:30 report.pdf\n-rw-r--r-- 1 alice alice 4.0K May 15 10:02 notes.txt\ndrwxr-xr-x 2 alice alice 4.0K May 14 11:00 docs",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav10",
@@ -189,7 +184,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'mkdir' = 'make directory'. Like building a new room in your house.",
     "outputExample": "$ mkdir myproject\n$ ls -d */\nDesktop/  Documents/  Downloads/  myproject/  Music/  Pictures/",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav11",
@@ -206,7 +201,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`rmdir` = Remove Directory, but only EMPTY ones. Think of it as the safe sibling of `rm -r`. If `rmdir` refuses, that's a feature, not a bug.",
     "outputExample": "$ mkdir empty_one\n$ rmdir empty_one\n$ rmdir Documents\nrmdir: failed to remove 'Documents': Directory not empty\n$ ls -A Documents\nnotes.txt  .draft",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav12",
@@ -223,7 +218,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tree` literally draws a tree. Most-used combo: `tree -L 2 -I 'node_modules|.git'` for a clean project overview. Not on the system? `sudo apt install tree` / `sudo dnf install tree`. Alternative: `find . -maxdepth 2`.",
     "outputExample": "$ tree -L 2\n.\n├── README.md\n├── package.json\n├── src\n│   ├── index.ts\n│   └── utils.ts\n└── tests\n    └── index.test.ts\n\n2 directories, 5 files",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav13",
@@ -241,7 +236,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "ALWAYS quote the pattern (`'*.log'`) so the shell doesn't expand it. Order is `find WHERE TESTS ACTIONS`. The friendlier modern alternative is `fd` (`sudo apt install fd-find`) — same job, simpler syntax: `fd '\\.log$'`.",
     "outputExample": "$ find . -name '*.txt'\n./notes.txt\n./drafts/old.txt\n./drafts/archive/letter.txt\n$ find /etc -name 'sshd_config'\n/etc/ssh/sshd_config",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav14",
@@ -259,7 +254,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`file` answers 'what AM I?' regardless of name. Magic numbers are tiny byte signatures at the start of files — e.g. `89 50 4E 47` = PNG, `25 50 44 46` = PDF. For deeper inspection, `xxd FILE | head` shows them in hex.",
     "outputExample": "$ file *\nbackup.tar.gz:    gzip compressed data, from Unix, original size 102400\ndeploy.sh:        Bourne-Again shell script, ASCII text executable\nlogo.png:         PNG image data, 800 x 600, 8-bit/color RGBA, non-interlaced\ndata.bin:         ELF 64-bit LSB executable, ARM aarch64, dynamically linked\nnotes.txt:        UTF-8 Unicode text",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav15",
@@ -277,7 +272,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "ONE slash `/` = the filesystem root. `~` = your home. `/root` = root user's home (very different). Quick check: `pwd` after `cd /` always prints a single character: `/`.",
     "outputExample": "$ cd /\n$ pwd\n/\n$ ls\nbin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav16",
@@ -294,7 +289,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Capital-`S` = Size. Lowercase `-s` (different!) prints allocated blocks per file. Memorize: `-lSh` = 'long, by Size, human' — the everyday combo.",
     "outputExample": "$ ls -lSh\ntotal 1.2G\n-rw-r--r-- 1 alice alice 800M May 15 10:30 bigmovie.mp4\n-rw-r--r-- 1 alice alice 256M May 14 18:01 backup.zip\n-rw-r--r-- 1 alice alice 1.2M May 15 09:55 screenshot.png\ndrwxr-xr-x 2 alice alice 4.0K May 12 11:20 Documents\n-rw-r--r-- 1 alice alice  142 May 15 10:30 notes.txt",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav17",
@@ -312,7 +307,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-lt` = Long + Time-sorted. Pipe to `head` for top-N. Pair-think: `-t` = newest first, `-tr` = oldest first. To go RECURSIVE switch to `find -mtime`.",
     "outputExample": "$ ls -lt | head -4\ntotal 24\n-rw-r--r-- 1 alice alice 1234 May 17 14:30 latest.md\n-rw-r--r-- 1 alice alice  567 May 17 14:25 newer.txt\ndrwxr-xr-x 2 alice alice 4096 May 17 12:00 drafts",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav18",
@@ -330,7 +325,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Tab once = complete; Tab twice = list possibilities. Linux users press Tab more than any other key — train your fingers: type 2-3 letters then Tab, ALWAYS. If nothing happens, hit Tab a second time to see why.",
     "outputExample": "$ cd /usr/lo<TAB><TAB>\nlocal/      lost+found/\n$ cd /usr/loc<TAB>\n$ cd /usr/local/",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav19",
@@ -348,7 +343,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-sh` = Summary + Human. Pair-think: `du` per folder, `df` per mountpoint (free space). The 'find the disk hog' incantation: `du -sh * | sort -h | tail`.",
     "outputExample": "$ du -sh ~/code/myapp\n2.3G\t/home/alice/code/myapp\n$ du -sh *\n12M\tCode\n4.5G\tDownloads\n128K\tMusic\n2.1G\tPictures",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav20",
@@ -366,7 +361,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Capital `-R` = Recursive. Lowercase `-r` = Reverse (different!). For huge trees, switch to `find` or `tree` — `ls -R` was designed for small directories.",
     "outputExample": "$ ls -R\n.:\nDocuments  Pictures  projects\n\n./Documents:\nnotes.txt  resume.pdf\n\n./Pictures:\nvacation.jpg\n\n./projects:\nmyapp\n\n./projects/myapp:\nREADME.md  src",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "file1",
@@ -384,7 +379,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`cp` = CoPy. Source first, destination second (same order as `mv`). For directories you NEED `-r`. To avoid blindly overwriting, alias `cp` to `cp -i` in your `.bashrc`.",
     "outputExample": "$ cp notes.txt notes-backup.txt\n$ ls\nnotes-backup.txt  notes.txt\n$ cp notes.txt /tmp/\n$ ls /tmp/notes.txt\n/tmp/notes.txt",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file2",
@@ -402,7 +397,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`mv` = MoVe. Same command does both move AND rename — depends on whether the destination is in a different directory. Source first, destination second. `mv` is INSTANT on the same filesystem but COPIES across filesystems.",
     "outputExample": "$ ls\ndraft-v1.md\n$ mv draft-v1.md final-report.md\n$ ls\nfinal-report.md\n$ mv final-report.md ~/Documents/\n$ ls ~/Documents/final-report.md\n/home/alice/Documents/final-report.md",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file3",
@@ -420,7 +415,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`rm` = ReMove. Permanent. No trash bin. The combo `rm -rf` deletes ANYTHING. Mental rule: before pressing Enter on `rm`, READ THE COMMAND TWICE. Alias `rm` to `rm -i` for a seatbelt.",
     "outputExample": "$ ls\nnotes.txt  scratch.txt\n$ rm scratch.txt\n$ ls\nnotes.txt\n$ rm -i notes.txt\nrm: remove regular file 'notes.txt'? y\n$ ls\n$",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file4",
@@ -438,7 +433,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`touch` literally 'touches' the file to mark it modified now. If the file is missing, touching it conjures it into existence empty. Pair-think `touch` (timestamp + create) vs `> file` (also creates, but truncates if exists).",
     "outputExample": "$ touch report.txt\n$ ls -l report.txt\n-rw-r--r-- 1 alice alice 0 May 17 16:42 report.txt\n$ touch report.txt\n$ ls -l report.txt\n-rw-r--r-- 1 alice alice 0 May 17 16:43 report.txt",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file5",
@@ -456,7 +451,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`cat` = CATenate. For ONE small file, it's a quick view. For BIG files, use `less`. For HEAD/TAIL portions, use `head`/`tail`. Don't write `cat file | grep X` — write `grep X file`.",
     "outputExample": "$ cat /etc/hostname\nmachine.local\n$ cat -n notes.txt\n     1\tBuy groceries\n     2\tFinish report\n     3\tCall mom",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file6",
@@ -473,7 +468,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-i` = Interactive ('Inquire before clobbering'). Same `-i` works for `cp`, `mv`, and `rm` — one mnemonic, three commands. Pair-think: `-i` asks, `-n` never overwrites, `-f` forces.",
     "outputExample": "$ ls\nnginx.conf  nginx.conf.bak\n$ cp -i nginx.conf nginx.conf.bak\ncp: overwrite 'nginx.conf.bak'? n\n$ cp -i nginx.conf nginx.conf.bak\ncp: overwrite 'nginx.conf.bak'? y\n$",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file7",
@@ -490,7 +485,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Same `-i` rule as `cp -i` / `rm -i`. Think of `mv` as `cp+rm` combined — so the same Inquire flag applies.",
     "outputExample": "$ ls\nreport-draft.md  report-final.md\n$ mv -i report-draft.md report-final.md\nmv: overwrite 'report-final.md'? y\n$ ls\nreport-final.md",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file8",
@@ -507,7 +502,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Capital `-I` = ONE prompt for the batch. Lowercase `-i` = per-file. Both stand for Interactive. Remember: `rm` has no undo — `-i` is your only seatbelt unless you've installed `trash-cli`.",
     "outputExample": "$ rm -i notes.txt scratch.txt\nrm: remove regular file 'notes.txt'? n\nrm: remove regular file 'scratch.txt'? y\n$ ls\nnotes.txt",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file9",
@@ -524,7 +519,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`cp -p` = Copy + Preserve. Use `-a` (archive) when you want to preserve EVERYTHING including symlinks. Neither preserves ownership for non-root users — that requires `sudo`.",
     "outputExample": "$ ls -l nginx.conf\n-rw-r--r-- 1 www-data www-data 2048 May 10 12:00 nginx.conf\n$ cp -p nginx.conf nginx.conf.bak\n$ ls -l nginx.conf.bak\n-rw-r--r-- 1 www-data www-data 2048 May 10 12:00 nginx.conf.bak",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file10",
@@ -541,7 +536,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ln -s TARGET LINKNAME` — same order as `cp` (source first, destination second). Forget it and you'll create the link in the wrong place. Without `-s` you get a HARD link (rare, advanced). Trailing `f` (`-sf`) forces overwrite — essential for the 'current → v2' deploy pattern.",
     "outputExample": "$ ln -s /usr/bin/python3.11 /usr/local/bin/python\n$ ls -l /usr/local/bin/python\nlrwxrwxrwx 1 alice alice 19 May 15 10:00 /usr/local/bin/python -> /usr/bin/python3.11\n$ python --version\nPython 3.11.7\n$ readlink /usr/local/bin/python\n/usr/bin/python3.11",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file11",
@@ -558,7 +553,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`du` = Disk Usage. Pair-think: `du` (per-folder) vs `df` (per-mountpoint free space). Memorize `du -sh *` — it answers 'where did my disk go?' in one breath. For interactive disk hunting install `ncdu` (`sudo apt install ncdu`).",
     "outputExample": "$ du -sh *\n12M     Documents\n4.5G    Downloads\n128K    Music\n2.1G    Pictures\n42M     Projects\n$ du -sh * | sort -h | tail -3\n42M     Projects\n2.1G    Pictures\n4.5G    Downloads",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file12",
@@ -575,7 +570,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'diff' = 'differences'. Like spotting the differences between two similar pictures. `-u` (unified) format is what git uses — learn to read + and - lines.",
     "outputExample": "$ diff nginx.conf nginx.conf.bak\n2c2\n< worker_processes 4;\n---\n> worker_processes 2;\n4a5\n> # legacy setting",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file13",
@@ -592,7 +587,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cp -r' = 'copy recursive'. The 'r' means it copies everything inside directories too.",
     "outputExample": "$ cp -r ~/code/myapp ~/backups/myapp-copy\n$ ls ~/backups/\nmyapp-copy/",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file14",
@@ -609,7 +604,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`mv` already walks directories — no `-r`. Mnemonic: `mv` doesn't need `-r` because moving a folder is usually just renaming one entry, not touching the contents. Compare: `cp -r`, `rm -r`, `mv` (no flag).",
     "outputExample": "$ ls\nproject_v1/\n$ mv project_v1 project_v1-archived\n$ ls\nproject_v1-archived/\n$ mv project_v1-archived archive/\n$ ls archive/\nproject_v1-archived/",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file15",
@@ -626,7 +621,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'rm -r' = 'remove recursive'. Like demolishing a house and everything in it. NEVER combine -rf with unquoted shell variables.",
     "outputExample": "$ rm -r old-logs/\n$ ls\n# old-logs directory is gone",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file16",
@@ -642,7 +637,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cp -v' = 'copy verbose'. The 'v' makes it 'verbose' — it tells you what it's doing.",
     "outputExample": "$ cp -v *.txt ~/backup/\n'notes.txt' -> '/home/alice/backup/notes.txt'\n'report.txt' -> '/home/alice/backup/report.txt'",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file17",
@@ -658,7 +653,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'mv -v' = 'move verbose'. Like the moving company telling you each item they're taking.",
     "outputExample": "$ mv -v *.log /var/archive/\n'access.log' -> '/var/archive/access.log'\n'error.log' -> '/var/archive/error.log'",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file18",
@@ -674,7 +669,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'rm -v' = 'remove verbose'. Like the garbage collector telling you what they're taking away.",
     "outputExample": "$ rm -v *.tmp\nremoved 'session1.tmp'\nremoved 'session2.tmp'\nremoved 'scratch.tmp'",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file19",
@@ -690,7 +685,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'ln' = 'link'. A hard link is like having two doors to the same room.",
     "outputExample": "$ ln report.txt reports/current-report.txt\n$ ls -li report.txt reports/current-report.txt\n12345 -rw-r--r-- 2 alice alice 1024 May 17 10:30 report.txt\n12345 -rw-r--r-- 2 alice alice 1024 May 17 10:30 reports/current-report.txt",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file20",
@@ -706,7 +701,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "The number after permissions in 'ls -l' shows how many hard links exist. Like counting how many doors lead to the same room.",
     "outputExample": "$ ls -l report.txt\n-rw-r--r-- 1 alice alice 1024 May 17 10:30 report.txt\n$ ln report.txt report-link.txt\n$ ls -l report.txt\n-rw-r--r-- 2 alice alice 1024 May 17 10:30 report.txt\n# The '2' means 2 hard links now exist",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file21",
@@ -722,7 +717,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cp -a' = 'copy archive'. Like making a perfect museum replica that preserves everything.",
     "outputExample": "$ ls -la /etc/nginx/\nlrwxrwxrwx 1 root root   14 May 01 sites-enabled -> ../sites-available\n$ cp -a /etc/nginx /backup/nginx\n$ ls -la /backup/nginx/\nlrwxrwxrwx 1 root root   14 May 01 sites-enabled -> ../sites-available  # symlink preserved",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file22",
@@ -738,7 +733,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'mv --backup' = 'move with backup'. Like keeping the old version in a safe place before replacing it.",
     "outputExample": "$ mv --backup new-nginx.conf /etc/nginx/nginx.conf\n$ ls /etc/nginx/\nnginx.conf  nginx.conf~  # ~ indicates the auto-saved backup",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file23",
@@ -754,7 +749,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'-newer reference' finds files created after the reference file. Like cleaning up everything bought after your last shopping trip.",
     "outputExample": "$ touch /tmp/build-start\n$ ./build.sh\n$ find /tmp -name '*.tmp' -newer /tmp/build-start -delete\n# Only .tmp files created during this build are removed",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file24",
@@ -770,7 +765,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'rsync --progress' shows a progress bar. Like watching a download progress bar.",
     "outputExample": "$ rsync -av --progress ubuntu.iso /media/usb/\nsending incremental file list\nubuntu.iso\n  1,073,741,824  45%   52.00MB/s    0:08:15",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file25",
@@ -786,7 +781,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'shred' = 'destroy beyond recognition'. Like shredding a document so it can't be pieced back together.",
     "outputExample": "$ shred -u private_key.pem\n$ ls private_key.pem\nls: cannot access 'private_key.pem': No such file or directory",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "view1",
@@ -804,7 +799,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`less` is more. Mental model: it's a read-only mini text editor — the same search (`/`), navigation (`g`/`G`), and quit (`q`) keys as `vim`, which is why Linux folks feel at home in it.",
     "outputExample": "$ less /var/log/syslog\nMay 15 09:14:01 host CRON[1234]: (root) CMD (run-parts /etc/cron.hourly)\nMay 15 09:14:02 host systemd[1]: Started Session 42 of user alice.\nMay 15 09:14:05 host sshd[2210]: Accepted publickey for alice from 10.0.0.5\nMay 15 09:14:10 host kernel: [12345.678] usb 1-2: new high-speed USB device\n:",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view2",
@@ -821,7 +816,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`head` of a file = the top of the file, like the head of a list. Pair it in your mind with `tail` (bottom). Default for both is 10 lines.",
     "outputExample": "$ head -n 5 /etc/passwd\nroot:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nbin:x:2:2:bin:/bin:/usr/sbin/nologin\nsys:x:3:3:sys:/dev:/usr/sbin/nologin\nsync:x:4:65534:sync:/bin:/bin/sync",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view3",
@@ -839,7 +834,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`head` of the file vs. `tail` of the file — like a dog: head at the front, tail at the back. `-f` = follow, like following someone in real time.",
     "outputExample": "$ tail -n 4 /var/log/auth.log\nMay 15 09:12:01 host sshd[2204]: Failed password for invalid user admin from 203.0.113.7\nMay 15 09:12:02 host sshd[2204]: Connection closed by 203.0.113.7 port 51422\nMay 15 09:14:05 host sshd[2210]: Accepted publickey for alice from 10.0.0.5\nMay 15 09:14:05 host sshd[2210]: pam_unix(sshd:session): session opened for user alice",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view4",
@@ -857,7 +852,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`grep` came from an old `ed` editor command: `g/re/p` — Globally search for a Regular Expression and Print matches. That literal acronym is the name.",
     "outputExample": "$ grep -i error /var/log/nginx/error.log\n2026-05-15 09:12:43 [error] upstream timed out\n2026-05-15 09:13:01 [error] upstream connection refused\n2026-05-15 09:13:08 [error] client sent invalid header",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view5",
@@ -875,7 +870,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`wc` = Word Count, but its main job in practice is Line Count via `wc -l`. Mnemonic: 'pipe-it-to-wc-dash-l' is the universal way to answer 'how many?' on the command line.",
     "outputExample": "$ wc /etc/passwd\n  47  85 2814 /etc/passwd\n$ wc -l *.txt\n  10 todo.txt\n 142 notes.txt\n 152 total",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view6",
@@ -892,7 +887,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "sort = organize. Like arranging items in order. sort never modifies the original — redirect with > to save.",
     "outputExample": "$ sort cities.txt\nAmsterdam\nBerlin\nChicago\nTokyo",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view7",
@@ -909,7 +904,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`uniq` = UNIQue, but ADJACENT-only. Mantra: 'sort then uniq' or use `sort -u`. The `-c` flag is the secret sauce for any 'count occurrences' question — `sort | uniq -c | sort -rn` is the universal top-N pattern.",
     "outputExample": "$ cat ip-log.txt | sort | uniq -c\n      2 10.0.0.1\n      1 10.0.0.2\n      3 10.0.0.5\n$ cat ip-log.txt | sort | uniq -c | sort -rn\n      3 10.0.0.5\n      2 10.0.0.1\n      1 10.0.0.2",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view8",
@@ -926,7 +921,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`nl` = Number Lines. Default skips blanks. For 'number absolutely everything' use `cat -n`. For inline numbering in `less`, press `=` or use `less -N file`.",
     "outputExample": "$ nl deploy.sh\n     1\t#!/bin/bash\n     2\tset -e\n      \n     3\techo 'Deploying...'\n     4\tcp -a dist/ /var/www/html/",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view9",
@@ -942,7 +937,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "cat -A = cat with All characters visible. `$` at end of line = normal Unix newline. `^M$` = Windows CRLF ending (the ^M is the problem). `^I` = tab character.",
     "outputExample": "$ cat -A deploy.sh\n#!/bin/bash^M$\nset -e^M$\necho 'Deploying...' ^M$\n# ^M on every line = Windows CRLF line endings causing failures",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view10",
@@ -959,7 +954,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tac` = `cat` spelled backwards. Pair-think: `tac` reverses LINE order, `rev` reverses CHARACTER order within each line. Two reversers, very different jobs.",
     "outputExample": "$ cat colors.txt\nred\ngreen\nblue\n$ tac colors.txt\nblue\ngreen\nred",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view11",
@@ -976,7 +971,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`split` defaults to 1000-line text chunks named `xaa, xab, ...`. Always pass a prefix (second arg) so you get readable filenames. Reassemble with plain `cat prefix_* > original`. For binary files use `-b SIZE`; for line-oriented files use `-l N`.",
     "outputExample": "$ ls -lh database-dump.sql\n-rw-r--r-- 1 alice alice 1.5G May 15 10:00 database-dump.sql\n$ split -b 20M database-dump.sql email-part_\n$ ls -lh email-part_*\n-rw-r--r-- 1 alice alice 20M May 15 10:00 email-part_aa\n-rw-r--r-- 1 alice alice 20M May 15 10:00 email-part_ab\n...",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view12",
@@ -991,7 +986,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cat' concatenates files together. Like gluing puzzle pieces back into a complete picture. Order matters — always list or glob in the correct sequence.",
     "outputExample": "$ cat piece_aa piece_ab piece_ac > ubuntu.iso\n$ sha256sum ubuntu.iso\nabc123...  ubuntu.iso\n$ sha256sum piece_* | sha256sum  # verify all pieces accounted for",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view13",
@@ -1007,7 +1002,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'grep -n' = 'grep with numbers'. Like having page numbers in a book so you can find things easily.",
     "outputExample": "$ grep -n 'connection refused' /var/log/app/server.log\n15:ERROR: connection refused to 10.0.0.5:5432\n23:WARN: connection refused, retrying in 5s\n67:ERROR: connection refused after 3 attempts",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view14",
@@ -1023,7 +1018,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'grep -c' = 'grep count'. Like counting how many times a word appears in a document.",
     "outputExample": "$ grep -c 'timeout' /var/log/nginx/error.log\n47",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view15",
@@ -1038,7 +1033,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cat -n' = 'cat numbered'. Like having numbered lines in a legal document.",
     "outputExample": "$ cat -n /etc/ssh/sshd_config | head -5\n     1\t# /etc/ssh/sshd_config\n     2\t\n     3\tPort 22\n     4\tListenAddress 0.0.0.0\n     5\tProtocol 2",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view16",
@@ -1055,7 +1050,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-r` = Reverse. Most useful in the combo `sort -nr` (numeric reverse) which answers 'who's on top of the leaderboard?' — pipe to `head` for a top-N list.",
     "outputExample": "$ cat scores.txt\n42\n7\n100\n23\n$ sort -nr scores.txt\n100\n42\n23\n7",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view17",
@@ -1071,7 +1066,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'sort | uniq -c' = 'sort and count uniques'. Like taking inventory and counting how many of each item you have.",
     "outputExample": "$ sort events.log | uniq -c\n      3 connection_refused\n      1 disk_full\n      5 timeout\n      2 unauthorized\n$ sort events.log | uniq -c | sort -rn\n      5 timeout\n      3 connection_refused\n      2 unauthorized\n      1 disk_full",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view18",
@@ -1087,7 +1082,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cut -b' = 'cut bytes'. Like cutting out specific pieces of paper from a document.",
     "outputExample": "$ cut -b 1-19 app.log\n2026-05-17 14:30:01\n2026-05-17 14:30:02\n2026-05-17 14:30:05",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view19",
@@ -1104,7 +1099,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cut -d: -f1' = 'cut delimiter colon field 1'. Like cutting out the first column from a spreadsheet.",
     "outputExample": "$ cut -d: -f1 /etc/passwd\nroot\ndaemon\nbin\nsys\nsync\ngames\nalice",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view20",
@@ -1120,7 +1115,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'paste' = 'paste together'. Like taping two pieces of paper side by side.",
     "outputExample": "$ paste names.txt scores.txt\nAlice\t95\nBob\t87\nCharlie\t92",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "perm1",
@@ -1137,7 +1132,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Octal digits: r=4, w=2, x=1. Add them up per slot, in order owner-group-others. `755` = `rwx r-x r-x` = 'I can do anything, you can look and run'.",
     "outputExample": "$ chmod 755 deploy.sh\n$ ls -l deploy.sh\n-rwxr-xr-x 1 alice alice 1240 May 15 10:02 deploy.sh",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm2",
@@ -1154,7 +1149,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`chown` = 'change owner'. Format mirrors `ls -l` columns: `USER:GROUP`. The colon is the separator; either side can be omitted.",
     "outputExample": "$ ls -l report.pdf\n-rw-r--r-- 1 root root 18K May 15 09:00 report.pdf\n$ sudo chown alice:staff report.pdf\n$ ls -l report.pdf\n-rw-r--r-- 1 alice staff 18K May 15 09:00 report.pdf",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm3",
@@ -1170,7 +1165,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "ls = list. The first column of ls -l is a 10-character permission string: type + 3 triplets (owner/group/others) of rwx.",
     "outputExample": "$ ls -l deploy.sh\n-rw-r--r-- 1 alice alice 142 May 15 10:00 deploy.sh\n# Missing 'x' bits — that's why it won't execute",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm4",
@@ -1187,7 +1182,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`+x` = add eXecute. The three permission bits in `ls -l` are `rwx` — read/write/execute. If you see `-rw-r--r--` and the file won't run, it's missing the `x`. Mnemonic: `+x` = 'plus eXecute'.",
     "outputExample": "$ ls -l setup.sh\n-rw-r--r-- 1 alice alice 142 May 15 10:00 setup.sh\n$ ./setup.sh\nbash: ./setup.sh: Permission denied\n$ chmod +x setup.sh\n$ ls -l setup.sh\n-rwxr-xr-x 1 alice alice 142 May 15 10:00 setup.sh\n$ ./setup.sh\nSetting up...",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm5",
@@ -1203,7 +1198,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "chmod -R = change mode Recursively. Like adjusting who can access an entire building's rooms in one sweep.",
     "outputExample": "$ chmod -R 755 /var/www/myapp\n$ ls -la /var/www/myapp/\ndrwxr-xr-x 3 alice alice 4096 May 17 deploy.sh\n-rwxr-xr-x 1 alice alice 1240 May 17 setup.sh",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm6",
@@ -1220,7 +1215,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`chgrp` = CHange GRouP. Sibling of `chown` (change owner) and `chmod` (change mode). All three start with `ch` for 'change'. If you get 'Operation not permitted', it usually means you're not a member of the target group — run `groups` to check.",
     "outputExample": "$ ls -l /var/www/html\ndrwxr-xr-x 2 alice alice 4096 May 15 10:00 /var/www/html\n$ sudo chgrp www-data /var/www/html\n$ ls -l /var/www/html\ndrwxr-xr-x 2 alice www-data 4096 May 15 10:00 /var/www/html",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm7",
@@ -1237,7 +1232,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`umask` = User MASK. Think 'subtract-from-max'. Numerically: file_max(666) - umask = actual_perm. So umask of `022` → `666 - 022 = 644`. The leading zero you sometimes see (`0022`) is the special-bits digit (setuid/sticky), almost always 0.",
     "outputExample": "$ umask\n0022\n$ umask -S\nu=rwx,g=rx,o=rx\n$ touch newfile && ls -l newfile\n-rw-r--r-- 1 alice alice 0 May 15 10:00 newfile\n$ umask 077\n$ touch secret && ls -l secret\n-rw------- 1 alice alice 0 May 15 10:00 secret",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm8",
@@ -1254,7 +1249,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`whoami` = 'who am I?' (one word). Returns EFFECTIVE user. Don't confuse with `who am i` (three words = login user) or `who` (all logged-in users system-wide). For full identity details use `id`.",
     "outputExample": "$ whoami\nalice\n$ sudo whoami\nroot\n$ sudo -u bob whoami\nbob\n$ id\nuid=1000(alice) gid=1000(alice) groups=1000(alice),27(sudo),998(docker)",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm9",
@@ -1271,7 +1266,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`sudo -i` = `i`nitial-login as root (fresh env). `sudo -s` = `s`hell (your env). `sudo COMMAND` = one-shot. Mental rule: prefer one-shot `sudo COMMAND` 95% of the time — `-i` is for sustained admin sessions only.",
     "outputExample": "$ whoami\nalice\n$ sudo -i\n[sudo] password for alice: ******\nroot@ubuntu:~# whoami\nroot\nroot@ubuntu:~# pwd\n/root\nroot@ubuntu:~# exit\nlogout\n$ whoami\nalice",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm10",
@@ -1288,7 +1283,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`groups` literally answers 'which groups?'. Don't confuse with `getent group NAME` which asks the opposite — 'who's IN this group?'. If you just added yourself to a group with `usermod -aG`, you won't see it in `groups` until next login.",
     "outputExample": "$ groups\nalice sudo docker users\n$ groups bob\nbob: bob audio video\n$ id\nuid=1000(alice) gid=1000(alice) groups=1000(alice),27(sudo),998(docker),100(users)",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm11",
@@ -1304,7 +1299,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'lsattr' = 'list attributes'. Like checking the special properties of a file at the filesystem level. If you see 'i', that's immutable — even root can't touch it without removing the flag first.",
     "outputExample": "$ lsattr /etc/resolv.conf\n----i--------e-- /etc/resolv.conf\n# 'i' flag = immutable — no changes allowed until removed with chattr -i",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm12",
@@ -1320,7 +1315,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'chattr +i' = 'change attribute immutable'. Like locking a file so even root can't change it accidentally. Remove with 'chattr -i'.",
     "outputExample": "$ sudo chattr +i /etc/nginx/nginx.conf\n$ sudo rm /etc/nginx/nginx.conf\nrm: cannot remove '/etc/nginx/nginx.conf': Operation not permitted\n$ lsattr /etc/nginx/nginx.conf\n----i--------e-- /etc/nginx/nginx.conf",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm13",
@@ -1337,7 +1332,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'setfacl -m' = 'set file ACL modify'. Like creating custom access rules for specific people.",
     "outputExample": "$ setfacl -m u:bob:rw project-report.txt\n$ getfacl project-report.txt\n# file: project-report.txt\n# owner: alice\n# group: alice\nuser::rw-\nuser:bob:rw-\ngroup::r--\nother::r--",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm14",
@@ -1353,7 +1348,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'getfacl' = 'get file ACL'. Like reading the detailed permission list that shows exactly who can do what.",
     "outputExample": "$ getfacl /var/www/html/config.php\n# file: /var/www/html/config.php\n# owner: alice\n# group: www-data\nuser::rw-\nuser:bob:r--\ngroup::r--\ngroup:developers:rw-\nmask::rw-\nother::---",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm15",
@@ -1369,7 +1364,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'find -perm -4000' = 'find setuid'. Like searching for programs that can run as root when executed by users.",
     "outputExample": "$ find /usr/bin -perm -4000\n/usr/bin/sudo\n/usr/bin/su\n/usr/bin/passwd\n/usr/bin/pkexec",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm16",
@@ -1385,7 +1380,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'find -perm -2' = 'find world-writable'. Like finding files that anyone on the system can modify.",
     "outputExample": "$ find /etc -perm -2 -type f 2>/dev/null\n/etc/some-misconfigured-script.sh\n# Any result here is a security issue — /etc files should not be world-writable",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm17",
@@ -1400,7 +1395,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'sudo -l' = 'sudo list'. Like checking your admin privileges to see what you can do as root.",
     "outputExample": "$ sudo -l\nUser alice may run the following commands on webserver:\n    (ALL : ALL) ALL\n# or more restricted:\n    (root) /usr/bin/apt, /usr/sbin/nginx",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm18",
@@ -1416,7 +1411,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'chown -R' = 'chown recursive'. Like giving away a whole folder and everything inside it to someone else.",
     "outputExample": "$ sudo chown -R www-data:www-data /var/www/myapp\n$ ls -la /var/www/myapp/\ndrwxr-xr-x 3 www-data www-data 4096 May 17 .\n-rw-r--r-- 1 www-data www-data 2048 May 17 index.html",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm19",
@@ -1432,7 +1427,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'chmod +t' = 'chmod sticky'. Like a directory where you can only touch your own stuff, not others'.",
     "outputExample": "$ chmod +t /tmp/shared-workspace\n$ ls -ld /tmp/shared-workspace\ndrwxrwxrwt 2 alice alice 4096 May 17 /tmp/shared-workspace\n# The 't' at the end confirms the sticky bit is set",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm20",
@@ -1448,7 +1443,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'stat -c '%a'' = 'stat octal'. Like getting the numeric code that represents the permission settings.",
     "outputExample": "$ stat -c '%a' /etc/nginx/nginx.conf\n644\n$ stat -c '%a' /usr/local/bin/deploy\n755",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "pipe1",
@@ -1465,7 +1460,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`>` = arrow pointing INTO a file. ONE arrow = overwrite. TWO arrows (`>>`) = append. Mnemonic: a single `>` is a sharp 'replace' — it clobbers. Only catches stdout (channel 1); for stderr use `2>`.",
     "outputExample": "$ echo 'hello' > greeting.txt\n$ cat greeting.txt\nhello\n$ echo 'world' > greeting.txt\n$ cat greeting.txt\nworld",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe2",
@@ -1482,7 +1477,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "ONE `>` = overwrite. TWO `>>` = append (think 'extra hop, extra arrow'). Pair-think: `> file` is destructive once you press Enter — `>> file` is safe to repeat. When in doubt about a log file, always use `>>`.",
     "outputExample": "$ echo 'line 1' > log.txt\n$ echo 'line 2' >> log.txt\n$ echo 'line 3' >> log.txt\n$ cat log.txt\nline 1\nline 2\nline 3",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe3",
@@ -1499,7 +1494,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`<` = arrow pointing FROM a file INTO the command. Mirror image of `>`. Most everyday commands don't need it (they accept filenames), but for tools that ONLY read stdin (`tr`, `mail`, DB clients), `<` is the bridge.",
     "outputExample": "$ cat names.txt\ncharlie\nalice\nbob\n$ sort < names.txt\nalice\nbob\ncharlie\n$ wc -l < /etc/passwd\n47",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe4",
@@ -1516,7 +1511,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`|` (vertical bar) = pipe. Reads left-to-right like a flowchart: 'take this, then this, then this'. Stdout of left → stdin of right. The fundamental Unix combinator — small tools, big results.",
     "outputExample": "$ ps aux | grep nginx | grep -v grep\nalice   1234  2.1  4.5 ... nginx: master process\nalice   1235  0.1  0.5 ... nginx: worker process\n$ ls | wc -l\n12",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe5",
@@ -1533,7 +1528,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`1>` = stdout, `2>` = stderr. The number is the file descriptor. `2>&1` means 'channel 2 follows channel 1's current destination'. Order matters: `> file 2>&1` merges to file; `2>&1 > file` keeps stderr on the terminal.",
     "outputExample": "$ find / -name sshd_config\nfind: '/root': Permission denied\nfind: '/proc/tty': Permission denied\n/etc/ssh/sshd_config\n$ find / -name sshd_config 2> /dev/null\n/etc/ssh/sshd_config",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe6",
@@ -1549,7 +1544,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`&>` = 'redirect & (and) everything-output-related'. Bash-only. Portable equivalent: `> file 2>&1` (note the order: redirect 1 FIRST, then dup 2 to 1). To APPEND both streams, use `&>>` instead.",
     "outputExample": "$ ./deploy.sh &> deploy.log\n$ cat deploy.log\nStarting deployment...\nls: cannot access '/opt/app-v3': No such file or directory\nDeploy completed with warnings.",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe7",
@@ -1565,7 +1560,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`<<` = here-document (literal text input). Pick any MARKER (convention: `EOF`). Quote it (`<< 'EOF'`) to TURN OFF variable expansion. `<<-` strips leading tabs for clean indented blocks. Cousin: `<<<` (three) = here-STRING (one line of input).",
     "outputExample": "$ cat << EOF > greeting.txt\n> Hello, $USER\n> Today is $(date +%A)\n> EOF\n$ cat greeting.txt\nHello, alice\nToday is Friday",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe8",
@@ -1582,7 +1577,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`/dev/null` = the bit bucket. Anything written there vanishes. Reading from it = empty. Mnemonic: 'write-only black hole'. To silence ONLY errors, use `2> /dev/null`. To silence everything, `> /dev/null 2>&1` or `&> /dev/null`.",
     "outputExample": "$ find / -name passwd 2>&1 | wc -l\n452\n$ find / -name passwd 2> /dev/null | wc -l\n3",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe9",
@@ -1599,7 +1594,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`&&` = 'and only then'. Mirror operator: `||` = 'or else'. Mental model: short-circuit boolean logic — bash stops evaluating once the result is decided. Every chain step DEPENDS on its predecessor's exit code; use `;` instead if you want sequential-but-independent.",
     "outputExample": "$ true && echo ok\nok\n$ false && echo ok\n$ mkdir /tmp/test && cd /tmp/test && pwd\n/tmp/test",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe10",
@@ -1615,7 +1610,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`;` = 'next, no matter what'. `&&` = 'next only if win'. `||` = 'next only if lose'. `&` = 'next in parallel'. When chaining commands that depend on each other, NEVER use `;` — use `&&`.",
     "outputExample": "$ false ; echo 'still ran'\nstill ran\n$ date ; uptime\nFri May 15 14:32:10 UTC 2026\n 14:32:10 up 3 days,  4:21,  2 users,  load average: 0.42, 0.31, 0.28",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe11",
@@ -1631,7 +1626,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`&>` truncates. `&>>` appends. Same difference as `>` vs `>>` but for both streams. Bash-only — for portable scripts use `>> file 2>&1`.",
     "outputExample": "$ ./backup.sh &>> /var/log/backup.log\n$ ./backup.sh &>> /var/log/backup.log\n$ cat /var/log/backup.log\nRun 1: backing up /home...\nRun 1: done, 2.3G copied\nRun 2: backing up /home...\nRun 2: done, 2.3G copied",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe12",
@@ -1648,7 +1643,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`||` = 'or else'. Mirror of `&&` ('and then'). The pair (`&&`/`||`) is bash's short-circuit boolean logic. For complex branches use proper `if`/`then`/`else` — chained `&&`/`||` has a subtle pitfall when the middle command fails.",
     "outputExample": "$ true || echo 'fallback'\n$ false || echo 'fallback'\nfallback\n$ [ -d /tmp/work ] || mkdir /tmp/work  # idempotent setup",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe13",
@@ -1664,7 +1659,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`2>>` = stderr append. `>>` (no digit) = stdout append. The digit `2` always means stderr — prefix any redirection with `2` to target errors specifically.",
     "outputExample": "$ ls /nope 2>> errors.log\n$ ls /also-nope 2>> errors.log\n$ cat errors.log\nls: cannot access '/nope': No such file or directory\nls: cannot access '/also-nope': No such file or directory",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe14",
@@ -1680,7 +1675,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tee` = T-pipe-junction (one stream in, two out). Use cases: (1) see-AND-save, (2) the famous `sudo tee` trick for writing to root-owned files. Append mode: `-a`.",
     "outputExample": "$ ls -la | tee listing.txt | head -3\ntotal 24\ndrwxr-xr-x 4 alice alice 4096 May 15 10:00 .\ndrwxr-xr-x 5 root  root  4096 May  1 09:00 ..\n$ wc -l listing.txt\n8 listing.txt  # full output was saved",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe15",
@@ -1696,7 +1691,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Multiple files = multiple copies. The killer pattern is `tee >(cmd1) >(cmd2)` for fan-out to OTHER commands (bash-only process substitution).",
     "outputExample": "$ date | tee /var/log/boot.log /var/log/archive/boot-2026-05-17.log\nFri May 17 14:32:10 UTC 2026\n$ cat /var/log/boot.log\nFri May 17 14:32:10 UTC 2026",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe16",
@@ -1711,7 +1706,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'<< EOF' = 'here document'. Like writing a letter directly in the command, ending with your signature (EOF).",
     "outputExample": "$ cat << END\n> Hello\n> World\n> END\nHello\nWorld",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe17",
@@ -1727,7 +1722,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'<<<' = 'here string'. Like feeding a string directly into a command's input stream. Three arrows for one string; two arrows (<<) for multi-line blocks.",
     "outputExample": "$ wc -w <<< 'The quick brown fox'\n4\n$ grep 'error' <<< 'connection error occurred'\nconnection error occurred",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe18",
@@ -1743,7 +1738,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'|' chain = 'pipeline assembly line'. Like passing work through multiple stations, each doing their part. All commands run concurrently.",
     "outputExample": "$ ps aux | grep nginx | grep -v grep | wc -l\n3\n$ cat names.txt | sort | uniq | wc -l\n15",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe19",
@@ -1758,7 +1753,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'< input > output' = 'in and out'. Like taking input from one file and sending results to another.",
     "outputExample": "$ sort < names.txt > sorted-names.txt\n$ head -3 sorted-names.txt\nAlice\nBob\nCharlie",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe20",
@@ -1774,7 +1769,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'> /dev/null 2>&1' = 'black hole redirect'. Like throwing everything into a trash can that never fills up. Order matters: stdout first, then redirect stderr to follow it.",
     "outputExample": "$ noisy_command > /dev/null 2>&1\n$ echo $?\n0  # exit code preserved even though output was discarded",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "proc1",
@@ -1792,7 +1787,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Two ps dialects exist: BSD (`ps aux`, no dashes) and System V (`ps -ef`, with dashes). Mnemonic for `aux`: All Users eXtended. Sister tools: `top`/`htop` (live view), `pgrep` (find PID by name), `pstree` (tree view).",
     "outputExample": "$ ps aux | head -5\nUSER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot           1  0.0  0.1 168720 11264 ?        Ss   May14   0:02 /sbin/init\nroot         412  0.0  0.0  35200  6144 ?        Ss   May14   0:00 /lib/systemd/systemd-journald\nalice       1872  0.2  0.4 412000 65536 tty1     Sl   09:14   0:18 /usr/bin/gnome-shell\nalice       2412 12.5  3.1 2400000 524288 ?      Sl   09:15   1:42 /usr/lib/firefox/firefox",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc2",
@@ -1810,7 +1805,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`pstree` = process tree. PID 1 (systemd/init) is the root ancestor of EVERYTHING. If a parent dies before its child, the child becomes an ORPHAN and is adopted by PID 1.",
     "outputExample": "$ pstree -p | head -8\nsystemd(1)-+-sshd(1432)---sshd(2001)---bash(2003)---vim(2412)\n           |-nginx(1832)-+-nginx(1833)\n           |              `-nginx(1834)\n           `-gnome-terminal(2500)---bash(2501)---pstree(3000)",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc3",
@@ -1828,7 +1823,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Escalation ladder: SIGTERM (15, 'please stop') → wait a few seconds → SIGKILL (9, 'die now'). Family: `kill PID` (one PID), `killall name` (all by exact name), `pkill pattern` (all matching regex).",
     "outputExample": "$ pgrep firefox\n2412\n$ kill 2412\n$ pgrep firefox\n$ # (empty — firefox exited cleanly after SIGTERM)",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc4",
@@ -1845,7 +1840,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`&` at end = run in background, hand prompt back NOW. Don't confuse with `;` (sequential) or `&&` (conditional). For long-running things you'll log out from, use `nohup ... &` or `tmux`/`screen`.",
     "outputExample": "$ sleep 30 &\n[1] 12345\n$ jobs\n[1]+  Running                 sleep 30 &\n$ # 30 seconds later:\n[1]+  Done                    sleep 30",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc5",
@@ -1861,7 +1856,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`fg` = ForeGround. `bg` = BackGround. `Ctrl+Z` = suspend (a one-key pause). Once suspended: `fg` to resume in foreground, `bg` to resume in background, `kill %N` to terminate.",
     "outputExample": "$ sleep 30\n^Z\n[1]+  Stopped                 sleep 30\n$ fg %1\nsleep 30\n# (now in foreground again; Ctrl+C to stop)",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc6",
@@ -1878,7 +1873,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Workflow: `Ctrl+Z` (pause) → `bg` (continue in background). Trio to memorize: `Ctrl+Z` pauses, `fg` foregrounds, `bg` backgrounds.",
     "outputExample": "$ make -j8  # started in foreground, takes too long\n^Z\n[1]+  Stopped                 make -j8\n$ bg\n[1]+ make -j8 &\n$ jobs\n[1]+  Running                 make -j8 &\n# build continues, prompt is yours",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc7",
@@ -1894,7 +1889,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`jobs` = this shell's jobs only. For system-wide use `ps` or `pgrep`. The `+` next to a job means 'default target'. The `[N]` number is what you pass with `%N`.",
     "outputExample": "$ sleep 100 &\n[1] 12345\n$ sleep 300\n^Z\n[2]+  Stopped                 sleep 300\n$ jobs\n[1]-  Running                 sleep 100 &\n[2]+  Stopped                 sleep 300\n$ jobs -l\n[1]- 12345 Running             sleep 100 &\n[2]+ 12347 Stopped             sleep 300",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc8",
@@ -1911,7 +1906,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Inside top: M=Memory sort, P=Processor (CPU) sort, q=quit, k=kill, 1=per-core view. Always available on every Linux box. If `htop` is installed, prefer it.",
     "outputExample": "$ top\ntop - 14:32:18 up 3 days, load average: 0.42, 0.31, 0.28\nTasks: 312 total,   2 running, 310 sleeping\n%Cpu(s):  4.2 us,  1.1 sy, 94.5 id\n   PID USER      PR  NI    VIRT    RES  S  %CPU  %MEM     TIME+ COMMAND\n  2412 alice     20   0 2400000 524288  S  12.5   3.1   1:42.10 firefox\n     1 root      20   0  168720  11264  S   0.0   0.1   0:02.41 systemd",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc9",
@@ -1929,7 +1924,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`pgrep` = process + grep. Sibling: `pkill` (same matching, but kills). Use `pgrep -f` when the executable is generic (python, java) and you need to match by script name.",
     "outputExample": "$ pgrep nginx\n1832\n1833\n1834\n$ pgrep -l sshd\n1432 sshd\n2001 sshd\n$ pgrep nonexistent\n$ echo $?\n1",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc10",
@@ -1947,7 +1942,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`pkill` = process kill (by pattern). Triple: `pgrep` (find), `pkill` (find + kill), `killall` (kill by exact name). RULE: always run `pgrep` first to preview before `pkill`.",
     "outputExample": "$ pgrep -a firefox  # preview first\n2412 /usr/lib/firefox/firefox\n2500 /usr/lib/firefox/firefox -contentproc\n$ pkill firefox\n$ pgrep firefox\n$ # (empty — all instances terminated)",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc11",
@@ -1964,7 +1959,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Inside top, capital letters sort: P=Processor (CPU), M=Memory, T=Time. Lowercase do other things: k=kill, r=renice, q=quit, u=filter user, h=help. `top` is your fallback when `htop` is missing.",
     "outputExample": "$ top\n# Press M to sort by memory...\n   PID USER      PR  NI    VIRT    RES  %MEM     TIME+ COMMAND\n  2412 alice     20   0 2400000 524288  3.1   1:42.10 firefox\n  3821 alice     20   0  819200 122880  0.7   0:08.20 code",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc12",
@@ -1981,7 +1976,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`pstree -p PID` = the subtree under PID. `pstree -s PID` = the ancestors of PID ('s' for 'show parents').",
     "outputExample": "$ pstree -pa 1832\nnginx,1832 -g daemon off;\n  |-nginx,1833\n  |-nginx,1834\n  `-nginx,1835",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc13",
@@ -1998,7 +1993,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Mnemonic: `-p` for PID, `-o` for Output format. Append `=` to a column name to hide the header. `etime` is human-readable, `etimes` is plain seconds — pick the right one for scripts.",
     "outputExample": "$ ps -p 1234 -o pid,user,etime,%cpu,cmd\n    PID USER         ELAPSED %CPU CMD\n   1234 alice       02:14:33 12.5 /usr/lib/firefox/firefox\n$ ps -p 1234 -o etime=\n02:14:33",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc14",
@@ -2016,7 +2011,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`lsof` = LiSt Open Files. `-p PID` filters by process, `-i :PORT` filters by network port. The `cwd` FD is the process's working directory; the `txt` FD is the executable itself. Look for '(deleted)' in NAME to find disk-space leaks.",
     "outputExample": "$ sudo lsof -p 1234 | grep deleted\nnginx 1234 www-data  5w  REG 8,1 0 131074 /var/log/nginx/old.log (deleted)\n# This deleted file is preventing 50MB from being freed",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc15",
@@ -2032,7 +2027,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Pattern: `cmd & pid=$!` saves PID, `wait $pid` waits for it, exit status of `wait` = exit status of the child. `wait` only sees direct children of the current shell.",
     "outputExample": "$ for i in 1 2 3; do (sleep $i; echo \"task $i done\") & done; wait; echo all-done\ntask 1 done\ntask 2 done\ntask 3 done\nall-done",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc16",
@@ -2049,7 +2044,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Width flag: no `w` = truncated to terminal width, `w` = double width, `ww` = unlimited. `/proc/PID/cmdline` is the kernel's authoritative source for the full argument list.",
     "outputExample": "$ ps auxww | grep java | grep -v grep\nappuser 8421  3.2 8.5 ... java -Xms512m -Xmx2g -Dspring.profiles.active=prod -jar /opt/myapp/app.jar --config=/etc/myapp/prod.yml",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc17",
@@ -2066,7 +2061,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "TERM = polite request, KILL = forced. HUP = 'reload config' for daemons. USR1/USR2 = app-defined — check man page. SIGKILL and SIGSTOP are the only signals a process can never ignore.",
     "outputExample": "$ kill -HUP $(pgrep -o nginx)\n$ tail -1 /var/log/nginx/error.log\n2026/05/17 14:32:18 [notice] nginx: signal 1 (SIGHUP) received, reconfiguring",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc18",
@@ -2085,7 +2080,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Cheat sheet: START bg=`&`, PAUSE=`Ctrl+Z`, LIST=`jobs`, FOREGROUND=`fg [%N]`, BACKGROUND=`bg [%N]`, KILL by job=`kill %N`, SURVIVE LOGOUT=`disown`.",
     "outputExample": "$ sleep 100 &\n[1] 5678\n$ sleep 200\n^Z\n[2]+  Stopped                 sleep 200\n$ bg %2\n[2]+ sleep 200 &\n$ kill %1\n[1]-  Terminated              sleep 100",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc19",
@@ -2102,7 +2097,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Range: -20 (CPU hog) ↔ 0 (default) ↔ +19 (super polite). A HIGH nice number = a NICE process that waits its turn. Only root can go negative. To change a running process's niceness, use `renice`.",
     "outputExample": "$ nice -n 15 sha256sum ubuntu.iso &\n[1] 8421\n$ ps -p 8421 -o pid,ni,%cpu\n    PID  NI %CPU\n   8421  15  4.2",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc20",
@@ -2119,7 +2114,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Acronym `tlnp`: TCP, Listening, Numeric, Process. Replace `t` with `u` for UDP, drop `l` to see active connections. Prefer `ss` over `netstat` on any modern system.",
     "outputExample": "$ sudo ss -tlnp\nState   Local Address:Port  Process\nLISTEN  0.0.0.0:22         users:((\"sshd\",pid=1432,fd=3))\nLISTEN  0.0.0.0:80         users:((\"nginx\",pid=1832,fd=6))\nLISTEN  127.0.0.1:5432     users:((\"postgres\",pid=712,fd=5))\nLISTEN  0.0.0.0:8080       users:((\"node\",pid=3821,fd=12))",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "net1",
@@ -2136,7 +2131,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ping` is named after sonar: a submarine pings a target and listens for the echo. Time between ping and echo = round-trip latency. No echo = no contact.",
     "outputExample": "$ ping -c 3 google.com\nPING google.com (142.250.185.46) 56(84) bytes of data.\n64 bytes from lga25s71-in-f14: icmp_seq=1 ttl=118 time=14.2 ms\n64 bytes from lga25s71-in-f14: icmp_seq=2 ttl=118 time=14.6 ms\n64 bytes from lga25s71-in-f14: icmp_seq=3 ttl=118 time=14.1 ms\n\n--- google.com ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2003ms\nrtt min/avg/max/mdev = 14.103/14.305/14.601/0.214 ms",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net2",
@@ -2153,7 +2148,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ip addr` = 'IP addresses'. The `ip` tool has sub-commands: `ip addr` (addresses), `ip link` (interface up/down/MAC), `ip route` (routing table), `ip neigh` (ARP). Same pattern every time.",
     "outputExample": "$ ip -br addr\nlo               UNKNOWN        127.0.0.1/8 ::1/128\neth0             UP             192.168.1.42/24 fe80::a00:27ff:fe4e:5/64\nwlan0            DOWN\ndocker0          DOWN           172.17.0.1/16",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net3",
@@ -2170,7 +2165,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`wget` = 'web get' — defaults to SAVE to file. Mirror-image of `curl` which defaults to PRINT to stdout. `wget -c` resumes; `wget -O-` makes it act like curl. If neither is installed: `sudo apt install wget` or `sudo dnf install wget`.",
     "outputExample": "$ wget https://example.com/file.zip\n--2026-05-15 14:32:10--  https://example.com/file.zip\nResolving example.com (example.com)... 93.184.216.34\nConnecting to example.com (example.com)|93.184.216.34|:443... connected.\nHTTP request sent, awaiting response... 200 OK\nLength: 4194304 (4.0M) [application/zip]\nSaving to: 'file.zip'\n\nfile.zip          100%[==============>]   4.00M  12.5MB/s    in 0.3s\n\n2026-05-15 14:32:10 (12.5 MB/s) - 'file.zip' saved [4194304/4194304]",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net4",
@@ -2187,7 +2182,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`scp` = Secure CoPy (over SSH). The COLON is the magic — `host:path` = remote, plain `path` = local. Capital `-P` for port (different from `ssh`'s `-p`). For anything beyond simple one-shot copies, prefer `rsync -avP`.",
     "outputExample": "$ scp report.pdf alice@server.com:~/\nalice@server.com's password:\nreport.pdf                                100% 2456KB  12.3MB/s   00:00\n$ scp -r project/ alice@server.com:/backups/\nproject/README.md                         100% 1234     45.6KB/s   00:00\nproject/src/main.py                       100% 8901    234.5KB/s   00:00",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net5",
@@ -2204,7 +2199,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ssh` = Secure SHell. Always `user@host` (omit `user@` if local username matches). For password-free login: `ssh-keygen` then `ssh-copy-id`. For frequently-used hosts, set up aliases in `~/.ssh/config`. To run one command without an interactive shell, just append the command in quotes.",
     "outputExample": "$ ssh alice@server.com\nalice@server.com's password:\nWelcome to Ubuntu 24.04.1 LTS\nLast login: Fri May 15 09:00:01 2026 from 192.168.1.42\nalice@server:~$ hostname\nserver.com\nalice@server:~$ exit\nlogout\nConnection to server.com closed.\n$",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net6",
@@ -2221,7 +2216,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`netstat -tlnp` mnemonic: 'TCP Listening Numeric Process'. Modern equivalent: `ss -tlnp` (Socket Statistics — same flags). If neither is installed: `sudo apt install net-tools` or `iproute2`. Alternative for 'who's on port X?': `sudo lsof -i :X` or `sudo fuser X/tcp`.",
     "outputExample": "$ sudo netstat -tlnp\nActive Internet connections (only servers)\nProto Recv-Q Send-Q Local Address      Foreign Address  State    PID/Program name\ntcp        0      0 127.0.0.1:631      0.0.0.0:*        LISTEN   1234/cupsd\ntcp        0      0 0.0.0.0:22         0.0.0.0:*        LISTEN   1456/sshd\ntcp        0      0 0.0.0.0:80         0.0.0.0:*        LISTEN   2104/nginx: master\ntcp6       0      0 :::22              :::*             LISTEN   1456/sshd",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net7",
@@ -2238,7 +2233,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`nslookup` = Name Server LOOKUP. Modern preference: `dig` (more detailed) or `host` (terser). Two-line check: `nslookup domain` then `nslookup domain 8.8.8.8` — if first fails and second works, your local DNS resolver is broken, not the world.",
     "outputExample": "$ nslookup google.com\nServer:         192.168.1.1\nAddress:        192.168.1.1#53\n\nNon-authoritative answer:\nName:   google.com\nAddress: 142.250.185.46\nName:   google.com\nAddress: 2607:f8b0:4006:80f::200e\n\n$ nslookup -type=mx gmail.com 8.8.8.8\nServer:         8.8.8.8\nAddress:        8.8.8.8#53\n\nNon-authoritative answer:\ngmail.com       mail exchanger = 5 gmail-smtp-in.l.google.com.\ngmail.com       mail exchanger = 10 alt1.gmail-smtp-in.l.google.com.",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net8",
@@ -2255,7 +2250,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ip route` is part of the modern `iproute2` suite. Old `route -n` is deprecated but still works. Top of the table = most-specific match wins; `default` matches anything else. If `ip route show default` is empty, you have NO internet route — that's the bug.",
     "outputExample": "$ ip route show\ndefault via 192.168.1.1 dev wlan0 proto dhcp metric 600\n169.254.0.0/16 dev wlan0 scope link metric 1000\n192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.42 metric 600\n$ ip route get 8.8.8.8\n8.8.8.8 via 192.168.1.1 dev wlan0 src 192.168.1.42 uid 1000",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net9",
@@ -2272,7 +2267,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`telnet` as a LOGIN tool is dead (use ssh). `telnet HOST PORT` as a 'is the port open?' tester is still useful. Modern equivalent: `nc -zv HOST PORT` (cleaner, scriptable). Inside an interactive telnet session, escape with `Ctrl+]` then type `quit`.",
     "outputExample": "$ telnet google.com 443\nTrying 142.250.185.46...\nConnected to google.com.\nEscape character is '^]'.\n^]\ntelnet> quit\nConnection closed.\n\n$ nc -zv google.com 443\nConnection to google.com (142.250.185.46) 443 port [tcp/https] succeeded!\n\n$ nc -zv google.com 9999\nnc: connect to google.com port 9999 (tcp) failed: Connection refused",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net10",
@@ -2290,7 +2285,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ss -antp` = All TCP Numeric Process. Add `state established` / `state listening` / etc. to filter. Modern, fast — `netstat` is being phased out. Watch CLOSE_WAIT — many lingering ones means an APP isn't closing sockets properly.",
     "outputExample": "$ sudo ss -antp | head\nState        Recv-Q Send-Q  Local Address:Port    Peer Address:Port      Process\nLISTEN       0      128         0.0.0.0:22              0.0.0.0:*          users:((\"sshd\",pid=1432,fd=3))\nLISTEN       0      511         0.0.0.0:80              0.0.0.0:*          users:((\"nginx\",pid=2401,fd=6))\nESTAB        0      0      192.168.1.42:55232    142.250.185.46:443        users:((\"firefox\",pid=2412,fd=22))\nESTAB        0      0      192.168.1.42:22         192.168.1.5:48201       users:((\"sshd\",pid=8923,fd=4))\nTIME-WAIT    0      0      192.168.1.42:55321    142.250.185.46:443\nCLOSE-WAIT   0      0           127.0.0.1:8080      127.0.0.1:55321       users:((\"myapp\",pid=4521,fd=12))",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net11",
@@ -2308,7 +2303,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-c N` Count of packets, `-i SEC` Interval, `-W SEC` Wait-per-packet, `-w SEC` Whole-deadline. Exit code: 0 = at least one reply, non-zero = all lost. For HOSTS-IN-PARALLEL use `fping -c N host1 host2 ...`. For port-level health checks, `nc -zv -w 2 host PORT` is more direct.",
     "outputExample": "$ ping -c 4 google.com\nPING google.com (142.250.185.46) 56(84) bytes of data.\n64 bytes from lga25s71-in-f14: icmp_seq=1 ttl=118 time=14.2 ms\n64 bytes from lga25s71-in-f14: icmp_seq=2 ttl=118 time=14.6 ms\n64 bytes from lga25s71-in-f14: icmp_seq=3 ttl=118 time=14.1 ms\n64 bytes from lga25s71-in-f14: icmp_seq=4 ttl=118 time=14.5 ms\n\n--- google.com ping statistics ---\n4 packets transmitted, 4 received, 0% packet loss, time 3005ms\nrtt min/avg/max/mdev = 14.103/14.350/14.601/0.214 ms\n$ echo $?\n0",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net12",
@@ -2326,7 +2321,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Three DNS tools: `host` (terse, friendly), `dig` (detailed, admin-default), `nslookup` (interactive/legacy). `host NAME` forward. `host IP` reverse. `-t TYPE` for specific record (MX/TXT/NS/CNAME). `host NAME @SERVER` queries a specific resolver.",
     "outputExample": "$ host google.com\ngoogle.com has address 142.250.185.46\ngoogle.com has IPv6 address 2607:f8b0:4004:81d::200e\ngoogle.com mail is handled by 10 smtp.google.com.\n$ host 8.8.8.8\n8.8.8.8.in-addr.arpa domain name pointer dns.google.\n$ host -t MX gmail.com\ngmail.com mail is handled by 5 gmail-smtp-in.l.google.com.\ngmail.com mail is handled by 10 alt1.gmail-smtp-in.l.google.com.\n$ host -t TXT example.com | head -3\nexample.com descriptive text \"v=spf1 -all\"\nexample.com descriptive text \"_dmarc.example.com\"",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net13",
@@ -2344,7 +2339,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`traceroute` = path discovery via expiring TTL packets. Each hop = one router. `*` = hop didn't reply (often firewalled, not necessarily down). Modern preferred: `mtr` (continuous trace with rolling loss/latency). Variants: `-T` TCP, `-I` ICMP, `-U` UDP (default).",
     "outputExample": "$ traceroute -n google.com\ntraceroute to google.com (142.250.185.46), 30 hops max, 60 byte packets\n 1  192.168.1.1     1.234 ms  1.142 ms  1.089 ms\n 2  10.0.0.1        5.678 ms  5.523 ms  5.421 ms\n 3  72.14.213.69    8.234 ms  8.012 ms  7.891 ms\n 4  108.170.250.34  12.345 ms  12.103 ms  11.987 ms\n 5  * * *\n 6  142.250.185.46  14.234 ms  14.103 ms  13.987 ms\n$ mtr -r -c 3 google.com\nStart: 2026-05-17T14:35:00\nHOST: web1                            Loss%   Snt   Last   Avg  Best  Wrst StDev\n  1.|-- 192.168.1.1                    0.0%     3    1.2   1.1   1.0   1.2   0.1\n  2.|-- 10.0.0.1                       0.0%     3    5.7   5.5   5.4   5.7   0.2",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net14",
@@ -2362,7 +2357,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ip link` = LAYER 2 (link). `ip addr` = LAYER 3 (IP). Verbs: `set IFACE up`/`down`, `set IFACE mtu N`, `set IFACE address MAC`, `set IFACE name NEW`. Flags to know: `UP` (admin enabled), `LOWER_UP` (cable/wifi connected — hardware), `RUNNING`.",
     "outputExample": "$ ip link show eth0\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP\n    link/ether aa:bb:cc:dd:ee:ff brd ff:ff:ff:ff:ff:ff\n$ sudo ip link set eth0 down\n$ ip link show eth0\n2: eth0: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel state DOWN\n    link/ether aa:bb:cc:dd:ee:ff brd ff:ff:ff:ff:ff:ff\n$ sudo ip link set eth0 up\n$ ip link show eth0\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP\n    link/ether aa:bb:cc:dd:ee:ff brd ff:ff:ff:ff:ff:ff",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net15",
@@ -2380,7 +2375,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ip route show` = whole table. `ip route get DEST` = 'for THIS dest, which rule wins?'. Pair with `ip rule list` for policy-based routing (multiple tables). Read fields: `via GW` (gateway), `dev IF` (interface), `src ADDR` (source IP we'd use).",
     "outputExample": "$ ip route get 8.8.8.8\n8.8.8.8 via 192.168.1.1 dev wlan0 src 192.168.1.42 uid 1000\n    cache\n$ ip route get 10.0.0.5\n10.0.0.5 via 10.8.0.1 dev tun0 src 10.8.0.42 uid 1000\n    cache\n$ ip rule list\n0:      from all lookup local\n100:    from 10.8.0.0/24 lookup vpn\n32766:  from all lookup main\n32767:  from all lookup default",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net16",
@@ -2397,7 +2392,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tcpdump` = TCP DUMP (but it captures UDP/ICMP/etc. too — name is historical). Always needs `sudo`. The filter syntax is called BPF — `host X`, `port N`, `tcp`, `udp`, combined with `and`/`or`/`not`. For visual analysis save with `-w` and open in Wireshark.",
     "outputExample": "$ sudo tcpdump -i eth0 -n -c 5\ntcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes\n14:35:20.123456 IP 192.168.1.42.54321 > 8.8.8.8.53: 12345+ A? example.com. (29)\n14:35:20.130012 IP 8.8.8.8.53 > 192.168.1.42.54321: 12345 1/0/0 A 93.184.216.34 (45)\n14:35:20.131245 IP 192.168.1.42.41234 > 93.184.216.34.443: Flags [S], seq 1234567\n14:35:20.140891 IP 93.184.216.34.443 > 192.168.1.42.41234: Flags [S.], seq 7654321, ack 1234568\n14:35:20.141012 IP 192.168.1.42.41234 > 93.184.216.34.443: Flags [.], ack 1, win 502\n5 packets captured",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net17",
@@ -2415,7 +2410,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ip addr add IP/PREFIX dev IFACE` adds; `ip addr del` removes; `ip addr flush` wipes. CIDR `/24` = 256 addresses, `/32` = single host. RUNTIME ONLY — gone on reboot. For persistence: NetworkManager / netplan / systemd-networkd / `/etc/network/interfaces`. Don't remove the PRIMARY IP if you're SSHed in!",
     "outputExample": "$ ip addr show eth0\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500\n    inet 192.168.1.42/24 brd 192.168.1.255 scope global dynamic eth0\n$ sudo ip addr add 192.168.1.50/24 dev eth0\n$ ip addr show eth0\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500\n    inet 192.168.1.42/24 brd 192.168.1.255 scope global dynamic eth0\n    inet 192.168.1.50/24 scope global secondary eth0\n$ ping -c1 192.168.1.50  # other hosts on the LAN can now reach this IP too\n64 bytes from 192.168.1.50: icmp_seq=1 ttl=64 time=0.045 ms",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net18",
@@ -2433,7 +2428,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`nc -zv host port` = Zero-I/O + Verbose port check. ALWAYS add `-w SEC` timeout or it can hang forever. Exit 0 = open, non-zero = closed/filtered. UDP with `-u` is unreliable (no handshake). For real port scans, use `nmap`. Modern alt: `ncat` (from nmap-ncat).",
     "outputExample": "$ nc -zv google.com 443\nConnection to google.com (142.250.185.46) 443 port [tcp/https] succeeded!\n$ nc -zv -w 2 google.com 12345\nnc: connect to google.com (142.250.185.46) port 12345 (tcp) failed: Connection refused\n$ for p in 22 80 443 3306 5432; do nc -zv -w 1 web1 $p 2>&1 | head -1; done\nConnection to web1 22 port [tcp/ssh] succeeded!\nConnection to web1 80 port [tcp/http] succeeded!\nConnection to web1 443 port [tcp/https] succeeded!\nnc: connect to web1 port 3306 (tcp) failed: Connection refused\nnc: connect to web1 port 5432 (tcp) failed: Connection refused",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net19",
@@ -2451,7 +2446,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-fsSL` = Fail + Silent + Show-errors + Follow-redirects. `-I` HEAD. `-X` method. `-d` body. `-H` header. `-u user:pass` basic auth. `-w` extract field. The fail-fast pattern: `curl -fsSL URL` exits non-zero on 4xx/5xx — never silently use HTML error pages as data.",
     "outputExample": "$ curl -I https://example.com\nHTTP/2 200\ncontent-type: text/html; charset=UTF-8\ncontent-length: 1256\ndate: Sat, 17 May 2026 14:35:22 GMT\nlast-modified: Thu, 17 Oct 2019 07:18:26 GMT\n\n$ curl -w '%{http_code} %{time_total}s %{size_download}b\\n' -o /dev/null -s https://example.com\n200 0.103s 1256b\n$ curl -fsS https://api.github.com/users/torvalds | jq -r '.public_repos'\n9",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net20",
@@ -2469,7 +2464,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dig` = DNS power tool. `+short` for scripts, `TYPE` (MX/TXT/NS/CNAME/SOA) at end, `@SERVER` to query a specific resolver, `+trace` to walk delegation, `-x IP` reverse lookup. Concise alt: `host`. Both ship in dnsutils/bind-utils package.",
     "outputExample": "$ dig +short google.com\n142.250.185.46\n$ dig google.com MX +short\n10 smtp.google.com.\n$ dig google.com\n; <<>> DiG 9.18.28 <<>> google.com\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12345\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; QUESTION SECTION:\n;google.com.\t\t\tIN\tA\n\n;; ANSWER SECTION:\ngoogle.com.\t\t300\tIN\tA\t142.250.185.46\n\n;; Query time: 14 msec\n;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)\n;; WHEN: Sat May 17 14:35:22 UTC 2026\n;; MSG SIZE  rcvd: 55",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "text1",
@@ -2484,7 +2479,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "grep = search. Like using find function to search for text.",
     "outputExample": "$ grep 'pattern' file.txt\nline with pattern",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text2",
@@ -2501,7 +2496,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`sed` = Stream EDitor. `s/old/new/g` mnemonic: 'substitute / old / with / new / globally'. Without `g`, only the FIRST match per line is replaced. Without `-i`, the FILE is NOT modified — sed only prints to stdout. Always test once without `-i` before doing the destructive edit.",
     "outputExample": "$ cat hello.txt\nhello world\nhello again\n$ sed 's/hello/goodbye/' hello.txt\ngoodbye world\ngoodbye again\n$ sed 's/o/O/g' hello.txt\nhellO wOrld\nhellO again\n$ sed -i.bak 's/hello/hi/g' hello.txt\n$ cat hello.txt\nhi world\nhi again\n$ cat hello.txt.bak\nhello world\nhello again",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text3",
@@ -2516,7 +2511,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'awk' = powerful text processor. Like using advanced filtering to extract exactly what you need.",
     "outputExample": "$ awk '{print $1}' /etc/passwd\nroot\ndaemon\nbin",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text4",
@@ -2531,7 +2526,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "sort = organize. Like arranging items in order.",
     "outputExample": "$ sort /tmp/hostnames.txt\nalice\nbob\ncharlie",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text5",
@@ -2549,7 +2544,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`uniq` only collapses ADJACENT duplicates — always `sort` first or use `sort -u` (sort + uniq in one). Flags: `-c` count, `-d` only duplicates, `-u` only unique. Order-preserving dedup: `awk '!seen[$0]++'`.",
     "outputExample": "$ cat /tmp/emails.txt\nalice@example.com\nbob@example.com\nalice@example.com\nalice@example.com\ncharlie@example.com\nbob@example.com\n$ uniq /tmp/emails.txt  # NOT what you want — adjacent only\nalice@example.com\nbob@example.com\nalice@example.com\ncharlie@example.com\nbob@example.com\n$ sort /tmp/emails.txt | uniq  # correct\nalice@example.com\nbob@example.com\ncharlie@example.com\n$ sort /tmp/emails.txt | uniq -c\n      3 alice@example.com\n      2 bob@example.com\n      1 charlie@example.com",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text6",
@@ -2566,7 +2561,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tr` = TRanslate. Remember: NO FILENAME ARG — always use `<` or a pipe. Pair-think: `tr` for chars, `sed` for patterns, `awk` for fields/columns.",
     "outputExample": "$ echo 'Hello World' | tr 'a-z' 'A-Z'\nHELLO WORLD\n$ echo 'eth0,eth1,eth2' | tr ',' '\\n'\neth0\neth1\neth2\n$ echo 'aaabbbccc' | tr -s 'abc'\nabc",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text7",
@@ -2583,7 +2578,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`cut` -d=Delimiter, -f=Field, -c=Character. The most common use is `cut -d: -f1` on `/etc/passwd`. If you need multi-char delimiters or smart CSV parsing, escalate to `awk` or `csvkit`.",
     "outputExample": "$ head -3 /etc/passwd\nroot:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nbin:x:2:2:bin:/bin:/usr/sbin/nologin\n$ cut -d: -f1 /etc/passwd | head -3\nroot\ndaemon\nbin",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text8",
@@ -2601,7 +2596,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`paste a b` = column merge (HORIZONTAL). `cat a b` = vertical concatenate. `-d CHAR` change delimiter (default TAB). `-s` SERIAL mode = each file's lines onto ONE line. For key-based joins (like SQL JOIN), use `join` instead.",
     "outputExample": "$ cat /tmp/usernames.txt\nalice\nbob\ncharlie\n$ cat /tmp/emails.txt\nalice@example.com\nbob@example.com\ncharlie@example.com\n$ paste /tmp/usernames.txt /tmp/emails.txt\nalice\talice@example.com\nbob\tbob@example.com\ncharlie\tcharlie@example.com\n$ paste -d, /tmp/usernames.txt /tmp/emails.txt\nalice,alice@example.com\nbob,bob@example.com\ncharlie,charlie@example.com\n$ paste -sd, /tmp/usernames.txt\nalice,bob,charlie\n$ ls /tmp/*.txt | paste -sd, -\n/tmp/emails.txt,/tmp/usernames.txt",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text9",
@@ -2619,7 +2614,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`diff` = file differences. `-u` UNIFIED format (preferred, like git diff), `-y` side-by-side, `-r` recursive (dirs), `-q` brief, `-i`/`-w`/`-B` ignore case/whitespace/blanks. Exit code: 0 same, 1 different. Generate patches with `>`, apply with `patch`. Color: pipe to `colordiff` or use `git diff --no-index`.",
     "outputExample": "$ diff -u /etc/nginx/nginx.conf.bak /etc/nginx/nginx.conf\n--- /etc/nginx/nginx.conf.bak\t2026-05-17 14:32:18.000000000 +0000\n+++ /etc/nginx/nginx.conf\t2026-05-17 14:32:42.000000000 +0000\n@@ -1,3 +1,4 @@\n worker_processes 1;\n-# listen 80\n+listen 80;\n events {}\n+server_name example.com;\n$ diff -q /etc/nginx/nginx.conf.bak /etc/nginx/nginx.conf\nFiles /etc/nginx/nginx.conf.bak and /etc/nginx/nginx.conf differ\n$ echo $?\n1",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text10",
@@ -2634,7 +2629,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "wc = word count. Like counting words in a document.",
     "outputExample": "$ wc -l ~/code/myapp/src/main.py\n312 /home/alice/code/myapp/src/main.py",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text11",
@@ -2649,7 +2644,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'sed' = stream editor. Like automatically find-and-replace across a whole file.",
     "outputExample": "$ sed 's/dev-server/PROD-SERVER/g' /etc/hosts\n127.0.0.1 localhost\n192.168.1.10 PROD-SERVER\n192.168.1.11 PROD-SERVER-2",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text12",
@@ -2664,7 +2659,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'awk' = advanced text processor. Like using a spreadsheet formula on text files.",
     "outputExample": "$ df -h | awk '{print $1, $5}'\nFilesystem Use%\n/dev/sda1 42%\ntmpfs 1%\n/dev/sda2 78%",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text13",
@@ -2679,7 +2674,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'sort | uniq' = deduplicate. Like removing duplicate entries from a list.",
     "outputExample": "$ sort /tmp/ips.txt | uniq\n10.0.0.1\n192.168.1.42\n203.0.113.5\n203.0.113.99",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text14",
@@ -2694,7 +2689,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cut -d' = cut by delimiter. Like cutting a string at specific separators.",
     "outputExample": "$ cut -d, -f3 /tmp/report.csv\nregion\nus-east-1\neu-west-1\nap-south-1",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text15",
@@ -2709,7 +2704,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'tr' = translate characters. Like using find-and-replace at the character level.",
     "outputExample": "$ echo 'WEBSERVER1 DBSERVER1' | tr 'A-Z' 'a-z'\nwebserver1 dbserver1",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text16",
@@ -2724,7 +2719,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'paste' = tape together. Like pasting columns side by side.",
     "outputExample": "$ paste /tmp/firstnames.txt /tmp/lastnames.txt\nJohn\tSmith\nJane\tDoe\nBob\tJones",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text17",
@@ -2739,7 +2734,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'printf' = formatted print. Like using a template to format output nicely.",
     "outputExample": "$ printf '%s: %d%%\\n' web1 99\nweb1: 99%",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text18",
@@ -2754,7 +2749,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'grep -E' = extended patterns. Like using powerful search rules to find things.",
     "outputExample": "$ grep -E '(Failed password|Invalid user)' /var/log/auth.log\nMay 17 14:23:01 web1 sshd: Failed password for root from 203.0.113.5 port 54321\nMay 17 14:23:15 web1 sshd: Invalid user admin from 203.0.113.5 port 54322",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text19",
@@ -2771,7 +2766,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`rev` = REVerse each line's chars. `tac` = `cat` spelled backwards = reverse line order. So two reversers exist; remember the difference: rev = per-character, tac = per-line.",
     "outputExample": "$ echo 'example.com' | rev\nmoc.elpmaxe\n$ printf 'one\\ntwo\\nthree\\n' | rev\neno\nowt\neerht\n$ printf 'one\\ntwo\\nthree\\n' | tac\nthree\ntwo\none",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text20",
@@ -2788,7 +2783,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`expand` = expand tabs (which are 'compressed' indentation) into spaces. Pair-think: `expand` (tab→space), `unexpand` (space→tab). Default tab width is 8 — set with `-t N`. To overwrite the original file, pipe through `sponge` (or use a temp file).",
     "outputExample": "$ printf 'col1\\tcol2\\tcol3\\n' > /tmp/demo.txt\n$ cat -A /tmp/demo.txt  # show the actual tab characters\ncol1^Icol2^Icol3$\n$ expand -t 4 /tmp/demo.txt\ncol1    col2    col3\n$ expand -t 4 /tmp/demo.txt | cat -A\ncol1    col2    col3$",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "sys1",
@@ -2805,7 +2800,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`uname` = Unix Name (of the kernel). `-a` = All. For DISTRO info you need `/etc/os-release` or `lsb_release -a`, NOT uname. Mnemonic: 'uname tells you about the kernel; os-release tells you about the OS flavor'.",
     "outputExample": "$ uname -a\nLinux laptop 6.8.0-31-generic #31-Ubuntu SMP PREEMPT_DYNAMIC Sat Apr 20 00:40:06 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n$ uname -r\n6.8.0-31-generic\n$ uname -m\nx86_64\n$ cat /etc/os-release | head -3\nPRETTY_NAME=\"Ubuntu 24.04.1 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys2",
@@ -2822,7 +2817,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`df` = Disk Free (per FILESYSTEM). Pair-think: `df` (mounts) vs `du` (folders). 'No space left on device' = check `df -h` first, then `df -i` (inode exhaustion is the sneaky cause).",
     "outputExample": "$ df -hT\nFilesystem     Type      Size  Used Avail Use% Mounted on\n/dev/nvme0n1p2 ext4      450G  142G  286G  34% /\ntmpfs          tmpfs     7.9G  3.2M  7.9G   1% /run\n/dev/nvme0n1p1 vfat      511M  6.1M  505M   2% /boot/efi\ntmpfs          tmpfs     7.9G   42M  7.9G   1% /run/user/1000",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys3",
@@ -2839,7 +2834,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Look at the `available` column, NOT `free`. `free` is misleadingly small because Linux uses spare RAM for caches; `available` is the honest 'room for new work'. Mnemonic: 'free is a liar, available is the truth'.",
     "outputExample": "$ free -h\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       6.2Gi       2.1Gi       342Mi       7.4Gi       8.5Gi\nSwap:          2.0Gi          0B       2.0Gi",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys4",
@@ -2856,7 +2851,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Load average's three numbers are 1/5/15 MINUTE averages in that order. Compare each to `nproc` (total CPUs). Trend reading: middle number HIGHER than first = recovering; LOWER than first = climbing. Don't confuse load with CPU % — load includes processes waiting for disk too.",
     "outputExample": "$ uptime\n 14:32:18 up 3 days,  4:21,  2 users,  load average: 0.42, 0.31, 0.28\n$ uptime -p\nup 3 days, 4 hours, 21 minutes\n$ uptime -s\n2026-05-12 10:11:32\n$ nproc\n12   # so load 0.42 means we're using ~4% of CPU capacity — plenty of headroom",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys5",
@@ -2873,7 +2868,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`lscpu` follows the `ls*` family pattern: `ls`=list-files, `lsblk`=list-block-devices, `lspci`=list-PCI, `lsusb`=list-USB, `lscpu`=list-CPU. Once you spot the pattern, you'll guess these correctly forever.",
     "outputExample": "$ lscpu\nArchitecture:        x86_64\nCPU op-mode(s):      32-bit, 64-bit\nByte Order:          Little Endian\nCPU(s):              12\nThread(s) per core:  2\nCore(s) per socket:  6\nSocket(s):           1\nVendor ID:           GenuineIntel\nModel name:          Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz\nCPU MHz:             2600.000\nL1d cache:           192 KiB\nL2 cache:            1.5 MiB\nL3 cache:            12 MiB\nFlags:               fpu vme ... sse4_2 ... avx avx2 aes",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys6",
@@ -2890,7 +2885,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ls*` family: `lspci` = list PCI. Sister commands: `lsusb`, `lscpu`, `lsblk`, `lsmod`. All print 'what hardware/kernel objects are present'. If `lspci` shows a device but `-k` shows no driver, that's typically why the device isn't working.",
     "outputExample": "$ lspci\n00:00.0 Host bridge: Intel Corporation Coffee Lake HOST and DRAM Controller\n00:02.0 VGA compatible controller: Intel Corporation UHD Graphics 630\n00:14.0 USB controller: Intel Corporation Cannon Lake PCH USB 3.1 xHCI\n00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection (7) I219-LM\n01:00.0 VGA compatible controller: NVIDIA Corporation TU117M [GeForce GTX 1650 Mobile]",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys7",
@@ -2907,7 +2902,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ls*` family: `lsusb` = list USB. Counterpart for storage: `lsblk` (shows USB sticks as block devices once mounted). If a device isn't in `lsusb`, the cable/port is the problem. If it's in `lsusb` but the OS can't use it, check `dmesg`.",
     "outputExample": "$ lsusb\nBus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub\nBus 001 Device 003: ID 046d:c52b Logitech, Inc. Unifying Receiver\nBus 001 Device 005: ID 0781:5567 SanDisk Corp. Cruzer Blade\nBus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys8",
@@ -2924,7 +2919,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ls*` family: `lsmod` = list MODules. Related verbs: `modprobe` (load/unload), `modinfo` (describe). If hardware is in `lspci`/`lsusb` but isn't working, the next stop is checking `lsmod` for its driver — and `dmesg` for why the driver didn't bind.",
     "outputExample": "$ lsmod | head\nModule                  Size  Used by\nnvidia_uvm           1404928  0\nnvidia_drm             77824  4\nbluetooth             786432  20 btusb,btrtl,btintel\next4                  933888  1\nbtrfs                1937408  0\nxhci_pci               24576  0\nxhci_hcd              315392  1 xhci_pci",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys9",
@@ -2942,7 +2937,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`env` = print environment. `env -i CMD` = empty env (debug). `env VAR=VAL CMD` = override for one command. `export NAME=value` to set + export, `unset NAME` to remove. Per-process env in `/proc/PID/environ` (NUL-separated — pipe through `tr '\\0' '\\n'`).",
     "outputExample": "$ env | sort | head\nHOME=/home/alice\nLANG=en_US.UTF-8\nLOGNAME=alice\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\nPWD=/home/alice\nSHELL=/bin/bash\nTERM=xterm-256color\nUSER=alice\nXDG_RUNTIME_DIR=/run/user/1000\n_=/usr/bin/env\n$ env -i bash -c 'env'\nPWD=/home/alice\nSHLVL=1\n_=/usr/bin/env",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys10",
@@ -2957,7 +2952,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'hostname' = system name. Like asking 'what is my computer called?'",
     "outputExample": "$ hostname\nweb1\n$ hostname -i\n192.168.1.42\n$ hostname -f\nweb1.example.com",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys11",
@@ -2974,7 +2969,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'date' = show date/time. Like checking a clock to see what time it is.",
     "outputExample": "$ date '+%Y-%m-%d'\n2026-05-19\n$ date '+%Y-%m-%dT%H:%M:%S'\n2026-05-19T14:35:22\n$ date '+%s'\n1747665322",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys12",
@@ -2990,7 +2985,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'uptime' = how long running. Like checking how long the server has been up.",
     "outputExample": "$ uptime\n 10:30:45 up 45 days, 12:34,  2 users,  load average: 0.15, 0.12, 0.10\n$ uptime -s\n2026-04-04 22:08:31",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys13",
@@ -3005,7 +3000,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'w' = who's logged in AND what they're doing. Like checking a visitor log to see who's in the building and what they're up to.",
     "outputExample": "$ w\nUSER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU  WHAT\nalice    pts/0    192.168.1.5      10:00    5.00s  0.20s  0.10s bash\nbob      pts/1    203.0.113.99     14:32    0.00s  0.05s  0.01s vim /etc/passwd",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys14",
@@ -3022,7 +3017,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dmesg` = 'display message'. Think of it as the kernel's diary: every time hardware sneezes, it scribbles a note here. First place to look when 'the computer is doing something weird at the hardware level'.",
     "outputExample": "$ sudo dmesg -T | tail -3\n[Wed May 15 14:02:11 2026] usb 1-2: new high-speed USB device number 5 using xhci_hcd\n[Wed May 15 14:02:11 2026] usb-storage 1-2:1.0: USB Mass Storage device detected\n[Wed May 15 14:02:12 2026] sd 6:0:0:0: [sdb] 30310400 512-byte logical blocks: (15.5 GB/14.5 GiB)",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys15",
@@ -3037,7 +3032,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'df -i' = disk inodes. Like counting file slots instead of disk space.",
     "outputExample": "$ df -i\nFilesystem     Inodes   IUsed    IFree IUse% Mounted on\n/dev/sda1     1310720  1310719        1  100% /\ntmpfs          2023424    1023  2022401    1% /run\n$ df -h\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        50G    20G   30G  40% /  # space left but inodes full!",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys16",
@@ -3052,7 +3047,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'lastlog' = last logins. Like checking an access log to see when people logged in.",
     "outputExample": "$ lastlog\nUsername         Port     From             Latest\nroot             pts/0    192.168.1.1     Mon May 19 14:35:00 +0000 2026\nalice            pts/0    192.168.1.5     Mon May 19 10:00:00 +0000 2026\nwww-data                                  **Never logged in**\nbackup                                    **Never logged in**",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys17",
@@ -3068,7 +3063,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'journalctl' = system journal. Like reading the system's diary of events.",
     "outputExample": "$ journalctl -u nginx -b --no-pager | tail -5\nMay 19 14:35:00 web1 systemd[1]: Starting A high performance web server...\nMay 19 14:35:00 web1 nginx[2341]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)\nMay 19 14:35:00 web1 nginx[2341]: nginx: configuration file /etc/nginx/nginx.conf test failed\nMay 19 14:35:00 web1 systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE\nMay 19 14:35:00 web1 systemd[1]: Failed to start A high performance web server.",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys18",
@@ -3083,7 +3078,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'free -h' = free memory. Like checking how much RAM is available.",
     "outputExample": "$ free -h\n               total        used        free      shared  buff/cache   available\nMem:            7.8G        5.9G        512M        256M        1.4G        1.5G\nSwap:           2.0G        800M        1.2G  # swap in use = memory pressure!",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys19",
@@ -3098,7 +3093,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'ulimit' = user limits. Like setting speed limits on different system resources.",
     "outputExample": "$ ulimit -a\ncore file size          (blocks, -c) 0\ndata seg size           (kbytes, -d) unlimited\nscheduling priority             (-e) 0\nfile size               (blocks, -f) unlimited\nopen files                      (-n) 1024\nmax user processes              (-u) 15674\nvirtual memory          (kbytes, -v) unlimited",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys20",
@@ -3114,7 +3109,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "'cat /etc/os-release' = system info file. Like reading the system's identification card.",
     "outputExample": "$ cat /etc/os-release\nNAME=\"Ubuntu\"\nVERSION=\"24.04.1 LTS (Noble Numbat)\"\nID=ubuntu\nID_LIKE=debian\nPRETTY_NAME=\"Ubuntu 24.04.1 LTS\"\nVERSION_ID=\"24.04\"\nHOME_URL=\"https://www.ubuntu.com/\"\n$ source /etc/os-release && echo \"Distro: $ID, Version: $VERSION_ID\"\nDistro: ubuntu, Version: 24.04",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "pkg1",
@@ -3131,7 +3126,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt install` = 'app store install'. APT is your distro's shop; `install` puts something on the shelf into your system. Always run `sudo apt update` first so APT knows what's currently on offer.",
     "outputExample": "$ sudo apt install git\nReading package lists... Done\nBuilding dependency tree... Done\nThe following additional packages will be installed:\n  git-man liberror-perl\nAfter this operation, 30.4 MB of additional disk space will be used.\nDo you want to continue? [Y/n] Y\nGet:1 http://archive.ubuntu.com/ubuntu noble/main amd64 git amd64 1:2.43.0-1 [3,679 kB]\nFetched 3,679 kB in 1s (5,123 kB/s)\nSelecting previously unselected package git.\nSetting up git (1:2.43.0-1) ...\nProcessing triggers for man-db (2.12.0-1) ...",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg2",
@@ -3148,7 +3143,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`remove` keeps configs as a souvenir; `purge` is the scorched-earth version that scrubs `/etc/` too. Equivalent on RHEL/Fedora: `dnf remove PACKAGE`. Pair with `apt autoremove` after to mop up the dependencies that came along for the ride.",
     "outputExample": "$ sudo apt purge apache2\nReading package lists... Done\nBuilding dependency tree... Done\nThe following packages will be REMOVED:\n  apache2*\n0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.\nAfter this operation, 3,521 kB disk space will be freed.\nDo you want to continue? [Y/n] Y\n(Reading database ... 184231 files currently installed.)\nRemoving apache2 (2:2.4.58-1ubuntu8) ...\nPurging configuration files for apache2 (2:2.4.58-1ubuntu8) ...",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg3",
@@ -3165,7 +3160,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt update` = refresh the SHOP CATALOG. `apt upgrade` = actually BUY the new versions. Two separate steps on Debian/Ubuntu, unlike `dnf upgrade` which does both. Stale catalog → mysterious 'Unable to locate package' errors.",
     "outputExample": "$ sudo apt update\nHit:1 http://archive.ubuntu.com/ubuntu noble InRelease\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates InRelease [128 kB]\nGet:3 http://security.ubuntu.com/ubuntu noble-security InRelease [128 kB]\nGet:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [342 kB]\nFetched 598 kB in 2s (271 kB/s)\nReading package lists... Done\nBuilding dependency tree... Done\n42 packages can be upgraded. Run 'apt list --upgradable' to see them.",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg4",
@@ -3183,7 +3178,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`upgrade` = safe (keeps packages held back), `full-upgrade` = allows REMOVALS, more powerful but riskier. Compare with Fedora's `dnf upgrade` which does both refresh + install in one shot. Always preview with `apt list --upgradable` if you're nervous.",
     "outputExample": "$ sudo apt upgrade\nReading package lists... Done\nBuilding dependency tree... Done\nCalculating upgrade... Done\nThe following packages have been kept back:\n  ubuntu-drivers-common\nThe following packages will be upgraded:\n  bash bash-completion curl git libc-bin libc6 libssl3 openssl\n8 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.\nNeed to get 12.4 MB of archives.\nAfter this operation, 18.4 kB of additional disk space will be used.\nDo you want to continue? [Y/n]",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg5",
@@ -3201,7 +3196,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt search` = catalog text search. Add `--names-only` for tighter results. To search by FILE not keyword, use `apt-file search` or `dpkg -S`. The 'WARNING: apt does not have a stable CLI' line on scripts is why scripts still prefer `apt-cache search` / `apt-get install`.",
     "outputExample": "$ apt search markdown\nSorting... Done\nFull Text Search... Done\ngoldmark/noble 1.7.0-1 amd64\n  Fast Markdown parser written in Go\n\npandoc/noble 3.1.11.1-1 amd64\n  general markup converter\n\nmarkdown/noble 1.0.1-13 all\n  Text-to-HTML conversion tool\n\ncmark/noble 0.30.3-1 amd64\n  CommonMark parsing and rendering program",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg6",
@@ -3219,7 +3214,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt show` = read the BOX before you BUY. RHEL/Fedora equivalent: `dnf info`. For installed-only info from the LOCAL dpkg DB use `dpkg -s`; for repo policy + version table use `apt-cache policy`.",
     "outputExample": "$ apt show postgresql\nPackage: postgresql\nVersion: 16+257\nPriority: optional\nSection: database\nOrigin: Ubuntu\nMaintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>\nInstalled-Size: 66.6 kB\nDepends: postgresql-16 (>= 16+257)\nRecommends: postgresql-doc\nDescription: object-relational SQL database (supported version)\nHomepage: https://www.postgresql.org/",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg7",
@@ -3237,7 +3232,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dpkg -l` = list local DB. The two-letter status code: first = WANT, second = HAVE — `ii` is the normal happy state. For scripts, `dpkg -s pkg` exits 0 iff installed, no piping needed.",
     "outputExample": "$ dpkg -l | grep -i curl\nii  curl                         8.5.0-2ubuntu10.3  amd64        command line tool for transferring data with URL syntax\nii  libcurl4t64:amd64            8.5.0-2ubuntu10.3  amd64        easy-to-use client-side URL transfer library (OpenSSL flavour)",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg8",
@@ -3255,7 +3250,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt-cache policy` = the COURT case for a package: who wants to install it, who CAN install it, what's the priority. `Installed:` (none) means not installed; `Candidate:` shows what `apt install` would do. Use to investigate 'wrong version got picked' mysteries.",
     "outputExample": "$ apt-cache policy nginx\nnginx:\n  Installed: 1.24.0-2ubuntu7\n  Candidate: 1.24.0-2ubuntu7.3\n  Version table:\n     1.24.0-2ubuntu7.3 500\n        500 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages\n        500 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages\n *** 1.24.0-2ubuntu7 100\n        100 /var/lib/dpkg/status",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg9",
@@ -3272,7 +3267,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt clean` = empty the DOWNLOAD folder. Does NOT touch installed software. Companion: `apt autoremove` (drops orphan DEPS) — these two are commonly run together to free space. RHEL equivalent: `dnf clean all`.",
     "outputExample": "$ du -sh /var/cache/apt/archives\n412M\t/var/cache/apt/archives\n$ sudo apt clean\n$ du -sh /var/cache/apt/archives\n8.0K\t/var/cache/apt/archives",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg10",
@@ -3289,7 +3284,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt-mark hold` = FREEZE this package. Sibling commands: `unhold` (thaw), `auto`/`manual` (autoremove eligibility), `showhold`/`showauto`/`showmanual` (audit). Compare with Fedora `sudo dnf versionlock add PKG`.",
     "outputExample": "$ sudo apt-mark hold nginx\nnginx set on hold.\n$ apt-mark showhold\nnginx\n$ sudo apt upgrade\n...\nThe following packages have been kept back:\n  nginx\n0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg11",
@@ -3306,7 +3301,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Prefer `sudo apt install ./file.deb` over `dpkg -i` — APT resolves deps; dpkg doesn't. If you do use dpkg and it breaks: `sudo apt install -f` cleans up. Always `./` for a local file, otherwise APT looks in repos for that name.",
     "outputExample": "$ sudo apt install ./google-chrome-stable_current_amd64.deb\nReading package lists... Done\nNote, selecting 'google-chrome-stable' instead of './google-chrome-stable_current_amd64.deb'\nThe following additional packages will be installed:\n  fonts-liberation libu2f-udev libvulkan1\nAfter this operation, 270 MB of additional disk space will be used.\nDo you want to continue? [Y/n] Y\nGet:1 http://archive.ubuntu.com/ubuntu noble/main amd64 libu2f-udev all 1.1.10-3 [9,160 B]\nSelecting previously unselected package google-chrome-stable.\nSetting up google-chrome-stable (124.0.6367.118-1) ...",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg12",
@@ -3323,7 +3318,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`depends` = what I need. `rdepends` = who needs me (reverse). Five flavors: Depends/PreDepends (must), Recommends/Suggests (nice-to-have), Conflicts/Breaks (must NOT). `|` in a dep line means alternatives.",
     "outputExample": "$ apt-cache rdepends --installed libssl3\nlibssl3\nReverse Depends:\n  wget\n  curl\n  openssh-client\n  openssl\n  git\n  apt\n  python3\n  nginx",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg13",
@@ -3340,7 +3335,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "PPAs = Ubuntu-only third-party repos. `add-apt-repository` adds source file + key + auto-update in one command. SECURITY: anything you add can install root code on every `apt upgrade` — only add what you trust. Prefer the modern `signed-by=` pattern.",
     "outputExample": "$ sudo add-apt-repository ppa:deadsnakes/ppa\nThis PPA contains newer Python versions for various Ubuntu releases.\n More info: https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa\nPress [ENTER] to continue or Ctrl-c to cancel.\nHit:1 http://archive.ubuntu.com/ubuntu noble InRelease\nGet:2 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble InRelease [18.1 kB]\n...\nReading package lists... Done",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg16",
@@ -3357,7 +3352,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Two locations: `/etc/apt/sources.list` (distro) + `/etc/apt/sources.list.d/*` (third party). Ubuntu 24.04 mostly uses `.sources` files (DEB822 multi-line). Tip: `apt-cache policy` gives a priority-aware view if you don't want to grep raw files.",
     "outputExample": "$ grep -R '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null\n/etc/apt/sources.list:deb http://archive.ubuntu.com/ubuntu noble main restricted universe multiverse\n/etc/apt/sources.list:deb http://archive.ubuntu.com/ubuntu noble-updates main restricted universe multiverse\n/etc/apt/sources.list.d/docker.list:deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu noble stable",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg17",
@@ -3375,7 +3370,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`man` = MANUAL. Section numbers matter when names collide: `man 1 passwd` (command) vs `man 5 passwd` (file format). Navigation in less: `/` search, `n`/`N` next/prev, `space`/`b` page, `q` quit. Companion: `apropos`, `whatis`, `--help`, `tldr`.",
     "outputExample": "$ man ls\nLS(1)                                        User Commands                                        LS(1)\n\nNAME\n       ls - list directory contents\n\nSYNOPSIS\n       ls [OPTION]... [FILE]...\n\nDESCRIPTION\n       List information about the FILEs (the current directory by default).  Sort entries alphabetically\n       if none of -cftuvSUX nor --sort is specified.\n\n       -a, --all\n              do not ignore entries starting with .\n\nManual page ls(1) line 1 (press h for help or q to quit)",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg14",
@@ -3393,7 +3388,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Recovery order: `apt-get check` (diagnose) → `apt --fix-broken install` (resolve deps) → `dpkg --configure -a` (finish half-configured packages). Anything other than `ii` in `dpkg -l` first column = potential trouble.",
     "outputExample": "$ sudo apt-get check\nReading package lists... Done\nBuilding dependency tree... Done\nReading state information... Done\n# (silent = healthy. If broken you'll see:)\n# E: Unmet dependencies. Try 'apt --fix-broken install' with no packages (or specify a solution).",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg15",
@@ -3411,7 +3406,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Two pairs: `apt-file list` ↔ `apt-file search` (repo-wide), `dpkg -L` ↔ `dpkg -S` (installed only). Repo-wide tools need an explicit cache update. Fedora equivalents: `dnf repoquery -l PKG` and `dnf provides PATH`.",
     "outputExample": "$ apt-file search /usr/bin/htop\nhtop: /usr/bin/htop\n$ apt-file list nginx | head -10\nnginx: /etc/init.d/nginx\nnginx: /etc/nginx/nginx.conf\nnginx: /etc/nginx/sites-available/default\nnginx: /usr/sbin/nginx\n$ dpkg -S /usr/bin/htop\nhtop: /usr/bin/htop",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "bash1",
@@ -3428,7 +3423,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`#!` = SHE-BANG (`#` = sharp/hash, `!` = bang). The line says 'use THIS interpreter for the rest of the file'. Must be the VERY FIRST line — even one blank line above it disables it.",
     "outputExample": "$ cat deploy.sh\n#!/bin/bash\necho 'Hello World'\n$ chmod +x deploy.sh\n$ ./deploy.sh\nHello World",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash2",
@@ -3445,7 +3440,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-f` = File (regular), `-d` = Directory, `-e` = Exists (any type). Always spell it `if [ -f \"$x\" ]; then ... ; fi`. Mnemonic for the closers: `fi` ends `if`, `done` ends `do`, `esac` ends `case` — keywords spelled backwards.",
     "outputExample": "$ touch /tmp/hello\n$ if [ -f /tmp/hello ]; then echo 'exists'; else echo 'missing'; fi\nexists\n$ if [ -f /tmp/nope ]; then echo 'exists'; else echo 'missing'; fi\nmissing",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash3",
@@ -3462,7 +3457,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`for VAR in LIST; do ... done`. The glob `*.log` is expanded BEFORE the loop starts, not while it runs. Always QUOTE `\"$file\"` — filenames with spaces will betray you otherwise.",
     "outputExample": "$ touch a.log b.log 'two words.log'\n$ for f in /var/log/myapp/*.log; do echo \"got: $f\"; done\ngot: /var/log/myapp/a.log\ngot: /var/log/myapp/b.log\ngot: /var/log/myapp/two words.log",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash4",
@@ -3479,7 +3474,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Flag cheat-sheet: `-p` PROMPT, `-r` RAW (use always), `-s` SILENT (password), `-n N` exactly N chars, `-t SECS` timeout, `-a ARR` into array. No variable name? Read into magic `$REPLY`. For file reading: `while IFS= read -r line` is the canonical safe loop.",
     "outputExample": "$ read -rp 'Enter name: ' name\nEnter name: Alice\n$ echo \"Hello $name\"\nHello Alice\n$ read -srp 'Password: ' pw; echo\nPassword: \n$ echo \"got ${#pw} chars\"\ngot 12 chars",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash5",
@@ -3496,7 +3491,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`$(cmd)` modern, backtick legacy. Always QUOTE the result on use: `\"$var\"`. Captured command runs in a SUBSHELL — variables set inside don't leak out. For multi-word/newline output, prefer `mapfile -t arr < <(cmd)` over `arr=($(cmd))`.",
     "outputExample": "$ today=$(date +%F)\n$ echo \"Today is $today\"\nToday is 2026-05-19\n$ backup=\"db_backup_${today}.sql\"\n$ echo $backup\ndb_backup_2026-05-19.sql",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash6",
@@ -3513,7 +3508,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`$0` script name, `$1`..`$9` positional, `${10}` and up need BRACES, `$#` count, `\"$@\"` all-as-words (use), `\"$*\"` all-as-one-string (avoid). Functions REDEFINE `$1`/`$2` inside — they don't see the script's args.",
     "outputExample": "$ cat deploy.sh\n#!/bin/bash\necho \"Host: $1\"\necho \"Path: $2\"\necho \"Count: $#\"\n$ ./deploy.sh web1.example.com /opt/myapp\nHost: web1.example.com\nPath: /opt/myapp\nCount: 2",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash7",
@@ -3530,7 +3525,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "FDs: 0=in, 1=out, 2=err. `>` overwrite stdout, `>>` append, `2>` errors, `2>&1` 'errors go where stdout goes' (order matters — put it AFTER `> file`). `&>` is the bash 'both' shortcut. `/dev/null` = throw away. To DISCARD errors but keep stdout: `cmd 2>/dev/null`.",
     "outputExample": "$ mysqldump mydb > /var/log/backup.log 2> /var/log/backup.err\n$ cat /var/log/backup.log | head -3\n-- MySQL dump 10.13  Distrib 8.0.36\n-- Host: localhost    Database: mydb\n-- ------------------------------------------------------\n$ cat /var/log/backup.err\nmysqldump: Got error: 1044: Access denied for user 'backup'@'localhost'",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash8",
@@ -3547,7 +3542,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`name() { ... }` defines, `name args` calls. `$1`..`$#` SHADOW the script's args inside. `local x=...` to avoid leaking variables. `return N` sets exit code (0-255), not a string — to 'return' data, echo it and let the caller use `$(...)`. Define before use.",
     "outputExample": "$ greet() { local name=$1; echo \"Hello, ${name:-stranger}\"; }\n$ greet World\nHello, World\n$ greet\nHello, stranger\n$ declare -F\ndeclare -f greet",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash9",
@@ -3564,7 +3559,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`if CMD; then ... fi` — `if` takes a COMMAND, not an expression. Exit code: 0 = success/true, non-zero = failure/false. `$?` holds the LAST exit code. The clean idiom is `if cmd; then ...`; the messy alternative is `cmd; if [ $? -eq 0 ]; then ...`. Strict-mode top line: `set -euo pipefail`.",
     "outputExample": "$ if mkdir /tmp/testdir; then echo created; else echo failed; fi\ncreated\n$ if mkdir /tmp/testdir; then echo created; else echo failed; fi\nmkdir: cannot create directory '/tmp/testdir': File exists\nfailed\n$ if grep -q ^root /etc/passwd; then echo 'root user exists'; fi\nroot user exists",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash10",
@@ -3581,7 +3576,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Memorize: `while IFS= read -r line; do ... done < file`. `IFS=` keeps whitespace, `-r` keeps backslashes. Avoid `cat file | while read`; that creates a subshell and variables LEAK away. For maximum filename safety with `find`, use `-print0` + `read -d ''`.",
     "outputExample": "$ while IFS= read -r line; do echo \"checking: $line\"; done < /etc/hosts\nchecking: 127.0.0.1 localhost\nchecking: 127.0.1.1 myhostname\nchecking: # The following lines are for IPv6 capable hosts\nchecking: ::1     ip6-localhost ip6-loopback",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "arch1",
@@ -3598,7 +3593,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tar -cvf` = 'See Vee File' (Create Verbose Filename). Without `-z`/`-j`/`-J` there is NO compression — `.tar` is just a bundle, like a ZIP with no compression.",
     "outputExample": "$ tar -cvf myapp.tar /home/alice/code/myapp/\n/home/alice/code/myapp/\n/home/alice/code/myapp/README.md\n/home/alice/code/myapp/src/\n/home/alice/code/myapp/src/main.py\n/home/alice/code/myapp/tests/test_main.py\n$ ls -lh myapp.tar\n-rw-r--r-- 1 alice alice 24K May 19 14:35 myapp.tar",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch2",
@@ -3615,7 +3610,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tar -xvf` = 'eXtract Vee File'. Flip `x` to `c` and you're back to Create. Same command on Debian/Ubuntu, RHEL/Fedora, macOS — `tar` is one of the most portable Unix tools.",
     "outputExample": "$ tar -xvf /tmp/myapp-1.0.tar\nmyapp-1.0/\nmyapp-1.0/README.md\nmyapp-1.0/src/\nmyapp-1.0/src/main.py\nmyapp-1.0/tests/test_main.py\n$ ls myapp-1.0/\nREADME.md  src  tests",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch3",
@@ -3632,7 +3627,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`gzip` = GNU zip. Replaces the original by default — use `-k` to KEEP it. The reverse is `gunzip` or `gzip -d`. On Debian/Ubuntu and RHEL/Fedora alike — `gzip` ships with every standard Linux base.",
     "outputExample": "$ ls -lh /var/log/nginx/access.log\n-rw-r--r-- 1 root root 8.0G May 19 14:35 /var/log/nginx/access.log\n$ sudo gzip /var/log/nginx/access.log\n$ ls -lh /var/log/nginx/access.log*\n-rw-r--r-- 1 root root 950M May 19 14:35 /var/log/nginx/access.log.gz",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch4",
@@ -3649,7 +3644,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`gunzip` = G-UNzip (undo gzip). Equivalent: `gzip -d` (decompress). For .bz2 use `bunzip2`; for .xz use `unxz`. To AVOID decompressing first when grepping logs, use the `z`-prefixed tools: `zcat`, `zgrep`, `zless`.",
     "outputExample": "$ ls -lh /var/log/nginx/access.log.1.gz\n-rw-r--r-- 1 root root 1.2G May 18 00:00 /var/log/nginx/access.log.1.gz\n$ sudo gunzip /var/log/nginx/access.log.1.gz\n$ ls -lh /var/log/nginx/access.log.1\n-rw-r--r-- 1 root root 7.8G May 18 00:00 /var/log/nginx/access.log.1",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch5",
@@ -3666,7 +3661,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tar -czvf` mnemonic: 'See Zee Vee File' (Create gZip Verbose Filename). For extract: `tar -xzvf` = 'eXtract Zee Vee File'. Compression letters: `z`=gzip, `j`=bzip2 (bJip2... close enough), `J`=xz. Modern tar auto-detects on extract, but always specify on CREATE.",
     "outputExample": "$ tar -czvf nginx_backup_2026-05-19.tar.gz /etc/nginx/\n/etc/nginx/\n/etc/nginx/nginx.conf\n/etc/nginx/sites-available/\n/etc/nginx/sites-available/myapp.conf\n/etc/nginx/sites-enabled/myapp.conf\n$ ls -lh nginx_backup_2026-05-19.tar.gz\n-rw-r--r-- 1 alice alice 12K May 19 14:35 nginx_backup_2026-05-19.tar.gz",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch6",
@@ -3682,7 +3677,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tar -xzvf` = 'eXtract Zee Vee File'. Same letters as create but `c` flips to `x`. Compression letters: lowercase `z`=gzip, lowercase `j`=bzip2, UPPERCASE `J`=xz.",
     "outputExample": "$ mkdir -p /opt/myapp && tar -xzvf /tmp/myapp-2.0.tar.gz -C /opt/myapp/\nmyapp-2.0/\nmyapp-2.0/README.md\nmyapp-2.0/bin/server\nmyapp-2.0/config/app.yml\n$ ls /opt/myapp/\nmyapp-2.0",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch7",
@@ -3699,7 +3694,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`bzip2` = the 'middle child' compressor: better than gzip, worse than xz. Replaces the original unless you use `-k`. Reverse: `bunzip2`. For directory archives use `tar -cjf` (j for bzip2).",
     "outputExample": "$ ls -lh /var/backups/db.sql\n-rw-r--r-- 1 postgres postgres 500M May 19 14:35 /var/backups/db.sql\n$ bzip2 /var/backups/db.sql\n$ ls -lh /var/backups/db.sql*\n-rw-r--r-- 1 postgres postgres 58M May 19 14:35 /var/backups/db.sql.bz2",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "daily1",
@@ -3716,7 +3711,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`uptime` = how long it's been 'up'. The three load numbers go newest to oldest (1 min, 5 min, 15 min) — read them like 'right now / recently / a while ago' to see if load is rising or falling.",
     "outputExample": "$ uptime\n 10:34:52 up 45 days,  3:21,  2 users,  load average: 0.52, 0.48, 0.45",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily2",
@@ -3733,7 +3728,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`df` = 'disk free', `-h` = 'human'. Mnemonic: `du` measures a Directory's Usage; `df` measures the whole Disk's Free space. One zooms in, one zooms out.",
     "outputExample": "$ df -h\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/nvme0n1p2  234G  112G  111G  51% /\n/dev/nvme0n1p1  511M  6.1M  505M   2% /boot/efi\ntmpfs           7.8G   45M  7.7G   1% /run\n/dev/sdb1        29G   18G   12G  61% /media/usb",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily3",
@@ -3750,7 +3745,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`free` answers 'how free is my RAM?'. Trick: look at `available`, not `free`. Linux philosophy: 'free RAM is wasted RAM' — the kernel caches aggressively, and `available` already accounts for cache it can reclaim.",
     "outputExample": "$ free -h\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       4.2Gi       512Mi       320Mi        10Gi        10Gi\nSwap:          2.0Gi          0B       2.0Gi",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily4",
@@ -3768,7 +3763,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ps aux` = All users, User format, also no-tty (daemons). Top CPU: `ps aux --sort=-%cpu | head`. Top RAM: `--sort=-rss`. For live updating, switch to `top` or `htop`. The `aux` mnemonic: 'AUXiliary view of processes'.",
     "outputExample": "$ ps aux | head\nUSER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot           1  0.1  0.0 167400 11944 ?        Ss   May15   0:14 /sbin/init\nroot           2  0.0  0.0      0     0 ?        S    May15   0:00 [kthreadd]\nsystemd+     682  0.0  0.0  90252  6024 ?        Ss   May15   0:00 /lib/systemd/systemd-resolved\nalice       1842  2.3  4.1 2880340 658432 ?      Sl   09:01   0:42 /usr/lib/firefox/firefox\nalice       2104  0.1  0.2  24400  4892 pts/0    Ss   09:30   0:00 -bash",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily5",
@@ -3786,7 +3781,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Two-step pattern on Debian: `update` (refresh CATALOG) → `upgrade` (apply new VERSIONS). On RHEL/Fedora a single `dnf upgrade` does both. Use `&&` not `;` so step 2 is skipped if step 1 fails. Add `autoremove` afterwards to drop orphan dependency packages.",
     "outputExample": "$ sudo apt update && sudo apt upgrade\nHit:1 http://archive.ubuntu.com/ubuntu noble InRelease\nGet:2 http://security.ubuntu.com/ubuntu noble-security InRelease [128 kB]\nFetched 128 kB in 1s (193 kB/s)\nReading package lists... Done\n42 packages can be upgraded. Run 'apt list --upgradable' to see them.\n...\nThe following packages will be upgraded:\n  bash curl git libc6 libssl3 linux-image-generic openssh-server\n7 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.\nNeed to get 87.5 MB of archives.\nDo you want to continue? [Y/n] Y",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily6",
@@ -3804,7 +3799,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`autoremove` = auto-installed but no longer needed → REMOVE. Often the bulk of space gain after kernel upgrades. Compare with `apt clean` (removes downloaded .deb cache, NOT installed packages). The full sweep: `update && upgrade && autoremove`.",
     "outputExample": "$ sudo apt autoremove\nReading package lists... Done\nThe following packages will be REMOVED:\n  linux-headers-6.5.0-15 linux-headers-6.5.0-15-generic\n  linux-image-6.5.0-15-generic linux-modules-6.5.0-15-generic\n  linux-modules-extra-6.5.0-15-generic\n0 upgraded, 0 newly installed, 5 to remove and 0 not upgraded.\nAfter this operation, 487 MB disk space will be freed.\nDo you want to continue? [Y/n] Y",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily7",
@@ -3822,7 +3817,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`autoclean` = remove only OBSOLETE cached .debs (gentle, no downside). `clean` = remove ALL cached .debs (maximum space, slight re-download cost). Neither removes installed packages — only cached installer files. Companion: `autoremove` for orphan packages.",
     "outputExample": "$ du -sh /var/cache/apt/archives\n412M\t/var/cache/apt/archives\n$ sudo apt autoclean\nReading package lists... Done\nBuilding dependency tree... Done\nDel curl 8.5.0-2ubuntu10.3 amd64 [228 kB]\nDel libc6 2.39-0ubuntu8.3 amd64 [3,247 kB]\nDel linux-image-6.5.0-15-generic 6.5.0-15.15 amd64 [14.2 MB]\n$ du -sh /var/cache/apt/archives\n267M\t/var/cache/apt/archives",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily8",
@@ -3840,7 +3835,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-l` long, `-a` all (include `.dotfiles`), `-h` human sizes, `-t` newest first, `-S` biggest first, `-r` reverse. The everyday combo: `ls -lah`. The first char of the permission string tells you what it is: `-` file, `d` directory, `l` symlink.",
     "outputExample": "$ ls -lah\ntotal 28K\ndrwxr-xr-x  5 alice alice 4.0K May 17 10:30 .\ndrwxr-xr-x 15 alice alice 4.0K May 14 10:00 ..\n-rw-------  1 alice alice  680 May 17 09:15 .bash_history\n-rw-r--r--  1 alice alice  220 May 14 10:00 .bashrc\ndrwxr-xr-x  8 alice alice 4.0K May 17 10:28 .git\n-rw-r--r--  1 alice alice  142 May 15 11:30 notes.txt\nlrwxrwxrwx  1 alice alice    9 May 17 10:30 link -> notes.txt\ndrwxr-xr-x  3 alice alice 4.0K May 15 14:20 src/",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily9",
@@ -3858,7 +3853,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`find PATH EXPRESSION` — actions at the end. `-name` glob (case-sens), `-iname` case-insens, `-type f/d`, `-mtime ±N` days, `-size ±N[k/M/G]`. Quote globs to stop shell expansion. Use `-exec ... {} +` (batch) over `;` (one-per-file) for speed. Modern faster alternative: `fd PATTERN`.",
     "outputExample": "$ find . -name '*.txt'\n./notes.txt\n./backup/data.txt\n./archive/old.txt\n./src/README.txt\n$ find . -name '*.txt' -size +1k\n./backup/data.txt\n$ find /var/log -name '*.log' -mtime -1 -type f\n/var/log/syslog\n/var/log/auth.log\n/var/log/nginx/access.log",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily10",
@@ -3876,7 +3871,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-p` = parents + idempotent (no error if exists). Standard 'ensure this dir' idiom in scripts. Companion with `-v` for verbosity, `-m MODE` for perms. Use BRACE expansion `{a,b,c}` to create many siblings in one call: `mkdir -p src/{api,web,worker}`.",
     "outputExample": "$ mkdir -pv src/{api,web}/{handlers,tests}\nmkdir: created directory 'src'\nmkdir: created directory 'src/api'\nmkdir: created directory 'src/api/handlers'\nmkdir: created directory 'src/api/tests'\nmkdir: created directory 'src/web'\nmkdir: created directory 'src/web/handlers'\nmkdir: created directory 'src/web/tests'",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily11",
@@ -3894,7 +3889,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Three buckets: STAGED (`Changes to be committed`), MODIFIED (`not staged`), UNTRACKED. Short form: first char = INDEX/staged, second = WORKING TREE/unstaged. `M ` = staged-modified, ` M` = unstaged-modified, `MM` = both. Run before EVERY commit.",
     "outputExample": "$ git status\nOn branch main\nChanges to be committed:\n\tmodified:   src/app.js\n\tnew file:   src/utils.js\n\nChanges not staged for commit:\n\tmodified:   README.md\n\nUntracked files:\n\tdraft.txt\n\n$ git status -s\nM  src/app.js\nA  src/utils.js\n M README.md\n?? draft.txt",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily12",
@@ -3912,7 +3907,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`npm install` reads package.json. `npm ci` reads package-lock.json (faster, clean, CI-safe). `--save-dev` (`-D`) for dev deps, `-g` for global. ALWAYS gitignore `node_modules/`. Modern alternatives: `pnpm`, `yarn`, `bun` — same idea, different tradeoffs.",
     "outputExample": "$ npm install\nnpm warn deprecated some-old-pkg@1.0.0: please upgrade\nadded 487 packages, and audited 488 packages in 12s\nfound 0 vulnerabilities\n$ npm install --save-dev eslint\nadded 81 packages, and audited 569 packages in 4s",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily13",
@@ -3930,7 +3925,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Conventional targets: `all` (build), `install` (system-install), `clean` (delete artifacts), `test`. `sudo` for system paths. `make -jN` parallel build. Classic source dance: `./configure && make && sudo make install`. Bypass sudo with `PREFIX=$HOME/.local`.",
     "outputExample": "$ ./configure --prefix=/usr/local && make -j$(nproc)\n...\ngcc -O2 build/main.o build/util.o -o myapp\n$ sudo make install\ninstall -m 0755 myapp /usr/local/bin/\ninstall -m 0644 doc/myapp.1 /usr/local/share/man/man1/\n$ which myapp\n/usr/local/bin/myapp",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily14",
@@ -3948,7 +3943,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`top` = always installed, live snapshot. Keys: `q` quit, `P` CPU sort, `M` MEM sort, `k` kill, `1` per-CPU, `c` full cmdline. For prettier UI install `htop` or `btop`. Batch one-shot: `top -b -n 1`. Refresh rate: `-d N` seconds.",
     "outputExample": "$ top\ntop - 09:42:18 up 2 days,  4:21,  2 users,  load average: 0.42, 0.31, 0.28\nTasks: 142 total,   1 running, 141 sleeping,   0 stopped,   0 zombie\n%Cpu(s):  3.2 us,  0.8 sy,  0.0 ni, 95.8 id,  0.1 wa\nMiB Mem :  15938.5 total,   1238.1 free,   4521.4 used,  10179.0 buff/cache\n\n    PID USER      PR  NI    VIRT    RES  %CPU  %MEM     TIME+ COMMAND\n   1842 alice     20   0 2880340 658432   2.3   4.0   0:42.10 firefox\n   2104 alice     20   0   24400   4892   0.0   0.0   0:00.42 bash",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily15",
@@ -3965,7 +3960,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`htop` = 'Hisham's top' (the author) but easier to remember as 'highlighted top' — colorful version of `top`. If `htop` isn't installed, fall back to plain `top`, which is on every system.",
     "outputExample": "$ htop\n  CPU[|||||||||                28.4%]   Tasks: 142, 312 thr; 2 running\n  Mem[||||||||||||||||      6.2G/16G]   Load average: 0.42 0.31 0.28\n\n  PID USER      PRI  NI  VIRT   RES  S CPU% MEM%   TIME+  Command\n 1234 alice      20   0 2400M  512M S 12.5  3.2  0:42.10 firefox\n 5678 alice      20   0  800M  120M S  2.3  0.7  0:08.20 bash\n\n F1Help  F2Setup  F3Search  F5Tree  F9Kill  F10Quit",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily16",
@@ -3983,7 +3978,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-f` follow, `-F` follow-and-handle-rotation (USE THIS for production logs). `-n N` last N lines. `--line-buffered` on `grep` to avoid lag when filtering live. Modern alt: `less +F`. Server convention: `tail -F` is your friend.",
     "outputExample": "$ tail -F /var/log/nginx/access.log\n192.168.1.42 - - [17/May/2026:09:32:01 +0000] \"GET / HTTP/1.1\" 200 612\n192.168.1.42 - - [17/May/2026:09:32:05 +0000] \"GET /api/health HTTP/1.1\" 200 24\n10.0.0.7   - - [17/May/2026:09:32:08 +0000] \"POST /api/login HTTP/1.1\" 401 32\n# (continues live as new requests arrive — Ctrl-C to stop)",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily17",
@@ -4001,7 +3996,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ss -tlnp` = TCP + Listening + Numeric + Process. Modern, fast, replaces `netstat`. Need sudo for process info on other users' sockets. Same flag pattern works for UDP: `ss -ulnp`. To see ESTABLISHED connections instead of listeners, drop `-l`: `ss -tnp`.",
     "outputExample": "$ sudo ss -tlnp\nState   Recv-Q  Send-Q  Local Address:Port  Peer Address:Port  Process\nLISTEN  0       128     0.0.0.0:22          0.0.0.0:*          users:((\"sshd\",pid=1234,fd=3))\nLISTEN  0       511     0.0.0.0:80          0.0.0.0:*          users:((\"nginx\",pid=2401,fd=6))\nLISTEN  0       4096    127.0.0.1:5432      0.0.0.0:*          users:((\"postgres\",pid=1789,fd=7))",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily18",
@@ -4019,7 +4014,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`grep -r PATTERN DIR`. Useful flags pile up: `-r` recurse, `-n` line numbers, `-i` case-insens, `-l` filenames only, `-w` whole word, `-C N` context. Use `-F` for literal strings (no regex headaches). Modern: install `ripgrep` (`rg`) — same concept, 10x faster.",
     "outputExample": "$ grep -rn 'TODO' --include='*.js' --include='*.ts' src/\nsrc/app.js:23:    // TODO: fix this bug\nsrc/utils/parse.ts:14:  // TODO: handle edge case\nsrc/components/Header.tsx:42:  // TODO: a11y review\n$ grep -rn 'TODO' src/ | wc -l\n12",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily19",
@@ -4037,7 +4032,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`sed 's/old/new/g'`: SUBSTITUTE, with `g` for GLOBAL (all matches per line). No `-i` = print to stdout (safe). With `-i` = overwrite file. `-i.bak` makes a backup first — always use this for one-shot edits. Change delimiter to `|` or `#` if pattern has `/`.",
     "outputExample": "$ sed 's/localhost/db.internal/g' /etc/myapp/settings.conf\ndb_host=db.internal\ndb_port=5432\ncache_host=db.internal\n$ sed -i.bak 's/localhost/db.internal/g' /etc/myapp/settings.conf\n$ ls /etc/myapp/\nsettings.conf  settings.conf.bak",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily20",
@@ -4055,7 +4050,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`awk 'PATTERN { ACTION }' FILE`. Fields: `$1`,`$2`,...,`$NF` (last); whole line `$0`. Specials: `NR` line number, `NF` field count, `FS`/`-F` separator, `BEGIN`/`END` blocks. Sum a column: `awk '{s+=$N} END {print s}'`. Tab-separated: `-F'\\t'`.",
     "outputExample": "$ ps aux | awk 'NR>1 {print $2, $3, $11}' | sort -k2 -nr | head\n1842 12.3 /usr/lib/firefox/firefox\n3201  5.2 /usr/bin/node\n2104  0.0 -bash\n$ awk -F: '$3 >= 1000 {print $1, $3}' /etc/passwd\nalice 1000\nbob 1001",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily21",
@@ -4073,7 +4068,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`sort | uniq -c | sort -rn | head` = the 'top N of anything' incantation. Must SORT first because uniq only collapses ADJACENT duplicates. `-c` count, `-d` only-duplicates, `-u` only-unique, `-i` case-insens. Pre-filter with `awk '{print $COL}'` to group by a specific column.",
     "outputExample": "$ awk '{print $1}' /var/log/nginx/access.log | sort | uniq -c | sort -rn | head -5\n  4231 192.168.1.42\n  2187 10.0.0.7\n   942 203.0.113.5\n   514 198.51.100.22\n   312 192.168.1.101\n$ grep -oP 'level=\\w+' /var/log/myapp/app.log | sort | uniq -c | sort -rn\n  4218 level=info\n   892 level=warn\n   201 level=error",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily22",
@@ -4091,7 +4086,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-e` edit, `-l` list, `-r` remove all. `EDITOR=nano` to escape vi. Personal crontab is per-user; system jobs go in `/etc/cron.d/`. Always validate with `crontab -l` after editing. Watch `/var/mail/$USER` for cron job output if you forgot to redirect it.",
     "outputExample": "$ EDITOR=nano crontab -e\ncrontab: installing new crontab\n$ crontab -l\n# m h  dom mon dow   command\n30 2  *   *   *     /usr/local/bin/backup.sh >> /var/log/backup.log 2>&1\n0  *  *   *   *     /usr/local/bin/heartbeat.sh\n*/15 * *   *   *    /opt/health-check.sh >/dev/null 2>&1",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily23",
@@ -4109,7 +4104,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`systemctl status` = the service dashboard. Verbs: `start/stop` (now), `enable/disable` (boot), `--now` (both), `restart/reload`. Scripts: `is-active`, `is-enabled`. Health check: `systemctl list-units --failed`. Pair with `journalctl -xeu SERVICE` for deep logs.",
     "outputExample": "$ systemctl status nginx\n● nginx.service - A high performance web server and a reverse proxy server\n     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; preset: enabled)\n     Active: active (running) since Sat 2026-05-17 09:32:01 UTC; 1h 14min ago\n   Main PID: 2402 (nginx)\n      Tasks: 3 (limit: 9468)\n     Memory: 4.8M\nMay 17 09:32:01 server1 systemd[1]: Starting nginx.service ...\nMay 17 09:32:01 server1 systemd[1]: Started nginx.service.",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily24",
@@ -4127,7 +4122,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`journalctl -u UNIT` = logs for one service. Stack flags: `-n N` last N, `-f` follow, `-e` end of pager, `-x` explain, `-r` reverse, `-p err` errors-only, `--since/--until` time bounds. The standard 'why did this fail?' incantation: `journalctl -xeu SERVICE`.",
     "outputExample": "$ sudo journalctl -u nginx -n 5\nMay 17 09:32:01 server1 systemd[1]: Starting nginx.service...\nMay 17 09:32:01 server1 nginx[2400]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\nMay 17 09:32:01 server1 systemd[1]: Started nginx.service.\nMay 17 10:14:22 server1 nginx[2402]: [error] open() \"/var/www/html/missing.css\" failed (2: No such file)\n$ sudo journalctl -u nginx -p err --since today | wc -l\n14",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily25",
@@ -4145,7 +4140,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ss -tulnp` = TCP + UDP + Listening + Numeric + Process. Drop `-l` to see active connections. `ss -s` for summary. Need sudo for process info on other users' sockets. Modern replacement for legacy `netstat`. Filter syntax: `'( sport = :80 )'`.",
     "outputExample": "$ sudo ss -tulnp\nNetid   State    Local Address:Port   Process\nudp     UNCONN   127.0.0.53%lo:53     users:((\"systemd-resolve\",pid=682,fd=13))\nudp     UNCONN   0.0.0.0:68           users:((\"systemd-network\",pid=678,fd=21))\ntcp     LISTEN   0.0.0.0:22           users:((\"sshd\",pid=1234,fd=3))\ntcp     LISTEN   0.0.0.0:80           users:((\"nginx\",pid=2401,fd=6))\ntcp     LISTEN   127.0.0.1:5432       users:((\"postgres\",pid=1789,fd=7))",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily26",
@@ -4163,7 +4158,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`;` = unconditional sequence (no matter what). `&&` = continue ONLY on success. `||` = continue ONLY on failure. `&` = run in background. `{ a; b; c; }` groups (note spaces and trailing `;`). For ANY destructive second step, prefer `&&` over `;` for safety.",
     "outputExample": "$ false ; echo 'still runs'\nstill runs\n$ false && echo 'this would NOT run'\n$ { date; uptime; } > /tmp/snap.txt\n$ cat /tmp/snap.txt\nSat May 17 11:14:22 UTC 2026\n 11:14:22 up 2 days,  5:48,  1 user,  load average: 0.42, 0.31, 0.28",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily27",
@@ -4181,7 +4176,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`&&` = AND-then, only on SUCCESS. `||` = OR-else, only on FAILURE. Use `&&` for SAFE chains: `cd dir && rm -rf *` won't wipe wrong directory if cd fails. The `cmd && a || b` 'if/else' one-liner has a corner-case bug — when correctness matters, use real `if`.",
     "outputExample": "$ true && echo 'success ran'\nsuccess ran\n$ false && echo 'this would NOT print'\n$ mkdir /tmp/testwork && cd /tmp/testwork && touch a b c && ls\na  b  c\n$ [ -f .env ] && source .env || echo 'no .env (continuing with defaults)'\nno .env (continuing with defaults)",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily28",
@@ -4199,7 +4194,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`||` = OR-else, runs on FAILURE. Use for fallback paths and recovery. Under `set -e`, LEFT side is exempt from auto-exit — that's how `cmd || true` opts out. Group multi-step fallbacks: `cmd || { cleanup; exit 1; }`. The `&& A || B` 'if/else' pattern has a corner case — use real `if` when it matters.",
     "outputExample": "$ false || echo 'fallback ran'\nfallback ran\n$ true || echo 'this would NOT print'\n$ cat /tmp/missing.conf || echo 'file missing, using defaults'\ncat: /tmp/missing.conf: No such file or directory\nfile missing, using defaults\n$ set -e; false || true; echo 'survived'\nsurvived",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily29",
@@ -4217,7 +4212,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`|` connects stdout → stdin. Only STDOUT travels through (use `|&` or `2>&1 |` for stderr too). Pipeline runs in PARALLEL. Last command's exit code wins unless `set -o pipefail`. Subshells in pipes can swallow variables — use process substitution or mapfile for those cases.",
     "outputExample": "$ grep ERROR /var/log/myapp/app.log | wc -l\n201\n$ ps aux | grep nginx | grep -v grep\nroot   2400  0.0  0.0 56012  1432 ? Ss 09:32  nginx: master\nwww-data 2401 0.0 0.1 56428 4892 ? S  09:32  nginx: worker\n$ cat /var/log/nginx/access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head -3\n  4231 192.168.1.42\n  2187 10.0.0.7\n   942 203.0.113.5",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily30",
@@ -4235,7 +4230,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`&` = background. `jobs` list, `fg %N` foreground, `bg %N` resume in background, `kill %N` terminate. For LOGOUT-survival use `nohup ... &` or `disown` or `tmux`/`screen`. For persistent services, write a systemd unit. Always REDIRECT output (`> log 2>&1`) when backgrounding non-interactive jobs.",
     "outputExample": "$ pg_dump mydb > /var/backups/mydb.sql 2>&1 &\n[1] 12345\n$ jobs\n[1]+  Running  pg_dump mydb > /var/backups/mydb.sql 2>&1 &\n$ # (do other work here)\n[1]+  Done     pg_dump mydb > /var/backups/mydb.sql 2>&1",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily31",
@@ -4253,7 +4248,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`>` = overwrite (TRUNCATES first!). `>>` = append. `2>` = stderr. `&>` = both. `> /dev/null` = throw away. Enable `set -o noclobber` to refuse overwrites. NEVER `> samefile` you're reading — it empties the file first.",
     "outputExample": "$ echo 'first' > /tmp/log.txt\n$ echo 'second' > /tmp/log.txt  # OVERWRITES — 'first' is gone\n$ cat /tmp/log.txt\nsecond\n$ ls /etc > /tmp/etc-listing.txt\n$ wc -l /tmp/etc-listing.txt\n237 /tmp/etc-listing.txt\n$ set -o noclobber; echo x > /tmp/log.txt\nbash: /tmp/log.txt: cannot overwrite existing file",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily32",
@@ -4270,7 +4265,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`>>` append (preserve existing). `>` overwrite (TRUNCATE). `2>>` append stderr. `>> file 2>&1` for both. No `noclobber` equivalent — appends always work. For multi-process safety use `flock`. For audit-quality logs prefer `logger` over `>> file.log`.",
     "outputExample": "$ echo first > /tmp/log.txt\n$ echo second >> /tmp/log.txt\n$ echo third >> /tmp/log.txt\n$ cat /tmp/log.txt\nfirst\nsecond\nthird\n$ for i in 1 2 3; do echo \"run $i at $(date +%T)\" >> /tmp/runs.log; sleep 1; done\n$ cat /tmp/runs.log\nrun 1 at 11:14:22\nrun 2 at 11:14:23\nrun 3 at 11:14:24",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily33",
@@ -4288,7 +4283,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "FD numbers: 0 stdin, 1 stdout, 2 stderr. `2>` redirect stderr (overwrite), `2>>` append, `2>&1` 'stderr follows stdout' (the `&` says 'this is FD, not filename'). `2>/dev/null` = discard errors. `&>` and `&>>` = both, bash shorthand. Order matters: put `2>&1` AFTER `> file`, not before.",
     "outputExample": "$ find / -name 'config.yml' 2>/dev/null\n/etc/myapp/config.yml\n/home/alice/code/myapp/config.yml\n$ ls /tmp /nope > /tmp/out.txt 2> /tmp/err.txt\n$ cat /tmp/out.txt\n/tmp:\nfile1\nfile2\n$ cat /tmp/err.txt\nls: cannot access '/nope': No such file or directory",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily34",
@@ -4306,7 +4301,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Two forms: bash shorthand `&> file` (overwrite) / `&>> file` (append), or POSIX `> file 2>&1` / `>> file 2>&1`. ORDER matters: `2>&1` must come AFTER `> file`. To see AND save, replace with `| tee`. For silence: `&> /dev/null`.",
     "outputExample": "$ ./deploy.sh &> /var/log/deploy-2026-05-17.log\n$ tail -3 /var/log/deploy-2026-05-17.log\nCompiling src/main.c ... ok\nLinking ... ok\ndeploy successful in 4.2s\n$ ls /nope /tmp &> /tmp/all.log\n$ cat /tmp/all.log\nls: cannot access '/nope': No such file or directory\n/tmp:\nfile1\nfile2",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily35",
@@ -4324,7 +4319,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`man` = MANUAL. 9 sections; collisions resolved by `man N name` (e.g., `man 5 passwd`). Navigation in less: `/` search, `n` next, `space` page, `q` quit. Quick alternatives: `cmd --help` for flag summary, `tldr CMD` for cheat-sheet, `apropos KEYWORD` to search.",
     "outputExample": "$ man rsync\nRSYNC(1)                         User Commands                        RSYNC(1)\n\nNAME\n       rsync - a fast, versatile, remote (and local) file-copying tool\n\nSYNOPSIS\n       Local:  rsync [OPTION...] SRC... [DEST]\n       Access via remote shell:\n         Pull: rsync [OPTION...] [USER@]HOST:SRC... [DEST]\n         Push: rsync [OPTION...] SRC... [USER@]HOST:DEST\n\nDESCRIPTION\n       Rsync is a fast and extraordinarily versatile file copying tool...\nManual page rsync(1) line 1 (press h for help or q to quit)",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily36",
@@ -4342,7 +4337,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`command -v` (POSIX, scripts), `type` (bash builtin, shows aliases/functions), `which` (classic but quirky), `whereis` (binary + man + source). Prefer `command -v` in scripts: `if command -v CMD >/dev/null; then ...; fi`. Use `type -a` to see EVERY match in PATH.",
     "outputExample": "$ command -v python\n/home/alice/.pyenv/shims/python\n$ type -a python\npython is /home/alice/.pyenv/shims/python\npython is /usr/bin/python\n$ type ls\nls is aliased to `ls --color=auto'\n$ which python\n/home/alice/.pyenv/shims/python\n$ if command -v jq >/dev/null; then echo 'jq present'; else echo 'install jq'; fi\njq present",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily37",
@@ -4360,7 +4355,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`history` prints history. `history | grep X` searches. `!N` re-run entry N, `!!` re-run last, `!STR` re-run most recent matching prefix. INTERACTIVE search: Ctrl-R then type, Ctrl-R again for older, Enter to run. Save after every command: `PROMPT_COMMAND='history -a'` in `.bashrc`.",
     "outputExample": "$ history | grep rsync\n  102  rsync -avz --delete ~/code/myapp/ deploy@web1:/var/www/myapp/\n  113  rsync -avz --progress -e 'ssh -p 2222' ./dist/ deploy@staging:/var/www/\n$ !113\nrsync -avz --progress -e 'ssh -p 2222' ./dist/ deploy@staging:/var/www/",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily38",
@@ -4377,7 +4372,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`!!` = the last command. `sudo !!` = redo with sudo. `!STR` re-run most recent starting with STR. `!$` = last arg of previous command. `^old^new^` = swap and rerun. Bash echoes the expansion before running — read it. Disable with `set +H` if dangerous.",
     "outputExample": "$ apt update\nE: Could not open lock file /var/lib/apt/lists/lock - open (13: Permission denied)\n$ sudo !!\nsudo apt update\n[sudo] password for alice: \nHit:1 http://archive.ubuntu.com/ubuntu noble InRelease\n...\n$ mkdir /opt/myapp && cd !$\ncd /opt/myapp\n$ pwd\n/opt/myapp",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily39",
@@ -4394,7 +4389,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`source FILE` (or `. FILE`) runs in CURRENT shell — settings stick. `bash FILE` or `./FILE` runs in SUBSHELL — settings disappear. Use source after editing `.bashrc`, for `.env` files, and for Python venv activate. Foot-gun: sourcing an untrusted file is like running it with shell access.",
     "outputExample": "$ echo 'alias hello=\"echo Hello World\"' >> ~/.bashrc\n$ hello\nbash: hello: command not found\n$ source ~/.bashrc\n$ hello\nHello World\n$ cat ~/code/myapp/.env\nDB_HOST=localhost\nDB_PORT=5432\n$ set -a; source ~/code/myapp/.env; set +a\n$ echo $DB_HOST\nlocalhost",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily40",
@@ -4412,7 +4407,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`alias name='value'` literal substitution at start of command. Add to `~/.bashrc` to persist. Reload with `source ~/.bashrc` (see daily39). Aliases can't take middle-of-command args — use a FUNCTION for that. Bypass alias with `\\name` or `command name`.",
     "outputExample": "$ alias ll='ls -lah'\n$ alias gs='git status'\n$ ll | head -3\ntotal 28K\ndrwxr-xr-x 5 alice alice 4.0K May 17 10:30 .\ndrwxr-xr-x 15 alice alice 4.0K May 14 10:00 ..\n$ alias\nalias gs='git status'\nalias ll='ls -lah'\nalias rm='rm -i'",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "nav21",
@@ -4430,7 +4425,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`pushd` PUSHES a directory onto the stack; `popd` POPS one off. Pair-think `pushd`/`popd`/`dirs` — three commands, one mental model: a stack of bookmarks.",
     "outputExample": "$ pwd\n/home/alice/projects\n$ pushd /tmp\n/tmp ~/projects\n$ pushd /var/log\n/var/log /tmp ~/projects\n$ dirs -v\n 0  /var/log\n 1  /tmp\n 2  ~/projects",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav22",
@@ -4448,7 +4443,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`popd` POPs and lands. `pushd /tmp` then `popd` is the canonical 'jump and return' pattern. Empty stack = use plain `cd`.",
     "outputExample": "$ dirs -v\n 0  /var/log\n 1  /tmp\n 2  ~/projects\n$ popd\n/tmp ~/projects\n$ popd\n~/projects\n$ popd\nbash: popd: directory stack empty",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav23",
@@ -4466,7 +4461,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dirs -v` = View the stack of dirs, numbered. Index 0 is always 'here'. To use the numbers, pair with `pushd +N` (rotate) or `popd +N` (remove).",
     "outputExample": "$ pushd /tmp; pushd /var/log; dirs -v\n 0  /var/log\n 1  /tmp\n 2  ~/projects\n$ pushd +2\n~/projects /var/log /tmp",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav24",
@@ -4484,7 +4479,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`~` alone = your home. `~user` = that user's home. The shell turns the tilde into a path BEFORE the command runs — confirm with `echo ~user`.",
     "outputExample": "$ echo ~alice\n/home/alice\n$ echo ~root\n/root\n$ sudo -u deploy bash -c 'cd ~ && pwd'\n/home/deploy",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav25",
@@ -4502,7 +4497,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`realpath` = the REAL path. Pair-think: `realpath` (canonical absolute) vs `readlink -f` (follow links). For a script's own location, `realpath \"$0\"` is bullet-proof.",
     "outputExample": "$ pwd\n/home/alice\n$ realpath ./projects/../docs/notes.md\n/home/alice/docs/notes.md\n$ realpath /usr/bin/python\n/usr/bin/python3.12\n$ realpath --relative-to=/etc /etc/nginx/nginx.conf\nnginx/nginx.conf",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav26",
@@ -4520,7 +4515,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`readlink -f` = Follow the link, fully. Without `-f`, you get just the first hop (often `/etc/alternatives/...`) which is rarely what you want. For a quick view of the immediate link target, plain `ls -l` shows `link -> target`.",
     "outputExample": "$ ls -l /usr/bin/vi\nlrwxrwxrwx 1 root root 20 May 14 /usr/bin/vi -> /etc/alternatives/vi\n$ readlink /usr/bin/vi\n/etc/alternatives/vi\n$ readlink -f /usr/bin/vi\n/usr/bin/vim.basic",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav27",
@@ -4538,7 +4533,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-d` = don't Descend (show the entry, not its contents). `*/` = glob that only matches directories (the trailing slash is the trick). Without `-d`, `ls */` would dump every directory's contents instead of names.",
     "outputExample": "$ ls -d */\napi/  docs/  node_modules/  src/  tests/\n$ ls -ld */\ndrwxr-xr-x 2 alice alice 4096 May 17 09:00 api/\ndrwxr-xr-x 3 alice alice 4096 May 16 18:30 docs/\ndrwxr-xr-x 9 alice alice 4096 May 15 10:02 node_modules/",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav28",
@@ -4556,7 +4551,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-1` is the digit ONE (looks like a lowercase L — easy mistake). Mnemonic: 'one column, one entry per line'. For scripts that handle weird filenames safely, prefer shell globs (`for f in *`) over `ls`.",
     "outputExample": "$ ls -1\nREADME.md\napi\ndocs\npackage.json\nsrc\ntests\n$ ls -1 *.md | wc -l\n3",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav29",
@@ -4573,7 +4568,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-maxdepth N` caps recursion. `.` (the start) is depth 0; immediate children are depth 1. Put `-maxdepth` BEFORE other tests for clarity. For 'skip this subtree entirely' use `-prune` instead.",
     "outputExample": "$ find . -maxdepth 2 -type d\n.\n./src\n./src/lib\n./docs\n./tests\n./tests/fixtures",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "nav30",
@@ -4590,7 +4585,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Parens `(...)` = SUBSHELL sandbox; changes inside (including `cd`) don't leak out. Braces `{...}` = same shell, changes DO persist. Pair-think: parens for 'temporary side trip', braces for 'group commands'.",
     "outputExample": "$ pwd\n/home/alice\n$ (cd /opt/app/build && pwd && make)\n/opt/app/build\nBuilding...\ndone\n$ pwd\n/home/alice",
-    "category": "GENERAL"
+    "category": "NAVIGATION"
   },
   {
     "id": "file26",
@@ -4606,7 +4601,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "install = cp + chmod + chown in one shot.",
     "outputExample": "$ sudo install -m 755 ~/scripts/deploy.sh /usr/local/bin/\n$ ls -l /usr/local/bin/deploy.sh\n-rwxr-xr-x 1 root root 421 May 14 deploy.sh",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file27",
@@ -4622,7 +4617,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "truncate -s 0 = chop the file down to 0 bytes.",
     "outputExample": "$ ls -lh /var/log/nginx/access.log\n-rw-r--r-- 1 www-data adm 2.1G May 19 /var/log/nginx/access.log\n$ sudo truncate -s 0 /var/log/nginx/access.log\n$ ls -lh /var/log/nginx/access.log\n-rw-r--r-- 1 www-data adm 0 May 19 /var/log/nginx/access.log",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file28",
@@ -4638,7 +4633,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "dd = 'data duplicator' (or, jokingly, 'disk destroyer' — double-check of=).",
     "outputExample": "$ dd if=/dev/zero of=/tmp/test.bin bs=1M count=10\n10+0 records in\n10+0 records out\n10485760 bytes (10 MB) copied, 0.012 s, 874 MB/s",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file29",
@@ -4654,7 +4649,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Brace expansion = combinations; -p = make parents.",
     "outputExample": "$ mkdir -p app/{logs,data}/2026\n$ tree app\napp\n├── data\n│   └── 2026\n└── logs\n    └── 2026",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file30",
@@ -4670,7 +4665,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "{,.bak} = expand to '' and '.bak' — instant backup.",
     "outputExample": "$ sudo cp /etc/nginx/nginx.conf{,.bak}\n$ ls /etc/nginx/\nnginx.conf  nginx.conf.bak  sites-available/  sites-enabled/",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file31",
@@ -4687,7 +4682,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "find ... -delete = filter then remove, no rm pipe needed.",
     "outputExample": "$ find . -name '*.tmp'  # preview first\n./build/tmp_stage1.tmp\n./build/tmp_stage2.tmp\n./cache/render.tmp\n$ find . -name '*.tmp' -delete\n$ find . -name '*.tmp'\n(no output)",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file32",
@@ -4704,7 +4699,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "stat = file statistics from the inode.",
     "outputExample": "$ stat /etc/nginx/nginx.conf\n  File: /etc/nginx/nginx.conf\n  Size: 1490\t\tBlocks: 8\t IO Block: 4096   regular file\nDevice: fd00h/64768d\tInode: 524291\t  Links: 1\nAccess: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)\nAccess: 2026-05-19 09:32:01.000000000 +0000\nModify: 2026-05-17 14:22:10.000000000 +0000\nChange: 2026-05-17 14:22:10.000000000 +0000\n Birth: -",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file33",
@@ -4720,7 +4715,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-s symbolic, -f force-replace.",
     "outputExample": "$ readlink /opt/app/current\n/opt/app/releases/v2.0.0\n$ ln -sf /opt/app/releases/v2.1.0 /opt/app/current\n$ readlink /opt/app/current\n/opt/app/releases/v2.1.0",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file34",
@@ -4737,7 +4732,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "basename = the 'base' name with no directory.",
     "outputExample": "$ basename /var/log/nginx/access.log.1\naccess.log.1\n$ basename /var/log/nginx/access.log.1 .1\naccess.log\n$ basename /etc/nginx/nginx.conf .conf\nnginx",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "file35",
@@ -4753,7 +4748,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "dirname = the 'dir' portion of the name.",
     "outputExample": "$ dirname /var/log/nginx/access.log\n/var/log/nginx\n$ dirname /var/log/syslog.1\n/var/log\n$ dirname config.yml\n.",
-    "category": "GENERAL"
+    "category": "FILE OPS"
   },
   {
     "id": "view21",
@@ -4769,7 +4764,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "column -t = tabular; -s = separator.",
     "outputExample": "$ column -t -s, /tmp/users.csv\nid  name   email                  role\n1   alice  alice@example.com      admin\n2   bob    bob@example.com        user",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view22",
@@ -4785,7 +4780,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "xxd = hex dump (think 'eXamine heX Dump').",
     "outputExample": "$ xxd /opt/app/bin/server | head -2\n00000000: 7f45 4c46 0201 0100 0000 0000 0000 0000  .ELF............\n00000010: 0200 3e00 0100 0000 4010 4000 0000 0000  ..>.....@.@.....",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view23",
@@ -4802,7 +4797,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-E = End-of-line $ marker.",
     "outputExample": "$ cat -E deploy.sh\n#!/bin/bash^M$\nset -e^M$\ncd /opt/app^M$\n$ dos2unix deploy.sh\ndos2unix: converting file deploy.sh to Unix format...",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view24",
@@ -4818,7 +4813,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-N = numbered lines in less.",
     "outputExample": "$ less -N /var/log/myapp/app.log\n      1 2026-05-17 09:32:01 [INFO] starting...\n      2 2026-05-17 09:32:02 [INFO] connected to db\n      3 2026-05-17 09:35:17 [WARN] cache miss\n      4 2026-05-17 09:41:08 [ERROR] timeout after 30s",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view25",
@@ -4834,7 +4829,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "head -n -N = head excluding the last N lines.",
     "outputExample": "$ cat /tmp/report.csv\nid,name,sales\n1,alice,120\n2,bob,95\nTOTAL,,215\n$ head -n -1 /tmp/report.csv\nid,name,sales\n1,alice,120\n2,bob,95",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view26",
@@ -4850,7 +4845,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "tail -n +N = tail starting at line N (the + means 'from').",
     "outputExample": "$ cat /tmp/users.csv\nid,name,role\n1,alice,admin\n2,bob,user\n$ tail -n +2 /tmp/users.csv\n1,alice,admin\n2,bob,user",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view27",
@@ -4866,7 +4861,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-n + Np = quiet, then print only line N (or range).",
     "outputExample": "$ sed -n '50,52p' /etc/myapp/settings.conf\ndb_host=localhost\ndb_port=5432\ndb_name=myapp_prod",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view28",
@@ -4882,7 +4877,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "NR = number of records (lines) so far.",
     "outputExample": "$ awk 'NR==42' /tmp/generated.conf\ntimeout=30\n$ awk 'NR>=40 && NR<=42' /tmp/generated.conf\ndb_pool_size=10\nmax_connections=100\ntimeout=30",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view29",
@@ -4899,7 +4894,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "comm = common; suppress columns with -1/-2/-3.",
     "outputExample": "$ comm expected.txt actual.txt\nweb1.internal\n\tweb2.internal\n\t\tdb1.internal\n# Column 1: only in expected, Column 2: only in actual, Column 3: in both",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "view30",
@@ -4915,7 +4910,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "cmp = compare bytes; silent = identical.",
     "outputExample": "$ cmp dist/app.bin dist/app.bin.golden\n$ echo $?\n0\n$ cmp dist/app.bin dist/app.bin.tampered\ndist/app.bin dist/app.bin.tampered differ: byte 1024, line 8",
-    "category": "GENERAL"
+    "category": "VIEWING TEXT"
   },
   {
     "id": "perm21",
@@ -4931,7 +4926,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "u+s = setUid; the 4 in 4755 is the SUID octal bit.",
     "outputExample": "$ sudo chmod u+s /usr/local/bin/mytool\n$ ls -l /usr/local/bin/mytool\n-rwsr-xr-x 1 root root 12420 May 17 /usr/local/bin/mytool",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm22",
@@ -4947,7 +4942,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "g+s on a dir = group-inherit-sticky; 2 is the SGID bit.",
     "outputExample": "$ sudo chmod g+s /srv/projects/myapp\n$ ls -ld /srv/projects/myapp\ndrwxrwsr-x 2 alice developers 4096 May 17 /srv/projects/myapp\n$ touch /srv/projects/myapp/newfile.txt\n$ ls -l /srv/projects/myapp/newfile.txt\n-rw-r--r-- 1 alice developers 0 May 17 newfile.txt  # inherits 'developers' group",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm23",
@@ -4964,7 +4959,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "id = identity (uid + gids).",
     "outputExample": "$ id\nuid=1000(alice) gid=1000(alice) groups=1000(alice),27(sudo),130(docker),1001(developers)\n$ id -nG\nalice sudo docker developers",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm24",
@@ -4981,7 +4976,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "newgrp = new (primary) group for this shell.",
     "outputExample": "$ id -gn\nalice\n$ newgrp developers\n$ id -gn\ndevelopers\n$ touch /srv/projects/myapp/test.txt\n$ ls -l /srv/projects/myapp/test.txt\n-rw-r--r-- 1 alice developers 0 May 17 test.txt\n$ exit\n$ id -gn\nalice",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm25",
@@ -4997,7 +4992,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "passwd = the password utility.",
     "outputExample": "$ passwd\nChanging password for alice.\nCurrent password: \nNew password: \nRetype new password: \npasswd: password updated successfully",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm26",
@@ -5013,7 +5008,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "visudo = vi for sudoers, with safety checks.",
     "outputExample": "$ sudo visudo\n# editor opens — add: bob ALL=(ALL:ALL) ALL\n# on save, visudo validates syntax before writing",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm27",
@@ -5030,7 +5025,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "ssh-keygen -t ed25519 = generate modern SSH key.",
     "outputExample": "$ ssh-keygen -t ed25519 -C 'alice@laptop-2026'\nGenerating public/private ed25519 key pair.\nEnter file in which to save the key (~/.ssh/id_ed25519): \nEnter passphrase (empty for no passphrase): \nYour identification has been saved in /root/.ssh/id_ed25519\nYour public key has been saved in /root/.ssh/id_ed25519.pub\n$ cat ~/.ssh/id_ed25519.pub\nssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... alice@laptop-2026",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm28",
@@ -5046,7 +5041,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "chage = change age (password lifetime).",
     "outputExample": "$ sudo chage -l alice\nLast password change                                    : Mar 01, 2026\nPassword expires                                        : May 30, 2026\nPassword inactive                                       : never\nAccount expires                                         : never\nMinimum number of days between password change          : 0\nMaximum number of days between password change          : 90\nNumber of days of warning before password expires       : 14",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm29",
@@ -5062,7 +5057,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-S = Symbolic umask display.",
     "outputExample": "$ umask -S\nu=rwx,g=rx,o=rx\n$ umask\n0022\n$ umask 0027; umask -S\nu=rwx,g=rx,o=",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "perm30",
@@ -5079,7 +5074,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "sudo -u USER = substitute user.",
     "outputExample": "$ sudo -u www-data touch /var/lib/myapp/data/test\ntouch: cannot touch '/var/lib/myapp/data/test': Permission denied\n$ sudo chown www-data:www-data /var/lib/myapp/data\n$ sudo -u www-data touch /var/lib/myapp/data/test\n$ ls -l /var/lib/myapp/data/\n-rw-r--r-- 1 www-data www-data 0 May 17 test",
-    "category": "GENERAL"
+    "category": "PERMISSIONS"
   },
   {
     "id": "pipe21",
@@ -5095,7 +5090,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "2>&1 = redirect fd 2 (stderr) into fd 1 (stdout).",
     "outputExample": "$ make 2>&1 | grep -i error\nsrc/main.c:42:10: error: expected ';' before '}' token\nmake: *** [Makefile:12: main.o] Error 1",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe22",
@@ -5111,7 +5106,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "pipefail = the pipe's exit code reflects any stage that failed.",
     "outputExample": "$ set -o pipefail; false | true; echo $?\n1\n$ set -o pipefail; true | true; echo $?\n0",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe23",
@@ -5127,7 +5122,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-I {} = the placeholder gets each input substituted in.",
     "outputExample": "$ cat servers.txt\nweb1.internal\nweb2.internal\n$ xargs -I {} ssh {} uptime < servers.txt\n web1.internal:  12:30:01 up 45 days, load: 0.12\n web2.internal:  12:30:02 up 12 days, load: 0.08",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe24",
@@ -5143,7 +5138,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-P = parallel workers; -n = inputs per call.",
     "outputExample": "$ time find . -name '*.log' | xargs -P 8 -n 1 gzip\nreal    0m4.2s  # vs ~33s serial with 8 files",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe25",
@@ -5159,7 +5154,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "mkfifo = make a named (filesystem-visible) FIFO pipe.",
     "outputExample": "$ mkfifo /tmp/data_stream\n$ ls -l /tmp/data_stream\nprw-r--r-- 1 alice alice 0 May 17 /tmp/data_stream",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe26",
@@ -5174,7 +5169,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "exec > file = from now on, stdout goes here.",
     "outputExample": "$ cat /usr/local/bin/backup.sh\n#!/bin/bash\nexec >> /var/log/backup.log 2>&1\necho \"[$(date)] backup starting\"\nrsync -av /data/ /backup/\necho \"[$(date)] done\"\n$ ./backup.sh\n$ cat /var/log/backup.log\n[2026-05-17 02:00:01] backup starting\n...",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe27",
@@ -5190,7 +5185,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Colon = silent true; > = open empty for writing.",
     "outputExample": "$ echo 'old content' > /tmp/test.log\n$ : > /tmp/test.log\n$ wc -c /tmp/test.log\n0 /tmp/test.log",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe28",
@@ -5206,7 +5201,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "2>/dev/null = drop stderr into the void.",
     "outputExample": "$ find / -name 'config.yml' 2>/dev/null\n/etc/myapp/config.yml\n/home/alice/code/myapp/config.yml\n# No 'Permission denied' noise above",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe29",
@@ -5222,7 +5217,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "tee = T-junction in the pipe; -a = append.",
     "outputExample": "$ ./deploy.sh 2>&1 | tee -a /var/log/deploy.log\n[09:32:01] pulling latest code...\n[09:32:05] running migrations...\n[09:32:08] restarting service...\n[09:32:09] deploy complete\n$ wc -l /var/log/deploy.log\n12",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "pipe30",
@@ -5238,7 +5233,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "$(...) = capture command stdout into a value.",
     "outputExample": "$ FQDN=$(hostname -f)\n$ echo \"This server is: $FQDN\"\nThis server is: web1.example.com\n$ LOGFILE=\"/var/log/myapp/${FQDN}-$(date +%Y%m%d).log\"\n$ echo $LOGFILE\n/var/log/myapp/web1.example.com-20260517.log",
-    "category": "GENERAL"
+    "category": "PIPES & REDIRECT"
   },
   {
     "id": "proc21",
@@ -5255,7 +5250,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`nohup` = NO HangUP. Always pair with `&` to background. Always redirect output (`> log 2>&1`) unless you're happy with `nohup.out`. For serious detached use prefer `tmux`/`screen` or a `systemd` user service. After-the-fact alternative: background normally then `disown`.",
     "outputExample": "$ nohup ./import.sh > /var/log/import.log 2>&1 &\n[1] 12345\n$ exit  # close SSH session\n# ...reconnect later...\n$ ps -p 12345\n    PID TTY          TIME CMD\n  12345 ?        00:14:21 import.sh\n$ tail /var/log/import.log\nRow 4123422 imported",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc22",
@@ -5272,7 +5267,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Compare with `nohup` (proc21): `nohup cmd &` works at LAUNCH (and handles output); `disown` works AFTER. Mnemonic: 'disown the kid so they can leave the house when the shell closes.' For interactive sessions, prefer `tmux` — much more flexible.",
     "outputExample": "$ sleep 1000 &\n[1] 4567\n$ jobs\n[1]+  Running                 sleep 1000 &\n$ disown %1\n$ jobs\n$ # (empty — the shell no longer tracks it, but it's still running)\n$ ps -p 4567\n    PID TTY          TIME CMD\n   4567 ?        00:00:00 sleep",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc23",
@@ -5290,7 +5285,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Naming sessions with `-s` is essential; nameless sessions get numbers and become impossible to identify. Detach = `Ctrl+b d`, list = `tmux ls`, attach = `tmux a` (short for attach). Learn one feature per week — start with split panes (`Ctrl+b %` and `Ctrl+b \"`).",
     "outputExample": "$ tmux new -s dev\n# (cleared screen, status bar at bottom: [dev] 0:bash*)\n# work happens here, then Ctrl+b d\n[detached (from session dev)]\n$ tmux ls\ndev: 1 windows (created Sun May 17 14:32:18 2026)\n$ tmux attach -t dev\n# (you're back, exactly where you left off)",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc24",
@@ -5307,7 +5302,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`kill -l` reads as 'kill list' — same letter that lists files in `ls`, jobs in `jobs`, etc. Pair it with `kill -SIGNAL PID` — `kill -l` tells you WHICH signals exist, `kill -SIG PID` sends them.",
     "outputExample": "$ kill -l\n 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL\n 5) SIGTRAP      6) SIGABRT      7) SIGBUS       8) SIGFPE\n 9) SIGKILL     10) SIGUSR1     11) SIGSEGV     12) SIGUSR2\n13) SIGPIPE     14) SIGALRM     15) SIGTERM     17) SIGCHLD\n18) SIGCONT     19) SIGSTOP     20) SIGTSTP\n$ kill -l 11\nSEGV",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc25",
@@ -5324,7 +5319,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Mnemonic: RE-NICE = change niceness LATER. Range/rules identical to `nice`. Decision tree: launching new? `nice`. Already running? `renice`. Don't own it or going below 0? `sudo renice`. Verify with the `NI` column in ps, top, or htop.",
     "outputExample": "$ ps -p 1234 -o pid,ni,cmd\n    PID  NI CMD\n   1234   0 ./backup.sh\n$ sudo renice -n 15 -p 1234\n1234 (process ID) old priority 0, new priority 15\n$ ps -p 1234 -o pid,ni,cmd\n    PID  NI CMD\n   1234  15 ./backup.sh",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc26",
@@ -5341,7 +5336,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Three numbers: REAL (your watch), USER (your code's CPU), SYS (kernel's CPU). USER+SYS > REAL = parallelism. USER+SYS < REAL = waiting (I/O, sleep, network). For peak memory and detailed stats use `/usr/bin/time -v` (full path — bypasses the builtin).",
     "outputExample": "$ time ./build.sh\nreal    0m12.483s\nuser    0m45.221s\nsys     0m2.108s\n# user+sys (47s) > real (12s) → parallel build using ~4 cores",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc27",
@@ -5358,7 +5353,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`lsof -i :PORT` = list open NET sockets on that port. Need sudo to see other users'. Modern alternative: `ss -tnlp 'sport = :PORT'`. To free a stuck port: find PID then `kill PID`.",
     "outputExample": "$ sudo lsof -i :8080\nCOMMAND  PID  USER   FD   TYPE DEVICE SIZE/OFF NODE NAME\nnode    8421  app    22u  IPv4  12abc      0t0  TCP *:8080 (LISTEN)\n$ kill 8421\n$ sudo lsof -i :8080\n# (no output — port is now free)",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc28",
@@ -5375,7 +5370,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`strace -p PID` attach, `strace cmd` launch. `-f` follow children, `-e trace=GROUP` filter, `-c` summary, `-o file` save. Look for `= -1 ENOENT` lines for 'file not found'. Slow: turn it OFF in production.",
     "outputExample": "$ sudo strace -p 4567 2>&1 | head\nstrace: Process 4567 attached\nepoll_wait(7, [], 1024, 100)            = 0\nrecvfrom(8, \"\", 4096, 0, NULL, NULL)    = 0\nread(9, 0x..., 4096)                    = -1 ENOENT (No such file or directory)",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc29",
@@ -5391,7 +5386,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ps -e -o COL,COL,... --sort=-KEY | head` = custom-ranked snapshot. `-` before key = DESCENDING. Useful keys: `%cpu`, `%mem`, `rss`, `etime`. `--no-headers` for clean scripting.",
     "outputExample": "$ ps -eo pid,user,%cpu,%mem,cmd --sort=-%cpu | head\n    PID USER     %CPU %MEM CMD\n   2412 alice    14.0  3.1 /usr/lib/firefox/firefox\n   1822 alice     8.3  0.7 node server.js\n   3201 alice     5.2  0.4 code .\n    684 root      2.1  0.5 /usr/sbin/sssd",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "proc30",
@@ -5408,7 +5403,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "SIGHUP (1) = 'hang up the phone' → repurposed as 'reload config'. Use `sudo systemctl reload SERVICE` when possible (logged, systemd-aware). ALWAYS validate config (`nginx -t`) BEFORE reloading.",
     "outputExample": "$ sudo nginx -t\nnginx: configuration file /etc/nginx/nginx.conf syntax is ok\nnginx: configuration file /etc/nginx/nginx.conf test is successful\n$ sudo kill -HUP $(pidof nginx)\n$ sudo tail -3 /var/log/nginx/error.log\n2026/05/17 14:32:18 [notice] 8421#8421: signal 1 (SIGHUP) received\n2026/05/17 14:32:18 [notice] 8421#8421: reconfiguring\n2026/05/17 14:32:18 [notice] 8421#8421: reload completed",
-    "category": "GENERAL"
+    "category": "PROCESSES"
   },
   {
     "id": "net21",
@@ -5422,7 +5417,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-O` = 'Output to the original name'",
     "outputExample": "$ curl -O https://releases.example.com/app-v2.1.tar.gz\n  % Total    % Received  ...\n  100  5120  100  5120  ...\n$ ls app-v2.1.tar.gz\napp-v2.1.tar.gz",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net22",
@@ -5436,7 +5431,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-X` = method, `-H` = header, `-d` = data",
     "outputExample": "$ curl -s -X POST -H 'Content-Type: application/json' -d '{\"order_id\":\"ORD-9981\"}' https://api.example.com/orders\n{\"status\":\"created\",\"id\":\"ORD-9981\"}",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net23",
@@ -5450,7 +5445,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-L` = Local port forwarding; traffic flows Local → SSH server → destination",
     "outputExample": "$ ssh -L 8080:10.10.5.20:80 -N user@gateway.example.com &\n[1] 84021\n# Now open http://localhost:8080 in your browser",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net24",
@@ -5464,7 +5459,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-R` = Remote port forwarding; traffic flows Remote server → back to you",
     "outputExample": "$ ssh -R 9000:localhost:3000 -N user@remote.example.com &\n# Colleague visits http://remote.example.com:9000 to see your local dev server",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net25",
@@ -5478,7 +5473,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ssh-copy-id` = copy my ID (public key) to the remote machine",
     "outputExample": "$ ssh-copy-id user@deploy.example.com\n/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed.\nuser@deploy.example.com's password:\nNumber of key(s) added: 1\nNow try logging in: ssh 'user@deploy.example.com'",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net26",
@@ -5492,7 +5487,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`mtr` = My Traceroute — a traceroute that never stops",
     "outputExample": "$ mtr db.example.com\n                             My traceroute\nHOST: laptop            Loss%   Snt  Last   Avg  Best  Wrst StDev\n 1. 192.168.1.1          0.0%    10   1.2   1.3   1.1   1.8   0.2\n 2. 10.0.0.1             0.0%    10   8.4   8.1   7.9   8.9   0.3\n 3. db.example.com       2.0%    10  22.1  21.8  20.9  24.1   1.0",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net27",
@@ -5507,7 +5502,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`+short` strips everything except the answer — short answer only",
     "outputExample": "$ dig +short example.com\n93.184.216.34",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net28",
@@ -5522,7 +5517,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-s` = statistics; `link` = layer-2 link info",
     "outputExample": "$ ip -s link show eth0\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500\n    RX: bytes  packets  errors  dropped\n    104857600  75000    0       12\n    TX: bytes  packets  errors  dropped\n    52428800   40000    0       0",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net29",
@@ -5536,7 +5531,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`whois` = 'Who IS the owner of this domain?'",
     "outputExample": "$ whois acme-bank.example.com\nDomain Name: ACME-BANK.EXAMPLE.COM\nRegistrar: Shady Domains LLC\nCreation Date: 2026-04-01\nExpiry Date: 2027-04-01\nName Server: ns1.shadydomains.com",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "net30",
@@ -5551,7 +5546,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`ip neigh` = IP neighbor table = who's next to me on the network",
     "outputExample": "$ ip neigh\n192.168.1.1  dev eth0 lladdr aa:bb:cc:dd:ee:ff REACHABLE\n192.168.1.50 dev eth0                           FAILED",
-    "category": "GENERAL"
+    "category": "NETWORKING"
   },
   {
     "id": "pkg18",
@@ -5568,7 +5563,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt list --installed` for humans; `dpkg-query -W` for scripts. `--manual-installed` separates 'I wanted this' from 'pulled in as dep'.",
     "outputExample": "$ apt list --installed 2>/dev/null | head\nListing...\nadduser/now 3.137ubuntu1 all [installed,automatic]\napt/now 2.7.14build2 amd64 [installed]\nbash/now 5.2.21-2ubuntu4 amd64 [installed]\n...\n$ apt list --installed 2>/dev/null | wc -l\n812",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg19",
@@ -5585,7 +5580,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Workflow: `apt update` (refresh) → `apt list --upgradable` (preview) → `apt upgrade` (apply).",
     "outputExample": "$ apt list --upgradable 2>/dev/null\nListing...\nbash/noble-updates 5.2.21-2ubuntu4.1 amd64 [upgradable from: 5.2.21-2ubuntu4]\ncurl/noble-updates,noble-security 8.5.0-2ubuntu10.4 amd64 [upgradable from: 8.5.0-2ubuntu10.3]\nlinux-generic/noble-updates 6.8.0-40.40 amd64 [upgradable from: 6.8.0-38.38]\n6 upgradable packages",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg20",
@@ -5602,7 +5597,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dpkg -L PKG` (List files), `dpkg -S PATH` (Search owner). For uninstalled packages: `apt-file list`.",
     "outputExample": "$ dpkg -L curl | head\n/.\n/usr\n/usr/bin\n/usr/bin/curl\n/usr/share\n/usr/share/doc\n/usr/share/doc/curl\n$ dpkg -L curl | wc -l\n14",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg21",
@@ -5619,7 +5614,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dpkg -S` = Search by path. `dpkg -L` = List files in a package. Reverse pair for repo: `apt-file search` / `apt-file list`.",
     "outputExample": "$ dpkg -S /usr/bin/curl\ncurl: /usr/bin/curl\n$ dpkg -S /tmp/test.txt\ndpkg-query: no path found matching pattern /tmp/test.txt",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg22",
@@ -5636,7 +5631,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Two-phase install: UNPACK then CONFIGURE. If config phase breaks, `dpkg --configure -a` retries it. Status code `ii` in `dpkg -l` = healthy; anything else = potential trouble.",
     "outputExample": "$ sudo apt install curl\nE: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a' to correct the problem.\n$ sudo dpkg --configure -a\nSetting up nginx (1.24.0-2ubuntu7.3) ...\nProcessing triggers for man-db (2.12.0-1) ...\n$ sudo apt install curl  # now works",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg23",
@@ -5653,7 +5648,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Three `show*` queries: `showhold` (pinned), `showmanual` (you wanted), `showauto` (came as dep). Holds persist across reboots — always audit them on a system you didn't build.",
     "outputExample": "$ apt-mark showhold\nlinux-image-6.5.0-15-generic\nmysql-server-8.0\nnginx",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg24",
@@ -5670,7 +5665,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt-mark unhold` = lift the freeze. Does NOT upgrade by itself — run `apt upgrade` afterwards to actually move the version forward.",
     "outputExample": "$ apt-mark showhold\nnginx\nmysql-server-8.0\n$ sudo apt-mark unhold nginx\nCanceled hold on nginx.\n$ apt-mark showhold\nmysql-server-8.0\n$ apt list --upgradable 2>/dev/null | grep nginx\nnginx/noble-updates 1.24.0-2ubuntu7.3 amd64 [upgradable from: 1.24.0-1]",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg25",
@@ -5687,7 +5682,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt source` needs `deb-src` enabled in sources.list. Pair with `apt build-dep PKG` to install build tooling. Rebuild with `dpkg-buildpackage`.",
     "outputExample": "$ apt source curl\nNeed to get 4,148 kB of source archives.\nGet:1 http://archive.ubuntu.com/ubuntu noble/main curl 8.5.0-2ubuntu10 (dsc) [2,612 B]\nGet:2 http://archive.ubuntu.com/ubuntu noble/main curl 8.5.0-2ubuntu10 (tar) [4,142 kB]\ndpkg-source: info: extracting curl in curl-8.5.0",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg26",
@@ -5704,7 +5699,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`--remove` only deletes the source file — not the installed packages. To revert installed packages too, use `ppa-purge`. Always run `sudo apt update` after removal.",
     "outputExample": "$ sudo add-apt-repository --remove ppa:deadsnakes/ppa\nRemoving from /etc/apt/sources.list.d/deadsnakes-ubuntu-ppa-noble.list\n$ sudo apt update\nHit:1 http://archive.ubuntu.com/ubuntu noble InRelease\nReading package lists... Done",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "pkg27",
@@ -5721,7 +5716,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apt show` = read the box before buying. RHEL equivalent: `dnf info`. For scripts: `apt-cache show`. For installed package info only: `dpkg -s pkg`.",
     "outputExample": "$ apt show nginx 2>/dev/null\nPackage: nginx\nVersion: 1.24.0-2ubuntu7.3\nInstalled-Size: 96.3 kB\nDepends: nginx-core (= 1.24.0-2ubuntu7.3) | nginx-full (= 1.24.0-2ubuntu7.3)\nHomepage: https://nginx.net\nDescription: small, powerful, scalable web/proxy server",
-    "category": "GENERAL"
+    "category": "PACKAGES"
   },
   {
     "id": "text21",
@@ -5736,7 +5731,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-F = input field separator.",
     "outputExample": "$ cat /var/data/sales.csv\ndate,region,revenue\n2026-05-01,west,4200\n2026-05-02,east,5100\n$ awk -F, 'NR>1{print $2}' /var/data/sales.csv\nwest\neast",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text22",
@@ -5751,7 +5746,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "{accumulate} END {print} = streaming reduce.",
     "outputExample": "$ printf '100\\n200\\n300\\n' | awk '{s+=$1} END {print s}'\n600",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text23",
@@ -5766,7 +5761,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-i.bak = in-place edit with a .bak safety net.",
     "outputExample": "$ sed -i.bak 's/localhost/db.internal/g' /etc/myapp/settings.conf\n$ ls /etc/myapp/\nsettings.conf  settings.conf.bak",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text24",
@@ -5781,7 +5776,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "/pattern/d = delete (don't print) matching lines.",
     "outputExample": "$ printf 'INFO ok\\nDEBUG hi\\nWARN slow\\n' | sed '/DEBUG/d'\nINFO ok\nWARN slow",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text25",
@@ -5796,7 +5791,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-A After, -B Before, -C Context (both).",
     "outputExample": "$ grep -A 2 'PANIC' /var/log/app.log\nPANIC: nil pointer dereference\n  goroutine 42 [running]:\n  main.handleRequest(0xc000014500)",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text26",
@@ -5811,7 +5806,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-l = list matching files only.",
     "outputExample": "$ grep -l 'proxy_pass' /etc/nginx/conf.d/*.conf\n/etc/nginx/conf.d/api.conf\n/etc/nginx/conf.d/app.conf",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text27",
@@ -5826,7 +5821,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-o = output only the match.",
     "outputExample": "$ echo 'client 10.0.0.5 accessed 192.168.1.1' | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+'\n10.0.0.5\n192.168.1.1",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text28",
@@ -5841,7 +5836,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-P = Perl regex flavor.",
     "outputExample": "$ echo 'status=404 reqid=1234' | grep -P '\\d{3}\\s+\\w+=\\d{4}'\nstatus=404 reqid=1234",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text29",
@@ -5856,7 +5851,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-d = delete; [:space:] = POSIX whitespace class.",
     "outputExample": "$ echo ' a b c ' | tr -d '[:space:]'\nabc",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "text30",
@@ -5871,7 +5866,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "iconv -f FROM -t TO; //TRANSLIT = best-effort ASCII substitution.",
     "outputExample": "$ echo 'café résumé' | iconv -f UTF-8 -t ASCII//TRANSLIT\ncafe resume",
-    "category": "GENERAL"
+    "category": "TEXT PROCESSING"
   },
   {
     "id": "sys21",
@@ -5886,7 +5881,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "lsb_release = Linux Standard Base release info. `-cs` gives just the codename for scripting.",
     "outputExample": "$ lsb_release -a\nDistributor ID: Ubuntu\nDescription:    Ubuntu 24.04 LTS\nRelease:        24.04\nCodename:       noble",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys22",
@@ -5902,7 +5897,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`lsblk` = list block devices. Like `ls` for storage chunks. The tree shape shows which partitions belong to which disk.",
     "outputExample": "$ lsblk\nNAME        SIZE TYPE MOUNTPOINT\nsda         500G disk\n├─sda1        1G part /boot\n└─sda2      499G part /\nsdb          16G disk\n└─sdb1       16G part /media/usb",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys23",
@@ -5917,7 +5912,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "blkid = block ID (UUID/label). Use UUID in /etc/fstab, not /dev/sdX names.",
     "outputExample": "$ sudo blkid /dev/sdb1\n/dev/sdb1: UUID=\"a1b2c3d4-e5f6-7890-abcd-ef1234567890\" TYPE=\"ext4\" LABEL=\"data\"",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys24",
@@ -5932,7 +5927,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "findmnt = find mount entry for a path.",
     "outputExample": "$ findmnt /var/data\nTARGET     SOURCE         FSTYPE  OPTIONS\n/var/data  nfs.example.com:/exports/data  nfs  rw,relatime,vers=4",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys25",
@@ -5949,7 +5944,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`last` = LAST logins. Siblings: `lastb` (bad/failed, needs sudo), `lastlog` (one row per user). All read /var/log/{wtmp,btmp,lastlog}.",
     "outputExample": "$ last -n 3\nalice   pts/0  192.168.1.10  Sat May 14 09:00   still logged in\nbob     pts/1  10.0.0.5      Sat May 14 08:42 - 09:15  (00:33)\nreboot  system boot         Sat May 14 08:30   still running",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys26",
@@ -5964,7 +5959,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "vmstat = virtual memory + system stats. High `wa` = I/O bound. High `si/so` = swap pressure. Skip the first line (it's a boot average).",
     "outputExample": "$ vmstat 1\nprocs ---memory---    ---swap-- ---io-- ---system-- ------cpu-----\n r b   swpd free buff cache  si so  bi  bo  in   cs  us sy id wa\n 2 0      0 512m  64m   2g   0  0   8  42 312  891   8  3 85  4",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys27",
@@ -5980,7 +5975,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`iostat` = I/O STATistics. Key metrics: `await` (latency), `%util` (saturation). Pair: `vmstat`=system-wide, `iostat`=per-disk, `iotop`=per-process.",
     "outputExample": "$ iostat -xz 1\nDevice  r/s   w/s  rkB/s  wkB/s  await  %util\nnvme0n1 12.0  34.5  384.0  1840.0  1.42   3.10\nsda      0.0  48.2    0.0  9200.0  82.3  97.4",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys28",
@@ -5996,7 +5991,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`lshw` = LiSt HardWare. Use `-short` for a compact view. Cousins: `lscpu`, `lspci`, `lsusb`, `lsblk` for narrower jobs.",
     "outputExample": "$ sudo lshw -short\nH/W path        Device   Class      Description\n================================================\n                         system     PowerEdge R740\n/0/4                     processor  Intel Xeon Gold 6226R\n/0/15                    memory     64GiB System Memory\n/0/100/1f.6     eno1     network    Ethernet I350-LM\n/0/100/1d/0     /dev/sda disk       1TB SAS HDD",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys29",
@@ -6011,7 +6006,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "/proc/meminfo = the kernel's memory ledger. MemAvailable is what matters for OOM risk — not MemFree.",
     "outputExample": "$ grep -E 'MemTotal|MemFree|MemAvailable|Cached' /proc/meminfo\nMemTotal:       16384000 kB\nMemFree:          512000 kB\nMemAvailable:    8192000 kB\nCached:          6144000 kB",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "sys30",
@@ -6027,7 +6022,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "-p = priority filter. 0=emerg 1=alert 2=crit 3=err 4=warning 5=notice 6=info 7=debug. `-p err` shows 0-3.",
     "outputExample": "$ journalctl -p err -b -n 5\nMay 17 10:12:33 web1 nginx[1234]: open() '/var/run/nginx.pid' failed (13: Permission denied)\nMay 17 10:14:01 web1 kernel: usb 2-1: device not accepting address, error -71",
-    "category": "GENERAL"
+    "category": "SYSTEM INFO"
   },
   {
     "id": "bash11",
@@ -6042,7 +6037,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-e` exit-on-error, `-u` unset-vars-are-errors, `-o pipefail` pipeline-fails-if-any-stage-fails. The trinity of bash safety.",
     "outputExample": "$ cat strict.sh\n#!/usr/bin/env bash\nset -euo pipefail\nfalse\necho 'never seen'\n$ bash strict.sh; echo \"exit=$?\"\nexit=1\n$ bash -c 'set -u; echo \"$NOPE\"'\nbash: NOPE: unbound variable",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash12",
@@ -6058,7 +6053,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`trap CMD SIGNAL` = run CMD when SIGNAL fires. Pseudo-signals: `EXIT` (always), `ERR` (on failure), `DEBUG` (before each command). Use `mktemp -d` + `trap 'rm -rf' EXIT` as the standard temp-dir idiom.",
     "outputExample": "$ cat with-trap.sh\n#!/usr/bin/env bash\nset -euo pipefail\ntmp=$(mktemp -d)\ntrap 'echo \"cleaning $tmp\"; rm -rf \"$tmp\"' EXIT\ntouch \"$tmp/file\"\nfalse  # provoke error\n$ bash with-trap.sh\ncleaning /tmp/tmp.AbcDe\n$ ls /tmp/tmp.AbcDe\nls: cannot access: No such file or directory",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash13",
@@ -6072,7 +6067,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Spec `\"f:v\"` = `-f` needs arg (colon after), `-v` doesn't. Value in `$OPTARG`, position in `$OPTIND`. After loop: `shift $((OPTIND-1))`. SHORT FLAGS ONLY.",
     "outputExample": "$ ./opts.sh -f /etc/nginx/nginx.conf -v extra\nfile=/etc/nginx/nginx.conf verbose=1 remaining=extra",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash14",
@@ -6088,7 +6083,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`:-` use-default (no assign), `:=` assign-and-use, `:+` use-only-if-set, `:?` error-if-empty. Colon = 'or empty also counts'.",
     "outputExample": "$ unset PORT\n$ port=\"${PORT:-8080}\"; echo $port\n8080\n$ PORT=9000 bash -c 'port=\"${PORT:-8080}\"; echo $port'\n9000",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash15",
@@ -6103,7 +6098,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`:?` = error-if-empty (LOUD). `:-` = use-if-empty (QUIET). Leading `:` is the null command — runs the expansion for its check effect only. Exits the script; does NOT just warn.",
     "outputExample": "$ cat req.sh\n#!/usr/bin/env bash\nset -euo pipefail\n: \"${API_TOKEN:?API_TOKEN env var is required}\"\necho \"deploying with token\"\n$ bash req.sh\nreq.sh: line 3: API_TOKEN: API_TOKEN env var is required\n$ API_TOKEN=sk-abc bash req.sh\ndeploying with token",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash16",
@@ -6119,7 +6114,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`/` first, `//` all, `/#` anchor start, `/%` anchor end. `%`/`%%` strip suffix, `#`/`##` strip prefix. Faster than `sed` for variable transformations.",
     "outputExample": "$ filename='My Photo 2026.JPG'\n$ echo \"${filename// /_}\"\nMy_Photo_2026.JPG\n$ echo \"${filename%.JPG}.jpg\"\nMy Photo 2026.jpg",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash17",
@@ -6134,7 +6129,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`case VAL in PAT) ACT ;; *) DEFAULT ;; esac`. Patterns are GLOBS. `|` means OR. `;;` ends branch. Always quote the value.",
     "outputExample": "$ ./svc.sh start\nstarting service\n$ ./svc.sh foo; echo $?\nusage: ./svc.sh {start|stop|status}\n1",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash18",
@@ -6150,7 +6145,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-A` Associative (string keys). MUST declare before use. `${!arr[@]}` = keys, `${arr[@]}` = values. Bash 4+ only — macOS default bash is 3.x.",
     "outputExample": "$ declare -A url=([dev]=https://dev.x [prod]=https://x)\n$ echo \"${url[dev]}\"\nhttps://dev.x\n$ for k in \"${!url[@]}\"; do echo \"$k: ${url[$k]}\"; done\ndev: https://dev.x\nprod: https://x",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash19",
@@ -6167,7 +6162,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`mapfile -t arr < file` = lines into array, no trailing `\\n`. Pipeline input: use `< <(cmd)` not `|`. Bash 4+ only.",
     "outputExample": "$ cat /etc/deploy/hosts.txt\nweb1\nweb2\ndb1\n$ mapfile -t hosts < /etc/deploy/hosts.txt\n$ echo \"count: ${#hosts[@]}\"\ncount: 3\n$ echo \"${hosts[1]}\"\nweb2",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash20",
@@ -6184,7 +6179,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`(( expr ))` STATEMENT (no $ on vars inside), `$((expr))` EXPRESSION (use result). C operators work. INTEGER ONLY — use `bc -l` or awk for floats. Under `set -e`, `(( i++ ))` can exit when i was 0.",
     "outputExample": "$ i=0; (( i++ )); echo $i\n1\n$ if (( i > 0 )); then echo positive; fi\npositive\n$ echo $((2**16))\n65536",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash21",
@@ -6200,7 +6195,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`tar -czf` = Create, gZip, File. `$(date +%F)` = today YYYY-MM-DD. Quote the filename. Rotate with `find -mtime +N -delete`.",
     "outputExample": "$ tar -czf \"backup-$(date +%F).tar.gz\" /etc\n$ ls -lh backup-*.tar.gz\n-rw-r--r-- 1 alice alice 1.8M May 17 09:32 backup-2026-05-17.tar.gz",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash22",
@@ -6216,7 +6211,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-mtime +N` = older than N days. ALWAYS preview with `-print` before `-delete`. Add `-type f` to avoid deleting directories. Put `-delete` LAST.",
     "outputExample": "$ find /var/log/myapp -name '*.log' -mtime +7 -print | head\n/var/log/myapp/app-2026-04-01.log\n/var/log/myapp/app-2026-04-02.log\n$ find /var/log/myapp -name '*.log' -type f -mtime +7 -delete\n$ find /var/log/myapp -name '*.log' -mtime +7 | wc -l\n0",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash23",
@@ -6232,7 +6227,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`${f%.txt}` = strip suffix (one `%` shortest, `%%` longest). `${f#prefix}` = strip prefix. ALWAYS quote `\"$f\"`. Set `shopt -s nullglob` so empty globs give empty list.",
     "outputExample": "$ touch notes.txt draft.txt 'my doc.txt'\n$ for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done\n$ ls\ndraft.md  'my doc.md'  notes.md",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash24",
@@ -6247,7 +6242,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`exec > FILE` = redirect this shell's stdout for the rest of its life. `>(cmd)` = process substitution (bash-only). Combo: `exec > >(tee -a log) 2>&1`. Put after strict-mode at the top.",
     "outputExample": "$ cat deploy.sh\n#!/usr/bin/env bash\nset -euo pipefail\nexec > >(tee -a /var/log/deploy.log) 2>&1\necho 'deploy started'\nls /nonexistent  # error\necho 'done'\n$ ./deploy.sh\ndeploy started\nls: cannot access '/nonexistent': No such file or directory\ndone\n$ tail /var/log/deploy.log\ndeploy started\nls: cannot access '/nonexistent': No such file or directory\ndone",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash25",
@@ -6263,7 +6258,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`cmd || action` = run action ON FAILURE. `{ a; b; }` groups (note spaces + closing `;`). Under `set -e`, left of `||` is exempt. The `&& X || Y` pattern is NOT a clean if/else — use real `if` when it matters.",
     "outputExample": "$ false || { echo 'first'; echo 'second'; exit 1; }\nfirst\nsecond\n$ echo $?\n1\n$ curl -fsS https://nope.invalid || echo 'fallback'\nfallback",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash26",
@@ -6279,7 +6274,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Five fields: `min hour dom mon dow`. `*` every, `*/N` every N, `,` list, `-` range. Mnemonic: 'My Hat Doesn't Match Dad's'. ALWAYS use absolute paths; cron has a minimal $PATH.",
     "outputExample": "$ crontab -l\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n30 2 * * * /usr/local/bin/backup.sh >> /var/log/backup.log 2>&1",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash27",
@@ -6295,7 +6290,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`*/N` = every N units. `flock -n LOCKFILE CMD` = skip if already running. Silence frequent jobs with `>/dev/null 2>&1`. For sub-minute scheduling, use systemd timers.",
     "outputExample": "$ crontab -l\n*/15 * * * * /usr/bin/flock -n /var/lock/hc.lock /opt/healthcheck.sh >> /var/log/hc.log 2>&1\n$ tail /var/log/hc.log\n[2026-05-17 09:15:01] OK\n[2026-05-17 09:30:01] OK",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash28",
@@ -6311,7 +6306,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-a archive, -v verbose, -z compress, --delete mirror, -P progress`. TRAILING SLASH on src/ = 'contents of src'. ALWAYS `--dry-run` before `--delete`.",
     "outputExample": "$ rsync -avz --dry-run --delete ./site/ alice@web1.example.com:/var/www/html/\nsending incremental file list\nindex.html\ndeleting old-page.html\n(DRY RUN)\n$ rsync -avz --delete ./site/ alice@web1.example.com:/var/www/html/\nsent 8,193 bytes  received 87 bytes",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash29",
@@ -6325,7 +6320,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`$#` count, `$1` next, `shift` consume one, `shift 2` consume flag+value. Always quote `\"$1\"`. Combine with `case` for routing. Handles long flags unlike `getopts`.",
     "outputExample": "$ ./parse.sh --file /etc/nginx/nginx.conf --verbose extra\nfile=/etc/nginx/nginx.conf verbose=1 remaining=extra",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "bash30",
@@ -6341,7 +6336,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`logger MSG` writes one line to journal/syslog. `-t TAG` for greppability, `-p FAC.SEV` for priority. Read back with `journalctl -t TAG`.",
     "outputExample": "$ logger -t mybackup -p user.notice 'backup started'\n$ logger -t mybackup -p user.notice 'backup completed'\n$ journalctl -t mybackup --since today\nMay 17 02:30:00 web1 mybackup[18234]: backup started\nMay 17 02:32:22 web1 mybackup[18234]: backup completed",
-    "category": "GENERAL"
+    "category": "BASH SCRIPTING"
   },
   {
     "id": "arch8",
@@ -6358,7 +6353,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`xz` = the tightest of gzip/bzip2/xz. Same `-k` rule to keep original. `-T0` to parallelize. Capital J in tar for xz.",
     "outputExample": "$ ls -lh /var/backups/db.sql\n-rw-r--r-- 1 alice alice 2.4G May 17 11:00 /var/backups/db.sql\n$ xz -T0 /var/backups/db.sql\n$ ls -lh /var/backups/db.sql.xz\n-rw-r--r-- 1 alice alice 142M May 17 11:02 /var/backups/db.sql.xz",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch9",
@@ -6375,7 +6370,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`unxz` = UN-xz (undo xz). Equivalent: `xz -d`. Stream without touching disk: `xzcat`. For tar.xz: use `tar -xJf`.",
     "outputExample": "$ ls -lh /tmp/db.sql.xz\n-rw-r--r-- 1 alice alice 18M May 17 11:30 /tmp/db.sql.xz\n$ unxz /tmp/db.sql.xz\n$ ls -lh /tmp/db.sql\n-rw-r--r-- 1 alice alice 142M May 17 11:30 /tmp/db.sql",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch10",
@@ -6392,7 +6387,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Capital `J` = xz. Compression letters: `z`=gzip, lowercase `j`=bzip2, capital `J`=xz. Combine with `XZ_OPT=-T0` for parallel speed.",
     "outputExample": "$ tar -cJf project-v1.0.tar.xz project/\n$ ls -lh project-v1.0.tar.xz\n-rw-r--r-- 1 alice alice 8.4K May 17 12:00 project-v1.0.tar.xz\n$ tar -tJf project-v1.0.tar.xz | head -3\nproject/\nproject/README.md\nproject/src/main.py",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch11",
@@ -6408,7 +6403,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-t` = Table of contents. Preview unknown archives with `-tvf` before extracting. Auto-detects compression.",
     "outputExample": "$ tar -tvf /tmp/vendor.tar.gz | head -5\ndrwxr-xr-x alice/alice    0 2026-05-17 12:00 vendor-1.2/\n-rw-r--r-- alice/alice 1024 2026-05-17 12:00 vendor-1.2/README.md\n-rw-r--r-- alice/alice 4096 2026-05-17 12:00 vendor-1.2/lib/main.py",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch12",
@@ -6424,7 +6419,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-C DIR` = Change directory before doing the operation. Target dir must EXIST. Safe extract idiom: `mkdir -p target && tar -xzf foo.tgz -C target`.",
     "outputExample": "$ mkdir -p /opt/staging\n$ tar -xzf /tmp/release.tar.gz -C /opt/staging\n$ ls /opt/staging\nproject/\n$ ls /opt/staging/project/\nREADME.md  src/  tests/",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch13",
@@ -6441,7 +6436,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Append the archive-INTERNAL path as args to extract only those. Find the exact path first with `tar -tf | grep`. `-O` extracts to stdout.",
     "outputExample": "$ tar -tf /var/backups/full.tar.gz | grep nginx.conf\netc/nginx/nginx.conf\n$ tar -xzf /var/backups/full.tar.gz etc/nginx/nginx.conf\n$ ls etc/nginx/\nnginx.conf",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch14",
@@ -6458,7 +6453,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`-r` recursive (required for directories!). `-9` max compression. `-x 'PAT'` exclude. For Linux→Linux, prefer `tar -czf`. For cross-platform, prefer `.zip`.",
     "outputExample": "$ zip -r project.zip project/\n  adding: project/ (stored 0%)\n  adding: project/README.md (deflated 32%)\n  adding: project/src/main.py (deflated 65%)\n$ ls -lh project.zip\n-rw-r--r-- 1 alice alice 8.4K May 17 11:42 project.zip",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch15",
@@ -6475,7 +6470,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`unzip foo.zip -d TARGET` extract elsewhere. `-l` LIST. `-o` overwrite, `-n` never overwrite, `-j` flat extract. Note: it's `-d`, NOT `-C` like tar.",
     "outputExample": "$ unzip -l project.zip\n  Length   Date    Time    Name\n      1024  2026-05-17 11:30   project/README.md\n      4096  2026-05-17 11:30   project/src/main.py\n$ unzip project.zip -d /tmp/review\ncreating: /tmp/review/project/\ninflating: /tmp/review/project/README.md\ninflating: /tmp/review/project/src/main.py",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch16",
@@ -6492,7 +6487,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Verbs: `a` add, `x` extract, `l` list, `t` test. `-p` password, `-mhe=on` hide filenames. For Linux backups, prefer `tar` (7z doesn't preserve Unix perms).",
     "outputExample": "$ 7z a -p -mhe=on secret.7z private/\nEnter password:\nVerify password:\nEverything is Ok\nArchive size: 142836 bytes\n$ 7z l secret.7z\nEnter password:\n   Date      Time  Name\n2026-05-17 11:30  private/README.md",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch17",
@@ -6509,7 +6504,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "z-family: `zcat`/`zless`/`zgrep`/`zdiff` for `.gz`. xz-family for `.xz`, bz-family for `.bz2`. All decompress on the fly, no temp file.",
     "outputExample": "$ ls -lh /var/log/nginx/access.log.1.gz\n-rw-r----- 1 www-data adm 412K May 16 06:25 access.log.1.gz\n$ zcat /var/log/nginx/access.log.1.gz | wc -l\n42103\n$ zcat /var/log/nginx/access.log.1.gz | head -3\n10.0.0.5 - - [16/May/2026:00:00:01 +0000] \"GET / HTTP/1.1\" 200 612",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch18",
@@ -6526,7 +6521,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`zgrep` = grep on `.gz`. `xzgrep` for `.xz`, `bzgrep` for `.bz2`. All grep flags work. Search rotated logs: `zgrep PATTERN /var/log/syslog*.gz`.",
     "outputExample": "$ zgrep -c 'permission denied' /var/log/nginx/error.log.*.gz\n/var/log/nginx/error.log.1.gz:42\n/var/log/nginx/error.log.2.gz:38\n$ zgrep -i 'permission denied' /var/log/nginx/error.log.1.gz | head -3\n2026/05/16 10:12:33 [error] 1234#0: open() '/var/www/private' failed (13: Permission denied)",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch19",
@@ -6543,7 +6538,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`--exclude='PAT'` (QUOTE it!) before the source dir. `--exclude-vcs` skips all VCS dirs. Always verify with `tar -tzf | grep PAT`.",
     "outputExample": "$ tar --exclude='node_modules' --exclude='*.log' --exclude-vcs -czf project.tar.gz project/\n$ tar -tzf project.tar.gz | grep -E '(node_modules|\\.git)' | wc -l\n0\n$ tar -tzf project.tar.gz | wc -l\n42",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "arch20",
@@ -6560,7 +6555,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`pigz` = Parallel gzip — multi-core, output is standard `.gz`. Same flags as gzip (`-k`, `-9`, `-d`). Tar integration: `tar -I pigz -cf ...`. Modern even-better alt: `zstd -T0`.",
     "outputExample": "$ time gzip -k /var/log/myapp/app.log\nreal    0m38s\n$ time pigz -k /var/log/myapp/app.log\nreal    0m06s  # ~6x faster on 8-core box\n$ ls -lh /var/log/myapp/app.log.gz  # compatible with normal gunzip\n-rw-r--r-- 1 alice alice 412M May 17 12:00 app.log.gz",
-    "category": "GENERAL"
+    "category": "ARCHIVES & COMPRESS"
   },
   {
     "id": "daily41",
@@ -6577,7 +6572,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Ctrl+R = Reverse search. Type to narrow, Ctrl+R again for older, Enter to run, Esc to edit, Ctrl+G to cancel. Works in bash + zsh + most REPLs.",
     "outputExample": "$ # press Ctrl+R, type 'ssh'\n(reverse-i-search)`ssh': ssh -L 8080:10.10.5.20:80 alice@gateway.example.com\n# press Enter to run or Esc to edit",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily42",
@@ -6593,7 +6588,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`!$` last arg. `!^` first arg. `!*` all args. Interactive alternative: `Alt+.` inserts last arg at cursor — friendlier because you see it before running.",
     "outputExample": "$ ls /var/log/nginx\naccess.log  error.log\n$ cd !$\ncd /var/log/nginx\n$ pwd\n/var/log/nginx",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily43",
@@ -6608,7 +6603,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Ctrl+L = clear visible screen, keep scrollback and typed text. `clear` is similar but slower. `reset` for mangled terminals.",
     "outputExample": "$ ls /var/log\nnginx  syslog  auth.log\n$ echo 'partial'  # type something\n# press Ctrl+L — screen clears, 'partial' command still at prompt\n$ echo 'partial'",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily44",
@@ -6626,7 +6621,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Ctrl+A = beginning (Alpha), Ctrl+E = End. By WORD: Alt+B/Alt+F. ERASE: Ctrl+U (to start), Ctrl+K (to end), Ctrl+W (one word back). PASTE killed text: Ctrl+Y.",
     "outputExample": "$ apt update && apt upgrade -y  # forgot sudo — cursor is at end\n# press Ctrl+A — cursor jumps to before 'apt'\n# type 'sudo '\n$ sudo apt update && apt upgrade -y",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily45",
@@ -6643,7 +6638,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`apropos KEYWORD` = `man -k KEYWORD`. `whatis CMD` = `man -f CMD` = one-line summary. If 'nothing appropriate', run `sudo mandb`.",
     "outputExample": "$ apropos 'disk usage'\ndf (1)               - report file system disk space usage\ndu (1)               - estimate file space usage\nncdu (1)             - NCurses Disk Usage",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily46",
@@ -6659,7 +6654,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`command -v CMD` = POSIX-portable tool check. Exit 0 if exists. `which` is quirky, avoid in scripts. `command CMD` also bypasses aliases — useful escape hatch.",
     "outputExample": "$ command -v rsync\n/usr/bin/rsync\n$ command -v nonexistent; echo $?\n1\n$ command -v git >/dev/null && echo installed || echo missing\ninstalled",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily47",
@@ -6676,7 +6671,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`watch -n SECONDS 'cmd'` = re-run on a clock. `-d` diffs, `-c` colors, `-t` no header, `-g` exit on change. ALWAYS quote the command. Stop with Ctrl-C.",
     "outputExample": "$ watch -n 1 -d 'kubectl get pods'\nNAME             READY   STATUS    RESTARTS   AGE\napp-7d9b6-xk2p   0/1     Pending   0          3s\n# (one second later, 'Pending' highlighted as it changes to 'Running')",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily48",
@@ -6692,7 +6687,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`pv` = Pipe Viewer. Drop into any pipeline for throughput + ETA. `-s SIZE` for percentage, `-L RATE` to throttle, `-N NAME` to label. Install with `apt install pv`.",
     "outputExample": "$ pv /var/backups/db.sql > /dev/null\n 1.34GiB 0:00:08 [ 168MiB/s] [=================>      ] 62% ETA 0:00:05",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily49",
@@ -6709,7 +6704,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`du -sh * | sort -h` = disk-hog hunter. `-s` summary, `-h` human size. `sort -h` understands K/M/G. Modern interactive alt: `ncdu`.",
     "outputExample": "$ sudo du -sh /var/* 2>/dev/null | sort -h | tail -5\n96M\t/var/cache\n412M\t/var/lib\n1.8G\t/var/log\n4.2G\t/var/backups",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "daily50",
@@ -6726,7 +6721,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`fc` = Fix Command. Opens last command in $EDITOR. `fc -l` = list. `fc N` = edit entry N. Interactive alternative: `Ctrl-X Ctrl-E` opens the current line while typing.",
     "outputExample": "$ fc\n# editor opens with last command\n# fix the mistake, save+quit\n# corrected command runs automatically\n$ fc -l -5\n  198  echo hello\n  199  ls\n  200  cd /etc/nginx\n  201  cat nginx.conf\n  202  fc",
-    "category": "GENERAL"
+    "category": "DAILY TIPS"
   },
   {
     "id": "rhel1",
@@ -6742,7 +6737,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dnf install` ~ `apt install`. Under dnf calls `rpm`, the way apt calls `dpkg`.",
     "outputExample": "$ sudo dnf install nginx\nDependencies resolved.\nInstalling:\n nginx  x86_64  1:1.24.0-1.fc40  fedora  34 k\nInstalling dependencies:\n nginx-core  x86_64  1:1.24.0-1.fc40  fedora  579 k\nIs this ok [y/N]: y\nComplete!",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel2",
@@ -6758,7 +6753,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dnf remove` = uninstall + auto-clean orphan deps. Unlike `apt remove`, dnf also removes configs (like `apt purge`).",
     "outputExample": "$ sudo dnf remove httpd\nRemoving:\n httpd  x86_64  2.4.59-1.fc40  @fedora  10 M\nRemoving unused dependencies:\n httpd-core  x86_64  ...\nIs this ok [y/N]: y\nComplete!",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel3",
@@ -6775,7 +6770,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dnf upgrade` = the whole-system bump. Compare: `apt update && apt upgrade` is two steps; `dnf upgrade` does both. `check-update` is the safe dry-run.",
     "outputExample": "$ sudo dnf upgrade\nDependencies resolved.\nUpgrading:\n kernel-core  x86_64  6.8.9-300.fc40  updates  37 M\n openssl-libs  x86_64  3.2.2-1.fc40  updates  2.4 M\nTransaction Summary: Upgrade 4 Packages\nIs this ok [y/N]: y",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel4",
@@ -6791,7 +6786,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dnf search` reads NAME+SUMMARY. Add `--all` for full description. `dnf provides PATH` for file-to-package lookups.",
     "outputExample": "$ dnf search markdown\nName & Summary Matched: markdown\nmarkdown.noarch : Text-to-HTML conversion tool\ncmark.x86_64 : CommonMark parsing and rendering library\npython3-markdown.noarch : Python implementation of Markdown",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel5",
@@ -6807,7 +6802,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dnf info` ~ `apt show`. The 'man page' for a package — read before installing. `rpm -qi` for local database only.",
     "outputExample": "$ dnf info podman\nAvailable Packages\nName     : podman\nVersion  : 5.0.3\nRelease  : 1.fc40\nSize     : 14 M\nLicense  : Apache-2.0\nURL      : https://podman.io\nSummary  : Manage Pods, Containers and Container Images",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel6",
@@ -6824,7 +6819,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dnf history` = the time machine for packages. `info` to inspect, `undo` to reverse one txn. No equivalent in stock `apt` — this is a real dnf advantage.",
     "outputExample": "$ dnf history\nID  | Command             | Date             | Action  | Altered\n44  | upgrade             | 2026-05-17 08:01 | Upgrade |    4\n43  | install nginx       | 2026-05-16 14:22 | Install |    3\n42  | remove httpd        | 2026-05-15 09:10 | Erase   |    1",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel7",
@@ -6840,7 +6835,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dnf provides PATH` = 'who ships this?' across all repos. `rpm -qf PATH` = same but only for installed files. Debian equivalents: `apt-file search` / `dpkg -S`.",
     "outputExample": "$ dnf provides /usr/bin/jq\njq-1.7.1-3.fc40.x86_64 : Command-line JSON processor\nRepo     : fedora\nFilename : /usr/bin/jq",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel8",
@@ -6857,7 +6852,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`dnf clean all` = forget everything. Pair with `dnf makecache` to immediately re-fetch. Debian equivalent: `sudo apt clean` + `sudo rm -rf /var/lib/apt/lists/*`.",
     "outputExample": "$ sudo dnf clean all\n47 files removed\n$ sudo dnf makecache\nFedora 40 - x86_64                  1.2 MB/s |  82 MB\nMetadata cache created.",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel9",
@@ -6874,7 +6869,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Group = meta-package. Quote names with spaces. `info` to inspect, `install` to apply, `remove` to undo. Debian equivalent: `apt install build-essential` (single meta-package).",
     "outputExample": "$ sudo dnf group install \"Development Tools\"\nInstalling group/module packages:\n gcc  x86_64  14.0.1-0.16.fc40  updates  38 M\n make  x86_64  4.4.1-2.fc40  fedora  588 k\n autoconf  noarch  2.71-7.fc40  fedora  714 k\n...\nInstall  47 Packages\nIs this ok [y/N]: y",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel10",
@@ -6891,7 +6886,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`rpm -qa` = Query All. Build vocabulary: `-q` = query, `-a` = all, `-f FILE` = file owner, `-l PKG` = list files, `-i PKG` = info. Debian equivalent: `dpkg -l`.",
     "outputExample": "$ rpm -qa | head -5\nbasesystem-11-20.fc40.noarch\nglibc-2.39-7.fc40.x86_64\nbash-5.2.26-3.fc40.x86_64\nnginx-1.24.0-1.fc40.x86_64\n$ rpm -qa | wc -l\n812",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel11",
@@ -6907,7 +6902,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`rpm -qf` = Query File owner. Trio: `rpm -qa` (all installed), `rpm -qf PATH` (who owns this), `rpm -ql PKG` (list files in pkg). Debian equivalent: `dpkg -S /path`.",
     "outputExample": "$ rpm -qf /usr/bin/nc\nnmap-ncat-7.93-8.fc40.x86_64\n$ rpm -qf /tmp/myfile\nfile /tmp/myfile is not owned by any package",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel12",
@@ -6924,7 +6919,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`rpm -ql` = Query List. `-qc` configs, `-qd` docs, `-qi` info, `-qf` file owner. For uninstalled .rpm files, add `-p`.",
     "outputExample": "$ rpm -ql nginx | grep -E '(conf|service|bin)'\n/etc/nginx/nginx.conf\n/usr/lib/systemd/system/nginx.service\n/usr/sbin/nginx",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel13",
@@ -6941,7 +6936,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`start/stop/restart` = NOW only. `enable/disable` = boot only. `enable --now` = both at once.",
     "outputExample": "$ sudo systemctl start nginx\n$ systemctl status nginx\n● nginx.service - nginx\n   Active: active (running) since Sat 2026-05-17 09:32:01 UTC; 4s ago\n   Main PID: 4821 (nginx)",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel14",
@@ -6958,7 +6953,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`enable --now` = persist + run. Cheat-sheet: `start/stop` (now), `enable/disable` (boot), `--now` (both). On RHEL/Fedora, dnf install does NOT auto-enable — opt in explicitly.",
     "outputExample": "$ sudo systemctl enable --now nginx\nCreated symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.\n$ systemctl is-enabled nginx\nenabled\n$ systemctl is-active nginx\nactive",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel15",
@@ -6973,7 +6968,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Edit unit → `daemon-reload` → `restart`. Or use `systemctl edit UNIT` which handles the reload for you. `reload` (no daemon) = reload the SERVICE's config, not systemd's unit file cache.",
     "outputExample": "$ sudo vim /etc/systemd/system/myapp.service\n$ sudo systemctl restart myapp\nWarning: The unit file ... changed on disk. Run 'systemctl daemon-reload' to reload units.\n$ sudo systemctl daemon-reload\n$ sudo systemctl restart myapp\n# success",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel16",
@@ -6989,7 +6984,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Mnemonic `-xeu`: eXplain + End + Unit. The trio for debugging failed services. Add `-f` for follow, `-b` for current boot.",
     "outputExample": "$ sudo journalctl -xeu nginx\nMay 17 09:32:01 server1 nginx[4820]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)\nMay 17 09:32:01 server1 systemd[1]: nginx.service: Failed with result 'exit-code'.\n░░ Subject: Unit process exited\n░░ The process \"/usr/sbin/nginx -t\" exited with status 1.",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel17",
@@ -7005,7 +7000,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`--list-all` = everything in the active zone. RHEL/Fedora default = `public` zone, allowing only `ssh` and `dhcpv6-client` by default.",
     "outputExample": "$ sudo firewall-cmd --list-all\npublic (active)\n  interfaces: eth0\n  services: ssh dhcpv6-client http\n  ports: \n  rich rules:",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel18",
@@ -7022,7 +7017,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Two configs: `--permanent` writes disk, `--reload` activates. Without `--permanent`, rules vanish on reboot. Without `--reload`, permanent rules aren't yet active.",
     "outputExample": "$ sudo firewall-cmd --add-port=8080/tcp --permanent\nsuccess\n$ sudo firewall-cmd --reload\nsuccess\n$ sudo firewall-cmd --list-ports\n8080/tcp",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel19",
@@ -7039,7 +7034,7 @@ export const questions: Question[] = [
     ],
     "memoryTip": "Three modes: Enforcing (block + log), Permissive (log only), Disabled. If a service breaks 'for no reason' on RHEL, check SELinux: `getenforce`, then `ausearch -m AVC`.",
     "outputExample": "$ getenforce\nEnforcing\n$ sestatus\nSELinux status: enabled\nCurrent mode: enforcing\nLoaded policy name: targeted",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   },
   {
     "id": "rhel20",
@@ -7056,11 +7051,11 @@ export const questions: Question[] = [
     ],
     "memoryTip": "`restorecon` = RESTORE the CONtext. Workflow: `ls -Z` to see, `matchpathcon` to learn expected, `restorecon -Rv` to fix. `-Rv` = recurse + verbose, the everyday combo.",
     "outputExample": "$ ls -Z /var/www/html/index.html\nunconfined_u:object_r:user_home_t:s0 /var/www/html/index.html\n$ sudo restorecon -Rv /var/www/html\nRelabeled /var/www/html/index.html from user_home_t to httpd_sys_content_t\n$ ls -Z /var/www/html/index.html\nsystem_u:object_r:httpd_sys_content_t:s0 /var/www/html/index.html",
-    "category": "GENERAL"
+    "category": "RHEL/FEDORA"
   }
 ];
 
-export const categories: Category[] = [
+export const categories = [
   {
     "id": "NAVIGATION",
     "name": "Navigation",
