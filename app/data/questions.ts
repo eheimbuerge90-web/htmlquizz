@@ -1,4 +1,21 @@
-export const questions = [
+export interface Question {
+  id: string;
+  question: string;
+  answer: string;
+  explanation: string;
+  usage: string;
+  examples: string[];
+  memoryTip: string;
+  outputExample: string;
+  category: string;
+}
+
+export interface Category {
+  name: string;
+  description: string;
+}
+
+export const questions: Question[] = [
   {
     "id": "nav1",
     "question": "You are five directories deep inside a project folder. What single command — with no arguments and no path — returns you instantly to your home directory?",
@@ -7043,7 +7060,7 @@ export const questions = [
   }
 ];
 
-export const categories = [
+export const categories: Category[] = [
   {
     "id": "NAVIGATION",
     "name": "Navigation",
