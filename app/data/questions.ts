@@ -208,7 +208,7 @@ export const questions: Question[] = [
   {
     id: "nav10",
     question: "You need to create a new empty folder named myproject in your current directory to hold a new application's files. What command creates that directory?",
-    answer: "mkdir directory_name",
+    answer: "mkdir myproject",
     explanation: `This command is like telling the filing cabinet to open a new drawer and label it. It creates an empty folder with whatever name you give it. You can even create a whole chain of nested folders in one go if you use the right option.
 
 ## Technical mkdir (make directory) creates one or more new directories as specified by its arguments. By default it fails if any intermediate parent directory in the path does not already exist — for example mkdir projects/2026/app errors out if projects or 2026 don't exist. The -p flag (parents) instructs mkdir to create any missing intermediate directories in the chain and also suppresses the error if the target directory already exists — making it idempotent (safe to run multiple times). Multiple directory names can be passed in a single invocation. The -m flag (mode) sets the initial permission bits directly: mkdir -m 700 secrets creates a directory readable/writable/executable only by its owner. The -v flag (verbose) prints each directory name as it is created. New directories inherit their parent's ownership and a permission mask filtered through the umask (a per-process value that removes permission bits from newly created files and directories).
@@ -229,7 +229,7 @@ export const questions: Question[] = [
   {
     id: "nav11",
     question: "You created a scratch folder called tmp-scratch that is now empty and you want to delete it safely — getting an error if it still contains files. What command removes only an empty directory?",
-    answer: "rmdir directory_name",
+    answer: "rmdir tmp-scratch",
     explanation: `This is a cautious way to remove a folder that refuses to work if there's anything still inside. Think of it as a bouncer at the door: it only lets the folder be deleted when it's completely vacant. It's the safe counterpart to the much more powerful (and dangerous) recursive delete.
 
 ## Technical rmdir (remove directory) deletes a directory entry from the filesystem only if the directory contains no entries besides the implicit . and .. (the directory's self-reference and parent-reference inodes). If any file or subdirectory exists inside — including dotfiles (files whose names start with .) — rmdir prints "Directory not empty" and exits with a non-zero status code (an error indicator the shell uses to detect command failure). The -p flag (parents) removes a chain of empty parent directories in sequence: rmdir -p tmp/build/cache deletes cache, then attempts build, then tmp, stopping at the first non-empty or non-existent directory. The flag --ignore-fail-on-non-empty suppresses the error for non-empty directories (makes it behave silently instead of failing). To see what is blocking a rmdir invocation, run ls -A dirname — any output indicates blocking entries. For non-empty directories use rm -r (recursive remove — dangerous, no recycle bin).
@@ -271,7 +271,7 @@ export const questions: Question[] = [
   {
     id: "nav13",
     question: "You need to locate all files with a .log extension anywhere inside /var/log and its subdirectories. What command searches recursively by filename pattern starting from that directory?",
-    answer: "find . -name filename",
+    answer: "find /var/log -name \"*.log\"",
     explanation: `This command is like sending a search party through every room, closet, and drawer in a building looking for items whose labels match a pattern you specify. Unlike a simple directory listing, it digs through every level of nesting automatically and reports back every match it finds, no matter how deeply buried.
 
 ## Technical find is a filesystem search tool that traverses a directory tree and evaluates a set of tests against every entry it visits. The first argument is the starting directory (. means current directory, but any absolute or relative path works). The -name PATTERN test filters by the entry's basename (the final component of its path — not including any parent directories) using shell-style glob patterns: * matches any sequence of characters, ? matches exactly one character, [abc] matches one character from the set. Always quote the pattern in single quotes ('*.log') — without quotes, the shell performs glob expansion before find ever runs, potentially substituting actual matching filenames instead of passing the literal pattern. -name is case-sensitive; -iname performs case-insensitive matching. Add -type f to restrict results to regular files only, or -type d for directories. find also supports actions: -delete removes matching files, and -exec CMD {} \; runs an arbitrary command on each match, where {} is replaced by the current filename.
@@ -293,7 +293,7 @@ export const questions: Question[] = [
   {
     id: "nav14",
     question: "You downloaded a file called data.bin and aren't sure whether it's a text file, a compressed archive, or a binary executable. What command inspects the file's actual content to identify its true type?",
-    answer: "file filename",
+    answer: "file data.bin",
     explanation: `File extensions like .txt or .jpg are just labels — any file can be renamed to have any extension. This command looks inside the file at its actual content (the first few bytes, which act like a fingerprint) and tells you what the data really is, regardless of what the filename says it is.
 
 ## Technical file examines a file's content using a database of magic numbers (distinctive byte sequences at specific offsets that identify file formats — for example, the bytes 89 50 4E 47 at offset 0 identify a PNG image, and 25 50 44 46 identify a PDF). It reads /usr/share/misc/magic (the magic database) to match patterns. The command ignores the file's extension entirely and reports what it detects in the content. Key flags: -i (or --mime-type) outputs the MIME type string (e.g. text/plain; charset=utf-8 or application/gzip) instead of a plain-English description — useful for scripts that need a machine-parseable format; -b (brief) suppresses the filename prefix so only the type description is printed; -z peeks inside compressed files to identify the compressed content. Multiple filenames can be passed in one invocation, and the output includes the filename followed by a colon for each. Combine with find for batch identification: find . -type f -exec file -b {} +.
@@ -446,7 +446,7 @@ export const questions: Question[] = [
   {
     id: "file1",
     question: "You want to make a duplicate of report.txt named report-backup.txt in the same directory, leaving the original file untouched. What command creates that copy?",
-    answer: "cp source destination",
+    answer: "cp report.txt report-backup.txt",
     explanation: `Copying a file is like photocopying a document — the original stays in the filing cabinet exactly as it was, and you get an identical duplicate that you can edit or send away without touching the original. If you point the destination at a folder instead of a filename, the copy lands inside that folder keeping the original name.
 
 ## Technical cp (copy) reads the bytes of the source file and writes them to the destination, leaving the source unchanged. Argument order is source first, destination second — the same convention as mv. If the destination is an existing directory (or a path ending with /), cp places the copy inside that directory using the source's basename (the final component of the source path). If the destination is a new filename, cp creates a file with that name. Important: plain cp silently overwrites an existing destination file without any warning; add -i (interactive) to be prompted before overwriting, or -n (no-clobber) to skip silently. By default cp creates the copy with fresh metadata: the current time as mtime (modification time), your user as owner, and permissions filtered by your umask (a per-process mask that removes permission bits from newly created files). To preserve the original's permissions, timestamps, and ownership, add -p (preserve) or -a (archive). Directories require -r (recursive) — without it cp exits with an error if the source is a directory.
@@ -468,7 +468,7 @@ export const questions: Question[] = [
   {
     id: "file2",
     question: "You want to rename draft-v1.md to final-report.md in the same directory. What single command both renames and moves files — handling both operations identically?",
-    answer: "mv source destination",
+    answer: "mv draft-v1.md final-report.md",
     explanation: `This command does double duty as both a rename tool and a mover — it's the same command regardless of whether you're changing a file's name, moving it to a different folder, or both at once. The file disappears from its old location and appears at the new one. Think of it as relabeling and relocating a box in one action.
 
 ## Technical mv (move) relinks a filesystem entry from one path to another. When source and destination are on the same filesystem (a distinct storage volume or partition), mv performs a rename syscall — it only updates directory entries (the mapping from name to inode, the filesystem's internal metadata record) without copying any data, making it instantaneous even for gigabyte files. When source and destination span different filesystems (e.g. from /home to /mnt/usb), mv falls back to copying bytes then deleting the source, which is slow and can leave both copies briefly on a power failure. If the destination is an existing directory, mv places the source inside it; if it is a non-existent path, mv renames the source to that path. Critical hazard: plain mv silently overwrites an existing destination — use -i (interactive) to be prompted or -n (no-clobber) to skip silently. Unlike cp and rm, mv does not need -r to handle directories — it moves them natively.
@@ -490,7 +490,7 @@ export const questions: Question[] = [
   {
     id: "file3",
     question: "You have a temporary file called scratch.txt that you no longer need and want to remove it permanently from the filesystem. What command deletes it — with no undo and no trash bin?",
-    answer: "rm filename",
+    answer: "rm scratch.txt",
     explanation: `This command is a one-way door: the file goes in and nothing comes back out. Unlike moving a document to the recycle bin on a desktop computer, this operation does not place the file anywhere recoverable — it is gone immediately. This is intentional and powerful, but it means you must be certain before pressing Enter.
 
 ## Technical rm (remove) unlinks a file from the directory structure. In filesystem terms, it removes the directory entry mapping the filename to its inode (the filesystem's internal metadata record). If the inode's hard link count (the number of directory entries pointing to it) drops to zero and no process has the file open, the kernel marks the data blocks as free — the data is not immediately overwritten but is no longer accessible and will eventually be reclaimed. There is no built-in undo mechanism. The -f flag (force) suppresses error messages and prompts, making rm proceed without any warnings. The -r flag (recursive) enables deletion of directories and their entire contents. The combination rm -rf is the most powerful deletion command on Linux: it removes anything without asking, including non-empty directories. A notorious catastrophic variant: rm -rf $VAR/ where $VAR is unset or empty becomes rm -rf / and destroys the root filesystem. Safer alternatives: use -i (interactive) to confirm each deletion, or install trash-cli (trash-put file) which sends files to a recoverable trash location.
@@ -512,7 +512,7 @@ export const questions: Question[] = [
   {
     id: "file4",
     question: "You need an empty placeholder file called .gitkeep to make Git track an otherwise-empty directory. What command creates a zero-byte file with that name?",
-    answer: "touch filename",
+    answer: "touch .gitkeep",
     explanation: `This command is like pressing a button that either conjures a brand new empty file out of thin air, or stamps a "touched at this moment" label on a file that already exists — without changing anything inside it. It's the simplest way to create an empty placeholder or refresh a file's timestamp.
 
 ## Technical touch is a dual-purpose utility. When the specified filename does not exist, touch creates it as a zero-byte regular file with permissions filtered by the current umask (a per-process value that removes bits from newly created files, typically resulting in 644). When the file already exists, touch updates its atime (access time — the timestamp recording when the file was last read) and mtime (modification time — the timestamp recording when the file's content was last changed) to the current clock time without altering the file's contents or size. Key flags: -a modifies only atime; -m modifies only mtime; -t YYYYMMDDhhmm.ss sets a specific timestamp; -r REFERENCE copies timestamps from another file; -c (no-create) skips file creation if the target doesn't exist, only updating timestamps on existing files. Multiple filenames can be passed in one invocation to create or touch several files simultaneously.
@@ -534,7 +534,7 @@ export const questions: Question[] = [
   {
     id: "file5",
     question: "You want to read the contents of /etc/hostname directly in your terminal without opening a text editor. What command prints a file's content to the screen?",
-    answer: "cat filename",
+    answer: "cat /etc/hostname",
     explanation: `This command is like reading a note out loud — it takes the contents of a file and prints every line to your screen from top to bottom. It's perfect for small files where you want a quick look. For large files it will scroll past your entire terminal history, so for those you'd use a different tool that lets you page through the content.
 
 ## Technical cat (concatenate) reads one or more files sequentially and writes their bytes to stdout (standard output — the default output stream that goes to your terminal). With a single file argument it simply displays that file. With multiple arguments it prints them back-to-back with no separator — the original use case of concatenating file contents into a combined output. Key flags: -n (number) prepends a line number to every output line; -A (all) displays non-printing characters — tabs appear as ^I and line endings appear as $, useful for debugging invisible whitespace; -s (squeeze) collapses consecutive blank lines into a single blank line. Avoid the "useless use of cat" anti-pattern: instead of cat file | grep pattern, write grep pattern file directly, which is faster. For large files, less (a pager that lets you scroll) is preferable since cat floods the terminal. The reversed-order counterpart is tac which outputs lines in reverse order.
@@ -556,7 +556,7 @@ export const questions: Question[] = [
   {
     id: "file6",
     question: "You want to copy nginx.conf to nginx.conf.bak but the destination already exists and you don't want to silently overwrite it. What flag makes the copy command ask for confirmation before overwriting?",
-    answer: "cp -i source destination",
+    answer: "cp -i nginx.conf nginx.conf.bak",
     explanation: `By default, copying onto an existing file replaces it instantly with no warning — like pasting a document on top of another one and the original vanishing. Adding this option turns that silent replacement into a question: it stops and asks "are you sure?" before proceeding, giving you a chance to say no.
 
 ## Technical The -i flag (interactive) instructs cp to print "cp: overwrite 'destination'?" and wait for keyboard input before overwriting an existing destination file. Entering y (yes) proceeds with the copy; entering n (no) skips that file. For scripted use this flag is usually omitted because the interactive prompt would hang the script waiting for input. The alternative -n flag (no-clobber) silently skips the copy if the destination exists without any prompt — useful when you want non-interactive protection. The -i flag applies only to the destination: it never modifies source files. When copying multiple files into a directory, -i prompts separately for each file that would overwrite an existing entry. This same -i safety flag works identically for mv -i (move) and rm -i (remove).
@@ -598,7 +598,7 @@ export const questions: Question[] = [
   {
     id: "file8",
     question: "You want to delete several *.tmp files in your current directory but want to confirm each deletion before it happens. What flag adds a per-file confirmation prompt to the remove command?",
-    answer: "rm -i filename",
+    answer: "rm -i *.tmp",
     explanation: `The normal delete command acts like a paper shredder with no preview — files go in and nothing comes back. Adding this option turns it into a checkpoint: before destroying each file it pauses and shows you the filename, asking "are you sure?" You can say yes to proceed or no to skip that particular file. This is especially useful when deleting by wildcard because you can catch unexpected matches before they're gone.
 
 ## Technical rm (remove) permanently unlinks files from the directory structure — there is no system-level recycle bin or undo. The -i flag (interactive) causes rm to print "rm: remove regular file 'filename'?" for each target and wait for a y/yes response before proceeding. Any other input skips that file. The capital -I flag (interactive-once) is a less granular variant: it prompts once when more than three files would be deleted, or when -r (recursive) is in use, rather than prompting for every individual file. Combining -i with -r produces an interactive recursive deletion: rm -ri folder/ asks separately for every file inside the directory tree. The -f flag (force) is the opposite of -i: it suppresses all prompts and error messages, proceeding silently. Never combine -r and -f (-rf) with paths containing unquoted variables, as an unset variable produces an empty string and rm -rf becomes rm -rf / which destroys the root filesystem.
@@ -640,7 +640,7 @@ export const questions: Question[] = [
   {
     id: "file10",
     question: "You want /usr/local/bin/python to be a shortcut that transparently points to /usr/bin/python3.11, so that running 'python' actually executes python3.11. What command creates this kind of pointer file?",
-    answer: "ln -s target link_name",
+    answer: "ln -s /usr/bin/python3 /usr/local/bin/python",
     explanation: `A symbolic link is like a sticky note on a filing cabinet drawer that says "the real thing is over there." When you open the drawer (run the link), the system automatically follows the note and brings you to the actual file. The link itself contains only a path — no copy of the data. If you move the real file, the link breaks and points to nothing.
 
 ## Technical ln -s (symbolic link) creates a new filesystem entry called link_name that stores the string target as its content — this string is the path the kernel follows when someone accesses link_name. This is distinct from a hard link (ln without -s) which creates a second directory entry pointing to the same inode (the filesystem's internal metadata and data-block record) — hard links share data and cannot span filesystems or link directories. Symbolic links can span filesystems, link directories, and can be relative (resolved from the link's own location) or absolute (resolved from /). In ls -l output, symlinks show type l and a -> target annotation. A dangling symlink (one whose target path does not exist) is valid syntax but resolves to an error when accessed. Use -f (force) to atomically replace an existing symlink: ln -sf new_target link_name. Use readlink -f link_name to resolve the full chain of symlinks to the final real path. The classic deploy pattern ln -sf /opt/app/v2 /opt/app/current atomically updates which version is "current."
@@ -703,7 +703,7 @@ export const questions: Question[] = [
   {
     id: "file13",
     question: "You want to copy the entire ~/code/myapp directory and all of its subdirectories and files into ~/backups/myapp-copy. What flag is required to make cp descend into directories?",
-    answer: "cp -r source destination",
+    answer: "cp -r ~/code/myapp ~/code/myapp-backup",
     explanation: `By default, the copy command refuses to copy a folder — it only knows how to copy individual files. Adding this option tells it to dig inside the folder, then inside all the subfolders inside that, and so on, copying every file it finds no matter how deeply nested. It's like telling a moving company to pack the entire contents of a filing cabinet rather than just one drawer.
 
 ## Technical Without -r (recursive), cp exits with an error when it encounters a directory as a source: "cp: -r not specified; omitting directory 'dirname'". The -r flag enables recursive descent: cp visits every entry in the source directory, copying files and recursing into subdirectories. A subtle path behavior: cp -r myapp/ backup/ (source with trailing slash) copies the contents of myapp into backup, while cp -r myapp backup/ (no trailing slash) copies myapp itself as a subdirectory inside backup, resulting in backup/myapp/. The -a flag (archive — equivalent to -dR --preserve=all) is a commonly used superset of -r that also preserves symbolic links (as symlinks rather than following them), permissions, timestamps, and ownership. The -u flag (update) skips files at the destination that are newer than the source, useful for incremental backups. Progress during large recursive copies can be monitored with rsync -av --progress instead of cp.
@@ -806,7 +806,7 @@ export const questions: Question[] = [
   {
     id: "file18",
     question: "You want to delete all *.tmp files in /tmp and see a confirmation line printed for each file as it is removed. What flag makes the remove command report each deletion?",
-    answer: "rm -v filename",
+    answer: "rm -v *.tmp /tmp",
     explanation: `When you delete files normally the command runs quietly — nothing is printed when it works, and you have to trust it did what you asked. Adding this option makes each deletion visible: it prints the filename as it's removed, giving you a receipt for every file that gets deleted. This is especially reassuring when deleting by wildcard, since you can see the full list of what was matched and removed.
 
 ## Technical The -v flag (verbose) instructs rm to print "removed 'filename'" to stdout for each file successfully deleted. Combined with -r (recursive), rm -rv prints a line for every file at every depth of the directory tree as it is removed. Combined with -i (interactive), rm -iv prints the filename, prompts for confirmation, and then prints the "removed" message if you said yes. Unlike cp -v and mv -v, rm -v output goes to stdout, not stderr, so it can be captured with > or piped. Verbose output is especially valuable when deleting by glob (rm -v *.tmp) because it makes explicit exactly which filenames matched the pattern — before pressing Enter you can see the expansion, and after running you have a log. Note: rm's verbose output cannot be used as an undo list because the deletions are permanent and there is no corresponding restore command.
@@ -826,7 +826,7 @@ export const questions: Question[] = [
   {
     id: "file19",
     question: "You want report.txt to be accessible under two different names in two different directories — changes made through either name should immediately be visible through the other. What command creates this second name that shares the same underlying data?",
-    answer: "ln target link_name",
+    answer: "ln report.txt report-link",
     explanation: `A hard link is like having two different labels on the exact same physical drawer in a filing cabinet. Both names point to the same stored content — there is no "original" and "copy." Editing the file through either name changes both immediately, because they are the same thing viewed from different angles. The content only disappears when every single label pointing to it is removed.
 
 ## Technical ln without the -s flag creates a hard link: a new directory entry (a name-to-inode mapping in the filesystem's directory structure) that points to the same inode (the filesystem's internal metadata record containing file size, permissions, timestamps, and pointers to data blocks) as an existing file. Hard links are indistinguishable from the original — there is no "source" and "link"; both entries are equally valid names for the same data. The inode's hard link count (visible as the second column in ls -l output) increments with each new hard link. The data blocks are only freed when the link count drops to zero and no process has the file open. Hard link limitations: they cannot span filesystems (both names must be on the same mounted filesystem), they cannot link directories (to prevent filesystem loops), and unlike symlinks they do not show a -> target in ls output. Hard links are used by backup tools (like rsync --link-dest) to efficiently store multiple incremental backups without duplicating unchanged files.
@@ -846,7 +846,7 @@ export const questions: Question[] = [
   {
     id: "file20",
     question: "After creating a hard link to report.txt, you want to verify that two directory entries now share the same underlying data. What command shows the hard link count for a file?",
-    answer: "ls -l filename",
+    answer: "ls -l report.txt",
     explanation: `When you list files in the detailed view, there's a number in the second column that tells you how many names point to this file's data. Normally that number is 1 — one name, one file. After creating a hard link, that number becomes 2, confirming that two different names now both lead to the same stored content. It's like a library book that has two catalog cards filed under different subject headings, both pointing to the same physical book on the shelf.
 
 ## Technical The -l flag (long format) in ls displays seven columns per entry; the second column is the hard link count — the number of directory entries (name-to-inode mappings) that reference this file's inode. For a regular file with no additional hard links, this count is 1. Each ln target link_name call that creates a hard link increments this count by 1. For directories, the link count includes the directory itself (via its .) and any subdirectories (each subdirectory contains a .. entry pointing to the parent's inode), so a directory with two subdirectories shows a link count of 4 (the directory entry, its own ., and two .. entries from its children). The -i flag (inode) adds the inode number as the first column — two files with identical inode numbers are hard links to the same data, regardless of their names or locations. The inode number is the most definitive way to identify hard links: if two entries show the same inode number, they share data blocks.
@@ -946,7 +946,7 @@ export const questions: Question[] = [
   {
     id: "file25",
     question: "You need to permanently destroy a file containing a private SSH key so that data recovery tools cannot retrieve it. What command overwrites the file's content with random data multiple times before deleting it?",
-    answer: "shred -u filename",
+    answer: "shred -u private-key.pem",
     explanation: `When you normally delete a file, the data sits on disk until something else is written over it — recovery software can often read it back. This command is like a paper shredder for digital files: it scribbles random data over the file's contents several times so the original information can no longer be recovered, then deletes the filename. It's the appropriate tool when you need to dispose of genuinely sensitive data.
 
 ## Technical shred overwrites a file's data blocks with random (or patterned) data to resist recovery. By default it makes three passes: a random pass, a second random pass, and a zero-fill pass. The -n N flag changes the pass count. The -u flag (unlink) removes the file after shredding — without -u, shred overwrites the content but leaves the (now-empty-of-sensitive-data) file in place. The -z flag appends a final zero-fill pass to make the file appear unmodified to casual inspection. Caveats: shred is less effective on modern filesystems with journaling (like ext4 — a common Linux filesystem that logs metadata changes), copy-on-write filesystems (like ZFS and Btrfs), and SSDs with wear leveling (which may not overwrite the same physical blocks). For solid-state drives or encrypted filesystems, simply deleting an already-encrypted file (via dm-crypt/LUKS — Linux's disk encryption layer) is usually more reliable. For full disk secure erasure, hdparm --security-erase or blkdiscard are more appropriate tools.
@@ -966,7 +966,7 @@ export const questions: Question[] = [
   {
     id: "view1",
     question: "You need to read through a 50,000-line /var/log/syslog interactively — scrolling forward and backward and searching for specific terms — without the entire file flooding your terminal. What command opens the file in a scrollable viewer?",
-    answer: "less filename",
+    answer: "less /var/log/syslog",
     explanation: `This command opens a file in a controlled reading environment — like a reading app rather than pasting the whole book on the floor. You see one screen at a time, can scroll up and down, and can search for words without the content scrolling away. When you're done reading, you press a key to close it and return to your normal prompt.
 
 ## Technical less is a terminal pager (a program that presents file content one screenful at a time, waiting for user input before advancing). Unlike cat, which writes all bytes to stdout immediately, less uses the terminal's alternate screen buffer (a separate display layer that vanishes when less exits, keeping your scroll history clean) and reads the file in chunks rather than loading it entirely into memory — making it practical for gigabyte-scale log files. Navigation keys: Space or f advances one screen, b goes back one screen, arrow keys scroll by line, g jumps to the first line, G jumps to the last. Search uses vi-style commands: /pattern searches forward, ?pattern searches backward, n finds the next match, N finds the previous. q quits. Key flags: -N shows line numbers in the left margin; -S disables line wrapping so wide lines must be scrolled horizontally; +G opens at the end of the file (useful for logs); +F enters follow mode (similar to tail -f) where less appends new content live — press Ctrl+C to stop following and return to interactive mode. The name is a Unix pun: the older pager was called more (shows more content), and "less is more."
@@ -988,7 +988,7 @@ export const questions: Question[] = [
   {
     id: "view2",
     question: "You received a large CSV file and want to see just the header row and the first few data rows to understand its structure without printing all 50,000 lines. What command shows only the beginning of a file?",
-    answer: "head filename",
+    answer: "head names.csv",
     explanation: `This command is like reading only the first page of a book to decide whether it's worth continuing. It shows the opening lines of a file and then stops — you never see the rest, which makes it extremely fast even on enormous files. It's the standard "quick preview" tool before committing to reading or processing an entire file.
 
 ## Technical head reads bytes from the beginning of a file and writes to stdout, stopping after the first N lines (default 10) or N bytes. It exits as soon as it has emitted the requested output, which is why it's instantaneous even on multi-gigabyte files — it never needs to read past the threshold. The -n N flag sets the number of lines (head -n 3 prints 3 lines); the -c N flag specifies bytes instead of lines (head -c 100 prints the first 100 bytes — useful for inspecting binary file magic numbers). When given multiple filenames, head prints each file's output preceded by a ==> filename <== header banner so you can distinguish them. A common pipeline pattern: command | head limits any long output to its first 10 lines, useful for previewing ls -lS output or the results of a find command.
@@ -1009,7 +1009,7 @@ export const questions: Question[] = [
   {
     id: "view3",
     question: "You want to watch /var/log/nginx/access.log in real time as new HTTP requests arrive — seeing each new line printed as it is appended to the file. What command follows a file and streams new content to your terminal live?",
-    answer: "tail filename",
+    answer: "tail -f /var/log/nginx/access.log",
     explanation: `This command starts by showing the last few lines of a file and then keeps watching — whenever the file gets new content added to the end, it immediately prints those new lines to your terminal. It's like sitting by a printer that's continuously receiving documents and reading each page as it comes out. The normal version shows the final lines and exits; the follow version stays open and never stops printing new arrivals until you press Ctrl+C.
 
 ## Technical tail prints the final N lines (default 10) of a file and then exits. The -n N flag controls the count; -n +N starts from line N rather than the end (tail -n +2 skips the first line, useful for stripping CSV headers). The critical flag is -f (follow): instead of exiting after printing the last lines, tail keeps the file open using the inotify or kqueue kernel notification mechanism (kernel subsystem that notifies programs when file events occur) and prints each new line as it is appended. The -F variant (capital F) adds filename-based retry: when a log rotation event renames the watched file and creates a new one with the same name, -F detects the rename, reopens the new file, and continues following — lowercase -f would silently continue reading the old renamed file. Piping tail -f output through grep enables live filtered monitoring: tail -f access.log | grep 'POST' shows only POST requests as they arrive.
@@ -1031,7 +1031,7 @@ export const questions: Question[] = [
   {
     id: "view4",
     question: "You want to scan /var/log/nginx/error.log and print only the lines that contain the word 'upstream' — ignoring all other lines. What command filters a file to show only matching lines?",
-    answer: "grep pattern filename",
+    answer: "grep error /var/log/nginx/error.log",
     explanation: `This command reads through a file line by line and acts as a filter — it keeps only the lines that contain the word or phrase you're looking for and discards everything else. Instead of reading thousands of log lines, you instantly see only the ones relevant to your investigation. You can also feed the output of other commands into it as a second stage of filtering.
 
 ## Technical grep (its name derives from the ed editor command g/re/p — globally search for a regular expression and print) reads input line by line and prints each line that matches a pattern. By default the pattern is a BRE (basic regular expression — a pattern syntax where most special characters must be backslash-escaped to activate their meaning). The -E flag switches to ERE (extended regular expression — where | and + work without backslashes), and -F uses fixed strings (disabling regex entirely, treating the pattern as a literal string). Key flags: -i (case-insensitive matching); -v (invert — print lines that do NOT match, useful for removing comment lines); -r or -R (recursive — search all files under a directory); -n (show line numbers with each match); -c (count matches rather than printing them); -l (print only the filenames containing matches); -w (whole-word — pattern must be surrounded by word boundaries); -A N, -B N, -C N (print N lines after, before, or around each match for context). Always quote patterns that contain spaces or shell-special characters.
@@ -1053,7 +1053,7 @@ export const questions: Question[] = [
   {
     id: "view5",
     question: "You want to know exactly how many lines are in /etc/passwd and also see the total word count and byte count for the file. What command reports all three counts at once?",
-    answer: "wc filename",
+    answer: "wc -l /etc/passwd",
     explanation: `This command counts things in a file and reports back three numbers: how many lines it has, how many words, and how many bytes. It's a quick measurement tool — like a ruler for text files. The most common use is counting lines, which answers questions like "how many user accounts are defined?" or "how many errors did today's log produce?"
 
 ## Technical wc (word count) reads input and maintains three counters: newline count (lines — incremented each time a newline character is encountered), word count (incremented for each whitespace-delimited sequence of characters — a "word" is any run of non-whitespace), and byte count. Output format: three numbers followed by the filename, in the order lines, words, bytes. Flags select a subset: -l (lines only), -w (words only), -c (bytes only), -m (character count — differs from byte count for multi-byte UTF-8 text where one character may be 2–4 bytes). When multiple filenames are passed, wc prints individual counts for each plus a total row. The most common pattern is piping into wc -l: grep ERROR app.log | wc -l counts how many error lines a log contains. grep -c pattern file is equivalent but faster for simple cases.
@@ -1075,7 +1075,7 @@ export const questions: Question[] = [
   {
     id: "view6",
     question: "You have a file of city names in random order and want to view them arranged alphabetically from A to Z, without modifying the original file. What command sorts the lines of a file and prints the result?",
-    answer: "sort filename",
+    answer: "sort cities.txt",
     explanation: `This command reads through a file and rearranges all the lines into order before printing them. The file itself is never changed — it's like spreading index cards on a table, sorting them, and reading them out in sequence without rewriting any cards. If you want to keep the sorted version, you redirect the output to a new file.
 
 ## Technical sort reads lines from a file (or stdin) and writes them to stdout in sorted order. The default sort order is a byte-wise lexicographic comparison using the current locale's collation rules — effectively alphabetical for ASCII text. Key flags: -n (numeric — treats the sort key as a number so 10 sorts after 9, not after 1 as it would in lexicographic order); -r (reverse — descending instead of ascending); -k N (key — sorts by the Nth whitespace-delimited field instead of the whole line); -t CHAR (field separator — like cut's -d, changes the field delimiter for -k); -u (unique — de-duplicates after sorting, equivalent to sort | uniq); -h (human-numeric — understands K/M/G suffixes for sizes from du -h output); -V (version — sorts version strings like v1.2.10 correctly, where 10 > 2). sort reads the entire input before printing, requiring memory proportional to input size; use -S to allocate more RAM (-S 2G) or --parallel=4 for multi-core sorting of huge files.
@@ -1096,7 +1096,7 @@ export const questions: Question[] = [
   {
     id: "view7",
     question: "You have a sorted list of IP addresses and want to collapse consecutive duplicate entries into single lines, also showing how many times each address appeared. What command removes adjacent duplicate lines and can optionally count them?",
-    answer: "uniq filename",
+    answer: "uniq ips-sorted.txt",
     explanation: `This command removes repeated lines that appear one after another — if the same entry appears three times in a row, it keeps only one copy. The counting option turns it into a frequency report: instead of just removing duplicates, it tells you how many times each line appeared. The important catch is that it only handles consecutive duplicates, so you almost always sort the data first to bring identical lines together.
 
 ## Technical uniq reads input and compares each line with the previous one, collapsing consecutive identical lines into a single output line. This adjacent-only behavior is why sort | uniq is the canonical de-duplication pipeline: sort brings all identical lines together so uniq can collapse them. The alternative sort -u (sort with unique flag) performs both operations internally and is slightly faster for simple cases. Key flags: -c (count — prepends the occurrence count as a right-aligned number, producing output like "   3 value"); -d (duplicates only — prints only lines that appeared more than once, omitting singletons); -u (unique only — prints only lines that appeared exactly once); -i (case-insensitive comparison). The classic frequency-analysis pipeline is sort file | uniq -c | sort -rn | head, which answers "what are the 10 most common entries?" for any line-based data.
@@ -1117,7 +1117,7 @@ export const questions: Question[] = [
   {
     id: "view8",
     question: "You want to display deploy.sh with every line preceded by its line number so you can reference specific lines when discussing the script with a colleague. What command adds line numbers to a file's output?",
-    answer: "nl filename",
+    answer: "nl deploy.sh",
     explanation: `This command acts like a word processor that adds line numbers in the margin before printing. The file itself is not changed — the numbers are only part of the display. This makes it easy to say "the problem is on line 42" when reviewing code or a configuration file with someone else.
 
 ## Technical nl (number lines) prefixes each non-blank line with its line number, right-aligned in a 6-character column followed by a tab. The default body numbering style (-bt — body, non-empty) skips blank lines: blank lines pass through unnumbered, so the line count reflects only content lines. The -ba flag (body, all) numbers every line including blanks. The -nrz flag uses zero-padded right-justified numbers (000001, 000002). nl supports a concept of logical pages (sections separated by \: markers) where headers, bodies, and footers can have independent numbering styles (-h, -b, -f flags). For simpler use, cat -n always numbers every line (including blanks) and is often more convenient. The grep -n flag adds line numbers to grep output for matched lines only. In less, the -N flag adds inline line numbers while browsing.
@@ -1138,7 +1138,7 @@ export const questions: Question[] = [
   {
     id: "view9",
     question: "A shell script you copied from a Windows machine is failing mysteriously. You suspect it contains invisible carriage return characters causing the problem. What command reveals all non-printable characters — showing line endings, tabs, and control characters explicitly?",
-    answer: "cat -A filename",
+    answer: "cat -A script.sh",
     explanation: `Normally you can only see the text in a file, not the invisible control characters that surround it. This option is like switching on an ultraviolet light that makes hidden marks visible: every line ending appears as a dollar sign, tabs appear as ^I, and Windows-style carriage returns appear as ^M. This is invaluable for diagnosing "the script looks fine but doesn't work" problems.
 
 ## Technical The -A flag (all) is equivalent to -vET, enabling three separate display enhancements: -v (non-printing) renders non-printable control characters as ^X notation (e.g., ^I for tab, ^M for carriage return); -E (end) appends a dollar sign $ at the end of every line, making the newline character visible; -T (tabs) renders tab characters as the two-character sequence ^I. A file edited on Windows uses CRLF line endings (carriage return U+000D followed by linefeed U+000A), shown as ^M$ in cat -A output. Linux scripts expect only LF endings, so the ^M character becomes part of the last word on each line — bash reads it as a literal character in the command name, causing "command not found" errors for what appears to be a valid command. Fix Windows line endings with dos2unix filename or sed -i 's/\r//' filename. The xxd command provides a hex dump for deeper binary inspection.
@@ -1158,7 +1158,7 @@ export const questions: Question[] = [
   {
     id: "view10",
     question: "You have an append-only log file where the newest entries are at the bottom, and you want to read it with the most recent entry first so you don't have to scroll to the end. What command reverses the line order of a file's output?",
-    answer: "tac filename",
+    answer: "tac access.log",
     explanation: `This command reads a file from top to bottom but prints the lines in the opposite order — the last line comes out first, the first line comes out last. It's like reading a stack of papers from the bottom instead of the top. It's useful for logs where newer events are appended at the end and you want to see the most recent entries without scrolling past thousands of old ones.
 
 ## Technical tac (cat spelled backwards) reads its entire input into memory (or a temporary file for large inputs), then writes the lines in reverse order. It reverses line order only — the characters within each line are unchanged. This is distinct from rev, which reverses the characters within each line but preserves line order. tac works on files or stdin: command | tac reverses any command's output. A common use is tac access.log | head -20 to see the 20 most recent log entries. Note that tac must read the entire file before producing any output, so it is unsuitable for continuously growing files (use tail -f instead). For large files, tac may use temporary disk space if the data doesn't fit in memory.
@@ -1179,7 +1179,7 @@ export const questions: Question[] = [
   {
     id: "view11",
     question: "You need to email a 1.5GB database dump but email has a 25MB attachment limit. What command breaks it into multiple smaller pieces that can later be reassembled?",
-    answer: "split filename",
+    answer: "split -b 20M database.dump",
     explanation: `This command is like cutting a long document into chapters for easier handling — each piece gets a sequential name like piece_aa, piece_ab, and so on. You can specify how big each piece should be. When you're ready to put it back together, you concatenate all the pieces in order and the original content is restored exactly.
 
 ## Technical split divides a file into multiple output files called chunks. The first argument is the source file; the optional second argument is a prefix for the output filenames (default: x). Default behavior: 1,000 lines per chunk, named xaa, xab, xac... using alphabetically sequential two-letter suffixes. Key flags: -b SIZE (byte mode — each chunk is at most SIZE bytes; SIZE can use suffixes like K, M, G); -l N (line mode — N lines per chunk); -d (use numeric suffixes: 00, 01, 02 instead of aa, ab, ac); -a N (suffix length — -a 3 produces three-character suffixes, allowing more chunks before exhaustion). To reassemble, use cat with a glob in alphabetical order: cat piece_* > restored.bin — alphabetical order of the suffixes matches the correct assembly sequence. Always verify the reassembled file with a checksum: sha256sum original.bin restored.bin should produce identical hashes.
@@ -1219,7 +1219,7 @@ export const questions: Question[] = [
   {
     id: "view13",
     question: "You found several occurrences of 'connection refused' in /var/log/app/server.log and need to know their exact line numbers so you can jump to each one in your text editor. What flag adds line numbers to grep's output?",
-    answer: "grep -n pattern filename",
+    answer: "grep -n \"connection refused\" /var/log/app/server.log",
     explanation: `Normally when grep finds a matching line it just prints the line itself — you see the content but not where in the file it lives. Adding this option is like finding matching paragraphs in a book and having the page numbers printed next to each one, so you can flip directly to the right spot.
 
 ## Technical The -n flag (line number) prepends the line number followed by a colon to each grep output line, in the format linenumber:matched-line. Line numbering starts at 1 and matches the line's position in the original file regardless of how many lines matched. This makes it easy to navigate to specific matches in an editor (vim +42 filename jumps to line 42) or to share the exact location of a finding. The -n flag works with all other grep flags: grep -ni 'error' app.log shows case-insensitive matches with line numbers; grep -n -A 3 'exception' stack.log shows line numbers plus 3 lines of context after each match. When grep receives multiple filenames, the format becomes filename:linenumber:matched-line, providing both file and position. The grep -rn pattern directory combination is the standard way to find all occurrences of a string in a project with exact locations.
@@ -1259,7 +1259,7 @@ export const questions: Question[] = [
   {
     id: "view15",
     question: "You want to share a snippet of /etc/ssh/sshd_config with a colleague via a chat message and need each line to have a reference number prepended. What command displays a file with sequential numbers at the start of every line?",
-    answer: "cat -n filename",
+    answer: "cat -n /etc/ssh/sshd_config",
     explanation: `This command is like printing a legal document with line numbers in the margin. Every single line — even blank ones — gets a sequential number prepended before the content. The file itself is never altered; the numbers only appear in the terminal output. This makes it easy for two people to discuss a file and say "look at line 23" rather than "it's about halfway down."
 
 ## Technical The -n flag (number) prepends a right-aligned line number and a tab to every output line, starting at 1 and incrementing for every line including blank lines. The format is consistent: a 6-character right-aligned number, a tab, then the line content. This is the simplest way to add line numbers to file output. The variant -b (number non-blank) works like nl's default — it numbers only non-blank lines, leaving blank lines unnumbered. cat -n is slightly simpler than nl for the most common use case but less configurable: nl supports different numbering styles for header, body, and footer sections, and zero-padded numbers. For a scrollable numbered view, less -N filename adds inline line numbers while browsing. To permanently add line numbers to a file, use awk '{print NR": "$0}' or nl and redirect the output.
@@ -1278,7 +1278,7 @@ export const questions: Question[] = [
   {
     id: "view16",
     question: "You have a list of deployment timestamps and want to display them from newest to oldest — the most recent timestamp first and the oldest last. What flag reverses the sort order?",
-    answer: "sort -r filename",
+    answer: "sort -r timestamps.txt",
     explanation: `Normally sorting arranges items from smallest to largest, or A to Z. Adding this option flips the direction entirely — the largest value or the last letter comes first. It's like reading a sorted list from the bottom up rather than the top down. This is especially useful for timestamps and numbers where "biggest first" is what you care about.
 
 ## Technical The -r flag (reverse) inverts whatever sort order is currently active. Applied to the default lexicographic (alphabetical) sort, -r produces Z-to-A ordering. Combined with -n (numeric sort), sort -nr produces descending numerical order — largest number first, used in pipelines like du -sh * | sort -hr | head for "top-N biggest." Combined with -h (human-readable size sort), sort -hr correctly reverses size-ordered output where 1G > 999M > 500K. The -r flag does not change what field or column is used for sorting — only the direction. For finding the top-N items, sort -r | head N is the standard pipeline. Version-aware reverse sort uses sort -Vr. Note that the -k field selection and -t delimiter flags combine with -r: sort -t: -k3 -nr reverses a numeric sort on the third colon-delimited field.
@@ -1380,7 +1380,7 @@ export const questions: Question[] = [
   {
     id: "perm1",
     question: "You have a shell script deploy.sh that you need everyone to be able to run, but only you (the owner) should be able to edit. What octal permission value sets owner to full access, and group/others to read and execute only?",
-    answer: "chmod 755 filename",
+    answer: "chmod 755 deploy.sh",
     explanation: `Every file on Linux has three groups of people who might try to access it: you (the owner), your team (the group), and everyone else (others). For each group, three things can be allowed or denied: reading, writing, and executing. You express this as a three-digit code where each digit encodes what one group is allowed to do. This command sets those permissions in one step using that numeric code.
 
 ## Technical chmod (change mode) modifies the permission bits stored in a file's inode (the filesystem's internal metadata record). In the octal (base-8) permission scheme, three bits encode permissions for each of three classes — user/owner (u), group (g), and others (o). Each bit has a value: read (r) = 4, write (w) = 2, execute (x) = 1. You add the values for the permissions you want to produce one octal digit per class. The permission value 755 means: owner = 7 (4+2+1 = rwx — read, write, execute), group = 5 (4+0+1 = r-x — read and execute), others = 5 (r-x). The nine permission bits are displayed by ls -l as -rwxr-xr-x. Common permission values: 644 (-rw-r--r--) for normal data files where only the owner edits; 755 for scripts and public directories; 600 (-rw-------) for SSH private keys and sensitive files only the owner should read; 700 for private directories.
@@ -1422,7 +1422,7 @@ export const questions: Question[] = [
   {
     id: "perm3",
     question: "You are trying to run a script and getting 'Permission denied'. You want to inspect the current permission settings on deploy.sh to understand who can read, write, and execute it. What command shows a file's detailed permissions?",
-    answer: "ls -l filename",
+    answer: "ls -l script.sh",
     explanation: `When a file refuses to open or run, the first thing to check is who has what kind of access. This command shows each file on its own line with a ten-character code on the left that tells you everything about its access settings — whether it's a file or directory, and exactly what the owner, group members, and everyone else are allowed to do with it.
 
 ## Technical The -l flag (long format) in ls displays the permission string as the first column, in the format TypeOwnerGroupOthers. The first character is the file type: - for regular file, d for directory, l for symbolic link, c for character device, b for block device, p for named pipe. The remaining nine characters are three triplets of rwx (read/write/execute) for the owner, group, and others respectively. A - in any position means that permission is absent. For example, -rw-r--r-- means: regular file; owner has read+write; group has read-only; others have read-only. The -d flag is used with directories to show the directory entry itself (ls -ld dir/) rather than its contents. The + symbol after the permission string indicates additional ACLs (Access Control List entries — extra per-user or per-group permissions beyond the standard three classes).
@@ -1442,7 +1442,7 @@ export const questions: Question[] = [
   {
     id: "perm4",
     question: "You just wrote a shell script called setup.sh. When you try to run it with ./setup.sh you get 'Permission denied' even though you own the file. What command adds the execute permission so you can run it?",
-    answer: "chmod +x filename",
+    answer: "chmod +x setup.sh",
     explanation: `A text file containing shell commands is just a text file until you mark it as executable. Without the execute permission, the operating system won't run it as a program, even if you wrote it and own it. Adding this permission is like stamping a "licensed to run" label on the script — after that, typing ./script.sh actually runs it.
 
 ## Technical chmod +x adds the execute (x) bit for all three permission classes (owner, group, others) relative to the current umask — effectively equivalent to a+x (all plus execute). The x bit being set changes a file's type from data to executable in the kernel's eyes. When you run ./script.sh, the kernel reads the file's first two bytes: if they are #! (shebang), the rest of the line specifies the interpreter (e.g., #!/bin/bash → runs bash with the script as input). Without a shebang, the shell typically tries to execute it as shell commands. Without the x bit, the kernel returns EACCES (permission denied) before even checking the shebang. To grant execute only to the owner: chmod u+x script.sh. To revoke execute from all: chmod -x script.sh. Absolute equivalent in octal: if the file was 644 (-rw-r--r--), chmod +x produces 755 (-rwxr-xr-x).
@@ -1588,7 +1588,7 @@ export const questions: Question[] = [
   {
     id: "perm11",
     question: "You have correct ownership and chmod permissions on a file but still cannot delete or modify it. You suspect a filesystem-level attribute is blocking you. What command reveals these hidden filesystem attributes on a file?",
-    answer: "lsattr filename",
+    answer: "lsattr config.php",
     explanation: `Beyond the normal read/write/execute permissions that chmod controls, Linux filesystems can attach a second layer of special properties to files that affect how they behave — properties that even the root administrator cannot override without explicitly removing them. This command reveals those hidden properties so you can see if one of them is the reason a file is resisting your changes.
 
 ## Technical lsattr (list attributes) reads and displays the ext2/ext3/ext4 filesystem extended attributes (also called file flags — kernel-level properties stored in the inode that modify file behavior beyond standard permission bits). These attributes are separate from POSIX permissions and are controlled by chattr (change attributes). The output is a sequence of letters where each represents a specific attribute: i (immutable — the file cannot be modified, deleted, renamed, or hard-linked, even by root); a (append-only — only appends are allowed, no overwrites or deletion, useful for log files); e (extents — data stored using extent maps, typically set by default on modern filesystems); c (compressed); s (secure deletion); u (undeletable — content preserved on deletion). The -d flag lists the directory entry itself rather than its contents. The -R flag recurses through directory trees.
@@ -1649,7 +1649,7 @@ export const questions: Question[] = [
   {
     id: "perm14",
     question: "After running setfacl on /var/www/html/config.php, you want to see the complete list of who has what access to this file — including any extra ACL entries beyond the standard owner/group/others. What command displays the full ACL?",
-    answer: "getfacl filename",
+    answer: "getfacl /var/www/html/config.php",
     explanation: `When a file has the standard three-way permissions plus extra individual access rules, the normal directory listing only shows a hint (a plus sign) that extra rules exist. This command reads out the complete access list — every user and group with their specific permissions — so you can see exactly who can do what with the file. It's like reading the full guest list for a secured room rather than just the general admission sign.
 
 ## Technical getfacl (get file access control list) reads and displays the ACL for one or more files in a structured format. The output format includes comment lines with the filename, owner, and group, followed by ACL entries: user:: (base entry for owner), user:NAME: (named user entry), group:: (base entry for owning group), group:NAME: (named group entry), mask:: (effective permission mask — limits the maximum permissions of all named user and group entries, and the owning group entry), and other:: (permissions for all other users). A + symbol in ls -l output indicates ACLs are present; getfacl reveals them in full. The -d flag shows default ACLs (inherited by files created inside a directory). The -R flag recursively lists ACLs for all files in a directory tree. To save an ACL snapshot for later restoration: getfacl file.txt > acl-backup.txt; restore with setfacl --restore=acl-backup.txt.
@@ -2363,7 +2363,7 @@ export const questions: Question[] = [
   {
     id: "proc9",
     question: "You want to find the PID of every running nginx process to send them all a reload signal — but you don't want to parse the full ps aux output manually. What command searches running processes by name and prints only their PIDs?",
-    answer: "pgrep process_name",
+    answer: "pgrep nginx",
     explanation: `Instead of listing every running process and visually scanning for the one you want, this command does the searching for you. You give it a name to look for, and it prints back only the process ID numbers of the matching processes — one per line, ready to be used in the next command. It's the efficient way to find PIDs when you know what you're looking for.
 
 ## Technical pgrep (process grep) searches the process list for processes whose name matches the specified pattern (by default, a substring match against the first 15 characters of the executable name) and prints matching PIDs to stdout, one per line. This is equivalent to ps aux | grep name | awk '{print $2}' but more precise: pgrep does not match itself in the output (unlike grep which would appear in its own result). Key flags: -f matches against the full command line instead of just the executable name — essential when multiple processes share the same binary (python, java, node) and you need to identify a specific script; -l prints PID and name; -a prints PID and full command line; -u USER filters by owner; -n selects only the newest matching process; -o selects only the oldest. The exit code is 1 if no matches are found, 0 if at least one match exists — useful in if-conditions to test whether a service is running.
@@ -2385,7 +2385,7 @@ export const questions: Question[] = [
   {
     id: "proc10",
     question: "All Firefox browser processes have become unresponsive and you want to terminate every one of them at once without looking up individual PIDs. What command sends a signal to all processes matching a name pattern?",
-    answer: "pkill process_name",
+    answer: "pkill -9 firefox",
     explanation: `Instead of finding PIDs one by one and then killing each individually, this command combines the search and the kill in one step — it finds every process matching the name you give and signals them all simultaneously. It's the "close all windows" approach for command-line processes.
 
 ## Technical pkill uses the same matching engine as pgrep but instead of printing PIDs, it sends a signal to all matching processes. The default signal is SIGTERM (15 — polite shutdown). Use -SIGNAL or -signal_number to send a different signal: pkill -9 firefox sends SIGKILL (force terminate). Key flags (same as pgrep): -f matches full command line; -u USER filters by owner; -n targets only newest match; -o targets only oldest match. The -e flag echoes which processes were signaled. The -c flag counts matches without signaling. CAUTION: a broad pattern can kill more processes than intended — for example, pkill ssh would match sshd, ssh-agent, and your current ssh session simultaneously. Best practice: always run pgrep PATTERN first to preview exactly what would be matched before running pkill PATTERN. The similar killall command requires an exact executable name match, which is slightly safer but less flexible.
@@ -2625,7 +2625,6 @@ export const questions: Question[] = [
 ## Technical \`ping\` sends ICMP (Internet Control Message Protocol) Echo Request datagrams to the target host and waits for Echo Reply responses. Each reply line shows round-trip time (RTT) in milliseconds and the TTL (Time To Live — the number of router hops the packet was allowed before expiring). On Linux, \`ping\` runs indefinitely without \`-c\`; use \`-c N\` to send exactly N packets and stop. Non-zero exit code means 100% packet loss. Cloud hosts frequently block ICMP at the firewall level, so no reply does not always equal no service.
 
 ## When to use
-
 - When a server stops responding and you need to know whether the network path itself is broken.
 - When you want the fastest possible layer-3 reachability check from the command line.
 - When diagnosing step by step: ping your router → ping 8.8.8.8 → ping a hostname, narrowing the failure to LAN, internet, or DNS.
@@ -2650,7 +2649,7 @@ export const questions: Question[] = [
 
 ## Technical \`ip addr show\` (abbreviated \`ip a\`) prints each network interface with its flags in angle brackets (\`UP\`, \`LOWER_UP\`, \`BROADCAST\`), its hardware MAC address, and all assigned IPv4 (\`inet\`) and IPv6 (\`inet6\`) addresses in CIDR notation. Interfaces include physical Ethernet (\`eth0\`, \`enp3s0\`), wireless (\`wlan0\`, \`wlp2s0\`), loopback (\`lo\`, always 127.0.0.1), VPN tunnels (\`tun0\`), and container bridges (\`docker0\`). \`ip\` supersedes the deprecated \`ifconfig\` command. Use \`ip -br addr\` for a compact one-line-per-interface summary.
 
-**When to use:**
+## When to use
 - When you need to know the machine's LAN IP before SSH-ing in from another device.
 - When confirming a DHCP lease was obtained after connecting to a new network.
 - When verifying a VPN interface (\`tun0\` or \`wg0\`) came up with the expected address.
@@ -2676,7 +2675,6 @@ export const questions: Question[] = [
 ## Technical \`wget\` (web get) is a non-interactive file downloader supporting HTTP, HTTPS, and FTP. By default it saves to the current directory using the URL's last path component as the filename. Key flags: \`-c\` continue/resume a partial download; \`-O NAME\` save with a different filename; \`-O -\` print to stdout (mirrors \`curl\`'s default); \`-q\` quiet (no progress); \`--limit-rate=1m\` throttle; \`-r --level=N\` recursive mirror. Unlike \`curl\` (which prints to stdout by default), \`wget\` always saves to disk unless you use \`-O -\`.
 
 ## When to use
-
 - When downloading ISOs, release tarballs, or large single files where resume-on-interruption matters.
 - When writing a script that must save a file without piping through stdout.
 - When mirroring a documentation subtree for offline reading.
@@ -2702,7 +2700,6 @@ export const questions: Question[] = [
 ## Technical \`scp\` (Secure Copy) tunnels file transfers over the SSH protocol. Syntax: \`scp SOURCE DEST\` where either side can be \`user@host:/path\` — the colon signals a remote location. If the destination ends in \`/\` or is an existing directory, the file keeps its original name inside that directory. Authentication reuses your SSH key pair (\`~/.ssh/\`). Key flags: \`-r\` recursive (copy a whole directory tree); \`-P PORT\` non-standard SSH port (capital P — lowercase \`-p\` is for preserved timestamps); \`-i ~/.ssh/keyfile\` select a specific key. Modern OpenSSH recommends \`rsync\` or \`sftp\` for new workflows, but \`scp\` remains universally available.
 
 ## When to use
-
 - When pushing a freshly built binary or config file to a production server.
 - When pulling log files off a remote box for local analysis.
 - When you need a one-shot file transfer and don't need rsync's delta-compression or resume.
@@ -2728,7 +2725,6 @@ export const questions: Question[] = [
 ## Technical \`ssh\` (Secure Shell) establishes an encrypted TCP connection (default port 22) to the remote host using public-key or password authentication. Once authenticated, you receive an interactive shell running on the remote machine. Key pair setup: \`ssh-keygen -t ed25519\` creates a key pair; \`ssh-copy-id user@host\` installs your public key in \`~/.ssh/authorized_keys\` on the remote, enabling password-free login. Key flags: \`-p PORT\` non-default port (lowercase — unlike scp's capital \`-P\`); \`-i ~/.ssh/keyfile\` specific key; \`-X\` X11 GUI forwarding; \`-L 8080:localhost:80\` local port tunnel; \`-J jumphost user@target\` hop through a bastion. Persistent config lives in \`~/.ssh/config\`.
 
 ## When to use
-
 - When administering a server remotely to install packages, restart services, or inspect logs.
 - When running a quick one-off command without starting a full interactive session: \`ssh user@host 'systemctl status nginx'\`.
 - When setting up a port forward to access a remote-only web UI from your laptop.
@@ -2754,7 +2750,6 @@ export const questions: Question[] = [
 ## Technical \`netstat -tlnp\` flag breakdown: \`-t\` TCP only; \`-l\` listening sockets only (drops ESTABLISHED connections from the output); \`-n\` numeric — show raw IPs and port numbers instead of resolving to hostnames and service names (much faster); \`-p\` show the PID and program name owning each socket (requires sudo to see other users' processes). The modern replacement is \`ss -tlnp\` (Socket Statistics), which reads directly from the kernel via netlink and is faster. The \`Local Address\` column: \`0.0.0.0:80\` means listening on all interfaces; \`127.0.0.1:80\` means loopback only. \`netstat\` comes from the deprecated \`net-tools\` package.
 
 ## When to use
-
 - When a service fails to start with "Address already in use" and you need to identify the occupying process.
 - When auditing which services a new server is exposing to the public internet.
 - When confirming a newly started daemon successfully bound to its expected port.
@@ -2780,7 +2775,6 @@ export const questions: Question[] = [
 ## Technical \`nslookup\` (Name Server Lookup) queries the configured DNS resolver (from \`/etc/resolv.conf\`) and prints the resolved IP(s) along with the server that answered. To query a specific DNS server instead of the default: \`nslookup api.example.com 8.8.8.8\`. Record type flags: \`-type=mx\` (mail exchangers), \`-type=txt\` (SPF/DMARC/verification), \`-type=ns\` (authoritative name servers), \`-type=ptr\` (reverse lookup). If the query times out with "no servers could be reached," your local DNS resolver is broken. Modern preferred alternatives are \`dig\` (more detail) and \`host\` (terser).
 
 ## When to use
-
 - When confirming whether a DNS record change has propagated by querying both your ISP's resolver and \`8.8.8.8\`.
 - When diagnosing "is this a DNS problem or a routing problem?" — a successful \`nslookup\` proves DNS works.
 - When looking up MX records to trace why email delivery is failing.
@@ -2806,7 +2800,6 @@ export const questions: Question[] = [
 ## Technical \`ip route show\` (shortened to \`ip r\`) prints the kernel's routing table. The critical entry is \`default via X dev Y\` — the gateway IP and outgoing interface used for all non-matched traffic (i.e., the internet). Other common entries: \`192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.42\` (the directly connected LAN). \`metric\` is the cost — lower wins when two routes match the same destination. \`ip route get 8.8.8.8\` answers the more precise question "exactly which route would the kernel pick for this IP?" The legacy equivalent is \`route -n\`.
 
 ## When to use
-
 - When a server can reach LAN hosts but not the internet, confirming the default route is absent or wrong.
 - When diagnosing why a VPN connection routes some traffic incorrectly.
 - When verifying a static route was added successfully.
@@ -2832,7 +2825,6 @@ export const questions: Question[] = [
 ## Technical \`telnet HOST PORT\` opens a raw TCP connection. If it prints "Connected to host" the port is reachable; "Connection refused" means nothing is listening; silence (hanging) means a firewall is silently dropping the packets. \`telnet\` as a login protocol is obsolete (unencrypted); this port-test use case is its only remaining value. To quit: \`Ctrl+]\` then type \`quit\`. The modern cleaner tool is \`nc -zv HOST PORT\`: \`-z\` zero-IO (don't send data), \`-v\` verbose (print result), exits 0 on success so it is script-safe. Always add \`-w SEC\` to nc to bound the wait time.
 
 ## When to use
-
 - When you need to verify a firewall rule opened port 9090 without writing any code.
 - When manually probing an HTTP or SMTP server to send raw protocol commands for debugging.
 - When confirming a port-forward or reverse proxy is routing correctly end-to-end.
@@ -2858,7 +2850,6 @@ export const questions: Question[] = [
 ## Technical \`ss -antp\` flag breakdown: \`-a\` ALL sockets (not just LISTEN); \`-n\` numeric (no DNS/service-name resolution — much faster); \`-t\` TCP; \`-p\` process (requires sudo). This shows every TCP state: LISTEN, ESTABLISHED (active connection), TIME_WAIT (recently closed — normal in large volume), CLOSE_WAIT (remote side closed but app hasn't — often a bug), SYN_SENT, SYN_RECV. Filter by state: \`ss -ntp state established\`. Filter by port: \`ss -ntp 'dport = :443'\`. Count per state: \`ss -ant | awk '{print $1}' | sort | uniq -c\`. \`ss\` is faster than \`netstat\` because it reads from the kernel directly via netlink rather than parsing \`/proc/net/\`.
 
 ## When to use
-
 - When investigating who is currently connected to your server during an incident.
 - When load-testing and counting concurrent ESTABLISHED connections to verify capacity.
 - When hunting for leaked CLOSE_WAIT sockets, which indicate an application is not closing connections properly.
@@ -2885,7 +2876,6 @@ export const questions: Question[] = [
 ## Technical \`ping -c N\` sends exactly N packets and exits. Exit code is 0 if at least one reply was received (host up), non-zero if all packets were lost (host down) — making it directly usable in shell conditionals: \`ping -c 1 -W 2 host >/dev/null 2>&1 && echo up || echo down\`. The \`-W SEC\` flag sets a per-packet timeout (default 10 s — always set this in scripts to bound total run time). \`-w SEC\` is a whole-operation deadline. \`-i SEC\` controls the inter-packet interval (root required below 0.2 s). \`-q\` suppresses per-packet output and prints only the final summary, which is cleaner in scripts.
 
 ## When to use
-
 - When writing a health-check script that must terminate with a pass/fail exit code.
 - When measuring a baseline latency sample (e.g., 100 pings with \`-q\` for clean statistics).
 - When looping over a list of hosts checking reachability: \`for h in web1 db1 cache1; do ...\`.
@@ -2912,7 +2902,6 @@ export const questions: Question[] = [
 ## Technical \`host NAME\` performs a forward lookup returning A (IPv4), AAAA (IPv6), and MX (mail) records in a few lines. \`host IP\` performs a reverse lookup (PTR record). Both use the resolvers in \`/etc/resolv.conf\` unless you specify a server with \`host NAME @RESOLVER\`. Record type flags: \`-t MX\` mail, \`-t TXT\` text, \`-t NS\` name servers, \`-t CNAME\` aliases, \`-t SOA\` zone info, \`-a\` all types, \`-v\` verbose. The \`host\` command is part of the \`dnsutils\` (Debian/Ubuntu) or \`bind-utils\` (Fedora/RHEL) package. Reverse lookups only succeed if the IP owner published a PTR record.
 
 ## When to use
-
 - When you see an unknown IP in logs and need its hostname for attribution or geolocation.
 - When performing a quick sanity check that a domain resolves to the expected IP after a DNS change.
 - When verifying MX records are correct after migrating email providers.
@@ -2939,7 +2928,6 @@ export const questions: Question[] = [
 ## Technical \`traceroute\` sends UDP probes (by default) with progressively increasing TTL values. TTL=1 expires at the first router, which sends back an ICMP Time Exceeded — revealing its IP and round-trip time. TTL=2 reaches hop 2, and so on. Each hop shows three RTT measurements. \`*\` means the hop didn't respond (commonly firewalled). Important: a slow hop is only a real problem if subsequent hops are also slow — a single slow hop that's followed by fast ones is just rate-limiting its ICMP responses. The modern interactive tool \`mtr\` keeps running and tracks per-hop loss and latency over time. Flags: \`-n\` skip DNS; \`-T -p 443\` TCP mode (bypasses firewalls that block UDP); \`-I\` ICMP mode.
 
 ## When to use
-
 - When diagnosing slow or intermittent connectivity by identifying the specific hop introducing latency or loss.
 - When proving that packet loss occurs on the ISP's network rather than your own.
 - When tracing a route after a BGP change to confirm traffic no longer goes through an unexpected country.
@@ -2966,7 +2954,6 @@ export const questions: Question[] = [
 ## Technical \`ip link set IFACE up\` and \`ip link set IFACE down\` are Layer-2 (link-layer) operations that enable or disable an interface administratively. Distinct from Layer-3 (\`ip addr\`) operations: you can have an interface that is UP with no IP address. The flags in \`ip link show\` output reveal two orthogonal states: \`UP\` (administratively enabled — you set this) and \`LOWER_UP\` (physical link detected — set by hardware/driver). \`UP\` without \`LOWER_UP\` means software-enabled but no physical signal. Other \`ip link set\` sub-commands: \`mtu N\` (change MTU), \`address MAC\` (change MAC — must be DOWN first), \`name NEWNAME\` (rename interface). Changes are runtime-only; for persistence use NetworkManager, systemd-networkd, or Netplan.
 
 ## When to use
-
 - When an interface gets stuck and cycling it down/up forces the driver to reset.
 - When changing the MTU for jumbo frames on a storage network.
 - When temporarily disabling an interface to test failover to a secondary connection.
@@ -2993,7 +2980,6 @@ export const questions: Question[] = [
 ## Technical \`ip route get IP\` asks the kernel to evaluate its full routing decision for a single destination, including policy-based routing (multiple tables selected by \`ip rule\` entries) and metric tiebreakers — things a manual reading of \`ip route show\` can't capture. Output fields: \`via GW\` (the gateway IP), \`dev IF\` (outgoing interface), \`src ADDR\` (source IP the kernel would assign). To add a source constraint: \`ip route get to 10.10.5.20 from 192.168.1.42\`. Pair with \`ip rule list\` to understand which routing TABLE was consulted. The legacy \`route -n\` shows only the main table and cannot simulate a routing decision for a specific destination.
 
 ## When to use
-
 - When confirming that specific subnets will route through a VPN tunnel and not the default gateway.
 - When debugging a dual-homed server where some traffic uses the wrong interface.
 - When validating that source-based policy routing sends traffic from a particular IP via a specific path.
@@ -3019,7 +3005,7 @@ export const questions: Question[] = [
 
 ## Technical \`tcpdump -i IFACE\` requires sudo because raw packet capture is a privileged operation. Common flags: \`-n\` no DNS resolution (faster); \`-c N\` stop after N packets; \`-w file.pcap\` save binary pcap for Wireshark; \`-r file.pcap\` read back a pcap; \`-v\`/\`-vv\`/\`-vvv\` increasing verbosity. After the interface flag, add a BPF (Berkeley Packet Filter) expression in quotes: \`'port 443'\`, \`'host 10.20.30.40'\`, \`'tcp and not port 22'\`, \`'port 53 or port 80'\`. To capture on all interfaces use \`-i any\`. Install with \`sudo apt install tcpdump\` or \`sudo dnf install tcpdump\`.
 
-**When to use:**
+## When to use
 - When diagnosing why an application can't reach a remote service — are packets leaving the host at all?
 - When capturing a .pcap file to open in Wireshark for graphical protocol analysis.
 - When verifying TLS handshakes or DNS queries are going to the expected endpoints.
@@ -3045,7 +3031,6 @@ export const questions: Question[] = [
 ## Technical \`ip addr add IP/PREFIX dev IFACE\` attaches an additional IPv4/IPv6 address to an interface. The \`/PREFIX\` is CIDR notation: \`/24\` = 255.255.255.0, \`/32\` = single host. Linux supports multiple IPs per interface; additional ones appear in \`ip addr show\` as \`scope global secondary\`. Remove with \`ip addr del IP/PREFIX dev IFACE\`. Wipe all with \`ip addr flush dev IFACE\` (dangerous if SSH'd in via that interface). This is runtime-only — for persistence configure via NetworkManager (\`nmcli\`), systemd-networkd (\`/etc/systemd/network/\`), Netplan (\`/etc/netplan/\`), or \`/etc/network/interfaces\`.
 
 ## When to use
-
 - When temporarily bringing up a second IP for a blue-green deployment migration test.
 - When a load balancer needs to respond to a virtual IP (VIP) in a high-availability setup.
 - When quickly fixing a DHCP failure by manually assigning an address without rebooting.
@@ -3072,7 +3057,6 @@ export const questions: Question[] = [
 ## Technical \`nc -z -v -w SEC\` breakdown: \`-z\` zero-I/O mode (connect and close — send no data); \`-v\` verbose (print one human-readable result line); \`-w N\` timeout in N seconds (ALWAYS set this — without it, connections to unreachable hosts hang indefinitely). Exit code 0 = port open, non-zero = refused or timed out. Scan multiple ports: \`nc -zv -w 1 host 1-1024\`. UDP check: \`nc -zu\` (unreliable — UDP has no handshake, so only ICMP-unreachable replies indicate closed; silence is ambiguous). Drop \`-z\` to enter interactive mode and send raw protocol commands. Flag differences exist between BSD nc and GNU netcat — \`ncat\` from nmap-ncat is the most consistent across platforms.
 
 ## When to use
-
 - When a deployment script must gate on port availability before connecting to a database or message broker.
 - When verifying a firewall change opened the expected ports without needing SSH access to the remote host.
 - When health-checking a list of service ports in a monitoring script.
@@ -3099,7 +3083,6 @@ export const questions: Question[] = [
 ## Technical The \`-fsSL\` flags: \`-f\` (fail) exits non-zero on HTTP 4xx/5xx instead of printing the error body; \`-s\` (silent) suppresses the progress bar; \`-S\` (show-error) prints error messages to stderr even though \`-s\` silenced progress — without this, failures are completely invisible; \`-L\` (location) follows HTTP 301/302 redirects. Other essential flags: \`-o FILE\` save to file; \`-O\` save with URL's filename; \`-I\` HEAD request (headers only); \`-X METHOD\` HTTP verb; \`-d 'body'\` POST body; \`-H 'K: V'\` custom header; \`-u user:pass\` basic auth; \`-k\` skip TLS verification (dangerous); \`-v\` verbose; \`-w '%{http_code}'\` extract status code. For JSON APIs: \`curl -fsSL URL | jq '.field'\`.
 
 ## When to use
-
 - When calling a REST API from a shell script and the caller must know whether the request succeeded.
 - When downloading a file in a CI/CD pipeline where a silent failure would corrupt the build.
 - When checking an HTTP endpoint's response headers to debug caching or content-type issues with \`-I\`.
@@ -3125,7 +3108,7 @@ export const questions: Question[] = [
 
 ## Technical \`dig\` (Domain Information Groper) outputs the complete DNS response: HEADER (status NOERROR/NXDOMAIN/SERVFAIL, query flags), QUESTION (what was asked), ANSWER (the records), AUTHORITY (which nameservers are authoritative), ADDITIONAL (glue records), and timing/server info. For scripting: \`dig +short example.com\` returns one answer per line. Specify record type as a final positional argument: \`dig example.com MX\`, \`dig example.com TXT\`, \`dig example.com NS\`. Query a specific resolver: \`dig @8.8.8.8 example.com\`. Reverse lookup: \`dig -x 203.0.113.1\`. \`+trace\` walks the full delegation chain from root servers down. From \`dnsutils\` (Debian/Ubuntu) or \`bind-utils\` (Fedora/RHEL).
 
-**When to use:**
+## When to use
 - When verifying DNS propagation after a record change by comparing your ISP resolver vs. \`@8.8.8.8\`.
 - When debugging why \`+trace\` shows a delegation mismatch between registrar and hosting DNS.
 - When checking SPF, DKIM, and DMARC TXT records for email deliverability investigation.
@@ -3146,13 +3129,12 @@ export const questions: Question[] = [
   {
     id: "text1",
     question: "Your Nginx error log at /var/log/nginx/error.log has thousands of lines. You need to see only the lines that contain the word 'upstream'. What is the simplest command for this?",
-    answer: "grep pattern file",
+    answer: "grep error /var/log/nginx/error.log",
     explanation: `Think of this command as the terminal version of Ctrl+F. You describe what you're looking for and it scans through potentially huge files and prints only the lines that match, no matter how many thousands of unrelated lines it has to skip.
 
 ## Technical \`grep\` (Global Regular Expression Print) scans a file or stdin line-by-line and prints every line matching a pattern. Patterns are basic regular expressions by default; use \`-E\` for extended regexes (ERE) or \`-P\` for PCRE. Key flags: \`-i\` case-insensitive; \`-r\` recursive through a directory; \`-v\` invert (print non-matching lines); \`-n\` show line numbers; \`-c\` count matching lines; \`-l\` list filenames only; \`-A N\`/\`-B N\`/\`-C N\` print N lines after/before/around each match. \`grep\` matches anywhere in the line unless you anchor with \`^\` (start) or \`$\` (end).
 
 ## When to use
-
 - When filtering a large log file to see only error-related or keyword-matching entries.
 - When searching an entire codebase for a function name or variable: \`grep -r 'db_connect' /var/www/myapp/\`.
 - When piping other commands' output through grep to focus only on relevant lines: \`ps aux | grep nginx\`.
@@ -3175,7 +3157,7 @@ export const questions: Question[] = [
 
 ## Technical \`sed\` (Stream Editor) applies a program to each input line. The \`s\` command: \`s/PATTERN/REPLACEMENT/FLAGS\`. The \`g\` flag means global — replace all matches on each line, not just the first. Without \`-i\`, output goes to stdout only (safe preview). \`-i\` edits in place (GNU sed); \`-i.bak\` edits in place and saves a backup with the \`.bak\` extension — good practice. Use alternate delimiters if the pattern contains slashes: \`s|/old/path|/new/path|g\`. To delete matching lines: \`sed '/pattern/d'\`. \`-E\` enables extended regex.
 
-**When to use:**
+## When to use
 - When updating a hostname, URL, or version string that appears dozens of times in a config file.
 - When stripping comment lines from a config before passing it to a script: \`sed '/^#/d' file\`.
 - When reformatting pipeline output: \`command | sed 's/foo/bar/g'\`.
@@ -3200,7 +3182,7 @@ export const questions: Question[] = [
 
 ## Technical \`awk\` is a line-oriented programming language. It splits each input line on whitespace (or a custom field separator set with \`-F 'CHAR'\`) and numbers the fields \`$1\`, \`$2\`, etc. (\`$0\` is the whole line). The code block \`'{...}'\` runs once per line. Power features: \`BEGIN{}\` runs before input, \`END{}\` runs after; arithmetic expressions like \`$3 > 100\`; string functions; \`NR\` (current line number); \`NF\` (number of fields on current line). For simple column extraction \`awk\` is more flexible than \`cut\` because it handles multiple spaces and can filter rows.
 
-**When to use:**
+## When to use
 - When extracting a specific column from command output that uses inconsistent spacing: \`ps aux | awk '{print $2}'\`.
 - When summing a column of numbers in a log: \`awk '{sum += $5} END {print sum}'\`.
 - When filtering rows by column value: \`awk '$4 > 500 {print $1, $4}' /var/log/bandwidth.log\`.
@@ -3224,7 +3206,6 @@ export const questions: Question[] = [
 ## Technical \`sort\` without flags sorts lexicographically (ASCII order: numbers → uppercase → lowercase). Key flags: \`-n\` numeric order (9 before 10, not after); \`-r\` reverse; \`-u\` unique (deduplicate); \`-k N\` sort by field N (1-indexed); \`-t CHAR\` set field delimiter; \`-f\` case-insensitive; \`-h\` human-numeric (understands 1K, 2M, 3G); \`-V\` version sort (1.2 before 1.10). To sort in place: redirect to a temp file then replace, or use \`sort -o file file\` which is safe to sort a file over itself.
 
 ## When to use
-
 - When preparing a list of hostnames, IPs, or usernames for readable output or further deduplication.
 - When sorting a log file by timestamp if the timestamps are in ISO 8601 format (lexicographic = chronological).
 - When sorting numeric columns correctly with \`-n\` before presenting to management.
@@ -3248,7 +3229,6 @@ export const questions: Question[] = [
 ## Technical \`uniq\` collapses only CONSECUTIVE identical lines — it won't find non-adjacent duplicates. \`sort\` must run first to cluster all duplicates together. The canonical pattern: \`sort file | uniq\` or equivalently \`sort -u file\`. Key \`uniq\` flags: \`-c\` prefix each unique line with its occurrence count; \`-d\` show only lines that appear more than once; \`-u\` show only lines that appear exactly once; \`-i\` case-insensitive. Order-preserving dedup (no sort): \`awk '!seen[$0]++' file\`. To count and rank: \`sort | uniq -c | sort -rn\`.
 
 ## When to use
-
 - When deduplicating a generated list of emails, IPs, or hostnames before sending a batch notification.
 - When finding which entries repeat in a log: \`sort /var/log/fail2ban.log | uniq -d\`.
 - When counting how many times each unique value appears: \`sort | uniq -c\`.
@@ -3274,7 +3254,7 @@ export const questions: Question[] = [
 
 ## Technical \`tr\` (translate) reads ONLY from stdin — it takes no filename argument. Redirect input with \`< file\` or pipe into it. It works on individual characters: \`tr 'A' 'B'\` replaces every capital A with a capital B. Ranges: \`a-z\`, \`A-Z\`, \`0-9\`. POSIX classes: \`[:lower:]\`, \`[:upper:]\`, \`[:digit:]\`, \`[:space:]\`. Modes: \`tr SET1 SET2\` substitutes; \`tr -d SET\` deletes characters in SET; \`tr -s SET\` squeezes consecutive copies of any char in SET into one; \`tr -c SET1 SET2\` complements (translate everything NOT in SET1). For the Windows CRLF problem specifically: \`tr -d '\\r' < windows.conf > unix.conf\`.
 
-**When to use:**
+## When to use
 - When stripping Windows carriage returns (\`\\r\`) from a file edited on Windows: \`tr -d '\\r' < file\`.
 - When converting all lowercase to uppercase in a pipeline for case-normalization.
 - When turning a comma-delimited list into one-per-line for further processing: \`echo 'a,b,c' | tr ',' '\\n'\`.
@@ -3299,7 +3279,7 @@ export const questions: Question[] = [
 
 ## Technical \`cut\` has two modes: field mode (\`-d CHAR -f N\`) splits on a delimiter; character mode (\`-c RANGE\`) extracts by position. Field details: \`-d:\` sets colon as the delimiter (no space between flag and char); \`-f1\` extracts field 1 (1-indexed); \`-f1,3\` extracts fields 1 and 3; \`-f2-\` extracts field 2 to end. Limitation: \`cut\` cannot handle multi-character delimiters or quoted CSV fields — use \`awk -F,\` for those. The \`/etc/passwd\` format is \`user:x:uid:gid:comment:home:shell\`, so \`-d: -f1\` is the classic usernames extraction.
 
-**When to use:**
+## When to use
 - When extracting usernames from \`/etc/passwd\`, groups from \`/etc/group\`, or fields from any colon/comma-delimited file.
 - When pulling a specific column from a TSV report for further processing.
 - When combined with \`ps aux | tr -s ' ' | cut -d' ' -f2\` to extract just PIDs.
@@ -3324,7 +3304,7 @@ export const questions: Question[] = [
 
 ## Technical \`paste FILE1 FILE2 ...\` joins corresponding lines from multiple files horizontally, separated by TAB by default. Change the delimiter with \`-d CHAR\` (\`-d,\` for CSV, \`-d:\` for colon-separated). For multiple delimiters that cycle: \`paste -d',;' a b c\` alternates \`,\` and \`;\`. The \`-s\` (serial) flag is a completely different mode: instead of column-merging multiple files, it joins ALL lines of each file into one long tab-separated line — useful for turning a list into a one-liner: \`paste -sd, file\`. Files of unequal length continue with the longer one, leaving the shorter side blank.
 
-**When to use:**
+## When to use
 - When merging two parallel files — one with usernames, one with emails — into a combined table.
 - When building a quick CSV from separate data columns: \`paste -d, /tmp/names.txt /tmp/ages.txt\`.
 - When converting a newline-separated list to a comma-separated one-liner: \`paste -sd, hosts.txt\`.
@@ -3351,7 +3331,6 @@ export const questions: Question[] = [
 ## Technical \`diff\` compares files line-by-line. Formats: default 'normal' uses \`a\`/\`c\`/\`d\` markers (harder to read); \`-u\` unified (standard for patches, compatible with git and \`patch\`); \`-y\` side-by-side. Key flags: \`-r\` recursive directories; \`-q\` brief (just report whether files differ, no detail); \`-i\` ignore case; \`-w\` ignore whitespace; \`-B\` ignore blank lines. Exit code: 0 = identical, 1 = different, 2 = error — usable in conditionals: \`if diff -q a b >/dev/null; then echo same; fi\`. To create a patch: \`diff -u original new > changes.patch\`; to apply it: \`patch original < changes.patch\`. For color: pipe to \`colordiff\` or use \`git diff --no-index\`.
 
 ## When to use
-
 - When reviewing what changed in a config file after a deployment.
 - When generating a patch file to share a code change without a full repository: \`diff -u old.py new.py > fix.patch\`.
 - When comparing two directory snapshots to see which files were added or removed: \`diff -rq dir1/ dir2/\`.
@@ -3378,7 +3357,6 @@ export const questions: Question[] = [
 ## Technical \`wc\` (word count) outputs three columns by default: line count, word count, byte count, followed by the filename. Key flags: \`-l\` lines only; \`-w\` words only; \`-c\` bytes; \`-m\` characters (differs from bytes for multibyte UTF-8). For scripting, suppress the filename by redirecting input instead of passing a filename argument: \`wc -l < file\` prints just the number. To count lines across multiple files and get a total: \`wc -l *.py\` adds a \`total\` line. Pipe to get line count of a command's output: \`ls /etc | wc -l\`.
 
 ## When to use
-
 - When checking a source file's line count before a code review or to estimate complexity.
 - When scripting a check that a log file hasn't grown unexpectedly large: \`[ $(wc -l < /var/log/app.log) -gt 10000 ] && alert\`.
 - When counting how many results a grep returned: \`grep -c 'ERROR'\` or \`grep 'ERROR' file | wc -l\`.
@@ -3401,7 +3379,7 @@ export const questions: Question[] = [
 
 ## Technical \`sed 's/PATTERN/REPLACEMENT/g'\` replaces all matches on every line. Without \`-i\`, it prints to stdout only (safe to preview). Add \`-i\` to modify the file directly (GNU sed). The \`g\` flag means "global" — without it, only the first match per line is replaced. Delimiters can be changed: \`s|dev-server|prod-server|g\` avoids escaping if the pattern has slashes. To delete lines matching a pattern: \`sed '/^dev-server/d'\`. Extended regexes with \`-E\` allow \`+\`, \`?\`, \`|\`, \`()\`.
 
-**When to use:**
+## When to use
 - When updating a hostname, IP address, or version string repeated throughout a configuration file.
 - When removing all comment lines from a config before feeding it to a parser: \`sed '/^#/d'\`.
 - When scripting bulk config updates across many servers with \`sed -i\` called over SSH.
@@ -3425,7 +3403,6 @@ export const questions: Question[] = [
 ## Technical \`awk '{print $1, $5}'\` prints fields 1 and 5, separated by a space. The comma between fields inserts the Output Field Separator (OFS, default space). To print with a custom separator: \`awk 'BEGIN{OFS=":"} {print $1,$5}'\`. \`$NF\` is always the last field regardless of how many columns there are. \`awk\` code runs once per line; conditions before the block filter which lines execute: \`awk 'NR>1 {print $1,$5}'\` skips the header row. In single quotes in bash to prevent shell expansion of \`$\` signs.
 
 ## When to use
-
 - When combining multiple output columns in a custom format that \`cut\` can't express.
 - When filtering rows by a column value while extracting specific fields: \`awk '$5 > 80 {print $1}' /tmp/disk.txt\`.
 - When doing arithmetic on columns: \`awk '{print $1, $3/$4*100"%"}'\`.
@@ -3449,7 +3426,6 @@ export const questions: Question[] = [
 ## Technical \`sort\` rearranges lines so identical ones are adjacent; \`uniq\` then collapses consecutive identical lines. The same result in one command: \`sort -u\`. For frequency analysis: \`sort | uniq -c | sort -rn\` — produces a count-sorted frequency table (most common first). For order-preserving dedup (keep first occurrence, preserve original order): \`awk '!seen[$0]++'\`. For duplicates only: \`sort | uniq -d\`.
 
 ## When to use
-
 - When finding unique visitors by IP from a log file.
 - When generating a clean input list for a batch script that should process each host exactly once.
 - When auditing a file for duplicate entries that shouldn't exist (configuration IDs, certificate serials).
@@ -3473,7 +3449,6 @@ export const questions: Question[] = [
 ## Technical \`cut -d, -f3\` sets comma as the field delimiter (\`-d,\`) and selects field 3 (\`-f3\`). Fields are 1-indexed. Ranges: \`-f2-4\` extracts fields 2 through 4; \`-f3-\` extracts field 3 to the end of the line. Limitation: \`cut\` does not handle quoted CSV fields that contain the delimiter character — for those use \`awk -F,\` or a proper CSV parser. Character mode: \`-c1-10\` extracts the first 10 characters of each line (useful for fixed-width formats or extracting timestamps).
 
 ## When to use
-
 - When pulling one column from a simple CSV, TSV, or colon-delimited file.
 - When extracting usernames from /etc/passwd: \`cut -d: -f1\`.
 - When trimming fixed-width records to a known column range: \`cut -c1-8\`.
@@ -3497,7 +3472,6 @@ export const questions: Question[] = [
 ## Technical \`tr 'A-Z' 'a-z'\` maps each uppercase letter to its lowercase equivalent. \`tr\` reads stdin only — pipe or redirect input. Other useful transformations: \`tr -d CHARS\` deletes characters; \`tr -s CHARS\` squeezes consecutive identical characters to one; \`tr -c SET1 SET2\` complements (translates everything NOT in SET1). For case conversion, modern shells also offer: \`echo "$var" | tr 'A-Z' 'a-z'\` or in bash 4+: \`\${var,,}\` for variable lowercasing.
 
 ## When to use
-
 - When normalizing case in a pipeline before comparing strings or looking up config values.
 - When converting Windows CRLF endings: \`tr -d '\\r'\`.
 - When generating a random alphanumeric token in a script: \`tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 24\`.
@@ -3521,7 +3495,6 @@ export const questions: Question[] = [
 ## Technical \`paste FILE1 FILE2\` joins corresponding lines with TAB by default. \`-d,\` changes the delimiter to a comma (making CSV output). \`-s\` (serial) changes mode entirely: instead of zipping files side-by-side, it folds each file's lines into one long tab-separated line. Unequal-length files are padded with empty fields for the shorter one. Three or more files: \`paste a.txt b.txt c.txt\` produces three columns.
 
 ## When to use
-
 - When merging parallel data files where each line in file A corresponds to line N in file B.
 - When building a user list from separate first/last name files before import into a database.
 - When constructing a tab-delimited table for input to \`column -t\` to format nicely for display.
@@ -3542,9 +3515,9 @@ export const questions: Question[] = [
     answer: "printf '%s: %d\\n' name age",
     explanation: `This command works like a fill-in-the-blank template. You write the format with placeholders that say "put a string here" or "put a number here," then supply the actual values afterward. The result is precisely formatted, consistent output — unlike \`echo\`, which behaves differently across shells.
 
-**Technical:** \`printf FORMAT [ARGS...]\` interprets format specifiers: \`%s\` string, \`%d\` integer, \`%f\` float, \`%x\` hex. Width/alignment: \`%-10s\` left-align in 10 chars, \`%10s\` right-align, \`%05d\` zero-pad to 5 digits. Precision: \`%.2f\` two decimal places. Escape sequences: \`\\n\` newline, \`\\t\` tab, \`\\r\` carriage return. Unlike \`echo\`, \`printf\` behavior is POSIX-standardized and identical across shells. It does NOT add a trailing newline unless you include \`\\n\` in the format.
+## Technical \`printf FORMAT [ARGS...]\` interprets format specifiers: \`%s\` string, \`%d\` integer, \`%f\` float, \`%x\` hex. Width/alignment: \`%-10s\` left-align in 10 chars, \`%10s\` right-align, \`%05d\` zero-pad to 5 digits. Precision: \`%.2f\` two decimal places. Escape sequences: \`\\n\` newline, \`\\t\` tab, \`\\r\` carriage return. Unlike \`echo\`, \`printf\` behavior is POSIX-standardized and identical across shells. It does NOT add a trailing newline unless you include \`\\n\` in the format.
 
-**When to use:**
+## When to use
 - When generating structured output lines in scripts where consistent formatting matters.
 - When writing data to a file with precise column alignment for readability.
 - When converting decimal to hex for a display or log message: \`printf '%x\\n' 255\`.
@@ -3567,7 +3540,7 @@ export const questions: Question[] = [
 
 ## Technical \`grep -E\` (or \`egrep\`) enables Extended Regular Expressions: \`|\` alternation (OR), \`+\` one or more, \`?\` zero or one, \`()\` grouping, \`{n,m}\` repetition range. Without \`-E\`, the pipe \`|\` would be a literal character. The \`-P\` flag enables PCRE (Perl-Compatible Regular Expressions) for lookaheads, lookbehinds, and non-greedy matching. Common ERE patterns: \`^START\` anchors to line start, \`END$\` to line end, \`[0-9]+\` one or more digits, \`(err|warn)\` alternation group.
 
-**When to use:**
+## When to use
 - When searching log files for multiple keywords simultaneously: \`grep -E 'Failed|Invalid|error' /var/log/auth.log\`.
 - When matching lines with a structured pattern: \`grep -E '^[0-9]{1,3}\\.' /tmp/ips.txt\` for lines starting with an IP octet.
 - When extracting email addresses or URLs from text: \`grep -Eo '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}'\`.
@@ -3591,7 +3564,6 @@ export const questions: Question[] = [
 ## Technical \`rev\` reverses the characters on each line individually, preserving line order. The suffix-sort pipeline: \`rev file | sort | rev\`. Another classic use: extract the last field of an unknown-depth path with \`rev | cut -d/ -f1 | rev\` (reverses so the last segment is first, cuts it, reverses back). Note: \`rev\` reverses CHARACTERS per line; \`tac\` is different — it reverses LINE ORDER but keeps each line intact. Both are simple, single-purpose tools.
 
 ## When to use
-
 - When grouping domain names by TLD for analysis or routing rules.
 - When extracting the basename of paths that use non-standard separators.
 - When building palindrome-checking logic in a script: \`[ "$x" = "$(echo "$x" | rev)" ]\`.
@@ -3616,7 +3588,7 @@ export const questions: Question[] = [
 
 ## Technical \`expand FILE\` replaces each tab character with the number of spaces needed to reach the next tab stop. Default tab stop spacing is every 8 columns; use \`-t N\` to set custom spacing (\`-t 4\` for 4-space indent). \`-t 2,4,6\` sets staggered stops. Output goes to stdout — to overwrite the original: \`expand -t 4 app.py > /tmp/app_expanded.py && mv /tmp/app_expanded.py app.py\`, or use \`sponge\` from \`moreutils\`: \`expand -t 4 app.py | sponge app.py\`. The reverse operation is \`unexpand\` (spaces → tabs).
 
-**When to use:**
+## When to use
 - When normalizing a source file's indentation from tabs to spaces before committing to a repo with an enforced style.
 - When preparing text for tools or printers that don't interpret tab characters correctly.
 - When aligning columns in a report before sending it as an email or pasting into a ticket.
@@ -3641,7 +3613,7 @@ export const questions: Question[] = [
 
 ## Technical \`uname\` (Unix Name) queries the running kernel, NOT the distribution. \`-a\` (all) prints: kernel name (\`Linux\`), hostname, kernel release (\`6.8.0-31-generic\`), kernel build timestamp, machine architecture (\`x86_64\`, \`aarch64\`, \`armv7l\`), and OS type. Individual flags: \`-r\` release only, \`-m\` machine arch only, \`-s\` kernel name, \`-n\` hostname, \`-o\` OS. Important distinction: \`uname\` does NOT identify the distribution (Ubuntu vs Fedora vs Arch) — they all share the same kernel. For distro identity read \`/etc/os-release\` or use \`lsb_release -a\`.
 
-**When to use:**
+## When to use
 - When choosing between \`_amd64\` and \`_arm64\` binary releases for a download.
 - When a package requires a minimum kernel version and you need to confirm yours.
 - When scripting: \`ARCH=$(uname -m)\` captures the architecture for use in download URLs.
@@ -3667,7 +3639,6 @@ export const questions: Question[] = [
 ## Technical \`df\` (Disk Free) reports per-mounted-filesystem usage. Columns: device, total size, used, available, percent used, mount point. \`-h\` formats sizes as \`12G\`/\`450M\` (human-readable binary units). Key flags: \`-T\` add filesystem type (ext4, xfs, tmpfs, overlay); \`-i\` show inode counts (a filesystem can exhaust inodes before bytes — same error, different cause); \`-x tmpfs\` exclude virtual filesystems; \`--total\` add a summary total row. Pair: \`df\` answers "which filesystem is full?"; \`du -sh * | sort -h | tail -20\` answers "what's taking the space?"
 
 ## When to use
-
 - When troubleshooting "No space left on device" to identify which mount point is full.
 - When provisioning a server and confirming new disks are mounted at the expected paths.
 - When a database or log service stops unexpectedly and disk exhaustion is a likely cause.
@@ -3693,7 +3664,6 @@ export const questions: Question[] = [
 ## Technical \`free\` reads \`/proc/meminfo\`. The \`Mem:\` row columns: \`total\` (physical RAM), \`used\` (non-reclaimable), \`free\` (truly untouched), \`shared\` (tmpfs/shm), \`buff/cache\` (kernel caches — reclaimable), \`available\` (accurate estimate of headroom for new programs). The \`Swap:\` row shows swap device usage. \`-h\` shows human-readable units (GiB). \`-m\` forces MiB. \`-s N\` refreshes every N seconds. Rule of thumb: small \`available\` + growing \`Swap.used\` = real pressure; OOM killer may trigger.
 
 ## When to use
-
 - When investigating slow performance and suspecting memory pressure or swap thrashing.
 - When sizing a new server and needing to know actual free headroom.
 - When a container or VM seems sluggish and you want to rule out RAM as the cause.
@@ -3719,7 +3689,6 @@ export const questions: Question[] = [
 ## Technical \`uptime\` output: current wall-clock time, uptime duration, active user count, and three load averages (1/5/15 minute). Load average counts processes that were RUNNING or WAITING for CPU/disk during the window. Compare each to \`nproc\`: load ≈ nproc = fully utilized; load >> nproc = overloaded. Trend reading: if the 1-min average is LOWER than the 15-min, the system is recovering; if HIGHER, it's climbing. \`uptime -p\` prints a human-readable duration ("up 3 days, 4 hours"); \`uptime -s\` prints the absolute boot datetime.
 
 ## When to use
-
 - When deciding whether to launch a CPU-heavy job by checking whether existing load has headroom.
 - When a user reports slowness and you want a 15-second snapshot of whether the server is saturated.
 - When monitoring uptime SLA — a server that hasn't been rebooted in 200 days shows stability.
@@ -3744,7 +3713,7 @@ export const questions: Question[] = [
 
 ## Technical \`lscpu\` reads \`/proc/cpuinfo\` and \`/sys/devices/system/cpu/\` and formats them into a human-friendly summary: Architecture, Model name, Socket(s) × Core(s) per socket × Thread(s) per core = total logical CPUs, frequency range, cache sizes (L1d/L1i/L2/L3), and a Flags line listing CPU capabilities like \`sse4_2\`, \`avx2\`, \`aes\` (hardware AES acceleration), \`vmx\`/\`svm\` (virtualization). On VMs: \`Hypervisor vendor\` shows if you're running in KVM/VMware/Hyper-V. \`nproc\` returns just the logical CPU count for scripting.
 
-**When to use:**
+## When to use
 - When checking whether \`avx2\`, \`aes\`, or another instruction set extension is present before installing a library that requires it.
 - When sizing parallel jobs: \`make -j$(nproc)\` uses the logical CPU count lscpu would show.
 - When confirming you're on a VM and identifying the hypervisor type.
@@ -3770,7 +3739,6 @@ export const questions: Question[] = [
 ## Technical \`lspci\` reads \`/sys/bus/pci/\` and prints one line per device: \`BUS:DEVICE.FUNCTION  Class  Vendor:Product  Name\`. Classes include \`VGA compatible controller\` (GPU), \`Ethernet controller\` (NIC), \`Network controller\` (Wi-Fi), \`Audio device\`. Flags: \`-k\` adds "Kernel driver in use" and "Kernel modules" per device — the key field for diagnosing missing drivers; \`-v\` verbose; \`-vv\` very verbose; \`-n\` show numeric vendor:device IDs instead of names. To check only the wireless adapter: \`lspci | grep -i network\`. Driver in lspci with \`-k\` but not loaded in \`lsmod\` = driver not running.
 
 ## When to use
-
 - When Wi-Fi or a NIC stopped working and you need to confirm which driver should be loaded.
 - When identifying the GPU model and whether the proprietary (e.g., \`nvidia\`) or open-source (\`nouveau\`) driver is active.
 - When inventorying a server's hardware without physical access.
@@ -3796,7 +3764,6 @@ export const questions: Question[] = [
 ## Technical \`lsusb\` lists devices as \`Bus N Device M: ID VID:PID Vendor Product\`. The \`VID:PID\` (four-hex-digit vendor ID and product ID) is the key identifier for udev rules and driver matching. \`-t\` shows a tree view of which devices are on which hub/port. \`-v\` (sudo recommended) prints full USB descriptors. \`-d VID:PID\` filters to one specific device. After plugging a device, check \`dmesg | tail -5\` to see the kernel's bind message — if lsusb shows the device but dmesg shows a driver error, the device is detected but the driver failed.
 
 ## When to use
-
 - When confirming whether Linux detected a newly plugged USB device at all.
 - When finding the VID:PID to write a udev rule for device permissions.
 - When diagnosing a USB hub layout to understand which physical port a device is on.
@@ -3822,7 +3789,6 @@ export const questions: Question[] = [
 ## Technical \`lsmod\` formats \`/proc/modules\` into columns: \`Module\` (name), \`Size\` (bytes in memory), \`Used by\` (count of dependents and their names). A non-zero "Used by" count means other modules depend on this one — you can't unload it while dependents are loaded. Load a module: \`sudo modprobe MODULENAME\`. Unload (if Used-by is 0): \`sudo modprobe -r MODULENAME\`. Get details: \`modinfo MODULENAME\` (author, parameters, firmware requirements). If hardware is in \`lspci\` but not functioning, the driver module is either not loaded or loaded with errors — check \`dmesg\` for the bind error.
 
 ## When to use
-
 - When confirming which GPU driver is active: \`lsmod | grep -E 'nvidia|nouveau'\`.
 - When diagnosing why a hardware device isn't working — is its driver module even loaded?
 - When checking whether \`kvm\` and \`kvm_intel\`/\`kvm_amd\` are loaded before starting a VM.
@@ -3848,7 +3814,6 @@ export const questions: Question[] = [
 ## Technical \`env\` prints all exported environment variables as \`NAME=value\` lines, one per line. Variables come from: \`/etc/environment\` (system-wide), \`~/.profile\`/\`~/.bash_profile\` (login shells), \`~/.bashrc\` (interactive shells), \`export VAR=value\` in the current session, or inheritance from the parent process. Sorted output: \`env | sort\`. Inspect one variable: \`printenv NAME\` or \`echo "$NAME"\`. Inspect a specific process's environment: \`cat /proc/PID/environ | tr '\\0' '\\n'\` (kernel uses NUL-byte separators). Run a command with a modified env without affecting your shell: \`env VAR=value CMD\`. Run with empty environment: \`env -i CMD\`.
 
 ## When to use
-
 - When debugging why an application uses an unexpected config path or database URL.
 - When auditing what credentials are exposed as environment variables before running user code.
 - When scripting and needing to confirm that a required variable is set before proceeding.
@@ -3874,7 +3839,7 @@ export const questions: Question[] = [
 
 ## Technical \`hostname\` prints the machine's current hostname from the kernel. Variants: \`hostname -i\` prints the IP address(es) associated with the hostname; \`hostname -f\` prints the fully qualified domain name (FQDN, e.g., \`web1.example.com\`). To temporarily change the hostname (reverts on reboot): \`sudo hostname newname\`. For a permanent change on systemd systems: \`sudo hostnamectl set-hostname newname\`, which also updates \`/etc/hostname\` and \`/etc/hosts\`. The FQDN requires proper \`/etc/hosts\` or DNS configuration to resolve correctly.
 
-**When to use:**
+## When to use
 - When setting up an SSH config alias and needing to confirm the server's exact hostname.
 - When writing a deployment script that embeds the current hostname in a generated config file.
 - When checking which machine you're on in a fleet with similar-looking prompts.
@@ -3895,9 +3860,9 @@ export const questions: Question[] = [
     answer: "date",
     explanation: `The \`date\` command is a clock and calendar that also lets you format the output however you need. By providing a format string starting with \`+\`, you can get the date in any form — perfect for creating timestamped filenames in scripts.
 
-**Technical:** \`date\` without arguments prints the full date/time in locale format. \`date '+FORMAT'\` applies a strftime-style format: \`%Y\` 4-digit year, \`%m\` 2-digit month, \`%d\` 2-digit day, \`%H\` hour (24h), \`%M\` minute, \`%S\` second, \`%s\` Unix timestamp (seconds since 1970-01-01 00:00 UTC). Date arithmetic (GNU date): \`date -d 'yesterday'\`, \`date -d '1 week ago'\`, \`date -d '2026-06-01'\`. Capture in a variable: \`TODAY=$(date '+%Y-%m-%d')\`. Set system date (root): \`sudo date -s 'STRING'\`.
+## Technical \`date\` without arguments prints the full date/time in locale format. \`date '+FORMAT'\` applies a strftime-style format: \`%Y\` 4-digit year, \`%m\` 2-digit month, \`%d\` 2-digit day, \`%H\` hour (24h), \`%M\` minute, \`%S\` second, \`%s\` Unix timestamp (seconds since 1970-01-01 00:00 UTC). Date arithmetic (GNU date): \`date -d 'yesterday'\`, \`date -d '1 week ago'\`, \`date -d '2026-06-01'\`. Capture in a variable: \`TODAY=$(date '+%Y-%m-%d')\`. Set system date (root): \`sudo date -s 'STRING'\`.
 
-**When to use:**
+## When to use
 - When generating timestamped filenames for backups, logs, or reports.
 - When scripting a date comparison: \`[[ $(date +%s) -gt $DEADLINE ]]\`.
 - When logging a precise timestamp with time: \`date '+%Y-%m-%dT%H:%M:%S%z'\` (ISO 8601).
@@ -3923,7 +3888,6 @@ export const questions: Question[] = [
 ## Technical \`uptime\` prints: current time, duration since last boot, active session count, and three load averages (1, 5, 15-minute windows). Load average counts processes that were either running or waiting for CPU/disk I/O during each window. Compare against \`nproc\`: load ≈ nproc = fully utilized; load significantly above nproc = overloaded. \`uptime -p\` prints a human-readable duration; \`uptime -s\` prints the exact boot datetime — useful for correlating with incident timelines.
 
 ## When to use
-
 - When a post-incident review needs to know when the server was last rebooted (combine \`uptime -s\` with the incident timeline).
 - When checking whether a long-running cron job has significantly raised the load average.
 - When responding to a "server feels slow" report and wanting a 5-second initial diagnostic.
@@ -3948,7 +3912,6 @@ export const questions: Question[] = [
 ## Technical \`w\` combines \`uptime\` output (header line) with per-user rows: \`USER\` (login name), \`TTY\` (terminal, e.g., \`pts/0\` = pseudoterminal = SSH session), \`FROM\` (source IP or hostname), \`LOGIN@\` (login timestamp), \`IDLE\` (time since last activity), \`JCPU\` (CPU time used by all processes on that terminal), \`PCPU\` (CPU time for the current command), \`WHAT\` (current command string). Compare with \`who\` (login info only, no activity) and \`last\` (historical login records).
 
 ## When to use
-
 - When a security alert arrives and you need to audit active sessions immediately.
 - When investigating why a server is slow — \`WHAT\` column shows what each user is running.
 - When enforcing a maintenance window by identifying who is still logged in before rebooting.
@@ -3972,7 +3935,6 @@ export const questions: Question[] = [
 ## Technical \`dmesg\` ('display message') prints the kernel's ring buffer. Each line has a \`[seconds.microseconds]\` offset since boot. Flags: \`-T\` converts timestamps to human-readable datetime; \`-w\` keeps watching for new messages (like \`tail -f\`); \`-H\` human-readable with color and paging; \`--level=err,warn\` filters by severity; \`-x\` adds facility/level prefix. Requires sudo on most modern systems. The ring buffer is fixed size — very old messages may be overwritten on busy systems. Complement with \`journalctl -k\` (kernel messages from systemd journal, which persists across reboots).
 
 ## When to use
-
 - When plugging in hardware and checking whether the kernel detected and bound a driver to it.
 - When investigating random system freezes or disk errors by looking for I/O error messages.
 - When a process is killed unexpectedly and you suspect the OOM killer — look for "Out of memory: Kill process" lines.
@@ -3998,7 +3960,6 @@ export const questions: Question[] = [
 ## Technical Every file (and directory, symlink, etc.) consumes exactly one inode — a fixed-size metadata record containing permissions, ownership, timestamps, and block locations. The total inode count is set when the filesystem is created and cannot be increased without reformatting (on most ext4 filesystems). \`df -i\` shows: total inodes (INodes), used (IUsed), free (IFree), and percent used (IUse%). Common cause of inode exhaustion: millions of tiny files from mail queues, session caches, or temp file directories. Diagnose which directory has the most files: \`find /var -xdev -type f | cut -d/ -f1-4 | sort | uniq -c | sort -rn | head\`.
 
 ## When to use
-
 - When "No space left on device" appears despite \`df -h\` showing available bytes.
 - When a mail server, PHP session handler, or build cache fills a directory with many tiny files.
 - When proactively monitoring a filesystem that stores millions of small objects.
@@ -4021,7 +3982,7 @@ export const questions: Question[] = [
 
 ## Technical \`lastlog\` reads \`/var/log/lastlog\`, a binary database with one record per UID. Output columns: Username, Port (terminal), From (source IP/hostname), and Latest (timestamp). Service accounts that should never log in show "Never logged in." Flags: \`-u USERNAME\` filters to one user; \`-t DAYS\` shows only users who logged in within the last N days; \`-b DAYS\` shows users who have NOT logged in for N days (useful for finding stale accounts). Compare with \`last\` (full chronological history of recent logins from \`/var/log/wtmp\`) and \`who\` (currently logged in).
 
-**When to use:**
+## When to use
 - When a security audit requires identifying accounts that haven't logged in for more than 90 days.
 - When verifying that a service account (e.g., \`www-data\`, \`nobody\`) has never had an interactive login.
 - When investigating a security incident by checking all accounts' recent activity at once.
@@ -4045,7 +4006,6 @@ export const questions: Question[] = [
 ## Technical \`journalctl --boot\` (or \`journalctl -b\`) shows journal entries from the current boot; \`--boot -1\` shows the previous boot. To filter by service: \`journalctl -u nginx --boot\`. To show only errors: \`journalctl -p err --boot\`. To follow in real time: \`journalctl -f -u nginx\`. Time-based filtering: \`journalctl --since '10 minutes ago'\` or \`--since '2026-05-19 14:00'\`. For fewer pages of output: \`journalctl -n 50 -u nginx\`. The journal persists across reboots in \`/var/log/journal/\` if configured with \`Storage=persistent\` in \`/etc/systemd/journald.conf\`.
 
 ## When to use
-
 - When diagnosing a service startup failure: \`journalctl -u nginx -b --no-pager\` shows the exact error message.
 - When troubleshooting a boot-time issue and wanting to replay the system's startup sequence.
 - When investigating why a cron job or timer fired at an unexpected time.
@@ -4070,7 +4030,6 @@ export const questions: Question[] = [
 ## Technical \`free -h\` reads \`/proc/meminfo\` and presents it in GiB/MiB. The \`available\` column is the key metric — it subtracts only genuinely committed memory from total RAM, treating \`buff/cache\` as reclaimable (which it is). High \`Swap: used\` with low \`Mem: available\` = genuine memory pressure; the system is using disk as overflow RAM, which is slow. \`-m\` forces MiB for scripting, \`-s N\` adds periodic refresh. \`-w\` splits buff and cache into separate columns for more detail.
 
 ## When to use
-
 - When establishing a baseline memory utilization measurement to justify an upgrade.
 - When investigating performance degradation and checking whether it correlates with swap usage.
 - When scripting a monitoring alert: \`[ $(free -m | awk 'NR==2{print $7}') -lt 500 ] && alert_low_memory\`.
@@ -4094,7 +4053,6 @@ export const questions: Question[] = [
 ## Technical \`ulimit -a\` displays all resource limits for the current shell. Key limits: \`open files (-n)\` — max file descriptors per process (default 1024 on many systems, commonly raised to 65536 for servers); \`max user processes (-u)\`; \`stack size (-s)\`; \`core file size (-c)\`. Two tiers: soft limit (current enforcement, raisable up to hard limit by user) and hard limit (ceiling, only root can raise). To change in current session: \`ulimit -n 65536\`. For persistence: edit \`/etc/security/limits.conf\` (e.g., \`alice soft nofile 65536\`), \`/etc/systemd/system/myapp.service\` (\`LimitNOFILE=65536\`), or \`/etc/systemd/system.conf\`.
 
 ## When to use
-
 - When investigating "too many open files" errors — confirm the current limit before raising it.
 - When configuring a database or web server that maintains many concurrent connections.
 - When a build fails with "fork: resource temporarily unavailable" — check the \`max user processes\` limit.
@@ -4117,7 +4075,7 @@ export const questions: Question[] = [
 
 ## Technical \`/etc/os-release\` is a POSIX shell-compatible key=value file defined by the Linux Foundation. Key fields: \`ID\` (lowercase short name: \`ubuntu\`, \`fedora\`, \`debian\`), \`VERSION_ID\` (e.g., \`24.04\`, \`40\`), \`NAME\` (human name), \`PRETTY_NAME\` (full display name), \`ID_LIKE\` (parent distro, e.g., Mint has \`ID_LIKE=ubuntu\`). Source it in scripts: \`source /etc/os-release; echo $ID\`. Alternative commands: \`lsb_release -a\` (if installed), \`hostnamectl\` (systemd). Important: this identifies the DISTRIBUTION, not the kernel — \`uname -a\` is for the kernel.
 
-**When to use:**
+## When to use
 - When a script needs to detect the distro to decide between \`apt\`, \`dnf\`, or \`pacman\`.
 - When generating a support ticket and needing to include the exact OS version.
 - When writing an Ansible or shell playbook that behaves differently on Ubuntu vs RHEL.
@@ -4136,12 +4094,12 @@ export const questions: Question[] = [
   {
     id: "pkg1",
     question: "A fresh Ubuntu 24.04 server needs the git package installed for a CI pipeline. What command installs it from the official repositories?",
-    answer: "apt-get install package_name",
+    answer: "apt-get install git",
     explanation: `A package manager is like an app store for your Linux server. You type the name of the software you want and the manager downloads it, installs it, and automatically handles everything else it needs to work — no hunting for download links or manual setup.
 
 ## Technical \`apt install\` (and the older \`apt-get install\`) downloads the named \`.deb\` package from configured repositories in \`/etc/apt/sources.list\`, automatically resolves and installs all declared \`Depends:\`, verifies cryptographic signatures, unpacks files into \`/usr/bin\`, \`/etc/\`, etc., and runs post-install scripts. Requires root via \`sudo\`. Key flags: \`-y\` skip the yes/no prompt (for scripts); \`--no-install-recommends\` skip suggested extras; \`package=version\` pins a specific version. Always run \`sudo apt update\` first so the catalog is fresh.
 
-**When to use:**
+## When to use
 - When adding any software to a Debian/Ubuntu system: editors, web servers, language runtimes, tools.
 - When a "command not found" error occurs and you need to identify and install the missing package.
 - When provisioning a new server via a shell script: \`sudo apt install -y git curl build-essential\`.
@@ -4161,13 +4119,12 @@ export const questions: Question[] = [
   {
     id: "pkg2",
     question: "You want to remove the apache2 package from a server and also delete its configuration files in /etc/apache2/ so a clean reinstall will use default settings. What command completely removes both the package and its configs?",
-    answer: "apt-get remove package_name",
+    answer: "apt-get remove --purge apache2",
     explanation: `Removing a package has two levels. The basic removal takes the programs away but leaves your customized settings behind in case you want them when you reinstall. The complete removal wipes everything — programs AND config files — giving you a clean slate.
 
 ## Technical \`apt remove\` removes program files but keeps config files in \`/etc/\` (status becomes \`rc\` — config-only). \`apt purge\` removes program files AND config files (equivalent to \`apt remove --purge\`). Neither removes automatically-installed dependencies — run \`sudo apt autoremove\` afterward to clean up orphaned packages. \`sudo apt autoremove --purge\` removes orphan deps and their configs too. After removal, any systemd service the package registered is stopped and disabled automatically.
 
 ## When to use
-
 - When completely wiping a misconfigured service before a clean reinstall.
 - When freeing disk space by removing software that's no longer needed.
 - When a package's leftover configs are interfering with a fresh installation of the same software.
@@ -4192,7 +4149,7 @@ export const questions: Question[] = [
 
 ## Technical \`apt update\` downloads metadata from every repository in \`/etc/apt/sources.list\` and \`/etc/apt/sources.list.d/*.list\`, caching it under \`/var/lib/apt/lists/\`. This metadata is the catalog APT uses for all subsequent \`install\`, \`upgrade\`, \`search\`, and \`show\` operations. Without it, you get "Unable to locate package" errors or install stale versions. The standard pattern is \`sudo apt update && sudo apt upgrade\`. Needs sudo to write the cache. Network operation — can be slow on rate-limited connections.
 
-**When to use:**
+## When to use
 - When provisioning a new server for the first time, before installing any packages.
 - Before running \`apt upgrade\` to ensure you're seeing the latest available versions.
 - After editing \`/etc/apt/sources.list\` or adding a new repo with \`add-apt-repository\`.
@@ -4218,7 +4175,6 @@ export const questions: Question[] = [
 ## Technical \`apt upgrade\` upgrades all installed packages that have newer versions available in the catalog. By default it will NEVER remove a package to satisfy a new dependency — packages requiring removals are "kept back." \`apt full-upgrade\` (formerly \`dist-upgrade\`) drops this constraint: it removes packages when necessary. After upgrading, check \`/var/run/reboot-required\` — if it exists, a kernel or core library update requires a reboot. \`apt list --upgradable\` previews what would be upgraded without doing it. Always run \`sudo apt update\` first.
 
 ## When to use
-
 - When applying routine security patches across the entire system.
 - When catching up a server that hasn't been updated in weeks.
 - When scripting unattended patching with \`sudo apt upgrade -y\` in a cron job.
@@ -4239,13 +4195,12 @@ export const questions: Question[] = [
   {
     id: "pkg5",
     question: "You need a tool to convert Markdown files to HTML but don't know the package name. What command searches the package catalog for packages related to 'markdown'?",
-    answer: "apt-cache search package_name",
+    answer: "apt-cache search markdown",
     explanation: `When you know what you want to do but not which program does it, this command searches the package catalog's names and descriptions for your keyword and lists all matching packages. It's the command-line equivalent of searching the app store for a category of software.
 
 ## Technical \`apt search KEYWORD\` (modern) and \`apt-cache search KEYWORD\` (older, scripting-safe) both search package names and short descriptions in the local metadata cache (built by \`apt update\`). \`apt search\` uses fuzzy matching and colorizes output; \`apt-cache search\` uses exact regex matching. \`--names-only\` (or \`-n\`) restricts matches to package names only. For already-installed packages: \`apt list --installed | grep KEYWORD\`. To find which package provides a specific file: \`apt-file search /usr/bin/foo\` (requires \`apt-file\` package). No sudo needed — read-only query.
 
 ## When to use
-
 - When looking for an unknown package by functionality: \`apt search 'markdown converter'\`.
 - When comparing alternatives: \`apt search 'web server'\` to see nginx, apache2, lighttpd, and others.
 - When discovering available Python libraries: \`apt search python3-flask\`.
@@ -4266,13 +4221,12 @@ export const questions: Question[] = [
   {
     id: "pkg6",
     question: "Before installing the postgresql package you want to read its full description, version, and list of dependencies. What command displays this metadata for a package without installing it?",
-    answer: "apt-cache show package_name",
+    answer: "apt-cache show postgresql",
     explanation: `Before committing to installing a package, this command shows you the full product description — what it does, who maintains it, what other packages it needs, and how much space it will use. It reads from the locally cached catalog so it works even offline.
 
 ## Technical \`apt show PKG\` prints the full APT metadata record: Version, Priority, Maintainer, Architecture, Installed-Size, Depends, Recommends, Suggests, Description, Download-Size, Homepage. \`apt-cache show PKG\` shows ALL available versions. To see just the candidate vs. installed versions and their sources: \`apt-cache policy PKG\`. For an already-installed package's status from the local dpkg database: \`dpkg -s PKG\`. No sudo needed — read-only metadata query.
 
 ## When to use
-
 - When vetting what a package does before installing it on a production server.
 - When checking which version is the current candidate before pinning or holding.
 - When reading the Depends line to predict what will be pulled in as dependencies.
@@ -4293,13 +4247,12 @@ export const questions: Question[] = [
   {
     id: "pkg7",
     question: "A deployment script needs to check whether the curl package is installed before attempting to download files. What pipeline confirms whether a package is installed and exits with a meaningful status code?",
-    answer: "dpkg -l | grep package_name",
+    answer: "dpkg -l | grep curl",
     explanation: `This command looks up the local package database and shows the installation status of any package matching your keyword. Each line starts with a two-letter status code that tells you exactly what state the package is in — installed, config-only, or missing.
 
 ## Technical \`dpkg -l\` lists all packages in the local dpkg database with a two-letter status prefix: first letter = desired state (\`i\`=install, \`r\`=remove), second = actual state (\`i\`=installed, \`c\`=config-only, \`n\`=not installed). A healthy installed package shows \`ii\`. For scripts, \`dpkg -s PKG >/dev/null 2>&1\` is cleaner — exits 0 if installed, non-zero otherwise. Even cleaner: \`dpkg -l PKG\` (no grep needed). For repo-aware listing with versions: \`apt list --installed\`.
 
 ## When to use
-
 - When a script must bail out early if a required package is absent.
 - When auditing what's installed on a server for a compliance inventory.
 - When generating a package manifest for replication to another machine: \`dpkg -l | awk '/^ii/ {print $2}'\`.
@@ -4320,13 +4273,12 @@ export const questions: Question[] = [
   {
     id: "pkg8",
     question: "You added a PPA for a newer version of nginx and want to confirm which version APT would install and which repository it would come from. What command shows the installed version, candidate version, and all available sources for a package?",
-    answer: "apt-cache policy package_name",
+    answer: "apt-cache policy nginx",
     explanation: `When you have multiple software sources (official repos, PPAs, third-party repos), APT has to decide which version to install from which source. This command exposes that decision process: it shows what's currently installed, what APT would pick next, and all the available versions ranked by priority.
 
 ## Technical \`apt-cache policy PKG\` output: \`Installed:\` (current version or \`(none)\`), \`Candidate:\` (what \`apt install PKG\` would select — highest priority available), \`Version table:\` (all versions with priority numbers and source URLs). Priority 500 = normal repo; 100 = already-installed version; higher numbers override lower. A \`***\` marks the installed version. Without a package name, \`apt-cache policy\` shows the global source priority table. Use this when "apt is picking the wrong version" — the candidate line tells you exactly what and why.
 
 ## When to use
-
 - When confirming a PPA's version will take precedence over the official repo after adding it.
 - When debugging "apt installed version X but I expected Y."
 - When verifying a held package is still being held (\`Candidate\` equals \`Installed\`).
@@ -4353,7 +4305,6 @@ export const questions: Question[] = [
 ## Technical \`apt clean\` deletes all \`.deb\` archives from \`/var/cache/apt/archives/\` and the \`partial/\` subdir. \`apt autoclean\` is gentler — only removes archives for versions no longer available from any repository. Neither removes installed packages or metadata. Neither affects \`/var/lib/apt/lists/\` (the metadata cache — \`sudo rm -rf /var/lib/apt/lists/*\` clears that separately). Requires sudo. Classic Dockerfile pattern: \`RUN apt-get install -y pkg && apt-get clean && rm -rf /var/lib/apt/lists/*\` — keeps all three cleanup steps in one \`RUN\` layer.
 
 ## When to use
-
 - When finalizing a Docker image to minimize its size — always in the same RUN command as apt install.
 - When freeing disk space on a long-running server after a large upgrade.
 - When preparing a VM snapshot and wanting to minimize its stored size.
@@ -4373,13 +4324,12 @@ export const questions: Question[] = [
   {
     id: "pkg10",
     question: "Your staging environment must stay on nginx 1.24 while production runs 1.26, and you want to prevent 'apt upgrade' from updating nginx on staging. What command freezes a package at its current version?",
-    answer: "apt-mark hold package_name",
+    answer: "apt-mark hold nginx",
     explanation: `This command puts a freeze on a specific package so the system's update process skips it entirely. The package stays at its current version no matter what newer versions become available, until you explicitly remove the freeze.
 
 ## Technical \`apt-mark hold PKG\` sets the package's dpkg selection to "hold," making it invisible to \`apt upgrade\` — held packages appear as "kept back" in upgrade output. Reverse with \`apt-mark unhold PKG\`. Inspect currently held packages: \`apt-mark showhold\`. Other marks: \`auto\` (dependency-installed, eligible for autoremove), \`manual\` (explicitly installed, never autoremoved). Marks are stored in \`/var/lib/apt/extended_states\` (auto/manual) and dpkg selections (hold). On Fedora/RHEL the equivalent is \`sudo dnf versionlock add PKG\`.
 
 ## When to use
-
 - When staging must stay on a specific version while production migrates to the next.
 - When pinning a kernel version to avoid an in-place upgrade that requires a reboot.
 - When a major version of a database or language runtime must not auto-upgrade because of compatibility constraints.
@@ -4405,7 +4355,6 @@ export const questions: Question[] = [
 ## Technical \`sudo apt install ./file.deb\` — note the \`./\` prefix which tells APT this is a local file path, not a package name to look up in the repos. APT uses its dependency resolver to pull missing dependencies from configured repos before installing. The low-level alternative \`sudo dpkg -i file.deb\` installs the .deb directly but does NOT resolve dependencies — if they're missing, dpkg leaves the system in a "broken" state requiring \`sudo apt --fix-broken install\` to recover. Always use \`apt install ./\` for new work. Verify the file's integrity before installing anything that will run scripts as root.
 
 ## When to use
-
 - When installing third-party .deb files from vendors (Chrome, VS Code, Slack, Zoom).
 - When installing a package you've built locally for testing.
 - When operating in an air-gapped environment where you've pre-downloaded packages.
@@ -4425,13 +4374,12 @@ export const questions: Question[] = [
   {
     id: "pkg12",
     question: "Before removing libssl3 from a server, you need to know which other installed packages depend on it — removing it might break them. What command shows the reverse dependencies of a package?",
-    answer: "apt-cache depends package_name",
+    answer: "apt-cache depends libssl3",
     explanation: `Every package can declare that it needs other packages to work. This command shows that dependency graph — both forward (what this package needs) and backward (what other packages need this one). Before removing something, always check who depends on it to avoid accidentally breaking other software.
 
 ## Technical \`apt-cache depends PKG\` shows what PKG needs: \`Depends\` (required), \`PreDepends\` (must be configured first), \`Recommends\` (installed by default), \`Suggests\` (optional extras), \`Conflicts/Breaks\` (must not coexist). \`apt-cache rdepends PKG\` shows the reverse — who depends on PKG — which is what you want before removing something. \`--installed\` limits to currently-installed packages. \`--recurse\` walks the full tree. A \`|\` in the output means "either-or" alternatives satisfy the dependency.
 
 ## When to use
-
 - When evaluating whether it's safe to remove a library — \`apt-cache rdepends --installed libssl3\` shows everything that would break.
 - When auditing what will be pulled in before installing a large package.
 - When planning a system cleanup and needing to understand the dependency graph.
@@ -4456,7 +4404,7 @@ export const questions: Question[] = [
 
 ## Technical \`add-apt-repository ppa:OWNER/NAME\` (requires the \`software-properties-common\` package) creates a new \`.list\` file in \`/etc/apt/sources.list.d/\`, imports the PPA's GPG signing key into \`/etc/apt/trusted.gpg.d/\`, and runs \`apt update\` automatically. Remove with \`add-apt-repository --remove ppa:...\`. Security note: PPAs run maintainer scripts as root on every upgrade — only add PPAs you trust. The modern more-secure pattern uses \`signed-by=/path/to/key.gpg\` in the sources entry so the key only signs that specific repo.
 
-**When to use:**
+## When to use
 - When you need a newer Python, GCC, or other tool version than Ubuntu's official repos provide.
 - When installing community software that targets Ubuntu but isn't in main/universe.
 - When a vendor (Docker, HashiCorp, Tailscale) provides an official apt repository you need to add.
@@ -4482,7 +4430,6 @@ export const questions: Question[] = [
 ## Technical APT source configuration lives in \`/etc/apt/sources.list\` (legacy main file) and \`/etc/apt/sources.list.d/*.list\` (one file per source). Each active line starts with \`deb\` (binary) or \`deb-src\` (source); commented lines start with \`#\`. Ubuntu 24.04+ also uses \`/etc/apt/sources.list.d/*.sources\` in DEB822 multi-line format. \`grep -R\` scans both locations recursively. For a priority-aware view: \`apt-cache policy\` (no args). To see what third-party software is installed: \`apt list --installed | grep -v 'noble/'\`.
 
 ## When to use
-
 - When auditing a server's software supply chain for a security review.
 - When debugging "apt is installing from the wrong source" by listing all active repos.
 - When migrating a server config and needing to replicate the exact repo setup.
@@ -4508,7 +4455,6 @@ export const questions: Question[] = [
 ## Technical \`man\` (manual) opens a formatted manual page in the \`less\` pager. Pages are organized into numbered sections: 1 = user commands (most used), 2 = system calls, 3 = library functions, 5 = file formats, 8 = admin commands. Specify a section: \`man 5 crontab\` vs \`man 1 crontab\`. Navigation inside man/less: \`/TEXT\` search forward, \`n\`/\`N\` next/previous hit, \`Space\`/\`b\` page down/up, \`q\` quit. For a one-line summary: \`whatis CMD\`. Search by topic: \`apropos KEYWORD\` (same as \`man -k\`). Quicker flag summary: \`CMD --help\`. Install from package: \`sudo apt install man-db\` and optionally the package's doc package.
 
 ## When to use
-
 - When learning a new command's complete option set.
 - When looking up a specific flag you can't remember: \`man rsync\` then \`/--checksum\`.
 - When reading config-file formats: \`man 5 sshd_config\`, \`man 5 crontab\`.
@@ -4534,7 +4480,7 @@ export const questions: Question[] = [
 
 ## Technical \`apt-get check\` reads the dpkg status file and verifies that every installed package's \`Depends:\` are satisfied. Silent output means all is healthy; error output shows unmet dependencies. Recovery steps in order: (1) \`sudo apt --fix-broken install\` — resolves missing deps by downloading them from repos; (2) \`sudo dpkg --configure -a\` — runs post-install scripts for packages stuck "half-configured"; (3) \`sudo apt --fix-missing install\` — retries failed downloads. A package stuck in \`hH\`, \`iU\`, or \`iF\` state in \`dpkg -l\` blocks all future apt operations.
 
-**When to use:**
+## When to use
 - When \`apt\` commands all fail with dependency errors after a crashed installation.
 - When you used \`dpkg -i\` and it reported dependency problems.
 - When auditing a server's package state before a major upgrade.
@@ -4555,13 +4501,12 @@ export const questions: Question[] = [
   {
     id: "pkg15",
     question: "The command 'htop' is not found and you need to know which package provides the /usr/bin/htop binary. What command searches repository metadata to find which package ships a specific file path?",
-    answer: "apt-file list package_name",
+    answer: "apt-file list htop",
     explanation: `Sometimes you know the file or command you need but not which package to install to get it. This tool lets you search in reverse — give it a file path and it tells you which package contains that file, even if the package isn't currently installed.
 
 ## Technical \`apt-file\` is a separate tool (install: \`sudo apt install apt-file && sudo apt-file update\`) that downloads and indexes file lists for all packages in your enabled repos. \`apt-file search PATH\` finds which package(s) provide a given path across the entire repo universe, not just installed packages. \`apt-file list PKG\` lists all files inside a given package. Compare with: \`dpkg -S PATH\` (installed-only reverse lookup) and \`dpkg -L PKG\` (installed-only file list). After adding new repos, run \`sudo apt-file update\` to refresh the index.
 
 ## When to use
-
 - When "command not found: htop" appears and you need to identify the package that provides it.
 - When a library file is missing and you need to know which package to install.
 - When exploring what a package would install before committing: \`apt-file list nginx | grep /etc\`.
@@ -4588,7 +4533,6 @@ export const questions: Question[] = [
 ## Technical \`#!/bin/bash\` is the shebang (hashbang): \`#!\` followed by the interpreter path. The kernel reads this first line before executing the file and invokes that interpreter with the rest of the file as input. Without a shebang, the script may run under the wrong shell or fail entirely. \`#!/usr/bin/env bash\` is the portable alternative — it finds \`bash\` on \`$PATH\` rather than requiring a hardcoded path. To actually run the script: \`chmod +x script.sh\` (mark executable) then \`./script.sh\`. The opening \`set -euo pipefail\` line is strongly recommended for safe scripts: \`-e\` exits on any error, \`-u\` treats unset variables as errors, \`-o pipefail\` catches failures in pipelines.
 
 ## When to use
-
 - When automating any repeatable sequence of commands: provisioning, deployment, backup, testing.
 - When you find yourself typing the same series of commands more than twice.
 - When writing a CI/CD pipeline step that needs to run on a remote server.
@@ -4614,7 +4558,6 @@ export const questions: Question[] = [
 ## Technical \`if [ -f FILE ]; then ... fi\` — the \`[\` command (alias for \`test\`) checks a condition and returns exit code 0 (true) or 1 (false). \`-f\` tests "is this an existing regular file?" Other test operators: \`-d\` directory, \`-e\` any file type, \`-r\` readable, \`-w\` writable, \`-x\` executable, \`-s\` non-empty, \`-z STR\` string empty, \`-n STR\` string non-empty. Spaces around \`[\` and \`]\` are REQUIRED. Always quote variables: \`[ -f "$file" ]\`. The bash-only \`[[ -f $file ]]\` (double brackets) handles unquoted variables more gracefully. \`fi\` closes the \`if\` block (if spelled backwards).
 
 ## When to use
-
 - When sourcing an optional config file only if it exists.
 - When creating a file or directory only if it doesn't already exist.
 - When a script must exit with an error if a required input file is absent.
@@ -4640,7 +4583,6 @@ export const questions: Question[] = [
 ## Technical \`for VAR in LIST; do BODY; done\` — bash expands the glob (\`*.log\`) to matching filenames BEFORE the loop starts. If nothing matches, the literal string \`*.log\` is passed (set \`shopt -s nullglob\` for an empty list instead). Inside the body, \`$file\` (or \`\${file}\`) holds the current filename. Always quote: \`"$file"\` — filenames with spaces split into multiple arguments without quotes. Variations: \`{1..10}\` numeric range; \`"$@"\` all script arguments; C-style \`for ((i=0; i<10; i++))\`; \`for dir in */\` for directories only.
 
 ## When to use
-
 - When compressing, converting, or processing every file matching a pattern in a directory.
 - When renaming a batch of files with a consistent transformation.
 - When running a health check against a list of hosts stored one-per-line in a file.
@@ -4665,7 +4607,7 @@ export const questions: Question[] = [
 
 ## Technical \`read\` is a bash built-in that reads one line from stdin into one or more variables. Key flags: \`-p PROMPT\` prints a prompt on the same line (no newline); \`-s\` silent — disables echoing (for passwords); \`-r\` raw — treats backslash as a literal character (ALWAYS use in scripts); \`-t SECS\` timeout; \`-n N\` read exactly N characters; \`-a ARR\` read words into an array. Without a variable name, input goes into \`$REPLY\`. After \`-s\`, always \`echo\` to move to a new line since the Enter key itself isn't echoed. Always use \`-r\` in scripts to prevent backslash-escape interpretation.
 
-**When to use:**
+## When to use
 - When a deployment script needs a database password without exposing it in shell history.
 - When prompting for a yes/no confirmation before a destructive operation.
 - When collecting a file path or hostname from the operator before proceeding.
@@ -4691,7 +4633,6 @@ export const questions: Question[] = [
 ## Technical \`var=$(command)\` runs \`command\` in a subshell, captures its stdout, strips trailing newlines, and assigns the result to \`var\`. The modern \`$(...)\` syntax supersedes the legacy backtick form (\`\`\`cmd\`\`\`), which doesn't nest cleanly. Always quote the captured value when using it: \`echo "$var"\` — unquoted, word-splitting on whitespace can silently break filenames with spaces. The captured command runs in a subshell, so variable assignments inside it do NOT affect the parent shell. For multi-line output as an array: \`mapfile -t arr < <(command)\`.
 
 ## When to use
-
 - When building filenames that include a timestamp, hostname, or computed value.
 - When capturing a count for conditional logic: \`count=$(grep -c ERROR app.log)\`.
 - When passing the output of one command as an argument to another: \`wc -l $(find . -name '*.py')\`.
@@ -4716,7 +4657,7 @@ export const questions: Question[] = [
 
 ## Technical Bash positional parameters: \`$0\` = script name, \`$1\`–\`$9\` = arguments 1–9, \`\${10}\` and beyond need braces. \`$#\` = count of arguments. \`"$@"\` expands each arg as a separately-quoted word (use this). \`"$*"\` joins all args into one string (avoid). Always quote: \`"$1"\`, \`"$2"\`, \`"$@"\` — args containing spaces must be quoted or they split. \`shift\` drops \`$1\` and renumbers the rest. For flag parsing (\`-v\`, \`--help\`), use \`getopts\` or a \`while\`/\`case\` loop. Functions redifine \`$1\`/\`$2\` to their own arguments, hiding the script's args.
 
-**When to use:**
+## When to use
 - When a script needs to accept a target hostname, file path, or environment name as input.
 - When validating required arguments at script start: \`[ $# -lt 2 ] && echo "Usage: $0 HOST PATH" && exit 1\`.
 - When iterating over all supplied arguments: \`for host in "$@"; do ssh "$host" uptime; done\`.
@@ -4742,7 +4683,6 @@ export const questions: Question[] = [
 ## Technical Every process has three standard file descriptors: 0 = stdin, 1 = stdout (normal output), 2 = stderr (error output). Redirection operators: \`> file\` sends FD 1 to \`file\` (truncates); \`>> file\` appends; \`2> file\` sends FD 2 to \`file\`; \`2>&1\` redirects FD 2 to wherever FD 1 currently points; \`&> file\` bash shorthand for "both stdout and stderr to file." Order matters: \`> file 2>&1\` (both to file, correct) vs \`2>&1 > file\` (stderr to terminal, stdout to file, wrong). Discard with \`/dev/null\`.
 
 ## When to use
-
 - When separating successful backup output from error messages into distinct log files.
 - When suppressing error messages while keeping stdout visible: \`command 2>/dev/null\`.
 - When logging everything from a cron job to a single file: \`command >> /var/log/job.log 2>&1\`.
@@ -4762,12 +4702,12 @@ export const questions: Question[] = [
   {
     id: "bash8",
     question: "Multiple scripts all need the same logging logic. You want to define a reusable 'log' function in a bash script that prints a timestamped message. What is the syntax for defining a bash function?",
-    answer: "function_name() { echo 'Hello'; }",
+    answer: "log_message() { echo \"[$(date)] $1\"; }",
     explanation: `A function is a named block of reusable code. Once defined, you can call it by name just like any command, passing arguments to it. This is how scripts stay maintainable — you write complex logic once, give it a name, and reuse it throughout the script.
 
 ## Technical Two syntaxes: \`name() { ...; }\` (POSIX, portable) and \`function name { ...; }\` (bash-only). Inside a function: \`$1\`, \`$2\` are the function's own arguments (not the script's). Use \`local var=...\` for variables scoped to the function — without \`local\`, any assignment leaks as a global and can corrupt other code. To "return" a value: print it with \`echo\` and capture with \`result=$(myfunc args)\`. \`return N\` sets only the exit code (0-255). Define functions before calling them — bash reads top-to-bottom. \`declare -F\` lists defined functions; \`declare -f myfunc\` shows a function's body.
 
-**When to use:**
+## When to use
 - When the same logic (logging, error handling, cleanup) needs to run from multiple places in a script.
 - When a script is getting long and needs to be organized into named, testable pieces.
 - When building a shared library of helpers that other scripts can \`source\`.
@@ -4793,7 +4733,6 @@ export const questions: Question[] = [
 ## Technical \`if COMMAND; then SUCCESS_BLOCK; else FAILURE_BLOCK; fi\` — bash runs \`COMMAND\` and branches based on its exit code (0 = true, non-zero = false). \`[ -f file ]\` is just a command that returns 0/1 based on the test. The magic variable \`$?\` holds the last command's exit code, but using \`if cmd; then\` directly is cleaner than \`cmd; if [ $? -eq 0 ]\`. Common strict-mode opener: \`set -euo pipefail\` — makes the script exit immediately on any command failure, treating unset variables as errors.
 
 ## When to use
-
 - When creating a required directory and needing to abort if it fails.
 - When checking whether a required tool is installed: \`if command -v git >/dev/null; then ...\`.
 - When running a test quietly and branching on result: \`if grep -q 'ERROR' app.log; then alert; fi\`.
@@ -4819,7 +4758,6 @@ export const questions: Question[] = [
 ## Technical \`while IFS= read -r line; do ... done < file\` breakdown: \`IFS=\` (empty, set only for this command) prevents \`read\` from stripping leading/trailing whitespace; \`-r\` treats backslash as a literal character; \`< file\` redirects stdin from the file in the main shell (not a subshell). Critical: \`cat file | while read line\` creates a SUBSHELL for the loop — any variables set inside don't survive after \`done\`. The \`< file\` form keeps everything in the parent shell. For fields on each line: \`IFS=: read -r user _ uid\` splits on colons.
 
 ## When to use
-
 - When processing a config file, hosts list, or CSV line-by-line in a script.
 - When filtering log files, printing only lines matching a condition.
 - When needing variables set inside the loop to be accessible after the loop finishes.
@@ -4844,7 +4782,7 @@ export const questions: Question[] = [
 
 ## Technical \`tar -cvf archive.tar source/\` flags: \`c\` = Create a new archive; \`v\` = Verbose (print each file as it's added so you can see progress); \`f\` = the next argument is the archive Filename. Always put \`f\` last among the letter flags so the next argument is unambiguously the filename. Without \`-z\`/\`-j\`/\`-J\`, no compression is applied. Tar preserves file permissions, timestamps, ownership, and directory structure. Multiple sources: \`tar -cvf out.tar dir1/ dir2/ file.txt\`. Archive to stdout: \`tar -cv dir/ -f -\`.
 
-**When to use:**
+## When to use
 - When bundling a project directory to send to someone without compressing it (e.g., files are already compressed).
 - When creating a snapshot of a directory for a pre-upgrade backup.
 - When piping a directory to a remote host over SSH: \`tar -cv dir/ -f - | ssh host 'tar -x -C /dest/'\`.
@@ -4870,7 +4808,6 @@ export const questions: Question[] = [
 ## Technical \`tar -xvf archive.tar\` flags: \`x\` = eXtract; \`v\` = Verbose (print each file); \`f\` = Filename follows. Files are extracted into the CURRENT directory by default. Use \`-C /target/dir\` to extract elsewhere. Modern GNU \`tar\` auto-detects compression format on extraction, so \`tar -xvf file.tar.gz\` works even without \`-z\`. Preview the contents without extracting: \`tar -tvf archive.tar\` (t = list). Watch for "tar bombs" — archives that scatter files at the top level; always preview first with \`-t\` for untrusted archives.
 
 ## When to use
-
 - When unpacking a software release downloaded from the internet.
 - When restoring from a tar backup.
 - When a colleague sends a project as a \`.tar\` file.
@@ -4895,7 +4832,7 @@ export const questions: Question[] = [
 
 ## Technical \`gzip FILE\` compresses using the DEFLATE algorithm, replaces the input file with \`FILE.gz\`, and preserves the original timestamp. The original is DELETED unless you use \`-k\` (keep). Compression levels: \`-1\` (fastest) to \`-9\` (smallest); default is \`-6\`. Gzip only processes one file at a time — for directories, tar first (\`tar -czf\`). Companion commands: \`gunzip\` or \`gzip -d\` to decompress; \`zcat\`, \`zgrep\`, \`zless\` to read compressed files directly without decompressing.
 
-**When to use:**
+## When to use
 - When compressing rotated log files that need to be kept for archiving but rarely accessed.
 - When freeing disk space on a server with large SQL dump or CSV files.
 - When shrinking a file before sending it over a slow connection.
@@ -4921,7 +4858,6 @@ export const questions: Question[] = [
 ## Technical \`gunzip FILE.gz\` decompresses, removes the \`.gz\` file, and restores the original. \`gunzip\` is identical to \`gzip -d\`. Keep both with \`-k\`. Output to stdout without removing the \`.gz\`: \`gunzip -c file.gz > newname\`. For log files that you want to read without permanently decompressing, use \`zcat FILE.gz | less\` or \`zgrep 'pattern' FILE.gz\`. For \`.bz2\` files use \`bunzip2\`; for \`.xz\` use \`unxz\` or \`xz -d\`.
 
 ## When to use
-
 - When you need to process a compressed log file with tools that don't understand gzip.
 - When restoring a backup that was compressed with gzip.
 - When a script must work with the raw text content of a .gz file.
@@ -4946,7 +4882,7 @@ export const questions: Question[] = [
 
 ## Technical \`tar -czvf archive.tar.gz dir/\` flags: \`c\` = Create; \`z\` = gZip compression; \`v\` = Verbose; \`f\` = Filename. The \`z\` flag tells tar to pipe the archive through gzip automatically. Mnemonic: "See Zee Vee File." Compression alternatives: \`-j\` for bzip2 (\`.tar.bz2\`, better compression, slower), \`-J\` for xz (\`.tar.xz\`, best compression, slowest), \`--zstd\` for zstd (\`.tar.zst\`, fast and small). On extract, swap \`c\` for \`x\`: \`tar -xzvf archive.tar.gz\`. Modern tar auto-detects compression on extract so \`tar -xvf\` works without specifying \`-z\`.
 
-**When to use:**
+## When to use
 - When creating a pre-upgrade backup: \`tar -czvf nginx_backup_$(date +%F).tar.gz /etc/nginx/\`.
 - When bundling a project directory to send to someone or upload to a server.
 - When archiving logs for long-term storage.
@@ -4972,7 +4908,6 @@ export const questions: Question[] = [
 ## Technical \`tar -xzvf archive.tar.gz\` flags: \`x\` = eXtract; \`z\` = gZip (decompress); \`v\` = Verbose; \`f\` = Filename. Add \`-C /target/\` to extract to a specific directory (the directory must exist). Modern GNU tar auto-detects compression, so \`tar -xvf file.tar.gz\` also works. For bzip2: \`-j\`; for xz: \`-J\`. Always preview untrusted archives first: \`tar -tzvf archive.tar.gz | head\`.
 
 ## When to use
-
 - When deploying a release artifact to a production server.
 - When unpacking a Linux kernel or software source tarball for compilation.
 - When restoring from a gzipped backup.
@@ -4996,7 +4931,7 @@ export const questions: Question[] = [
 
 ## Technical \`bzip2 FILE\` uses the Burrows-Wheeler Transform algorithm to compress, replaces the input with \`FILE.bz2\`, and removes the original unless \`-k\` is used. Produces 10–15% smaller output than gzip on typical text/SQL data, but is 3–5× slower. The reverse command is \`bunzip2\` (or \`bzip2 -d\`). For directories: \`tar -cjf archive.tar.bz2 dir/\` (use \`j\` flag in tar). Reading \`.bz2\` files without decompressing: \`bzcat\`, \`bzgrep\`, \`bzless\`. Modern alternative: \`zstd\` (faster than gzip, often smaller than bzip2).
 
-**When to use:**
+## When to use
 - When upload bandwidth is the bottleneck and smaller files justify slower compression.
 - When compressing large SQL dumps or CSV files for archival where CPU time doesn't matter.
 - When a recipient specifically requires or expects bzip2 format.
@@ -5022,7 +4957,6 @@ export const questions: Question[] = [
 ## Technical \`uptime\` reads from \`/proc/uptime\` and \`/proc/loadavg\`. The three load-average values represent the mean number of processes in a runnable or uninterruptible state over the past 1, 5, and 15 minutes — essentially the average queue depth for CPU time. A healthy rule of thumb: on an N-core machine, load below N means the CPU is not saturated. A 4-core machine with a 1-minute load of 8.0 means processes are waiting twice as long as they should. The \`w\` command combines \`uptime\` output with per-user session info. \`/proc/loadavg\` exposes the same data for scripts.
 
 ## When to use
-
 - When you first log in to any server to confirm it hasn't silently rebooted overnight.
 - When a slow-responding app may be CPU-starved and you want a sub-second triage.
 - When comparing load before and after a config change to see if the server settled down.
@@ -5048,7 +4982,6 @@ export const questions: Question[] = [
 ## Technical \`df\` (disk free) reads mount table entries from \`/proc/mounts\` and calls \`statfs()\` for each. The \`-h\` flag (human-readable) formats byte counts with SI suffixes (K, M, G). The \`Use%\` column is the one to watch; it's calculated as used/(used+available), not used/size, because some space is reserved for root. Once a filesystem hits ~95% the reserved blocks are exhausted and non-root writes fail. Lines starting with \`tmpfs\` and \`devtmpfs\` are RAM-backed virtual filesystems (not disk). Add \`-T\` to see the filesystem type (ext4, xfs, btrfs). Add \`-i\` to check inode usage — a disk can be 100% inode-exhausted while still having free space, causing identical "no space" errors.
 
 ## When to use
-
 - When an application throws "No space left on device" before trying anything else.
 - Before installing a large package or database to ensure the target partition has room.
 - When running routine capacity checks on production servers.
@@ -5074,7 +5007,6 @@ export const questions: Question[] = [
 ## Technical \`free\` reads \`/proc/meminfo\`. The \`-h\` flag formats values with Gi/Mi suffixes. Memory is split into RAM (\`Mem:\` row) and swap (\`Swap:\` row — disk acting as emergency overflow RAM). \`buff/cache\` shows RAM used as page cache and buffers; this is not "wasted" — it's actively speeding up I/O and will be reclaimed under pressure. \`available\` is the kernel's own estimate of how much is reclaimable: free + reclaimable page cache. When \`available\` is near zero and \`Swap used\` is climbing, the system is under memory pressure — expect performance degradation and potential OOM kills. The \`-s N\` flag continuously refreshes every N seconds.
 
 ## When to use
-
 - When an application feels sluggish and you suspect memory pressure before profiling it.
 - Before launching a memory-hungry job like a JVM server or large Postgres query.
 - When \`Swap used\` is non-zero and you want to understand how bad the situation is.
@@ -5100,7 +5032,6 @@ export const questions: Question[] = [
 ## Technical \`ps aux\` uses BSD-style flags (no leading dash): \`a\` = all users, \`u\` = user-oriented format (adds %CPU, %MEM, VSZ, RSS), \`x\` = include daemonized processes without a controlling terminal. Key output columns: PID (process ID), %CPU (sampled CPU usage), %MEM (fraction of physical RAM), VSZ (virtual address space in KB), RSS (resident set size — physical RAM in KB), STAT (process state: R running, S sleeping, D uninterruptible I/O, Z zombie, T stopped), COMMAND. To sort by CPU at collection time: \`--sort=-%cpu\`. To sort by RAM: \`--sort=-rss\`. \`ps\` is a snapshot; for a live updating view use \`top\` or \`htop\`.
 
 ## When to use
-
 - When \`uptime\` shows high load and you need to identify the offending process.
 - When you need a PID to pass to \`kill\` or \`strace\`.
 - When capturing a snapshot for comparison before and after a config change.
@@ -5126,7 +5057,7 @@ export const questions: Question[] = [
 
 ## Technical \`apt update\` re-downloads the package index from every repository listed in \`/etc/apt/sources.list\` and \`/etc/apt/sources.list.d/\`, storing results under \`/var/lib/apt/lists/\`. No packages are installed or modified. \`apt upgrade\` then compares installed versions against the refreshed index and upgrades packages where a newer version exists, but only if doing so requires no removals (packages held back due to dependency conflicts show in a "held back" line). For a more thorough pass that allows removals to satisfy cross-package dependency changes, use \`sudo apt full-upgrade\`. The \`&&\` ensures step 2 is skipped if step 1 fails (network unreachable, GPG key error, etc.). After kernel or libc upgrades a reboot is required: \`[ -f /var/run/reboot-required ] && echo reboot needed\`. Fedora/RHEL equivalent: \`sudo dnf upgrade\`.
 
-**When to use:**
+## When to use
 - Weekly or monthly patching of a production server.
 - After cloning a fresh VM before installing any project-specific software.
 - When applying a security advisory that lists a specific CVE fix.
@@ -5153,7 +5084,6 @@ export const questions: Question[] = [
 ## Technical APT tracks whether each package was installed explicitly (by the user) or automatically (as a dependency) in \`/var/lib/apt/extended_states\`. \`autoremove\` finds packages marked auto-installed that no other installed package depends on and removes them. By default, config files in \`/etc\` are preserved; add \`--purge\` to wipe configs too. Before confirming, read the proposed removal list — \`autoremove\` occasionally proposes removing something you consider primary (especially if you installed it via \`apt install -f\` or dependency drag-in). To mark a package as manually installed so \`autoremove\` won't touch it: \`sudo apt-mark manual PKGNAME\`. Fedora/RHEL equivalent: \`sudo dnf autoremove\`.
 
 ## When to use
-
 - After uninstalling a large package like texlive or a desktop environment.
 - As part of a monthly cleanup after kernel upgrades (pairs well with \`apt upgrade\`).
 - Before a snapshot or container image export to keep the image lean.
@@ -5180,7 +5110,6 @@ export const questions: Question[] = [
 ## Technical APT's package cache lives at \`/var/cache/apt/archives/\`. \`autoclean\` removes \`.deb\` files where no enabled repository still lists that exact version. \`clean\` (no "auto") deletes EVERY cached \`.deb\` — maximum space reclaimed but each future \`apt install\` re-downloads from the network. \`autoclean\` is safe to run on any schedule. Check current cache size with \`du -sh /var/cache/apt/archives\`. Neither command touches INSTALLED packages or package metadata — only cached installer files. Fedora equivalent: \`dnf clean packages\` (conservative) or \`dnf clean all\` (everything). In Dockerfiles the canonical layer-shrink line is \`apt-get clean && rm -rf /var/lib/apt/lists/*\`.
 
 ## When to use
-
 - On a regular weekly or monthly cron job to keep the cache from growing unbounded.
 - Before a disk-space-sensitive backup or snapshot.
 - As the final layer of a Dockerfile to minimize image size.
@@ -5206,7 +5135,7 @@ export const questions: Question[] = [
 
 ## Technical \`-l\` (long format) outputs one line per entry with: permission string (10 chars: type + 3 rwx triples for user/group/other), hard link count, owner, group, size in bytes, mtime, and name. \`-a\` (all) includes entries whose names start with \`.\`, including \`.\` (current dir) and \`..\` (parent dir). The first character of the permission string is the file type: \`-\` regular file, \`d\` directory, \`l\` symlink, \`b\` block device, \`c\` char device, \`s\` socket, \`p\` named pipe. Add \`-h\` for human-readable sizes (\`ls -lah\` is the everyday workhorse). Add \`-t\` to sort by modification time newest first. Add \`-S\` to sort by size. Add \`-r\` to reverse any sort.
 
-**When to use:**
+## When to use
 - Before running \`chmod\` or \`chown\` to see current permissions.
 - When hunting for hidden \`.env\` or \`.git\` directories in a project folder.
 - When checking who owns files in a shared directory that multiple services write to.
@@ -5233,7 +5162,6 @@ export const questions: Question[] = [
 ## Technical \`find\` takes a starting path and a series of expressions. \`.\` means current directory. \`-name 'PATTERN'\` matches the basename against a glob; the single quotes prevent the shell from expanding the glob before \`find\` sees it (quoting is critical). Key additional tests: \`-type f\` (regular files only), \`-type d\` (directories), \`-size +100M\` (bigger than 100 MB), \`-mtime -1\` (modified in the last 24 hours), \`-newer FILE\` (modified after FILE). Tests without explicit operators are implicit AND. Actions: \`-print\` (default), \`-delete\` (irreversible!), \`-exec CMD {} \;\` (run CMD per file), \`-exec CMD {} +\` (batch form, faster). Use \`-iname\` for case-insensitive matching. Use \`-maxdepth N\` to limit recursion depth.
 
 ## When to use
-
 - When you know a filename but not its location.
 - When cleaning up old log files: \`find /var/log -name '*.log' -mtime +30 -delete\`.
 - When auditing a project for files that shouldn't be committed: \`find . -name '*.env'\`.
@@ -5254,12 +5182,12 @@ export const questions: Question[] = [
   {
     id: "daily10",
     question: "Your deploy script needs to create the path `~/projects/myapp/logs/archive` even if none of those directories exist yet. What single command creates the full directory chain, succeeding silently even if some directories already exist?",
-    answer: "mkdir -p project",
+    answer: "mkdir -p ~/projects/myapp/logs/archive",
     explanation: `Plain \`mkdir\` fails if any parent directory in the path is missing. The \`-p\` flag fixes this: it creates every missing directory in the chain from left to right, and — crucially — it doesn't complain if the directory already exists. This makes it safe to run repeatedly in a script. It's the standard "ensure this directory exists before I write to it" pattern.
 
 ## Technical Without \`-p\`, \`mkdir a/b/c\` fails with "No such file or directory" if \`a\` or \`a/b\` doesn't exist. With \`-p\`, it creates all missing components. The idempotency (silent success on pre-existing directory) is what makes it script-safe — no need for \`[ -d dir ] || mkdir dir\` guards. Default permissions are \`0777 & ~umask\`, typically \`0755\`; override with \`-m MODE\`. Brace expansion lets you create many sibling directories in one call: \`mkdir -p src/{api,web,worker}/{handlers,models,tests}\` creates 9 directories at once. Add \`-v\` for verbose output that lists each path created. The \`$(dirname "$file")\` pattern is useful in scripts: \`mkdir -p "$(dirname "$OUTFILE")"\` ensures the output file's parent exists.
 
-**When to use:**
+## When to use
 - In any deploy or setup script before writing to a path that may not exist.
 - When scaffolding a new project directory layout in one command.
 - When extracting archives into a target path that might be missing.
@@ -5286,7 +5214,6 @@ export const questions: Question[] = [
 ## Technical \`git status\` compares three trees: the HEAD commit (last snapshot), the index (staging area), and the working tree (current files on disk). Output sections: "Changes to be committed" = files in index that differ from HEAD (staged); "Changes not staged for commit" = working-tree files that differ from index (modified but not staged); "Untracked files" = paths not in the index at all. Add \`-s\` for short/porcelain output: two-letter codes where first char = index state, second = working-tree state (\`M \` staged-modified, \` M\` unstaged-modified, \`A \` new staged file, \`??\` untracked). \`--porcelain\` guarantees stable format across git versions for scripts. \`-uall\` shows untracked files inside untracked directories (default collapses them to the directory name).
 
 ## When to use
-
 - Before every single commit to verify exactly what will be included.
 - After a merge or rebase to check for unresolved conflicts.
 - When switching between tasks to remember where you left off.
@@ -5312,7 +5239,7 @@ export const questions: Question[] = [
 
 ## Technical \`npm install\` (alias: \`npm i\`) reads \`package.json\` for the dependency lists (\`dependencies\` and \`devDependencies\`) and \`package-lock.json\` for exact pinned versions. It installs into \`./node_modules/\`. \`package-lock.json\` is the reproducibility guarantee — commit it so teammates get identical trees. For CI pipelines, prefer \`npm ci\`: it's faster, refuses to modify package files, errors on lockfile discrepancies, and always starts from a clean slate. With a package name (\`npm install lodash\`), it adds that package to \`dependencies\` and installs it. \`--save-dev\` (\`-D\`) adds to \`devDependencies\` instead. \`-g\` installs globally to a system path. \`--omit=dev\` skips dev dependencies for production deploys. Common alternatives: \`pnpm install\`, \`yarn\`, \`bun install\`.
 
-**When to use:**
+## When to use
 - When setting up a freshly cloned JavaScript or TypeScript project.
 - After pulling changes that modified \`package.json\` or \`package-lock.json\`.
 - Before running \`npm run build\` or \`npm test\` in a CI environment.
@@ -5338,7 +5265,7 @@ export const questions: Question[] = [
 
 ## Technical \`make\` reads \`Makefile\` (or \`makefile\`) in the current directory and executes the named target's recipe lines. The \`install\` target by convention copies build outputs to system prefix paths — typically \`/usr/local/bin\`, \`/usr/local/lib\`, \`/usr/local/share/man\`, or wherever \`./configure\` was told to put them via \`--prefix\`. The classic source-build sequence is \`./configure && make && sudo make install\`. CAUTION: files installed this way bypass the package manager (APT/DNF don't know they exist, so \`apt list --installed\` won't show them). To avoid root: pass \`PREFIX=$HOME/.local\` to install into your home directory. To wrap the install in a real .deb for package-manager tracking, use \`checkinstall\` instead of \`sudo make install\`. Parallel build: \`make -j$(nproc)\` uses all CPU cores.
 
-**When to use:**
+## When to use
 - Installing software from source when no package exists in your distro's repos.
 - Following a project's build instructions that specify the configure/make/install sequence.
 - Installing a patched version of a tool that differs from the distro package.
@@ -5365,7 +5292,6 @@ export const questions: Question[] = [
 ## Technical \`top\` is part of the \`procps\` package, which is a mandatory dependency on every mainstream Linux distribution. It reads from \`/proc\` continuously and redraws the terminal at a configurable interval (default 3 seconds; change with \`-d N\`). Header sections: uptime/load, task counts, CPU breakdown (us/sy/ni/id/wa/hi/si/st), and memory summary. Process columns: PID, USER, PR (priority), NI (nice value -20 to +19), VIRT (virtual memory), RES (resident/physical RAM), SHR (shared memory), S (state), %CPU, %MEM, TIME+ (cumulative CPU), COMMAND. Interactive keys: \`q\` quit, \`P\` sort by CPU% (default), \`M\` sort by %MEM, \`T\` sort by cumulative time, \`k\` kill (type PID then signal), \`r\` renice, \`1\` toggle per-CPU view, \`c\` toggle full command, \`u\` filter by user, \`h\` help. Batch mode: \`top -b -n 1\` for scriptable one-shot output.
 
 ## When to use
-
 - When \`htop\` isn't installed and you need a live process view.
 - When SSHed into a minimal system with no additional tools available.
 - When you need to kill a process interactively (press \`k\` then enter the PID).
@@ -5392,7 +5318,6 @@ export const questions: Question[] = [
 ## Technical \`htop\` was written by Hisham Muhammad (the 'h') as a more modern \`top\`. It reads from \`/proc\` like \`top\` but renders using ncurses with colors. Per-CPU bars immediately show whether load is spread across all cores or pinned on one. Key differences from \`top\`: F5 toggles parent→child tree view (shows process hierarchy), F9 sends a signal to the selected process (default SIGTERM), F3 or \`/\` searches by name, F4 filters the list, F6 changes sort column. Mouse support works in most terminals. \`htop\` must be installed first: \`sudo apt install htop\` on Debian/Ubuntu, \`sudo dnf install htop\` on Fedora/RHEL. Config is stored in \`~/.config/htop/htoprc\`. For even richer visuals, \`btop\` and \`glances\` are newer alternatives.
 
 ## When to use
-
 - Whenever you would use \`top\` but have the option of a nicer interface.
 - When you need to navigate a long process list interactively with arrow keys.
 - When you want to identify which specific CPU core is hot (visible in the bar display).
@@ -5412,13 +5337,12 @@ export const questions: Question[] = [
   {
     id: "daily16",
     question: "Your application is throwing errors and you want to watch `/var/log/myapp/error.log` in real time as new lines are written, so you can see errors the moment they happen. What command keeps the file open and prints new lines continuously?",
-    answer: "tail -f logs",
+    answer: "tail -f /var/log/myapp/error.log",
     explanation: `The basic \`tail\` command shows the last few lines of a file and exits. Adding the \`-f\` flag changes this: after printing the last lines, it keeps running and prints any new lines as they arrive, in real time. Press Ctrl-C to stop. It's the fastest way to watch a log file as events happen.
 
 ## Technical \`tail -f\` holds the file open using \`inotify\` (Linux kernel file-watch API) and prints new bytes as they're appended. The default initial output is the last 10 lines; change with \`-n N\`. The plain \`-f\` flag won't recover if the file is rotated (renamed/replaced by logrotate) — it silently stops seeing new writes. Use \`-F\` (capital F) instead: it polls for the file's reappearance by name and reopens it after rotation — the right choice for production log files. To follow multiple files simultaneously, pass several paths: \`tail -F /var/log/nginx/access.log /var/log/nginx/error.log\`. To filter live output, pipe to \`grep --line-buffered\` (the \`--line-buffered\` flag prevents grep from buffering output). Alternative: \`less +F file\` enters follow mode inside less, and pressing Ctrl-C drops you into interactive search without losing your position.
 
 ## When to use
-
 - Watching application logs during deployment to confirm startup succeeds.
 - Monitoring an access log while reproducing a bug to correlate request and error.
 - Following \`/var/log/syslog\` while troubleshooting a hardware or driver issue.
@@ -5444,7 +5368,7 @@ export const questions: Question[] = [
 
 ## Technical \`ss\` (socket statistics) reads directly from kernel netlink sockets, making it much faster than the deprecated \`netstat\` which parsed \`/proc/net/tcp\`. Flags: \`-t\` TCP (use \`-u\` for UDP or \`-tu\` for both), \`-l\` listening sockets only (omit to see all states including ESTABLISHED), \`-n\` numeric output (no name resolution — faster, no DNS lookup), \`-p\` show process info. The "Local Address:Port" column tells you what the socket is bound to: \`0.0.0.0:80\` = all IPv4 interfaces, \`127.0.0.1:5432\` = localhost only (not externally accessible), \`[::]:22\` = all IPv6 interfaces. Without \`sudo\`, process info only shows your own sockets. \`ss -s\` gives a one-line summary of socket counts. To see active ESTABLISHED connections (not just listeners), drop \`-l\`.
 
-**When to use:**
+## When to use
 - When a process fails to start with "address already in use" to find what holds the port.
 - Before configuring firewall rules, to audit what services are actually exposed.
 - When matching a PID from \`top\` or \`ps\` to its listening port.
@@ -5470,7 +5394,7 @@ export const questions: Question[] = [
 
 ## Technical \`grep\` (Globally search a Regular Expression and Print) with \`-r\` recursively descends into all subdirectories. Pattern is a Basic Regular Expression (BRE) by default; use \`-E\` for Extended regex (adds \`+\`, \`?\`, \`|\`, \`()\` without backslashes) or \`-F\` for fixed literal strings (faster and safer when the pattern has no regex characters). Key additional flags: \`-i\` case-insensitive, \`-n\` show line numbers (very useful), \`-l\` list only filenames with matches (not the matching lines), \`-w\` whole-word match, \`-C N\` show N lines of context around each match, \`--include='*.py'\` restrict to specific file types, \`--exclude-dir=node_modules\` skip directories. Output format: \`filename:linenum:matchingline\`. Modern faster alternatives: \`rg\` (ripgrep) respects \`.gitignore\` and is 5-10x faster — install with \`sudo apt install ripgrep\`.
 
-**When to use:**
+## When to use
 - Finding every reference to a variable, function, or config key across a codebase.
 - Locating which config file sets a specific value like a hostname or port.
 - Hunting for TODO/FIXME comments before a release.
@@ -5496,7 +5420,7 @@ export const questions: Question[] = [
 
 ## Technical \`sed\` (stream editor) processes input line by line. The substitution command syntax is \`s/PATTERN/REPLACEMENT/FLAGS\`. PATTERN is a Basic Regular Expression (BRE); use \`-E\` for Extended regex. REPLACEMENT can use \`&\` (whole match) and \`\\1\`,\`\\2\` (capture groups). FLAGS: \`g\` global (all matches on line), \`i\` case-insensitive, \`N\` replace only Nth occurrence. Without \`-i\`, output goes to stdout (safe inspection mode). \`-i\` edits in place (destructive). \`-i.bak\` edits in place and writes the original to \`FILE.bak\` first — always use this for one-shot file edits. The delimiter \`/\` can be any character; use \`|\` or \`#\` when the pattern contains slashes: \`sed 's|/old/path|/new/path|g'\`. Beyond substitution: \`d\` deletes lines, \`/^#/d\` deletes comment lines, \`/^$/d\` deletes blank lines.
 
-**When to use:**
+## When to use
 - Bulk-replacing a hostname, port, or path in a config file.
 - Stripping comment lines and blank lines from a file in a pipeline.
 - Transforming output mid-pipeline without creating a temporary file.
@@ -5520,9 +5444,9 @@ export const questions: Question[] = [
     answer: "awk '{print $1}' file.txt",
     explanation: `This tool reads text line by line and splits each line into numbered fields based on whitespace (or any delimiter you choose). Referring to the fields as \`$1\`, \`$2\`, and so on, you tell it what to do with each line. \`{print $1}\` means "for every line, print the first field." It's like a tiny programming language designed specifically for working with tabular text data.
 
-**Technical:** \`awk\` is a pattern-action language: \`'PATTERN { ACTION }'\`. With no pattern, the action runs on every line. Fields: \`$1\`,\`$2\`,...,\`$NF\` (last field); \`$0\` = whole line. \`NR\` = current line number, \`NF\` = number of fields on current line. Default field separator is any whitespace; override with \`-F CHAR\`: \`-F:\` for colon-separated, \`-F,\` for CSV, \`-F'\\t'\` for tab-separated. Patterns can be regex (\`/ERROR/ {print}\`), expressions (\`$3 > 100 {print}\`), or special blocks: \`BEGIN { setup code }\` (runs before first line) and \`END { teardown/summary }\` (runs after last line). Arithmetic is built in: \`{sum += $2} END {print sum}\` sums a column. Arrays: \`count[$1]++\` tallies occurrences. \`awk\` handles anything \`cut\` and \`grep\` can do plus arithmetic and logic.
+## Technical \`awk\` is a pattern-action language: \`'PATTERN { ACTION }'\`. With no pattern, the action runs on every line. Fields: \`$1\`,\`$2\`,...,\`$NF\` (last field); \`$0\` = whole line. \`NR\` = current line number, \`NF\` = number of fields on current line. Default field separator is any whitespace; override with \`-F CHAR\`: \`-F:\` for colon-separated, \`-F,\` for CSV, \`-F'\\t'\` for tab-separated. Patterns can be regex (\`/ERROR/ {print}\`), expressions (\`$3 > 100 {print}\`), or special blocks: \`BEGIN { setup code }\` (runs before first line) and \`END { teardown/summary }\` (runs after last line). Arithmetic is built in: \`{sum += $2} END {print sum}\` sums a column. Arrays: \`count[$1]++\` tallies occurrences. \`awk\` handles anything \`cut\` and \`grep\` can do plus arithmetic and logic.
 
-**When to use:**
+## When to use
 - Extracting a specific column from \`ps\`, \`df\`, \`ls -l\`, or any tabular command output.
 - Summing a column of numbers in a data file.
 - Filtering rows where a column meets a condition (e.g., \`$3 > 5\`).
@@ -5549,7 +5473,6 @@ export const questions: Question[] = [
 ## Technical \`uniq\` only collapses ADJACENT duplicates — that's why \`sort\` must come first (otherwise non-adjacent duplicates stay separate). The \`-c\` flag (count) prepends the occurrence count to each unique line. Follow-up: \`sort -rn\` sorts the output numerically descending, making the most frequent entry first; \`head -N\` then limits to top N. The full "top N of anything" incantation: \`sort | uniq -c | sort -rn | head -N\`. To count by a specific column rather than the whole line, pre-extract with \`awk '{print $COL}'\` or \`cut -d' ' -f COL\`. Other useful \`uniq\` flags: \`-d\` show only lines that appear MORE THAN ONCE, \`-u\` show only lines that appear EXACTLY ONCE, \`-i\` case-insensitive comparison.
 
 ## When to use
-
 - Finding the top N IP addresses in a web server access log.
 - Counting the frequency of error messages in an application log.
 - Identifying the most-changed files in a git log: \`git log --name-only --pretty='' | sort | uniq -c | sort -rn | head\`.
@@ -5575,7 +5498,7 @@ export const questions: Question[] = [
 
 ## Technical \`crontab -e\` opens the user's personal crontab (stored at \`/var/spool/cron/crontabs/USERNAME\` on Debian or \`/var/spool/cron/USERNAME\` on RHEL) in \`$EDITOR\`, falling back to \`vi\`. Set \`EDITOR=nano\` to use nano. When saved, \`cron\` validates the syntax before activating — syntax errors are rejected. Each active line format: \`MIN HOUR DOM MON DOW COMMAND\` (all \`*\` = "any"). Special strings also work: \`@reboot\`, \`@daily\`, \`@weekly\`. By default, cron emails command output to the user; redirect \`>> /var/log/myjob.log 2>&1\` to suppress mail and log instead. Key companion commands: \`crontab -l\` lists current jobs (no editor), \`crontab -r\` DELETES the entire crontab with no confirmation prompt (dangerous). With \`sudo -u USERNAME crontab -e\` you can edit another user's crontab as root. System-wide cron jobs live in \`/etc/cron.d/\` (require an extra username field).
 
-**When to use:**
+## When to use
 - Scheduling nightly database backups.
 - Running a cleanup or log-rotation script on a schedule.
 - Setting up a periodic health check or heartbeat ping.
@@ -5601,7 +5524,7 @@ export const questions: Question[] = [
 
 ## Technical \`systemctl\` is the front-end to \`systemd\`, the init system on every modern mainstream Linux distribution. \`status SERVICE\` combines: loaded state (unit file location + enabled/disabled for boot), active state (active/inactive/failed + timestamp), PID, resource usage (CPU time, memory), CGroup members, and the last ~10 journal lines for the service. The leading dot is colored: green = running, red = failed, white = inactive. Reading the status requires no \`sudo\`; the journal section may be truncated for non-root users without \`systemd-journal\` group membership. Essential companion verbs (all require \`sudo\`): \`start\`/\`stop\` (now), \`restart\` (stop+start), \`reload\` (re-read config without full restart if supported), \`enable\`/\`disable\` (boot persistence), \`enable --now\` (enable + start in one step). Script-friendly: \`systemctl is-active nginx\` prints "active" or "inactive" and returns exit code 0 or 1. To see every failed service at once: \`systemctl list-units --failed\`. For deeper log investigation: \`journalctl -xeu nginx\`.
 
-**When to use:**
+## When to use
 - Confirming a freshly deployed service actually started.
 - After editing a config file to verify the reload/restart succeeded.
 - When a service doesn't respond and you need the last error lines without hunting log files.
@@ -5627,7 +5550,7 @@ export const questions: Question[] = [
 
 ## Technical \`journalctl\` reads systemd's binary journal stored in \`/var/log/journal/\` (or \`/run/log/journal/\` for volatile storage). \`-u UNIT\` filters by systemd unit name (the service name). Key flags: \`-n N\` last N lines only (like \`tail -n\`), \`-f\` follow live like \`tail -f\`, \`-r\` reverse chronological (newest first), \`-e\` jump to end of pager immediately, \`-x\` include explanatory text for known error conditions, \`-p err\` filter by syslog priority (emerg/alert/crit/err/warning/notice/info/debug), \`--since '2 hours ago'\` or \`--since '2026-05-17 09:00'\` for time bounds, \`--until\` for end time. The standard "debug a failing service" command is \`sudo journalctl -xeu nginx\`. Without \`sudo\`, you may see only partial output; add yourself to the \`systemd-journal\` group for permanent read access. Journal persists across reboots if \`Storage=persistent\` in \`/etc/systemd/journald.conf\`.
 
-**When to use:**
+## When to use
 - When \`systemctl status\` shows a service failed but only displays 10 log lines.
 - When investigating a problem that happened at a specific time last night.
 - When watching a service's log stream live during a rolling deploy.
@@ -5654,7 +5577,6 @@ export const questions: Question[] = [
 ## Technical \`ss -tulnp\` adds \`-u\` (UDP) to the TCP-focused \`ss -tlnp\`. The full flag set: \`-t\` TCP, \`-u\` UDP, \`-l\` listening only, \`-n\` numeric (no name resolution), \`-p\` process info (requires \`sudo\` for other users). The Netid column shows \`tcp\` or \`udp\`. Removing \`-l\` shows ALL socket states including ESTABLISHED connections — useful to see who is actively connected. \`ss -s\` prints a one-line summary of socket counts by state and protocol (quick sanity check). To filter to a specific port: \`sudo ss -tulnp | grep :53\`. To count active connections per service: \`sudo ss -tnp state established | awk '{print $NF}' | sort | uniq -c\`. Older equivalent: \`sudo netstat -tulnp\` — deprecated but still functional on most distros.
 
 ## When to use
-
 - Full security audit of what services are exposed before configuring a firewall.
 - Debugging a UDP service (DNS resolver, NTP, syslog) that isn't responding.
 - Answering "is anything listening on port 8080 or port 8443?" in one command.
@@ -5681,7 +5603,6 @@ export const questions: Question[] = [
 ## Technical \`;\` is the bash command separator — syntactically equivalent to a newline. The shell executes commands left to right, each in turn regardless of exit codes. The exit code of the last command becomes the exit code of the whole line. Key safety concern: \`cd /missing ; rm -rf *\` — if \`cd\` fails, \`rm -rf *\` runs in the CURRENT directory and can cause catastrophic deletion. PREFER \`&&\` for any chain where a later step is dangerous without a prior step having succeeded. Use \`;\` only when the commands are genuinely independent. A group using braces shares redirections: \`{ date; uptime; df -h; } >> daily-snapshot.txt\` appends all three commands' output to one file. A parenthesized group \`(cd /tmp; ls)\` runs in a subshell — the \`cd\` doesn't affect the calling shell.
 
 ## When to use
-
 - When two commands are completely independent and both should always run.
 - When grouping commands for a single redirect: \`{ cmd1; cmd2; } > log\`.
 - When the second step makes sense even if the first fails (e.g., \`make ; echo done\`).
@@ -5708,7 +5629,6 @@ export const questions: Question[] = [
 ## Technical \`&&\` is short-circuit logical AND in bash. A command's exit code of 0 = success; any non-zero = failure. \`cmd1 && cmd2\` runs \`cmd2\` only when \`cmd1\` exits 0. The exit code of the entire \`&&\` expression is: 0 if the last command ran and succeeded, or the exit code of the first failing command. Use case: \`cd /tmp/work && rm -rf *\` is safe — if \`cd\` fails (directory missing), \`rm\` is skipped. Compare to \`cd /tmp/work ; rm -rf *\` which would delete files in the current directory if \`cd\` fails. Common patterns: \`[ -f config.yml ] && source config.yml\` (source only if file exists); \`command -v jq >/dev/null && echo 'jq present'\` (check tool availability). Gotcha: \`cmd && success_action || failure_action\` looks like if/else but is BROKEN — if \`success_action\` itself fails, \`failure_action\` also runs. Use real \`if/then/else\` for that pattern.
 
 ## When to use
-
 - Build/test/deploy chains where each step depends on the previous.
 - Safe preconditions before destructive operations (cd before rm).
 - One-liner tool presence checks in scripts.
@@ -5735,7 +5655,6 @@ export const questions: Question[] = [
 ## Technical \`||\` is short-circuit logical OR. \`cmd1 || cmd2\` runs \`cmd2\` only when \`cmd1\` exits non-zero. The exit code of the expression is: 0 if either side succeeds, non-zero only if BOTH sides fail. The critical safety valve under \`set -e\` (exit-on-error): the LEFT side of \`||\` is exempt from auto-exit-on-error — so \`risky_cmd || true\` runs \`risky_cmd\` but doesn't kill the script if it fails (the \`|| true\` absorbs the failure). Group multi-step fallbacks with braces: \`cmd || { log_error; rm -f /tmp/lock; exit 1; }\`. The tempting pattern \`cmd && success || failure\` is SUBTLY BROKEN: if \`success\` itself exits non-zero, \`failure\` also runs. For a correct if/else use real shell syntax: \`if cmd; then success; else failure; fi\`.
 
 ## When to use
-
 - Providing a default when something is missing: \`[ -f .env ] || cp .env.example .env\`.
 - Error handling inline without verbose if/else blocks.
 - Opting out of \`set -e\` for one command: \`cleanup || true\`.
@@ -5761,7 +5680,7 @@ export const questions: Question[] = [
 
 ## Technical The pipe \`|\` connects the stdout (file descriptor 1) of the left command to the stdin (file descriptor 0) of the right command via an OS pipe buffer. The two processes run concurrently — bash starts both, hooks them up via \`pipe(2)\` + \`fork(2)\`, and waits. Stderr is NOT piped; to include stderr use \`2>&1 |\` or the bash shorthand \`|&\`. Pipelines can chain indefinitely: \`ps aux | grep firefox | grep -v grep | awk '{print $2}'\`. By default, bash uses the exit code of the LAST command in the pipeline — add \`set -o pipefail\` to make the whole pipeline fail if any stage fails (highly recommended in scripts). Subtle trap: commands in a pipeline run in subshells in most bash configurations, so variables set inside don't propagate to the calling shell (workaround: process substitution \`< <(cmd)\` or \`mapfile\`).
 
-**When to use:**
+## When to use
 - Any time you want to narrow, transform, or count the output of one command using another.
 - Filtering: \`ps aux | grep nginx\`.
 - Counting: \`ls /etc | wc -l\`.
@@ -5789,7 +5708,6 @@ export const questions: Question[] = [
 ## Technical \`&\` instructs bash to fork and exec the command in a background process and return immediately. Bash prints \`[N] PID\` where N is the shell job number. Background jobs are tracked in the shell's job table: \`jobs\` lists them, \`fg %N\` brings job N foreground, \`bg %N\` resumes a stopped job in background, \`kill %N\` terminates it. A foreground job can be paused with Ctrl-Z (SIGTSTP) then continued in background with \`bg\`. Critical caveat: background processes receive SIGHUP when the terminal closes (they die). To survive logout: \`nohup cmd &\` (ignores SIGHUP, stdout/stderr redirect to \`nohup.out\`), or \`disown %N\` after starting (removes from job table), or run inside \`tmux\`/\`screen\`. For true persistent services, write a systemd unit. Always redirect output when backgrounding: \`cmd > /var/log/cmd.log 2>&1 &\`.
 
 ## When to use
-
 - Starting a long-running task while keeping the terminal available.
 - Launching several parallel jobs: \`cmd1 & cmd2 & cmd3 & wait\` (wait for all).
 - Starting a local dev server while continuing to work in the same shell.
@@ -5815,7 +5733,7 @@ export const questions: Question[] = [
 
 ## Technical \`>\` redirects stdout (file descriptor 1) to the named file. The file is truncated (set to zero bytes) before the command runs, even if the command ultimately writes nothing — so \`> file.txt\` with no command on the left creates or empties the file. Stderr (FD 2) is unaffected and still goes to the terminal unless you also redirect it: \`cmd > file 2>&1\` (both to file; order matters — \`2>&1\` after \`> file\`), or bash shorthand \`&> file\`. To APPEND without truncating, use \`>>\`. To prevent accidental overwrites of existing files, enable \`set -o noclobber\` in your shell: \`>\` then refuses to overwrite, and \`>|\` overrides per-command. Foot-gun: \`sort file.txt > file.txt\` — the shell truncates \`file.txt\` BEFORE \`sort\` reads it, leaving you with an empty file. Fix: \`sort file.txt > file.txt.tmp && mv file.txt.tmp file.txt\`, or use \`sponge\` from moreutils.
 
-**When to use:**
+## When to use
 - Saving command output to a file for later analysis.
 - Generating a config file from a script.
 - Capturing the full output of a build or test run.
@@ -5842,7 +5760,6 @@ export const questions: Question[] = [
 ## Technical \`>>\` opens the file in append mode (O_APPEND flag) — writes go to the end of the file atomically at the OS level, which means multiple processes can safely append to the same file without corrupting each other's entries (unlike \`>\` which truncates then writes non-atomically). Creates the file if it doesn't exist. For appending stderr: \`2>>\`. For appending both stdout and stderr: \`>> file 2>&1\` or bash shorthand \`&>>\`. For multi-process-safe atomic appends, \`flock /tmp/lock -c 'echo line >> file'\` serializes writers. For production logging, the \`logger\` command is more robust: it sends to syslog/journal which handles rotation automatically. Common script pattern for timestamped entries: \`echo "[$(date '+%Y-%m-%d %H:%M:%S')] event" >> /var/log/myapp/events.log\`.
 
 ## When to use
-
 - Writing timestamped entries to a log file from a script or cron job.
 - Building an audit trail where every run adds its output to a cumulative file.
 - Collecting SSH uptime checks across multiple hosts into one report file.
@@ -5868,7 +5785,6 @@ export const questions: Question[] = [
 ## Technical File descriptors: 0 = stdin, 1 = stdout (normal output), 2 = stderr (error/diagnostic output). \`2> FILE\` redirects FD 2 to a file, leaving FD 1 untouched. \`2> /dev/null\` discards errors completely. \`2>> FILE\` appends errors. To redirect both to the SAME file: \`> file 2>&1\` (stdout to file FIRST, then stderr follows stdout — order matters!) or bash shorthand \`&> file\`. \`2>&1\` reads as "FD 2 goes to wherever FD 1 currently points" — the \`&\` disambiguates "this is a file descriptor number, not a filename called '1'". Common mistake: \`cmd 2>&1 > file\` leaves stderr on the terminal (it was redirected to old stdout before stdout moved to the file). Correct: \`cmd > file 2>&1\`.
 
 ## When to use
-
 - Silencing "Permission denied" noise from \`find /\` or \`find /proc\`.
 - Keeping a clean log of program output while routing warnings to a separate file.
 - Discarding noisy warnings from a command you only care about the exit code of.
@@ -5894,7 +5810,7 @@ export const questions: Question[] = [
 
 ## Technical \`&> file\` is bash shorthand for redirecting both stdout (FD 1) and stderr (FD 2) to the same file, truncating first. \`&>> file\` is the append variant. The POSIX-portable equivalent (works in \`sh\`, \`dash\`, etc.) is \`> file 2>&1\` (overwrite) and \`>> file 2>&1\` (append). The ordering trap: \`> file 2>&1\` is CORRECT (redirect stdout to file, THEN make stderr follow the new stdout location). \`2>&1 > file\` is WRONG (makes stderr follow the OLD stdout — the terminal — then redirects only stdout). The bash \`&>\` shorthand avoids this confusion. To capture everything to a file AND display it live: \`cmd 2>&1 | tee /tmp/run.log\` — the \`tee\` command writes to the file and passes through to stdout simultaneously. To discard everything: \`cmd &> /dev/null\`.
 
-**When to use:**
+## When to use
 - Capturing complete deploy script logs for postmortem: \`./deploy.sh &> /var/log/deploy-$(date +%F).log\`.
 - Silencing a noisy command completely: \`cron_job.sh &> /dev/null\`.
 - Building a unified build log: \`make &>> /tmp/build.log\`.
@@ -5920,7 +5836,7 @@ export const questions: Question[] = [
 
 ## Technical \`man\` reads documentation files from \`/usr/share/man/\` and renders them through a pager (usually \`less\`). Pages are organized into nine numbered sections: 1 = user commands, 2 = system calls, 3 = library functions, 4 = special files (\`/dev/\`), 5 = file formats (e.g., \`/etc/passwd\`, \`crontab\`), 6 = games, 7 = miscellaneous (overviews: \`signal(7)\`, \`regex(7)\`, \`hier(7)\`), 8 = sysadmin commands, 9 = kernel routines. When a name exists in multiple sections (e.g., \`passwd\` is both a command (1) and a file format (5)), specify the section: \`man 5 passwd\`. Navigation inside the pager: \`/text\` search forward, \`n\`/\`N\` next/previous match, \`space\`/\`b\` page down/up, \`g\`/\`G\` go to start/end, \`q\` quit. Related: \`man -k keyword\` (same as \`apropos\`) searches descriptions; \`man -f cmd\` (same as \`whatis\`) gives a one-line summary; \`tldr cmd\` is a community cheat-sheet (install with \`sudo apt install tldr\`).
 
-**When to use:**
+## When to use
 - Reading a command's documentation before using an unfamiliar flag.
 - Looking up the format of a config file: \`man 5 crontab\`, \`man 5 passwd\`.
 - When \`--help\` output is too brief and you need the full description.
@@ -5947,7 +5863,6 @@ export const questions: Question[] = [
 ## Technical Three tools resolve command names, with important differences: \`command -v CMD\` is POSIX-portable, works in scripts, exits non-zero if not found, prints the path or alias definition — the standard "is this installed?" check. \`type CMD\` is a bash builtin that also reports aliases, shell functions, and shell builtins (which \`command -v\` may omit). \`which CMD\` is an external binary that only looks at PATH; it misses aliases and functions and has historically varying behavior across distros. \`type -a CMD\` shows ALL matches in PATH order — useful for seeing that \`/home/alice/.pyenv/shims/python\` wins over \`/usr/bin/python\`. \`whereis CMD\` additionally finds man pages and source directories. For scripts, always use \`command -v CMD >/dev/null\` as the "is this tool installed?" check: \`command -v jq >/dev/null || { echo 'install jq first' >&2; exit 1; }\`.
 
 ## When to use
-
 - Diagnosing "the wrong Python/node/pip is running" — which version wins in the PATH?
 - Checking whether a tool is installed before trying to use it in a script.
 - Verifying that a shell alias is shadowing a real command.
@@ -5973,7 +5888,7 @@ export const questions: Question[] = [
 
 ## Technical \`history\` is a bash builtin that reads \`~/.bash_history\` (or the file set in \`$HISTFILE\`) and prints entries with line numbers. \`history N\` prints only the last N entries. Piping to \`grep\` filters by pattern. Once you find the right entry number (e.g., 142), execute it with \`!142\`. Special history expansions: \`!!\` re-runs the last command; \`!STR\` re-runs the most recent command starting with STR; \`!$\` inserts the last argument of the previous command. INTERACTIVE reverse search: Ctrl-R starts an incremental search — bash shows the most recent match as you type; Ctrl-R again cycles backward through older matches; Enter to execute, right-arrow or End to edit before executing, Ctrl-G to cancel. Important: by default history is only written to disk when the shell EXITS. Set \`PROMPT_COMMAND='history -a'\` in \`~/.bashrc\` to flush after every command (essential when working across multiple terminal windows). Tune with: \`HISTSIZE=10000\`, \`HISTFILESIZE=20000\`, \`HISTCONTROL=ignoredups:erasedups\`.
 
-**When to use:**
+## When to use
 - Recovering a complex command you built interactively and didn't save anywhere.
 - Finding how you solved a problem last month without re-Googling.
 - Auditing your own recent activity before a code review or incident report.
@@ -6000,7 +5915,6 @@ export const questions: Question[] = [
 ## Technical \`!!\` is bash history expansion — it's replaced by the text of the most recent history entry before the line is executed. \`sudo !!\` therefore expands to \`sudo LAST_COMMAND\` and bash prints the expanded form before executing. Related expansions: \`!N\` re-runs history entry number N, \`!-N\` re-runs N entries back, \`!STR\` re-runs the most recent entry starting with STR, \`!?STR\` re-runs the most recent entry CONTAINING STR. Word references: \`!$\` is the last word/argument of the previous command (useful: \`mkdir /long/path && cd !$\`), \`!*\` all arguments, \`!:N\` the Nth word. Quick typo fix: \`^old^new^\` replaces 'old' with 'new' in the last command and re-runs it. Disable history expansion with \`set +H\` if it causes problems. Note: some prefer \`fc -s\` or alias-based approaches for reliability in edge cases.
 
 ## When to use
-
 - You forgot sudo on a command that requires it — the most common use case.
 - You ran a command and realized you need to prefix or modify it slightly.
 - You want to repeat the previous command with minor variations using word references.
@@ -6025,7 +5939,7 @@ export const questions: Question[] = [
 
 ## Technical \`source FILE\` (and its POSIX shorthand \`. FILE\` — a literal dot followed by a space) reads the file and executes its contents IN THE CURRENT SHELL PROCESS — not in a subshell. This is the critical difference from \`bash FILE\` or \`./FILE\`, which spawn a new child process where any \`export\`, \`alias\`, or function definitions don't survive back to the calling shell. Sourcing effectively replays all the commands in the file as if you typed them. Common files to source: \`~/.bashrc\` (interactive bash settings), \`~/.bash_profile\` (login shell), \`~/.zshrc\` (zsh), \`.env\` files (\`set -a; source .env; set +a\` auto-exports every variable), Python virtualenv \`activate\` scripts. Security warning: sourcing an untrusted file gives it full shell access — it can set malicious aliases, unset functions, \`cd\` you away, etc. To undo an alias: \`unalias name\`; to unset a variable: \`unset VAR\`; to remove a function: \`unset -f funcname\`.
 
-**When to use:**
+## When to use
 - After editing \`~/.bashrc\` to add aliases, functions, or environment variables.
 - When activating a Python virtualenv: \`source venv/bin/activate\`.
 - When loading per-project environment variables from a \`.env\` file.
@@ -6051,7 +5965,6 @@ export const questions: Question[] = [
 ## Technical \`alias name='value'\` defines a shell alias. Aliases are expanded by bash ONLY at the start of a command (so \`echo ll\` doesn't expand the alias). They're stored in the shell process's alias table. Session-only aliases disappear on logout; add them to \`~/.bashrc\` or \`~/.bash_aliases\` (if \`~/.bashrc\` sources it) to persist. \`alias\` alone lists all current aliases; \`unalias NAME\` removes one for the session. Key limitation: aliases cannot accept positional arguments in their body (\`alias greet='echo hello $1'\` doesn't work — \`$1\` isn't the arg you pass to \`greet\`). For parameterized shortcuts, use a SHELL FUNCTION instead: \`greet() { echo "hello $1"; }\`. Bypass a specific alias call with a leading backslash (\`\\ls\` calls the real \`ls\`) or \`command ls\`. Aliases are recursive but the same name expands only once (so \`alias ls='ls --color=auto'\` doesn't loop on itself).
 
 ## When to use
-
 - Saving keystrokes on any command you run dozens of times per day.
 - Adding safety flags as defaults: \`alias rm='rm -i'\` to confirm before deletion.
 - Standardizing command invocations across a team by putting aliases in a shared \`.bash_aliases\` file.
@@ -6078,7 +5991,6 @@ export const questions: Question[] = [
 ## Technical \`pushd PATH\` saves the current working directory on the shell's directory stack and then \`cd\`s to PATH. The stack is an ordered list per shell process. With no arguments, \`pushd\` swaps the top two stack entries — toggling between two directories. \`pushd +N\` rotates the stack, making entry N the new top without removing anything. \`dirs -v\` shows the full numbered stack at any time (index 0 = current directory). \`popd\` removes the top entry and \`cd\`s to the new top. \`dirs -c\` clears the entire stack. The stack is per-shell and lost when the terminal closes.
 
 ## When to use
-
 - When debugging requires bouncing between two or more directories repeatedly.
 - When building a breadcrumb trail through a deep directory structure.
 - In scripts where you need to temporarily work in another directory and return.
@@ -6104,7 +6016,7 @@ export const questions: Question[] = [
 
 ## Technical \`popd\` removes (pops) the top entry from the directory stack and \`cd\`s to the new top. Like \`pushd\`, it prints the updated stack after each call. \`popd +N\` removes the Nth entry WITHOUT changing your current directory — useful for pruning stale entries from the middle of the stack. \`popd -0\` removes the BOTTOM entry. \`dirs -c\` clears the entire stack at once. If the stack has only one entry (the current directory), \`popd\` errors: \`bash: popd: directory stack empty\`. The stack is per-shell; there's no global shared stack between terminal windows.
 
-**When to use:**
+## When to use
 - Returning from a \`pushd\` jump after finishing work in the other directory.
 - Unwinding a chain of navigation moves back to the starting point.
 - Cleaning stale entries from the stack with \`popd +N\` without changing location.
@@ -6131,7 +6043,6 @@ export const questions: Question[] = [
 ## Technical \`dirs\` alone prints the stack on a single line space-separated — hard to read with long paths. \`-v\` puts each entry on its own line with its zero-based index. Index 0 is always the current directory and always matches \`pwd\`. The indexes are used with \`pushd +N\` (rotate stack so entry N becomes top) and \`popd +N\` (remove entry N without moving). Useful flags: \`-c\` clears the stack; \`-l\` expands \`~\` abbreviations to full paths; \`-p\` is like \`-v\` but without the index numbers. The stack is per-shell and resets when the terminal closes.
 
 ## When to use
-
 - Before deciding which \`pushd +N\` rotation to use.
 - To confirm a \`pushd\` saved the right directory.
 - When you've been navigating for a while and want to see all your bookmarks.
@@ -6158,7 +6069,6 @@ export const questions: Question[] = [
 ## Technical The shell performs tilde expansion on any word starting with \`~\`. \`~\` alone expands to \`$HOME\`. \`~USERNAME\` looks up USERNAME in \`/etc/passwd\` (via \`getpwnam()\`) and expands to the user's home directory field (field 6 of the colon-delimited record). If the user doesn't exist, the \`~user\` string is left literally unchanged — no error. Tilde expansion happens before the command executes, so \`echo ~alice\` prints the path without requiring filesystem access. Whether you can actually \`cd\` into another user's home depends on permissions: most users set their home to \`drwx------\` (700), restricting access to owner and root. Even without \`cd\` access, \`echo ~alice\` still works.
 
 ## When to use
-
 - Checking another user's home directory as root during troubleshooting.
 - Writing scripts that reference user home directories by name without hardcoding paths.
 - Quickly navigating to \`~root\` (\`/root\`) when working as root.
@@ -6179,12 +6089,12 @@ export const questions: Question[] = [
   {
     id: "nav25",
     question: "Your script uses `../../configs/app.yml` as a path. You need to know what absolute path that resolves to from the script's current working directory, with all `..` components eliminated. What command prints the canonical absolute path?",
-    answer: "realpath filename",
+    answer: "realpath ../../configs/app.yml",
     explanation: `Paths with \`../\` components and symlinks can be hard to reason about. This command takes whatever path you give it — relative, with parent-directory jumps, with symlinks — and resolves it all the way to the single absolute path it actually refers to. It's the "tell me exactly what file this is" command.
 
 ## Technical \`realpath\` is part of GNU coreutils. It resolves the given path by: prepending the current directory if the path is relative, then resolving each component (including \`.\`, \`..\`, and symlinks) until it reaches an actual filesystem entry. "Canonical" means: starts with \`/\`, no \`.\` or \`..\` components, all symlinks followed to their ultimate target. By default, the path must exist; use \`-m\` to allow non-existent components. \`-e\` is stricter (errors on any missing intermediate component). \`--relative-to=DIR\` outputs the path relative to another directory — useful for computing portable references between two known paths. \`-s\` suppresses symlink resolution (normalizes path structure only). The canonical "where is this script?" idiom in bash: \`SCRIPT_DIR="$(realpath "$(dirname "\$0")")"\`.
 
-**When to use:**
+## When to use
 - Resolving a relative path in a script to an absolute one for safe use in logs and error messages.
 - Checking what a symlink chain ultimately points to.
 - Computing the relative path between two directories for generating portable references.
@@ -6210,7 +6120,7 @@ export const questions: Question[] = [
 
 ## Technical \`readlink\` without flags prints only the immediate target string (one hop) — it reads the symlink's content without following it. \`readlink -f\` (follow) recursively follows the symlink chain to the final non-symlink target. The underlying syscall is \`realpath(3)\`, which resolves the path against the filesystem. The \`-f\` flag tolerates a missing final component (so it works on broken symlink chains where intermediate targets exist). Use \`-e\` (exists) to error out if any component in the chain is missing. A common use case: \`update-alternatives\` on Debian/Ubuntu manages \`/usr/bin/python\`, \`/usr/bin/vi\`, etc. as chains of symlinks — \`readlink -f\` reveals the actual version installed.
 
-**When to use:**
+## When to use
 - Finding the actual binary behind an \`alternatives\`-managed command.
 - Debugging a deploy setup with \`/opt/app/current -> release-v2 -> release-v2.0.1\`.
 - Checking whether two differently-named files actually point to the same physical file.
@@ -6237,7 +6147,6 @@ export const questions: Question[] = [
 ## Technical Shell glob expansion happens before \`ls\` sees any arguments. \`*/\` matches entries in the current directory that are directories (the kernel treats the trailing slash as "this must be a directory or symlink to one"). \`-d\` (directory) makes \`ls\` report on the arguments themselves rather than their contents. The combination produces a names-only directory listing. Caveat: \`*/\` doesn't match hidden directories (names starting with \`.\`); include them with \`.*/ */\`. For long format with permissions and dates, use \`ls -ld */\`. The \`find\` alternative is more portable: \`find . -maxdepth 1 -mindepth 1 -type d\`.
 
 ## When to use
-
 - Getting a clean overview of a project's top-level directory structure.
 - Counting how many subdirectories exist: \`ls -d */ | wc -l\`.
 - Iterating over subdirectories in a script (though a glob loop is safer for weird names).
@@ -6264,7 +6173,6 @@ export const questions: Question[] = [
 ## Technical \`ls -1\` (digit ONE, not lowercase L) forces single-column output. Normally \`ls\` auto-detects whether stdout is a TTY: if yes, multi-column; if piped, one-per-line. \`-1\` overrides this to always one-per-line. Important caveat: \`ls\` output is NOT safe for scripting when filenames may contain spaces, newlines, or glob characters. For robust scripting use shell globs (\`for f in *; do ...\`) or \`find -print0\` with \`xargs -0\`. Use \`ls -1\` for human-readable one-liners only. Combine with \`-a\` for dotfiles, \`-t\` for newest-first sort, \`-S\` for size sort.
 
 ## When to use
-
 - When you want a human-readable, one-per-line list in the terminal for visual scanning.
 - Counting files matching a pattern: \`ls -1 *.log | wc -l\`.
 - Feeding into \`grep\` to filter visible filenames (not content).
@@ -6291,7 +6199,6 @@ export const questions: Question[] = [
 ## Technical \`find\` walks the directory tree recursively. \`-maxdepth N\` restricts descent to N levels below the starting point (the start itself is depth 0). \`-mindepth N\` skips entries less than N levels deep. \`-type d\` matches directories only; other values: \`f\` regular file, \`l\` symlink, \`c\` character device, \`b\` block device. The starting \`.\` itself (depth 0) is always included by default — use \`-mindepth 1\` to exclude it. Important: place \`-maxdepth\` as the first test before \`-type\` and other tests for predictable behavior. To skip specific subtrees like \`node_modules\`: \`find . -name node_modules -prune -o -maxdepth 2 -type d -print\`.
 
 ## When to use
-
 - Getting a quick structural overview of a project without drowning in \`node_modules\`.
 - Auditing config directory structure: \`find /etc -maxdepth 2 -type d\`.
 - Scripting that needs to iterate over only the first few levels of a hierarchy.
@@ -6316,7 +6223,7 @@ export const questions: Question[] = [
 
 ## Technical Parentheses \`(...)\` in bash create a subshell via \`fork()\`. The subshell inherits the parent's environment (variables, functions, \`$PWD\`, shell options) but runs as a separate process. Any state changes inside — \`cd\`, variable assignments, \`set -e\` — are local to the subshell and don't propagate to the parent. This is the key difference from braces \`{...}\` which execute in the CURRENT shell (so \`cd\` inside braces DOES change the parent's \`$PWD\`). The pattern \`(cd DIR && CMD)\` is idiomatic bash for "run CMD in DIR without changing my shell's location." The subshell costs a \`fork()\` call but that's negligible for most uses.
 
-**When to use:**
+## When to use
 - Running \`make\`, \`npm run\`, or any tool that must be invoked from a specific directory.
 - Executing a command in a temporary directory that gets cleaned up: \`(cd "$(mktemp -d)" && ...)\`.
 - Sandboxing environment changes in a script so they don't affect subsequent commands.
@@ -6341,7 +6248,7 @@ export const questions: Question[] = [
 
 ## Technical \`install\` copies SOURCE to DEST and applies the mode (permissions) atomically. \`-m 755\` sets permissions to owner rwx, group rx, other rx — the standard for a publicly executable script. Other useful flags: \`-o USER\` sets owner, \`-g GROUP\` sets group, \`-d\` creates directories instead of copying files (like \`mkdir\`), \`-b\` creates a backup of any existing destination file, \`-C\` skips the copy if the source and destination are identical (useful in Makefiles to avoid unnecessary rebuilds). The destination trailing slash \`/\` means "install INTO this directory, keep the source filename." Without \`sudo\`, you can only install to directories you own; system paths like \`/usr/local/bin\` require root.
 
-**When to use:**
+## When to use
 - In Makefiles, \`install\` targets that deploy binaries and scripts to system locations.
 - When writing a software package's setup script that copies files to \`/etc/\` or \`/usr/local/\`.
 - Deploying config files with specific ownership requirements.
@@ -6366,7 +6273,6 @@ export const questions: Question[] = [
 ## Technical \`truncate -s 0\` calls \`truncate(2)\` or \`ftruncate(2)\` on the file, setting its size to exactly 0 bytes while preserving the inode number, permissions, ownership, and any open file descriptors pointing to it. Processes that have the file open for writing will continue writing from offset 0 — so the file fills again, but from empty. The shell redirection equivalent \`> logfile\` (empty redirect) also works and is often faster to type, but \`truncate\` is more explicit about intent. You can also grow files: \`truncate -s 100M sparsefile\` creates a sparse file of 100MB without writing 100MB of data to disk.
 
 ## When to use
-
 - Clearing a log file that a running daemon (nginx, postgres, java) has open without restarting the daemon.
 - Freeing disk space immediately when a log has grown unexpectedly large.
 - Creating sparse files of specific sizes for testing purposes.
@@ -6390,7 +6296,7 @@ export const questions: Question[] = [
 
 ## Technical \`dd\` is a low-level block-copy tool. \`if=\` (input file) and \`of=\` (output file) specify source and destination — these can be device nodes like \`/dev/zero\`, \`/dev/urandom\`, \`/dev/null\`, or \`/dev/sda\`. \`bs=\` (block size) sets how many bytes are transferred per read/write call — larger values generally mean faster I/O. \`count=\` limits how many blocks to copy. \`/dev/zero\` provides infinite null bytes; \`/dev/urandom\` provides cryptographically secure random data. For writing ISOs to USB: \`dd if=ubuntu.iso of=/dev/sdX bs=4M status=progress\`. CRITICAL WARNING: swapping \`if=\` and \`of=\` can destroy a disk — \`dd if=/dev/sda of=backup.img\` backs up a disk; \`dd if=/dev/zero of=/dev/sda\` WIPES it.
 
-**When to use:**
+## When to use
 - Generating test files of a specific size for benchmarking or testing.
 - Creating a swap file: \`dd if=/dev/zero of=/swapfile bs=1M count=2048\`.
 - Writing a bootable image to a USB drive.
@@ -6412,9 +6318,9 @@ export const questions: Question[] = [
     answer: "mkdir -p app/{logs,data}/2026",
     explanation: `Brace expansion is a bash shortcut where \`{logs,data}\` gets expanded into two separate arguments before the command runs. So this one command is equivalent to running \`mkdir\` twice — once for \`app/logs/2026\` and once for \`app/data/2026\`. The \`-p\` flag creates all intermediate directories (\`app/\`, \`app/logs/\`, \`app/data/\`) without failing if they already exist.
 
-**Technical:** Bash performs brace expansion before executing the command, generating one argument per item in the braces separated by commas. \`app/{logs,data}/2026\` expands to two strings: \`app/logs/2026\` and \`app/data/2026\`. These are both passed as arguments to \`mkdir\`, which creates each path with \`-p\`'s "create all parents" behavior. Brace expansion can be nested and combined: \`{dev,staging,prod}/{config,secrets}\` generates 6 paths. It works anywhere bash expands arguments — \`cp\`, \`rm\`, \`echo\` all benefit. Important: brace expansion is a bash feature, not POSIX sh, so it won't work in \`/bin/sh\` scripts.
+## Technical Bash performs brace expansion before executing the command, generating one argument per item in the braces separated by commas. \`app/{logs,data}/2026\` expands to two strings: \`app/logs/2026\` and \`app/data/2026\`. These are both passed as arguments to \`mkdir\`, which creates each path with \`-p\`'s "create all parents" behavior. Brace expansion can be nested and combined: \`{dev,staging,prod}/{config,secrets}\` generates 6 paths. It works anywhere bash expands arguments — \`cp\`, \`rm\`, \`echo\` all benefit. Important: brace expansion is a bash feature, not POSIX sh, so it won't work in \`/bin/sh\` scripts.
 
-**When to use:**
+## When to use
 - Scaffolding a project's directory layout in a single command.
 - Creating parallel directory trees (multiple environments, multiple years).
 - Generating test fixtures: \`mkdir -p tests/{unit,integration,e2e}\`.
@@ -6439,7 +6345,6 @@ export const questions: Question[] = [
 ## Technical Bash brace expansion generates multiple strings from one template. \`file{,.bak}\` expands to \`file file.bak\` (an empty first alternative, then \`.bak\`). Applied to \`cp\`: \`cp nginx.conf{,.bak}\` becomes \`cp nginx.conf nginx.conf.bak\`. The same trick works with \`mv\`: \`mv file{,.old}\` renames it. And with \`cp -a /etc/nginx{,.bak}\` for recursive directory copies that preserve attributes. This is a very common sysadmin idiom because it minimizes typos (you only type the filename once) and produces an obviously named backup.
 
 ## When to use
-
 - Before editing any production config file — always back up first.
 - When you want a dated backup: \`cp nginx.conf{,.$(date +%Y%m%d)}\`.
 - Before applying a \`sed -i\` in-place edit (though \`sed -i.bak\` is even more convenient).
@@ -6464,7 +6369,6 @@ export const questions: Question[] = [
 ## Technical \`find . -name '*.tmp' -delete\` is equivalent to but more efficient than \`find . -name '*.tmp' | xargs rm\`. The \`-delete\` action is applied directly by \`find\` without spawning a subprocess per file, and it correctly handles filenames with spaces. The glob \`'*.tmp'\` must be quoted to prevent the shell from expanding it before \`find\` sees it (without quotes, the shell tries to expand \`*.tmp\` in the current directory — if there are no matches, \`find\` gets the literal string; if there are matches, \`find\` gets those specific filenames as arguments, not a pattern). Useful companion tests: \`-mtime +7\` (only files older than 7 days), \`-size +100k\` (only files larger than 100KB), \`-type f\` (regular files only, skip directories).
 
 ## When to use
-
 - Cleaning up scratch/temp files before a commit: \`find . -name '*.tmp' -delete\`.
 - Removing old log files: \`find /var/log/myapp -name '*.log' -mtime +30 -delete\`.
 - Deleting empty directories: \`find . -type d -empty -delete\`.
@@ -6484,13 +6388,12 @@ export const questions: Question[] = [
   {
     id: "file32",
     question: "A file shows 0 bytes in `ls -l` but `du` says it's using 8KB of disk space. You need to see the inode-level metadata including exact byte size, allocated blocks, all three timestamps, and the inode number. What command shows all of that?",
-    answer: "stat filename",
+    answer: "stat server",
     explanation: `Where \`ls -l\` gives you a quick summary, this command shows the complete low-level record the filesystem keeps for a file — everything from its exact byte size and disk block allocation to all three timestamps and its unique inode number. It's the file's "birth certificate" from the filesystem's perspective.
 
 ## Technical \`stat\` calls \`stat(2)\` and prints every field from the inode: file type and name, size in bytes, allocated disk blocks (in 512-byte units), inode number, number of hard links, device, UID/GID, and three timestamps: \`Access\` (atime — last read), \`Modify\` (mtime — last content change), \`Change\` (ctime — last metadata change including permissions, owner, link count). Note: ctime is NOT creation time; most Linux filesystems don't store creation time at all (btrfs and ext4 with newer kernels do, in a separate \`Birth\` field). The discrepancy you see with 0 bytes but 8KB disk usage comes from filesystem minimum allocation (one block even for empty files) — \`stat\` shows both \`Size: 0\` and \`Blocks: 8\`. Custom format: \`stat -c '%n %s %a %y' file\` prints name, size, octal permissions, mtime.
 
 ## When to use
-
 - When \`ls -l\` and \`du\` disagree on file size.
 - When debugging permission issues that require seeing exact octal permissions.
 - When checking if a config file was recently modified vs. just had its permissions changed.
@@ -6515,7 +6418,7 @@ export const questions: Question[] = [
 
 ## Technical \`ln -s TARGET LINKNAME\` creates a symlink at LINKNAME pointing to TARGET. Without \`-f\`, if LINKNAME already exists (as any file type including an existing symlink), the command fails with "File exists." \`-f\` atomically removes the existing LINKNAME and creates the new symlink. Important: the replacement is NOT atomic at the filesystem level (it's a remove then create). For true atomic symlink replacement, use \`-T\` together with a temporary-name + rename approach, or rely on \`mv -T\` (rename syscall is atomic). Add \`-n\` (no-dereference): if LINKNAME is a symlink to a directory, \`-f\` without \`-n\` can cause unexpected behavior — \`-n\` treats LINKNAME as a normal file even if it points to a directory.
 
-**When to use:**
+## When to use
 - Deploy cutover: \`ln -sf /opt/app/releases/v2.1.0 /opt/app/current\`.
 - Updating an \`alternatives\`-style managed symlink.
 - Replacing a versioned config symlink in an infrastructure-as-code script.
@@ -6537,9 +6440,9 @@ export const questions: Question[] = [
     answer: "basename /var/log/syslog.1",
     explanation: `Given a full path like \`/var/log/nginx/access.log.1\`, this command strips everything before the last slash and returns just the filename itself. It's the "what is the file called, ignoring where it lives" tool. You can also optionally strip a file extension from the result.
 
-**Technical:** \`basename PATH [SUFFIX]\` removes the directory component (everything up to and including the last \`/\`) from PATH and prints the result. If SUFFIX is given, it's also stripped from the end (useful for removing extensions: \`basename notes.txt .txt\` → \`notes\`). Edge cases: \`basename /\` returns \`/\`; \`basename /foo/\` (trailing slash) returns \`foo\`. The shell parameter expansion alternative \`\${path##*/}\` does the same thing for variables. \`basename\` is clearer for readers and handles edge cases correctly. Typical use in scripts: \`outfile="$(basename "\$infile" .csv).json"\` converts an input filename from .csv to .json.
+## Technical \`basename PATH [SUFFIX]\` removes the directory component (everything up to and including the last \`/\`) from PATH and prints the result. If SUFFIX is given, it's also stripped from the end (useful for removing extensions: \`basename notes.txt .txt\` → \`notes\`). Edge cases: \`basename /\` returns \`/\`; \`basename /foo/\` (trailing slash) returns \`foo\`. The shell parameter expansion alternative \`\${path##*/}\` does the same thing for variables. \`basename\` is clearer for readers and handles edge cases correctly. Typical use in scripts: \`outfile="$(basename "\$infile" .csv).json"\` converts an input filename from .csv to .json.
 
-**When to use:**
+## When to use
 - Deriving output filenames from input paths in a script.
 - Displaying filenames without their full paths in progress messages.
 - Stripping extensions to build new filenames: \`$(basename file.md .md).html\`.
@@ -6562,9 +6465,9 @@ export const questions: Question[] = [
     answer: "dirname /var/log/syslog.1",
     explanation: `Given a full path like \`/var/log/nginx/access.log\`, this command strips the filename at the end and returns just the directory part: \`/var/log/nginx\`. It's the "what folder does this live in" command, and the natural partner to \`basename\` which does the opposite.
 
-**Technical:** \`dirname PATH\` removes the last component (after the final \`/\`) from PATH and prints the directory part. If there's no \`/\`, it returns \`.\` (current directory). Edge cases: \`dirname /\` returns \`/\`; \`dirname /foo/bar/\` (trailing slash) returns \`/foo/bar\` then strips again to \`/foo\`. Common idiom: \`mkdir -p "$(dirname "\$outfile")"\` ensures the output directory exists before writing to it. The canonical "script in its own directory" pattern: \`cd "$(dirname "\$0")"\` moves into the directory containing the running script, making relative paths work correctly regardless of where it was invoked.
+## Technical \`dirname PATH\` removes the last component (after the final \`/\`) from PATH and prints the directory part. If there's no \`/\`, it returns \`.\` (current directory). Edge cases: \`dirname /\` returns \`/\`; \`dirname /foo/bar/\` (trailing slash) returns \`/foo/bar\` then strips again to \`/foo\`. Common idiom: \`mkdir -p "$(dirname "\$outfile")"\` ensures the output directory exists before writing to it. The canonical "script in its own directory" pattern: \`cd "$(dirname "\$0")"\` moves into the directory containing the running script, making relative paths work correctly regardless of where it was invoked.
 
-**When to use:**
+## When to use
 - Creating the parent directory of an output file before writing to it.
 - Changing into the script's own directory at startup for predictable relative paths.
 - Constructing related paths: \`logdir="$(dirname "\$config")/logs"\`.
@@ -6589,7 +6492,6 @@ export const questions: Question[] = [
 ## Technical \`column -t\` (table mode) collects the entire input, calculates the maximum width of each column, and reformats with space padding. \`-s,\` sets the input field separator to a comma (default is whitespace). The output uses spaces as the separator, so the result is no longer valid CSV — it's display-only. Limitations: \`column\` does not understand CSV quoting, so a comma inside a quoted field (e.g., \`"Smith, Bob"\`) will be treated as a separator and misalign the column. For those cases, use \`csvkit\`'s \`csvlook\` or Python's \`csv\` module. Other useful separators: \`-s $'\\t'\` for TSV (tab-separated), or \`-s:\` for \`/etc/passwd\`.
 
 ## When to use
-
 - Quick inspection of a CSV export without opening a spreadsheet.
 - Formatting the output of \`mount\`, \`ps\`, or any command with tab-delimited columns: \`mount | column -t\`.
 - Making a TSV file readable: \`column -t -s $'\\t' data.tsv\`.
@@ -6608,13 +6510,12 @@ export const questions: Question[] = [
   {
     id: "view22",
     question: "You received a compiled binary at `/opt/app/bin/server` and suspect it contains embedded credentials. What command displays its raw bytes as a hex dump with the ASCII interpretation alongside, so you can read any embedded text?",
-    answer: "xxd filename",
+    answer: "xxd /opt/app/bin/server",
     explanation: `This tool displays a file's raw bytes in two columns side-by-side: the left shows the bytes as hexadecimal numbers, and the right shows the same bytes as printable ASCII characters (with dots for bytes that don't print). Each row covers 16 bytes. You can see file format headers (the "magic bytes" that identify a PNG, PDF, ELF binary, etc.) and any embedded text strings.
 
 ## Technical \`xxd\` produces a canonical hex dump: offset on the left (8 hex digits), 16 bytes per row split into two groups of 8 (hex), then the ASCII representation. Non-printable bytes appear as \`.\` in the ASCII column. Useful flags: \`-s OFFSET\` starts the dump at a byte offset, \`-l N\` limits to N bytes, \`-c N\` changes bytes per row, \`-b\` shows binary instead of hex, \`-r\` ("reverse") converts a hex dump BACK to binary. The alternative \`od -c\` (octal dump with characters) and \`hexdump -C\` produce similar output. For scanning binaries for printable strings only, \`strings\` is more efficient.
 
 ## When to use
-
 - Checking file magic bytes to confirm a file's true type.
 - Scanning a binary for embedded credentials, URLs, or version strings.
 - Debugging binary protocol captures or custom file formats.
@@ -6633,13 +6534,12 @@ export const questions: Question[] = [
   {
     id: "view23",
     question: "A bash script copied from a Windows machine fails with mysterious errors. You suspect it has Windows-style CRLF line endings (carriage return + newline). What `cat` flag makes invisible characters like `^M` (carriage return) and trailing spaces visible?",
-    answer: "cat -E filename",
+    answer: "cat -E script.sh",
     explanation: `This flag adds a visible dollar sign at the end of every line just before the newline character. In a clean Unix file you see \`text$\`. In a file with Windows line endings you see \`text^M$\` — the carriage return is exposed as \`^M\`. In a file with trailing spaces you see \`text   $\`. This immediately reveals the hidden characters that are breaking your script.
 
 ## Technical \`cat -E\` appends \`$\` before each line's newline (LF, \\n). On a Windows-encoded file, each line ends with \\r\\n — the \\r appears as \`^M\` when displayed, followed by the appended \`$\` and then \\n. This pattern \`^M$\` is the signature of a CRLF file. To also show tabs as \`^I\` and other non-printable characters in caret notation, combine with \`-v\`: \`cat -vE\`. \`cat -A\` is equivalent to \`-vET\` (shows everything). To FIX CRLF files: \`dos2unix file.sh\` (install with \`sudo apt install dos2unix\`) or \`sed -i 's/\\r//' file.sh\`.
 
 ## When to use
-
 - Diagnosing "\\$'\\r': command not found" errors in a bash script.
 - Checking why a variable contains a trailing carriage return that breaks comparisons.
 - Verifying that a config file has no trailing whitespace that might affect parsing.
@@ -6659,12 +6559,12 @@ export const questions: Question[] = [
   {
     id: "view24",
     question: "You're debugging a 10,000-line log file and want to read it page by page in your terminal, with line numbers shown on the left so you can refer to specific lines. What command opens the file in a scrollable pager with persistent line numbers?",
-    answer: "less -N filename",
+    answer: "less -N debug.log",
     explanation: `This opens the file in a viewer where you can scroll forward and backward through it a screen at a time, without loading the whole file into memory first. The \`-N\` flag adds line numbers on the left edge. Navigation keys: spacebar to page down, \`b\` to page back, \`j\`/\`k\` (or arrow keys) for line-by-line, \`g\` to go to start, \`G\` to go to end, \`/pattern\` to search, \`n\`/\`N\` for next/previous match, \`q\` to quit.
 
 ## Technical \`less\` is a pager that reads from stdin or a file, rendering one screenful at a time using terminal control codes. Unlike \`more\` (forward-only), \`less\` allows both forward and backward navigation. \`-N\` adds line numbers. Other useful flags: \`-S\` disables line wrapping (long lines scroll horizontally), \`-i\` makes search case-insensitive, \`+G\` starts at the end of the file, \`+/pattern\` starts at the first match, \`+F\` enters follow-mode (like \`tail -f\`, Ctrl-C to switch back to pager mode). Press \`h\` inside \`less\` for the full key-binding reference.
 
-**When to use:**
+## When to use
 - Reading any file longer than your terminal window without losing context.
 - Navigating a log file to find an error at a specific line number.
 - Following a log live (\`less +F\`) and then switching to search mode to analyze what you see.
@@ -6683,12 +6583,12 @@ export const questions: Question[] = [
   {
     id: "view25",
     question: "A CSV report file has a summary/totals section in the last 3 lines that you want to exclude from processing. What `head` flag prints all lines except the last N lines?",
-    answer: "head -n -5 filename",
+    answer: "head -n -3 report.csv",
     explanation: `The \`head\` command normally shows the first N lines. When you give it a NEGATIVE number, it flips: it shows everything EXCEPT the last N lines. So if your file has 100 lines and you use \`-n -3\`, you get the first 97. This is exactly what you need to strip a trailer section from a file before piping it to another tool.
 
-**Technical:** \`head -n -N FILE\` prints all lines except the last N. This is equivalent to \`head -n "$(($(wc -l < FILE) - N))"\` but much more concise. The negative form works in GNU coreutils (Linux); macOS's BSD \`head\` does NOT support negative counts (use \`ghead\` from homebrew there). Combine with \`tail -n +M\` to extract a specific middle range: \`tail -n +2 file | head -n -3\` skips the first line (header) and last 3 lines (trailer), isolating the data rows. Similarly, \`head -c -100 file\` prints all bytes except the last 100.
+## Technical \`head -n -N FILE\` prints all lines except the last N. This is equivalent to \`head -n "$(($(wc -l < FILE) - N))"\` but much more concise. The negative form works in GNU coreutils (Linux); macOS's BSD \`head\` does NOT support negative counts (use \`ghead\` from homebrew there). Combine with \`tail -n +M\` to extract a specific middle range: \`tail -n +2 file | head -n -3\` skips the first line (header) and last 3 lines (trailer), isolating the data rows. Similarly, \`head -c -100 file\` prints all bytes except the last 100.
 
-**When to use:**
+## When to use
 - Stripping a footer (totals row, signature block, copyright notice) from a file before processing.
 - Extracting data rows from a file that has both a header and a footer.
 - Piping to \`wc -l\` to count data lines: \`head -n -1 report.csv | tail -n +2 | wc -l\`.
@@ -6707,13 +6607,12 @@ export const questions: Question[] = [
   {
     id: "view26",
     question: "A CSV file at `/tmp/users.csv` has a header on line 1 that you want to skip before piping the data rows to `awk` for processing. What `tail` flag starts printing from line 2 instead of from the end?",
-    answer: "tail -n +5 filename",
+    answer: "tail -n +5 /tmp/users.csv",
     explanation: `The \`tail\` command usually shows the LAST N lines. Adding a plus sign before the number reverses the meaning: it skips the first N-1 lines and prints everything from line N to the end. So \`tail -n +2\` skips line 1 (the header) and prints from line 2 onward.
 
 ## Technical \`tail -n +N FILE\` prints starting at line N, outputting all remaining lines. The \`+\` prefix selects the "byte/line offset from beginning" mode rather than "from end" mode. To extract a specific range: \`tail -n +3 file | head -n 10\` gives lines 3 through 12. To process every line except the first two: \`tail -n +3\`. The same syntax works for bytes: \`tail -c +1025\` skips the first 1024 bytes. Very common idiom in shell pipelines: \`tail -n +2 data.csv | awk -F, '{...}'\` processes only data rows.
 
 ## When to use
-
 - Skipping a CSV header before processing with \`awk\`, \`sort\`, or \`cut\`.
 - Extracting a specific range of lines: \`tail -n +START | head -n COUNT\`.
 - Stripping a fixed-size header block from a binary file.
@@ -6737,7 +6636,7 @@ export const questions: Question[] = [
 
 ## Technical \`sed -n\` suppresses the default print of every processed line. The address \`10,20\` selects lines 10 through 20 (inclusive). The \`p\` command prints the current line. Combining them: print only lines in that range. Without \`-n\`, the \`p\` would print selected lines TWICE (once from \`p\`, once from the default output). For a single line: \`sed -n '50p'\`. To print from line N to the end of file: \`sed -n '50,$p'\` (\`$\` = last line). To print between two pattern markers: \`sed -n '/START/,/END/p'\`. An awk equivalent that many find clearer: \`awk 'NR>=50 && NR<=65'\`.
 
-**When to use:**
+## When to use
 - Inspecting a specific region of a large config or log file.
 - Extracting a function from a source code file when you know the line numbers.
 - Scripting: extracting a fixed-format header block at known line offsets.
@@ -6759,9 +6658,9 @@ export const questions: Question[] = [
     answer: "awk 'NR==5' filename",
     explanation: `In \`awk\`, \`NR\` is a built-in counter that holds the current line number (starting at 1). When you write \`NR==42\` as the pattern, \`awk\` checks it for every line and only takes the action (default: print the line) when the condition is true — which happens exactly once, on line 42.
 
-**Technical:** \`NR\` (Number of Records) increments each time \`awk\` reads a line. Without an explicit action, the default action is \`{print}\`. So \`awk 'NR==42' file\` is equivalent to \`awk 'NR==42 {print}' file\`. For a range: \`awk 'NR>=10 && NR<=20' file\`. For every Nth line: \`awk 'NR%5==0' file\` (every 5th). Common mistake: writing \`NR=42\` (assignment, always true) instead of \`NR==42\` (comparison). The \`sed\` equivalent \`sed -n '42p'\` is slightly more efficient; \`awk\` is more readable for complex conditions. Combine with field extraction: \`awk 'NR==42 {print $3}'\` prints only column 3 of line 42.
+## Technical \`NR\` (Number of Records) increments each time \`awk\` reads a line. Without an explicit action, the default action is \`{print}\`. So \`awk 'NR==42' file\` is equivalent to \`awk 'NR==42 {print}' file\`. For a range: \`awk 'NR>=10 && NR<=20' file\`. For every Nth line: \`awk 'NR%5==0' file\` (every 5th). Common mistake: writing \`NR=42\` (assignment, always true) instead of \`NR==42\` (comparison). The \`sed\` equivalent \`sed -n '42p'\` is slightly more efficient; \`awk\` is more readable for complex conditions. Combine with field extraction: \`awk 'NR==42 {print $3}'\` prints only column 3 of line 42.
 
-**When to use:**
+## When to use
 - When you need line N of a file and prefer \`awk\`'s readable syntax over \`sed\`.
 - When combining line selection with field extraction in one step.
 - When extracting every Nth line for sampling: \`awk 'NR%100==0' bigfile.log\`.
@@ -6786,7 +6685,6 @@ export const questions: Question[] = [
 ## Technical \`comm\` requires BOTH files to be sorted (it does a single-pass linear scan). If files are unsorted, results are silently wrong — always \`sort\` first. Output: column 1 (tab-indented 0) = lines only in file1, column 2 (tab-indented 1) = lines only in file2, column 3 (tab-indented 2) = lines in both. Suppress columns with flags: \`-1\` hides column 1, \`-2\` hides column 2, \`-3\` hides column 3. Common set operations: intersection = \`comm -12\` (lines in both), difference A-B = \`comm -23\` (only in A), symmetric difference = \`comm -3\` (unique to each). For unsorted input or more complex differences, use \`diff\` instead.
 
 ## When to use
-
 - Comparing two sorted hostname or IP lists to find what's missing or extra.
 - Set operations on sorted word lists (intersection, difference, symmetric difference).
 - Auditing: expected service names vs. actually running services.
@@ -6812,7 +6710,6 @@ export const questions: Question[] = [
 ## Technical \`cmp\` compares files sequentially byte by byte using \`read(2)\`. Exit code: 0 = identical, 1 = differ, 2 = error (file not found, etc.). For scripting, use \`-s\` (silent) to suppress output and just use the exit code: \`if cmp -s file1 file2; then echo same; else echo differ; fi\`. \`-l\` (list) reports EVERY differing byte: byte offset, octal values from each file — useful for analyzing binary protocol differences. The differences from \`diff\`: \`diff\` works on text (shows changed lines), \`cmp\` works on bytes (stops at first). For large files, \`cmp\` is much faster for the "are these identical?" question. Alternative: \`md5sum\` or \`sha256sum\` for comparing against a known hash.
 
 ## When to use
-
 - Verifying a compiled binary hasn't changed since the last known-good build.
 - Checking that a file copy or download is bit-perfect: \`cmp original.iso copy.iso\`.
 - Comparing binary protocol dumps where every byte matters.
@@ -6834,9 +6731,9 @@ export const questions: Question[] = [
     answer: "chmod u+s /usr/local/bin/tool",
     explanation: `The setuid bit is a special permission flag that makes an executable run as the user who OWNS the file, not as the user who runs it. When a file with setuid set is owned by root, anyone who executes it temporarily gains root's privileges for the duration of that program. This is how \`passwd\` lets ordinary users change their own passwords — it briefly becomes root to write to \`/etc/shadow\`, then gives up that privilege.
 
-**Technical:** \`chmod u+s FILE\` adds the Set-UID (SUID) bit. In \`ls -l\` output it appears as \`s\` in the owner's execute position: \`-rwsr-xr-x\`. If the owner lacks execute permission, a capital \`S\` appears instead (SUID set but not executable — a misconfiguration). In octal form, SUID is the leading 4: \`chmod 4755 tool\`. Security implications: SUID root binaries are high-value attack targets — any vulnerability in the program can lead to root compromise. Audit all SUID binaries regularly: \`find / -perm -4000 -type f 2>/dev/null\`. Critical limitation: Linux ignores SUID on shell scripts for security reasons — SUID only works on compiled ELF binaries.
+## Technical \`chmod u+s FILE\` adds the Set-UID (SUID) bit. In \`ls -l\` output it appears as \`s\` in the owner's execute position: \`-rwsr-xr-x\`. If the owner lacks execute permission, a capital \`S\` appears instead (SUID set but not executable — a misconfiguration). In octal form, SUID is the leading 4: \`chmod 4755 tool\`. Security implications: SUID root binaries are high-value attack targets — any vulnerability in the program can lead to root compromise. Audit all SUID binaries regularly: \`find / -perm -4000 -type f 2>/dev/null\`. Critical limitation: Linux ignores SUID on shell scripts for security reasons — SUID only works on compiled ELF binaries.
 
-**When to use:**
+## When to use
 - Creating a system tool that needs elevated privileges for a specific task (disk access, raw sockets, etc.).
 - Auditing: \`find / -perm -4000 -type f\` to list all SUID binaries on the system.
 - Removing SUID from binaries that don't need it: \`chmod u-s FILE\`.
@@ -6861,7 +6758,6 @@ export const questions: Question[] = [
 ## Technical \`chmod g+s DIR\` adds the Set-GID (SGID) bit to a directory. In \`ls -ld\` output it appears as \`s\` in the group execute position: \`drwxrwsr-x\`. In octal, SGID is the leading 2: \`chmod 2775 dir\`. Newly created files and directories inside inherit the directory's group (not the user's primary group). Subdirectories also inherit the SGID bit, propagating the behavior through the tree. Audit: \`find / -perm -2000 -type d 2>/dev/null\`. On files (not directories), SGID makes executables run as the file's GROUP — a less common usage. Compare to SUID (runs as owner) — SGID on directories is about group inheritance, not execution privilege.
 
 ## When to use
-
 - Setting up shared project directories where a team works under a common group.
 - Shared web roots where both the web server user and deployment user are in the same group.
 - Any \`/srv/\` or \`/var/\` directory meant to be written to by a service account group.
@@ -6885,7 +6781,7 @@ export const questions: Question[] = [
 
 ## Technical \`id\` calls \`getuid()\`, \`getgid()\`, and \`getgroups()\` and formats the output. \`uid\` = effective user ID, \`gid\` = primary group, \`groups\` = all supplementary groups (from \`/etc/group\`). With no arguments it shows the current user. With a username argument (\`id alice\`), it shows that user's identity regardless of who you are. \`id -nG\` prints only group names (no numbers) — useful for scripts. Important: group membership changes (via \`usermod -aG\`) don't take effect until a new login session; \`newgrp groupname\` can activate a specific group without logout. The effective UID/GID (what the kernel uses for permission checks) may differ from real UID/GID in setuid/setgid processes.
 
-**When to use:**
+## When to use
 - Verifying you're in the \`sudo\`, \`docker\`, or \`www-data\` group before troubleshooting permission errors.
 - Confirming a new group membership took effect after \`usermod -aG\`.
 - Auditing another user's group memberships: \`id alice\`.
@@ -6911,7 +6807,6 @@ export const questions: Question[] = [
 ## Technical \`newgrp GROUP\` executes a new shell with the specified group as the effective primary GID. The new shell is a full child shell — changes to environment variables inside don't propagate back to the parent. If you're not already a member of the group, \`newgrp\` prompts for the group password (if set in \`/etc/gshadow\`). On exit, the parent shell resumes with the original GID. \`id -gn\` inside the new shell confirms the switch. The primary group affects the group ownership of newly created files and directories. Note: \`sg GROUP -c 'command'\` is an alternative that runs a single command under a different group without starting an interactive shell.
 
 ## When to use
-
 - When you need to create files owned by a project group without logging out.
 - When testing whether a command works correctly under a specific group identity.
 - When your primary group is your personal group but your work requires files owned by the team group.
@@ -6937,7 +6832,6 @@ export const questions: Question[] = [
 ## Technical \`passwd\` without arguments changes the calling user's password. It reads the new password, runs it through a hashing function (typically yescrypt or SHA-512 depending on distro and \`/etc/pam.d/passwd\` config), and writes the hash to \`/etc/shadow\` (which only root can read directly). PAM (Pluggable Authentication Modules) enforces complexity policies configured in \`/etc/pam.d/common-password\` (Debian) or \`/etc/security/pwquality.conf\` (RHEL). Root can change any user's password without knowing the current one: \`sudo passwd alice\`. To LOCK an account (prevent password auth): \`sudo passwd -l alice\`. To UNLOCK: \`sudo passwd -u alice\`. \`chage\` manages password expiry policies.
 
 ## When to use
-
 - Rotating your own password on a schedule or after a security incident.
 - When your password has expired and you're prompted at login.
 - As root, resetting a locked or forgotten user password: \`sudo passwd alice\`.
@@ -6961,7 +6855,7 @@ export const questions: Question[] = [
 
 ## Technical \`visudo\` opens \`/etc/sudoers\` (or a specified file with \`-f\`) using the editor in \`$EDITOR\` or \`$VISUAL\` (defaulting to \`vi\`). Unlike direct editing with \`nano /etc/sudoers\`, \`visudo\` holds a file lock (preventing simultaneous edits), parses the file's syntax on save, and rejects changes that would create an invalid sudoers file. If there's a syntax error it offers to re-edit or abandon changes. The \`-c\` flag syntax-checks the current file without editing. Drop-in files in \`/etc/sudoers.d/\` are the modern best practice — add per-user rules there instead of modifying the main file. Typical entry to grant full sudo: \`alice ALL=(ALL:ALL) ALL\`. For password-free sudo (risky): \`alice ALL=(ALL) NOPASSWD: ALL\`.
 
-**When to use:**
+## When to use
 - Granting or revoking a user's sudo privileges.
 - Adding NOPASSWD rules for automation or service accounts.
 - Restricting a user to specific commands only.
@@ -6986,7 +6880,6 @@ export const questions: Question[] = [
 ## Technical \`ssh-keygen -t ed25519\` generates an Ed25519 key pair. Ed25519 uses elliptic curve cryptography and is currently the recommended algorithm: short keys (256-bit), fast verification, and resistant to known attacks. The default output files are \`~/.ssh/id_ed25519\` (private) and \`~/.ssh/id_ed25519.pub\` (public). The private key should have a passphrase for extra protection. \`-C 'comment'\` embeds a comment in the public key (visible in \`authorized_keys\`). \`-f ~/.ssh/deploy_key\` specifies a custom filename. Copy the public key to a server: \`ssh-copy-id -i ~/.ssh/id_ed25519.pub user@host\` or manually append \`~/.ssh/id_ed25519.pub\` to the server's \`~/.ssh/authorized_keys\`. NEVER share \`id_ed25519\` (the private key file without \`.pub\`).
 
 ## When to use
-
 - Setting up passwordless SSH authentication to a server.
 - Creating a dedicated deploy key for CI/CD pipelines.
 - Generating a signing key for git commit signing.
@@ -7012,7 +6905,6 @@ export const questions: Question[] = [
 ## Technical \`chage\` (change age) manages the shadow password aging fields in \`/etc/shadow\`. \`-l USER\` lists the current policy in human-readable form. Fields shown: "Last password change" (date of last change), "Password expires" (max age, set with \`-M DAYS\`), "Password inactive" (grace period after expiry before account lock, set with \`-I DAYS\`), "Account expires" (absolute date, set with \`-E DATE\`), "Minimum number of days between password change" (\`-m\`), "Maximum number of days between password change" (\`-M\`), "Number of days of warning before password expires" (\`-W\`). To enforce 90-day rotation: \`sudo chage -M 90 -W 14 alice\`. To force password change on next login: \`sudo chage -d 0 alice\`.
 
 ## When to use
-
 - Checking why a user reports "account disabled" or "password expired" errors at login.
 - Auditing compliance with password rotation policies.
 - Setting up password expiry for a new user account: \`sudo chage -M 90 alice\`.
@@ -7037,7 +6929,6 @@ export const questions: Question[] = [
 ## Technical \`umask\` is applied as a bitwise AND-NOT against the default permissions: files default to 0666 (no execute), directories to 0777. With umask 0022: files get 0666 & ~0022 = 0644 (rw-r--r--), directories get 0777 & ~0022 = 0755 (rwxr-xr-x). \`umask -S\` displays the permissions that WILL be granted (not the bits that will be masked): \`u=rwx,g=rx,o=rx\` means the umask is 0022. \`umask\` alone prints the octal mask (0022). Set temporarily: \`umask 0027\` removes world read/write/execute and group write (new files get 0640, dirs get 0750). For a script that needs specific permissions, it's cleaner to set the umask at the top: \`umask 0077\` (private files) or use explicit \`chmod\` after creation.
 
 ## When to use
-
 - Before running a script that creates log files or config files that other users need to read.
 - When newly created files have unexpected permissions — check umask first.
 - Temporarily restricting new file permissions in a script: \`umask 0077; create_sensitive_file\`.
@@ -7062,7 +6953,6 @@ export const questions: Question[] = [
 ## Technical \`sudo -u USER CMD\` forks a process that runs CMD with USER's identity (UID, GID, and supplementary groups). The calling user must have permission in \`/etc/sudoers\` to run commands as USER (or have unrestricted sudo). \`-u\` accepts both username strings and numeric UIDs (\`-u '#33'\` for UID 33). For an interactive login shell as another user: \`sudo -u alice -i\`. For preserving the current environment: \`sudo -u alice -E CMD\`. Compare to \`su\` (requires the target user's password unless you're root) and \`runuser\` (like \`su\` but for scripts, no PAM). The target user's home and environment variables can be obtained with \`sudo -u alice -i env\`.
 
 ## When to use
-
 - Testing file permissions from a service account's perspective without a full user switch.
 - Running database maintenance as the postgres user: \`sudo -u postgres psql -c 'VACUUM;'\`.
 - Running a web framework command as the app user: \`sudo -u www-data php artisan migrate\`.
@@ -7087,7 +6977,7 @@ export const questions: Question[] = [
 
 ## Technical File descriptors: 1 = stdout, 2 = stderr. \`2>&1\` means "redirect FD 2 to wherever FD 1 currently points." When placed before the \`|\`, FD 1 points to the pipe, so FD 2 also gets directed into the pipe. Order is critical: \`cmd 2>&1 | grep\` is correct; \`cmd | grep 2>&1\` applies the redirect to \`grep\`'s stderr, not \`cmd\`'s. Bash shorthand: \`|&\` is equivalent to \`2>&1 |\`. For capturing both to a file AND piping: \`cmd 2>&1 | tee output.log | grep error\`. To save to a file as well: \`cmd 2>&1 | tee build.log | grep -i error\`.
 
-**When to use:**
+## When to use
 - Searching a compiler's combined output for errors: \`make 2>&1 | grep -i error\`.
 - Watching both stdout and stderr live in one \`less\` pager: \`cmd 2>&1 | less\`.
 - Counting errors in a mixed-output stream: \`make 2>&1 | grep -c error\`.
@@ -7111,7 +7001,7 @@ export const questions: Question[] = [
 
 ## Technical Without \`pipefail\`, \`false | true\` exits 0 (success) because \`true\` is last. With \`set -o pipefail\`, \`false | true\` exits 1 (failure) because \`false\` failed. The pipeline's exit code becomes the rightmost non-zero exit code of any stage. Combine with \`set -e\` (exit on error) and \`set -u\` (unset variable is error): \`set -euo pipefail\` is the standard "strict mode" header for production scripts. \`PIPESTATUS\` array captures each stage's individual exit code: \`\${PIPESTATUS[0]}\` for stage 1, etc. Caveat: \`pipefail\` only applies to simple pipelines; it doesn't affect compound commands in a pipeline stage.
 
-**When to use:**
+## When to use
 - At the top of any production bash script.
 - When a pipeline feeds critical data to a downstream process.
 - Whenever you need to detect "the source data generation failed" in a chain.
@@ -7136,7 +7026,6 @@ export const questions: Question[] = [
 ## Technical \`xargs -I PLACEHOLDER CMD ...\` reads lines from stdin and for each line, runs CMD with every occurrence of PLACEHOLDER replaced by that line. By default \`-I\` implies \`-L 1\` (one line per invocation). The placeholder is typically \`{}\` but can be any string (e.g., \`-I %%\`). Each invocation is a separate subprocess — no parallelism by default; add \`-P N\` for N parallel workers. QUOTING: \`{}\` should be quoted in commands where it might be shell-interpreted: \`xargs -I {} mv {} {}.bak\`. Filename safety: when filenames may contain spaces, prefer \`find -print0 | xargs -0\` (null-delimited) over line-based \`xargs\`.
 
 ## When to use
-
 - Running a command for each line in a file where input goes in the middle: \`xargs -I {} ssh {} uptime\`.
 - Moving files to a new location: \`find . -name '*.log' | xargs -I {} mv {} /archive/\`.
 - Download each URL in a list: \`cat urls.txt | xargs -I {} curl -O {}\`.
@@ -7161,7 +7050,6 @@ export const questions: Question[] = [
 ## Technical \`xargs -P N\` forks up to N worker processes concurrently. \`-n 1\` limits each invocation to 1 argument (without it, \`xargs\` may batch multiple arguments per call, reducing parallelism). Exit code: \`xargs -P\` returns 0 if all invocations succeeded. The workers may complete in any order. For \`-I {}\` with \`-P\`: the order of output is non-deterministic. A common pattern: \`find . -name '*.log' | xargs -P $(nproc) -n 1 gzip\` uses all CPU cores. GNU Parallel (\`parallel\`) is a more powerful alternative with better output handling and error reporting.
 
 ## When to use
-
 - Compressing, converting, or processing many files in parallel.
 - Downloading many URLs concurrently: \`cat urls.txt | xargs -P 8 -n 1 wget\`.
 - Running the same test or build against many inputs in parallel.
@@ -7186,7 +7074,6 @@ export const questions: Question[] = [
 ## Technical \`mkfifo PATH\` creates a FIFO (First-In First-Out) special file. In \`ls -l\` output it shows type \`p\`: \`prw-r--r--\`. FIFOs are kernel-buffered like anonymous pipes but addressable by name. Typical usage: writer — \`tail -f /var/log/nginx/access.log > /tmp/data_stream &\`; reader — \`grep ERROR < /tmp/data_stream | mail -s alerts admin@example.com\`. Blocking behavior: \`open()\` on a FIFO blocks until both ends are connected (unless \`O_NONBLOCK\` is used). Clean up: \`rm /tmp/data_stream\` (it's a regular filesystem entry). Alternative for more complex IPC: Unix domain sockets (\`sock_type=SOCK_STREAM\`).
 
 ## When to use
-
 - Streaming data between two separate programs that start independently.
 - Avoiding a temporary file when one program generates data faster than the other consumes it.
 - Complex pipeline setups where you need to branch or reuse a data stream.
@@ -7211,7 +7098,6 @@ export const questions: Question[] = [
 ## Technical \`exec\` without a command name modifies the shell's own file descriptors in place. \`exec > file\` redirects FD 1 (stdout) of the current shell to the file. \`2>&1\` then makes FD 2 (stderr) follow FD 1, so both go to the file. All subsequent commands in the script inherit these file descriptors. To APPEND rather than overwrite: \`exec >> file 2>&1\`. To both log AND display on screen: \`exec > >(tee -a /var/log/myjob.log) 2>&1\` — this uses process substitution to tee to both the file and the original stdout. Compare to running a script with redirection from outside: \`./script.sh >> /var/log/myjob.log 2>&1\` achieves the same thing but requires the caller to remember the redirect.
 
 ## When to use
-
 - Cron jobs where you want a complete log without modifying every command.
 - Init scripts or systemd \`ExecStart\` wrappers where you need a self-contained log.
 - Long-running scripts where you want all output captured from the start.
@@ -7229,12 +7115,12 @@ export const questions: Question[] = [
   {
     id: "pipe27",
     question: "Your script initializes a log file at the start of each run. You want to create the file if it doesn't exist, or empty it if it does, using only bash built-in syntax without any external command. What shell construct does this?",
-    answer: ": > filename",
+    answer: ": > /var/log/app.log",
     explanation: `The colon (\`:\`) is bash's built-in "do nothing" command — it succeeds silently without producing any output. When you redirect its (empty) output to a file with \`>\`, the shell opens the file for writing (creating it if missing or truncating it if it exists) but nothing gets written. The result is a zero-byte file. It uses no external command, making it slightly faster in tight loops.
 
-**Technical:** \`:\` is a bash builtin (POSIX null command) that always succeeds (exit 0) and produces no output. \`> file\` opens the file in write mode, truncating it (POSIX \`O_WRONLY | O_CREAT | O_TRUNC\`). Together they create or empty the file purely via shell mechanisms — no fork, no execve. The alternative \`> file\` alone (empty redirect with no command) works in bash but is not POSIX-portable. \`truncate -s 0 file\` is clearer and more explicit in scripts. \`: >> file\` is the append equivalent — creates the file if missing but doesn't empty it (same as \`touch file\`). Use whichever is clearest to future readers.
+## Technical \`:\` is a bash builtin (POSIX null command) that always succeeds (exit 0) and produces no output. \`> file\` opens the file in write mode, truncating it (POSIX \`O_WRONLY | O_CREAT | O_TRUNC\`). Together they create or empty the file purely via shell mechanisms — no fork, no execve. The alternative \`> file\` alone (empty redirect with no command) works in bash but is not POSIX-portable. \`truncate -s 0 file\` is clearer and more explicit in scripts. \`: >> file\` is the append equivalent — creates the file if missing but doesn't empty it (same as \`touch file\`). Use whichever is clearest to future readers.
 
-**When to use:**
+## When to use
 - Initializing a log file at the start of a script.
 - Clearing a lock file or status file.
 - Creating an empty file as a "done" marker: \`: > /tmp/.build_complete\`.
@@ -7259,7 +7145,6 @@ export const questions: Question[] = [
 ## Technical \`/dev/null\` is a character special file that discards everything written to it and returns EOF on read. \`2>/dev/null\` redirects FD 2 (stderr) to \`/dev/null\`. FD 1 (stdout) is unaffected. The result: errors disappear silently, normal output continues to stdout (or wherever it was going). To also capture errors rather than discard: \`2>/var/log/errors.log\` or \`2>>/var/log/errors.log\`. To suppress ALL output: \`&>/dev/null\`. Caution: \`2>/dev/null\` silences ALL errors — if a real unexpected error occurs, you won't see it. Use only when the specific errors are known benign noise.
 
 ## When to use
-
 - Suppressing "Permission denied" noise from \`find /\`, \`grep -r\`, \`ls /proc\`.
 - Silencing expected "file not found" errors in cleanup scripts.
 - Checking if a command exists: \`command -v jq 2>/dev/null && echo found\`.
@@ -7281,9 +7166,9 @@ export const questions: Question[] = [
     answer: "command | tee -a app.log",
     explanation: `The \`tee\` command is named after the T-shaped pipe fitting in plumbing — it splits the flow in two directions at once. Without it you must choose: either see output live OR save it to a file. With \`tee\`, the output flows both to your screen and to the file simultaneously. The \`-a\` flag makes it append to the file rather than overwrite, so successive runs accumulate a history.
 
-**Technical:** \`tee\` reads from stdin and writes simultaneously to stdout (the terminal or next pipe stage) and to one or more named files. \`-a\` opens the file in append mode. \`tee\` can write to multiple files: \`cmd | tee file1 file2\`. To also capture stderr through \`tee\`, merge first: \`cmd 2>&1 | tee deploy.log\`. Process substitution alternative for splitting streams: \`cmd > >(tee stdout.log) 2> >(tee stderr.log >&2)\`. \`tee\` is in GNU coreutils — always available.
+## Technical \`tee\` reads from stdin and writes simultaneously to stdout (the terminal or next pipe stage) and to one or more named files. \`-a\` opens the file in append mode. \`tee\` can write to multiple files: \`cmd | tee file1 file2\`. To also capture stderr through \`tee\`, merge first: \`cmd 2>&1 | tee deploy.log\`. Process substitution alternative for splitting streams: \`cmd > >(tee stdout.log) 2> >(tee stderr.log >&2)\`. \`tee\` is in GNU coreutils — always available.
 
-**When to use:**
+## When to use
 - Watching a deploy script live while keeping a log for postmortem.
 - Monitoring a long build in real time while capturing the full transcript.
 - Writing to a log file that requires \`sudo\` to write: \`cmd | sudo tee /var/log/system.log\`.
@@ -7308,7 +7193,6 @@ export const questions: Question[] = [
 ## Technical \`$(...)\` is called command substitution. Bash forks a subshell, runs the command inside, captures its stdout, strips any trailing newlines, and substitutes the result in place of the \`$(...)\` expression. No spaces around \`=\` in assignment — \`var=$(cmd)\` is correct; \`var = $(cmd)\` is a syntax error. Trailing newlines are stripped (feature, not bug — \`\$(printf 'line1\\nline2\\n')\` loses the trailing newline but keeps the embedded one). The older backtick syntax \`\`cmd\`\` does the same but doesn't nest cleanly. For multiline output, capture into an array: \`mapfile -t lines < <(command)\` — this avoids word splitting on spaces.
 
 ## When to use
-
 - Capturing the current date: \`TODAY=$(date +%Y-%m-%d)\`.
 - Getting the current hostname: \`HOST=$(hostname -f)\`.
 - Counting files: \`COUNT=$(find . -name '*.py' | wc -l)\`.
@@ -7333,7 +7217,6 @@ export const questions: Question[] = [
 ## Technical \`nohup\` is a small wrapper that sets SIGHUP to be ignored (\`SIG_IGN\`) before executing the command, so the process never receives the terminal-close signal. It also detaches stdin and, if stdout/stderr are connected to a terminal, redirects them to \`nohup.out\`. The \`&\` is required separately — \`nohup\` alone doesn't background the process. Always redirect output explicitly: \`nohup ./import.sh > import.log 2>&1 &\` — this is cleaner than relying on \`nohup.out\` and ensures you know where to find the log. Alternatives: \`disown %N\` works on a job already running. \`tmux\` or \`screen\` provide a full detachable session and are better for interactive use.
 
 ## When to use
-
 - Starting a long-running job over SSH that must outlive the connection.
 - Kicking off a background process from a deployment script.
 - When you don't want to write a systemd unit for a one-off long-running task.
@@ -7356,9 +7239,9 @@ export const questions: Question[] = [
     answer: "disown %1",
     explanation: `When you run a job with \`&\`, your shell keeps track of it in a job table and sends it a kill signal when you log out. \`disown\` removes the job from that table — the shell forgets about it entirely, so when you exit, no kill signal is sent. The process keeps running. Think of it as the "I forgot to use nohup" rescue command.
 
-**Technical:** \`disown %N\` removes job N from the shell's job table. Without arguments, it removes the most recent job. \`disown -a\` removes all jobs. \`disown -h %N\` keeps the job in the table (so \`jobs\` still shows it) but marks it to not receive SIGHUP on shell exit — a middle ground. Key difference from \`nohup\`: \`nohup\` works at LAUNCH time and also redirects output; \`disown\` works AFTER launch but does NOT redirect. If the process is writing to the terminal and the terminal closes, the process may receive SIGPIPE on its next write and die. Best practice: redirect output first: \`./job.sh > /tmp/job.log 2>&1 & disown\`.
+## Technical \`disown %N\` removes job N from the shell's job table. Without arguments, it removes the most recent job. \`disown -a\` removes all jobs. \`disown -h %N\` keeps the job in the table (so \`jobs\` still shows it) but marks it to not receive SIGHUP on shell exit — a middle ground. Key difference from \`nohup\`: \`nohup\` works at LAUNCH time and also redirects output; \`disown\` works AFTER launch but does NOT redirect. If the process is writing to the terminal and the terminal closes, the process may receive SIGPIPE on its next write and die. Best practice: redirect output first: \`./job.sh > /tmp/job.log 2>&1 & disown\`.
 
-**When to use:**
+## When to use
 - You started a job with \`&\` and only now realize you need to log out.
 - Cleaning up the shell's job table before exiting.
 - Combined with \`nohup\`: \`nohup cmd > log 2>&1 & disown\` for maximum safety.
@@ -7384,7 +7267,6 @@ export const questions: Question[] = [
 ## Technical \`tmux\` (terminal multiplexer) runs sessions inside a server daemon (\`tmux server\`). A SESSION holds multiple WINDOWS (like browser tabs), each window holds multiple PANES (splits). The prefix key is Ctrl+b by default — press and release, then type a command key. Essential key bindings: \`d\` detach (session keeps running), \`c\` new window, \`n\`/\`p\` next/previous window, \`%\` split pane vertically, \`"\` split horizontally, \`o\` cycle panes, \`x\` close pane, \`[\` scroll mode (q to exit). CLI: \`tmux ls\` lists sessions, \`tmux attach -t NAME\` reattaches, \`tmux kill-session -t NAME\` destroys a session. Install: \`sudo apt install tmux\`.
 
 ## When to use
-
 - Any work on a remote server where connection stability matters.
 - Running long jobs (training, builds, imports) while working in parallel panes.
 - Pairing with others by sharing a \`tmux\` session.
@@ -7411,7 +7293,6 @@ export const questions: Question[] = [
 ## Technical \`kill -l\` (list) prints the signal table. About 30 standard signals plus real-time signals (SIGRTMIN through SIGRTMAX). Key signals: 1 SIGHUP (terminal hangup/reload), 2 SIGINT (Ctrl+C), 3 SIGQUIT (Ctrl+\\, core dump), 9 SIGKILL (cannot be caught or ignored), 10 SIGUSR1 (user-defined), 11 SIGSEGV (segmentation fault), 12 SIGUSR2, 13 SIGPIPE (broken pipe), 15 SIGTERM (graceful termination), 17 SIGCHLD (child state change), 18 SIGCONT (continue stopped process), 19 SIGSTOP (cannot be caught — pauses process). \`kill -l 11\` translates number to name; \`kill -l SEGV\` translates name to number. Prefer signal names over numbers in scripts for portability — numbers can differ between architectures.
 
 ## When to use
-
 - Translating a numeric signal from a crash report or core dump analysis.
 - Confirming which signal number to use before adding a \`trap\` in a script.
 - Auditing what signals a program handles: \`strace -e trace=rt_sigaction prog\`.
@@ -7437,7 +7318,6 @@ export const questions: Question[] = [
 ## Technical \`renice -n VALUE -p PID\` changes the nice value of PID. The scale runs from -20 (highest priority, most CPU) to +19 (lowest priority, most yielding). A normal process starts at 0. Only root can decrease the value (increase priority); regular users can only increase it (lower priority) on their own processes. Targets: \`-p PID\` single process, \`-u USER\` all processes owned by a user, \`-g PGID\` a process group. The change takes effect on the scheduler's next decision cycle — essentially immediate. Verify with \`ps -p PID -o pid,ni,cmd\` or the \`NI\` column in \`top\`/\`htop\`. Compare to \`nice\` which sets niceness at launch time — \`renice\` adjusts it afterward.
 
 ## When to use
-
 - A background build or backup is consuming too much CPU and slowing interactive work.
 - Throttling a user's runaway process without killing it: \`sudo renice -n 19 -u username\`.
 - Boosting a critical foreground job that needs to finish faster (requires root).
@@ -7463,7 +7343,6 @@ export const questions: Question[] = [
 ## Technical The bash builtin \`time cmd\` measures wall-clock elapsed time (\`real\`), time in user-space code (\`user\`), and time in kernel code on behalf of this process (\`sys\`). \`user+sys\` is total CPU consumed. If \`user+sys < real\`: process spent time waiting (I/O, network, sleep). If \`user+sys > real\`: process used multiple CPU cores. The external \`/usr/bin/time\` program supports \`-v\` for verbose output including peak RSS memory, context switches, and page faults — use the full path to bypass the builtin. Custom format: \`/usr/bin/time -f 'elapsed=%E peak-rss=%M kb' cmd\`. Time compound statements: \`time { cmd1; cmd2; }\` or \`time (cmd1 | cmd2)\`.
 
 ## When to use
-
 - Comparing two algorithms or implementations to find the faster one.
 - Verifying a deploy script finishes within a time budget.
 - Identifying whether a slow command is CPU-bound (user+sys ≈ real) or I/O-bound (user+sys << real).
@@ -7489,7 +7368,6 @@ export const questions: Question[] = [
 ## Technical \`lsof\` (LiSt Open Files) with \`-i :PORT\` filters to sockets on that port. Output columns: COMMAND (process name), PID, USER, FD (file descriptor), TYPE (IPv4/IPv6), DEVICE, SIZE, NODE (TCP/UDP), NAME (address:port + state). Add \`-sTCP:LISTEN\` to show only listening sockets (not active connections). Add protocol: \`-i tcp:8080\` or \`-i udp:53\`. Requires sudo to see processes owned by other users. Modern faster alternative: \`sudo ss -tnlp 'sport = :8080'\` (always installed via iproute2). Classic: \`sudo netstat -tlnp | grep :8080\`. Once you find the PID, kill it to free the port: \`kill -9 PID\` if normal signals don't work.
 
 ## When to use
-
 - "Address already in use" error when starting a server.
 - Auditing which program is unexpectedly listening on a port.
 - Finding and killing a zombie server process that didn't clean up.
@@ -7515,7 +7393,6 @@ export const questions: Question[] = [
 ## Technical \`strace\` intercepts system calls using \`ptrace(2)\`. \`-p PID\` attaches to a running process (requires sudo for other users' processes). Output format: \`syscall(args) = return_value\`. Look for \`= -1 ENOENT\` (file not found), \`= -1 EACCES\` (permission denied), or a blocking call that never returns. Key flags: \`-f\` follow child processes (forks), \`-e trace=file\` filter to file-related calls, \`-e trace=network\` network only, \`-c\` print a summary table of call counts and time at exit, \`-T\` show time spent in each call, \`-o file.log\` save to file. Install: \`sudo apt install strace\`. Note: strace slows the target process significantly — fine for debugging, remove for performance work.
 
 ## When to use
-
 - Diagnosing a hung process: look for a blocking \`read()\`, \`recv()\`, or \`epoll_wait()\`.
 - Finding a missing file: look for \`openat(...) = -1 ENOENT\`.
 - Debugging permission errors in a container or chroot.
@@ -7540,7 +7417,7 @@ export const questions: Question[] = [
 
 ## Technical \`ps -e\` selects all processes (system-wide). \`-o COL,...\` specifies custom output columns: \`pid\`, \`ppid\`, \`user\`, \`%cpu\`, \`%mem\`, \`rss\` (memory KB), \`vsz\` (virtual KB), \`etime\` (elapsed time), \`comm\` (basename only), \`cmd\` (full command). \`--sort=KEY\` sorts ascending; \`--sort=-KEY\` sorts descending (largest first). \`--no-headers\` removes the header for clean script output. Caveat: \`%cpu\` from \`ps\` is the AVERAGE since process start, not instantaneous — for live/instantaneous numbers use \`top -b -n 1\` or \`pidstat\`. For grouping CPU by user: \`ps -eo user,%cpu --no-headers | awk '{a[$1]+=$2} END {for (u in a) print u, a[u]}' | sort -k2 -nr\`.
 
-**When to use:**
+## When to use
 - Cron-based CPU monitoring: alert if any process exceeds a threshold.
 - Incident response: capture a process snapshot at the time of an incident.
 - Comparing CPU state before and after a config change.
@@ -7565,7 +7442,6 @@ export const questions: Question[] = [
 ## Technical SIGHUP (signal 1) was originally the "terminal hangup" signal, but most daemons repurpose it as a graceful reload trigger. The master process re-reads its config file, starts new worker processes with the new config, and gracefully drains old workers. \`pidof nginx\` returns the PID of the master process; \`cat /var/run/nginx.pid\` is an alternative. The preferred modern form is \`sudo systemctl reload nginx\` — it's logged, systemd-aware, and calls the unit's \`ExecReload=\` action (which is typically SIGHUP under the hood). Always validate config before reloading: \`sudo nginx -t\`. Not all daemons support SIGHUP reload — check the man page.
 
 ## When to use
-
 - Applying a new nginx virtual host or TLS certificate without downtime.
 - Rotating log files (SIGHUP tells the daemon to reopen its log file handles).
 - Any zero-downtime config change to a daemon that supports graceful reload.
@@ -7591,7 +7467,6 @@ export const questions: Question[] = [
 ## Technical \`curl -O\` (capital letter O, not zero) instructs curl to write the response body to a local file whose name is extracted from the URL path's final component (here, \`app-v2.1.tar.gz\`). It differs from \`-o\` (lowercase), which requires you to supply an explicit output filename. If the server issues a redirect, curl follows it and derives the filename from the final redirected URL. Without \`-L\` the redirect is not followed by default, so pairing \`-OL\` is common.
 
 ## When to use
-
 - When you are downloading a release tarball or installer whose filename is already meaningful and you want to keep it.
 - When scripting a download step inside a Makefile or CI job and you want the filename to stay in sync with whatever the URL points to.
 - When you use \`curl\` instead of \`wget\` and need the equivalent of \`wget URL\`.
@@ -7618,7 +7493,6 @@ app-v2.1.tar.gz`,
 ## Technical \`curl -X POST\` overrides the default GET method. \`-H 'Content-Type: application/json'\` adds an HTTP request header telling the server the body is JSON. \`-d '{"order_id":"ORD-9981"}'\` supplies the request body; when \`-d\` is used, curl defaults to POST anyway, but \`-X POST\` makes the intent explicit. The response body (typically JSON) is printed to stdout. Add \`-s\` to silence the progress meter and \`-w '\n'\` to append a newline after the output.
 
 ## When to use
-
 - When testing or debugging a REST endpoint without a GUI tool like Postman.
 - When writing a shell script that must submit data to an internal service API.
 - When reproducing a bug by sending the exact payload that a failing client sends.
@@ -7642,7 +7516,6 @@ app-v2.1.tar.gz`,
 ## Technical \`ssh -L [bind_address:]local_port:remote_host:remote_port user@jump_host\` sets up local port forwarding. The SSH client listens on \`localhost:8080\`; every connection to that port is encapsulated in the SSH session and forwarded to \`10.10.5.20:80\` as seen from \`gateway.example.com\`. The remote server sees the connection originating from the gateway, not from your laptop. Add \`-N\` to suppress the interactive shell (tunnel only) and \`-f\` to background the process.
 
 ## When to use
-
 - When you need to access an admin interface on an internal server that has no public route.
 - When a database port (e.g., 5432 for Postgres) is firewalled and you must tunnel through a bastion host.
 - When you want to proxy HTTP traffic from your browser through a remote SSH server.
@@ -7667,7 +7540,6 @@ app-v2.1.tar.gz`,
 ## Technical \`ssh -R remote_port:local_host:local_port\` configures reverse (remote) port forwarding. The SSH server listens on port 9000 and forwards any incoming connection back through the existing SSH session to \`localhost:3000\` on the client machine. The remote server requires \`GatewayPorts yes\` in its \`sshd_config\` if you need non-localhost binds. Combine with \`-N\` (no shell) and \`-f\` (background) for persistent tunnels.
 
 ## When to use
-
 - When your local dev server is behind NAT or a corporate firewall and a teammate needs to review your work.
 - When demoing a locally-running prototype to a client without deploying it anywhere.
 - When a webhook from an external service must reach your development machine.
@@ -7690,7 +7562,7 @@ app-v2.1.tar.gz`,
 
 ## Technical \`ssh-copy-id\` reads the default public key (\`~/.ssh/id_rsa.pub\`, \`id_ed25519.pub\`, etc.) and appends it to \`~/.ssh/authorized_keys\` on the remote host with correct permissions (mode 600). It authenticates this one-time copy using your existing credentials (password or existing key). Use \`-i\` to specify a non-default key file. The resulting setup uses public-key authentication: the client proves possession of the private key without transmitting it.
 
-**When to use:**
+## When to use
 - When setting up passwordless SSH access to a server you manage regularly.
 - When automating deployments and a CI/CD runner needs non-interactive SSH access.
 - When adding a new team member's key to a shared jump host.
@@ -7716,7 +7588,7 @@ Now try logging in: ssh 'user@deploy.example.com'`,
 
 ## Technical \`mtr\` (Matt's Traceroute) sends a stream of ICMP or UDP probes with increasing TTL values, just like \`traceroute\`, but it continuously repeats them and computes running statistics: packet loss %, best/worst/average/standard-deviation latency per hop. It updates the terminal in real time using ncurses. Use \`--report\` (\`-r\`) to run for a fixed number of cycles and print a summary — useful for pasting into tickets. \`--tcp -P 443\` probes with TCP SYN packets, bypassing firewalls that block ICMP.
 
-**When to use:**
+## When to use
 - When investigating intermittent connection drops to a remote server.
 - When a cloud database appears slow and you need to identify whether the latency is in the first or last mile.
 - When filing a network issue with your ISP or hosting provider and you need a statistical report.
@@ -7743,7 +7615,7 @@ HOST: laptop            Loss%   Snt  Last   Avg  Best  Wrst StDev
 
 ## Technical \`dig\` (Domain Information Groper) is a full-featured DNS query tool. Without extra flags it prints a verbose multi-section response including the question, answer, authority, and additional sections plus query statistics. The \`+short\` option suppresses everything except the data fields of the answer records. For an A record query (IPv4) this is one or more IP addresses. Add \`AAAA\` to query IPv6, or \`MX\`, \`TXT\`, \`NS\` for other record types. \`dig +short example.com MX\` returns just the mail-exchanger hostnames and priorities.
 
-**When to use:**
+## When to use
 - When a script needs to resolve a hostname to an IP for further processing.
 - When quickly checking whether a DNS change has propagated without reading verbose output.
 - When comparing the result from multiple DNS servers: \`dig +short @8.8.8.8 example.com\` vs \`@1.1.1.1\`.
@@ -7767,7 +7639,7 @@ HOST: laptop            Loss%   Snt  Last   Avg  Best  Wrst StDev
 
 ## Technical \`ip link\` shows layer-2 (Ethernet) interface state and configuration. Adding \`-s\` (statistics) appends per-interface packet and byte counters: RX bytes, RX packets, RX errors, RX dropped; and the same for TX. A second \`-s -s\` adds extended error detail. The counters reset on reboot or on driver reload. To watch them change in real time, wrap in \`watch -n1 ip -s link\`. The older equivalent is \`ifconfig -a\`, but \`ip\` is the current standard on Linux.
 
-**When to use:**
+## When to use
 - When verifying that traffic is flowing through a newly configured network interface.
 - When diagnosing a suspected NIC error storm by checking the error and drop counters.
 - When baseline-profiling network throughput before and after a configuration change.
@@ -7795,7 +7667,7 @@ HOST: laptop            Loss%   Snt  Last   Avg  Best  Wrst StDev
 
 ## Technical \`whois\` queries the WHOIS protocol (port 43) against the authoritative registrar database for the TLD in question. For gTLDs like \`.com\`, it first queries IANA, which redirects to the correct registrar's WHOIS server. The response includes registrar name, creation/expiry dates, name servers, and registrant contact details (many now redacted under GDPR). For IP address lookups, \`whois 93.184.216.34\` queries the regional internet registry (RIPE, ARIN, etc.) for netblock ownership.
 
-**When to use:**
+## When to use
 - When investigating a suspicious domain or phishing email to identify the registrant or registration date.
 - When checking whether a domain you want to register is already taken and who owns it.
 - When determining which DNS registrar manages a domain so you know where to request a takedown.
@@ -7822,7 +7694,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`ip neigh\` (short for \`ip neighbor\`) displays the kernel's neighbor table, which is the modern Linux interface to ARP (Address Resolution Protocol) for IPv4 and NDP (Neighbor Discovery Protocol) for IPv6. Each entry shows the IP address, the interface it was seen on, the resolved MAC (hardware) address, and the neighbor state: REACHABLE, STALE, DELAY, PROBE, FAILED, or PERMANENT. FAILED means ARP requests went unanswered. The classic equivalent is \`arp -n\`, but \`ip neigh\` is preferred on modern systems.
 
-**When to use:**
+## When to use
 - When diagnosing why a local IP is unreachable — a FAILED or missing entry points to a layer-2 problem.
 - When verifying that a new VM or container has announced itself on the network after boot.
 - When investigating a duplicate IP conflict by checking which MAC holds a given IP.
@@ -7848,7 +7720,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`apt list --installed\` queries the APT cache and filters for entries with the installed flag. Each output line follows the format \`package/suite version arch [installed,...]\`. The text \`WARNING: apt does not have a stable CLI interface\` is emitted on stderr — suppress it with \`2>/dev/null\` in scripts. For scripting use \`dpkg-query -W -f='\${binary:Package}\\n'\` instead, which has a stable interface. Append \`--manual-installed\` to limit output to packages you explicitly requested (as opposed to those pulled in as dependencies).
 
 ## When to use
-
 - When generating a package manifest before migrating a server to a new host.
 - When auditing what software is on a server you inherited and don't fully know.
 - When comparing two servers to find discrepancies in their installed software.
@@ -7874,7 +7745,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`apt list --upgradable\` reads from the cached package metadata (refreshed by \`apt update\`) and emits one line per upgradable package: \`package/suite NEWER_VERSION arch [upgradable from: OLDER_VERSION]\`. Run \`sudo apt update\` first or the data will be stale. Pipe to \`tail -n +2 | wc -l\` for a count suitable for a monitoring alert. Filter for security-only with \`grep -- -security\`. Packages held with \`apt-mark hold\` appear here but will not actually be upgraded — cross-check with \`apt-mark showhold\`.
 
 ## When to use
-
 - When reviewing pending updates before a scheduled maintenance window.
 - When checking whether a critical CVE patch is waiting to be applied.
 - When generating a daily "pending updates" metric for a monitoring dashboard.
@@ -7900,7 +7770,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`dpkg -L\` ('list files') consults the local dpkg database at \`/var/lib/dpkg/info/PKG.list\` and prints every path the installed package owns. It only works for packages that are already installed. For an uninstalled package, use \`apt-file list PKG\` (requires \`apt-file\` installed and indexed). The inverse — 'which package owns this file?' — is \`dpkg -S /path\`. Filter output with \`grep\`: \`grep ^/etc\` for configs, \`grep bin/\` for executables.
 
 ## When to use
-
 - When locating the nginx binary path after installing it via apt.
 - When finding configuration files to back up before uninstalling a package.
 - When auditing what will disappear from disk if you remove a package.
@@ -7926,7 +7795,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`dpkg -S\` ('search') queries the local dpkg database for any installed package that owns the given path. The argument can be an exact path, a substring, or a glob (quote globs to prevent shell expansion). Output is \`package: path\` per match. If the file isn't owned by any dpkg-managed package (installed by hand, by pip, npm, or make install), dpkg -S returns a non-zero exit and prints nothing. For packages not yet installed, use \`apt-file search PATH\`. Pair with \`$(which CMD)\` for command lookup: \`dpkg -S $(which curl)\`.
 
 ## When to use
-
 - When an unfamiliar binary appears on the system and you need to identify its source package.
 - When a binary is misbehaving and you want to know which package to reinstall.
 - When auditing a system for files not managed by the package manager.
@@ -7952,7 +7820,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical Every dpkg install has two phases: (1) UNPACK files to disk, (2) CONFIGURE (run the package's \`postinst\` script to create users, enable services, generate keys, etc.). If phase 2 is interrupted, the package is marked 'half-configured' in the dpkg database and blocks subsequent apt/dpkg operations. \`dpkg --configure -a\` re-runs the \`postinst\` script for every such package. If that still fails, escalate to \`sudo apt --fix-broken install\` (apt install -f), which can propose removing the offending package. As a last resort, \`sudo dpkg --remove --force-remove-reinstreq PKG\` forces removal to clear the wedge.
 
 ## When to use
-
 - When apt fails after you pressed Ctrl-C during a running upgrade.
 - When a disk-full condition caused an install to fail mid-way.
 - When the system rebooted unexpectedly during an apt upgrade.
@@ -7978,7 +7845,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`apt-mark showhold\` reads dpkg's selections file and prints the name of every package marked as 'hold' — one per line. A held package is excluded from \`apt upgrade\` and \`apt dist-upgrade\`. The related queries \`apt-mark showmanual\` and \`apt-mark showauto\` list packages you explicitly requested versus those installed as dependencies. None of these require sudo. To release a hold, use \`sudo apt-mark unhold PKG\`. Packages on hold still appear in \`apt list --upgradable\` but won't actually upgrade.
 
 ## When to use
-
 - When auditing a server before applying security patches to ensure all packages are eligible.
 - When investigating why a specific package is listed as upgradable but never actually upgrades.
 - When reviewing holds before decommissioning a version constraint that no longer applies.
@@ -8004,7 +7870,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`apt-mark unhold\` reverses \`apt-mark hold\` by removing the hold entry from dpkg's selections file. After running it, verify with \`apt-mark showhold\` (the package should no longer appear) and \`apt list --upgradable\` (the package should now show as upgradable if a newer version exists). Unholding does not trigger an upgrade; run \`sudo apt upgrade\` or \`sudo apt install --only-upgrade nginx\` to actually install the newer version. To unhold every held package at once: \`sudo apt-mark unhold $(apt-mark showhold)\`.
 
 ## When to use
-
 - When a bug that prompted a version pin has been fixed upstream and you want to resume upgrades.
 - When a compatibility constraint between two services has been resolved.
 - When preparing a server for a major OS upgrade that requires all packages to be current.
@@ -8030,7 +7895,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`apt source\` fetches three files: the upstream source tarball, a \`.dsc\` (Debian source control) file, and a diff with Debian-specific patches. It then unpacks them into a subdirectory named \`package-version/\`. Requirements: (1) \`deb-src\` lines must be enabled in \`/etc/apt/sources.list\` (commented by default on Ubuntu — uncomment and rerun \`apt update\`), and (2) no sudo needed since the source lands in the current directory. Use \`sudo apt build-dep PKG\` to install every compiler and library needed to rebuild. Rebuild with \`dpkg-buildpackage -b -us -uc\` inside the unpacked directory.
 
 ## When to use
-
 - When investigating exactly how a package is built and what patches Ubuntu applied.
 - When applying a local fix to a package and needing to build a custom .deb for your fleet.
 - When studying the integration code that Debian/Ubuntu adds around upstream software.
@@ -8056,7 +7920,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`add-apt-repository --remove\` deletes the \`.list\` file that the PPA created under \`/etc/apt/sources.list.d/\`. It does NOT uninstall packages you installed from that PPA, and it does NOT remove the imported GPG key from \`/etc/apt/trusted.gpg.d/\`. Run \`sudo apt update\` after removal so APT forgets the PPA's metadata. To also downgrade installed packages back to their official Ubuntu versions, install \`ppa-purge\` and run \`sudo ppa-purge ppa:deadsnakes/ppa\`.
 
 ## When to use
-
 - When removing a PPA you used for testing and no longer need.
 - When a PPA has been abandoned and its packages are blocking upgrades.
 - When reverting a server to rely only on official distribution packages.
@@ -8081,7 +7944,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`apt show\` prints the candidate version's metadata fields: Package, Version, Priority, Installed-Size, Depends, Recommends, Description, and Homepage. It is the user-friendly equivalent of \`apt-cache show\`, which is the stable scripting-friendly version (apt warns about an unstable CLI interface). Use \`-a\` to show all available versions, not just the candidate. Scan the Depends field carefully — some 'small' packages pull in large desktop components.
 
-**When to use:**
+## When to use
 - When evaluating a package before installing it on a production server.
 - When comparing two competing packages to understand their dependency footprints.
 - When looking up a package's upstream homepage to read its documentation.
@@ -8106,7 +7969,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`awk -F,\` sets the field separator (FS) to a comma, causing awk to split each input line at commas instead of whitespace. \`$2\` refers to the second field after splitting. For a line \`2026-05-01,west,4200\`, \`$1\` is the date, \`$2\` is the region, \`$3\` is the revenue. Add conditions before the action: \`awk -F, '$3 > 5000 {print $2}'\` prints only regions with revenue above 5000. Note: basic awk does not handle quoted fields containing commas — use a proper CSV library for such input.
 
-**When to use:**
+## When to use
 - When extracting a single column from a CSV log or export file.
 - When checking unique values in a column: pipe to \`sort -u\`.
 - When filtering CSV rows by a numeric column value.
@@ -8129,7 +7992,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical awk processes files line by line. \`sum+=$1\` adds each line's first field to an accumulator variable. Variables start at 0 by default so no initialization is needed. The \`END\` block runs exactly once after the last line is processed, making it ideal for printing totals and averages. For an average: \`awk '{c++; s+=$1} END {print s/c}'\`. For the maximum: \`awk '{if($1>max) max=$1} END {print max}'\`. A common mistake is putting \`print sum\` inside the main block instead of \`END\`, which prints a running total on every line.
 
-**When to use:**
+## When to use
 - When summing a column of byte counts, durations, or prices from a log or report.
 - When computing an average response time across thousands of log lines.
 - When aggregating numeric data without importing it into another tool.
@@ -8153,7 +8016,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`sed -i\` means 'edit in place' — modify the file directly. The suffix after \`-i\` (here \`.bak\`) causes sed to save the original file as \`settings.conf.bak\` before overwriting it. Without the suffix, \`sed -i\` edits with no backup. The \`s/old/new/g\` substitution command replaces ALL occurrences on each line (the trailing \`g\` makes it global; without it only the first match per line is replaced). Always use a backup suffix until you are confident the regex is correct, especially on system configuration files.
 
 ## When to use
-
 - When updating a hostname or IP address across a configuration file.
 - When renaming a variable or key in a config template.
 - When replacing a deprecated setting name with its new name across many files.
@@ -8176,7 +8038,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical The sed address \`/DEBUG/\` matches any line containing 'DEBUG' (case-sensitive). The \`d\` command deletes matched lines — preventing them from appearing in the output. Without \`-i\`, sed does not modify the source file. To save the filtered version: \`sed '/DEBUG/d' /var/log/app.log > /var/log/app_clean.log\`. To delete lines matching a pattern and update the file in place: add \`-i\`. The inverse (keep ONLY matching lines) is \`sed -n '/DEBUG/p'\`.
 
-**When to use:**
+## When to use
 - When stripping debug noise from logs before sharing them with a colleague.
 - When cleaning comment lines from a config file: \`sed '/^#/d'\`.
 - When removing blank lines from a file: \`sed '/^$/d'\`.
@@ -8200,7 +8062,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`grep -A N\` ('After') prints N lines after each match in addition to the matching line itself. The symmetric flags are \`-B N\` (Before — lines preceding the match) and \`-C N\` (Context — N lines both before and after). When multiple matches are close together, grep uses \`--\` as a separator between result groups. Combine: \`grep -B 2 -A 5 'PANIC' /var/log/app.log\` shows 2 lines of context before and 5 after each panic entry.
 
 ## When to use
-
 - When a log error is followed by a stack trace that contains the actual cause.
 - When investigating a crash where the relevant state is printed after the error line.
 - When searching for a config directive that spans multiple lines.
@@ -8224,7 +8085,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`grep -l\` (lowercase L, for 'list') suppresses line output and emits only the filename of each file containing at least one match. The inverse is \`grep -L\` (uppercase) which lists files that do NOT contain the pattern. Combine with \`-r\` for recursive search: \`grep -rl 'proxy_pass' /etc/nginx/\` searches all files under /etc/nginx and returns only matching filenames. This is more efficient than \`grep -r\` when you only care about which files are affected, not what they contain.
 
 ## When to use
-
 - When auditing which config files reference a deprecated setting.
 - When finding all files in a project directory that import a specific module.
 - When identifying which log files contain a specific error before reading them.
@@ -8248,7 +8108,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`grep -o\` (only-matching) prints just the matched text, one match per output line. Combined with \`-E\` (extended regex), you can write richer patterns like IP address extraction. Pipe through \`sort | uniq -c\` to count how many times each IP appears: \`grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' /var/log/nginx/access.log | sort | uniq -c | sort -rn\` gives a frequency table — a common first step in access-pattern analysis. The \`-P\` flag enables Perl-compatible regex for even richer patterns like lookaheads.
 
 ## When to use
-
 - When extracting IP addresses, UUIDs, or error codes from free-form log lines.
 - When pulling URLs from an HTML file using a pattern.
 - When building a frequency table of a recurring field in logs.
@@ -8271,7 +8130,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`grep -P\` activates PCRE (Perl-Compatible Regular Expressions). PCRE adds: \`\\d\` (digit, equivalent to [0-9]), \`\\w\` (word character), \`\\s\` (whitespace), \`+\` (one or more), \`?\` (optional), \`{N,M}\` (range), and lookahead/lookbehind assertions like \`(?<=Bearer )\\S+\` (match what follows 'Bearer ' without including 'Bearer' in the match). Without \`-P\`, grep treats \`\\d\` as a literal backslash followed by 'd'. Use basic or extended regex (\`-E\`) for simple patterns and PCRE only when the extra features are actually needed, since \`-P\` is less portable.
 
-**When to use:**
+## When to use
 - When your pattern uses Perl shorthand classes like \\d, \\w, or \\s.
 - When you need a lookahead or lookbehind assertion to match based on surrounding context.
 - When porting a regex from a Python or Perl script to a grep command.
@@ -8295,7 +8154,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`tr -d\` deletes every character that belongs to the specified set from the input, passing everything else through unchanged. The POSIX character class \`[:space:]\` matches all whitespace types: space, tab (\`\\t\`), newline (\`\\n\`), carriage return (\`\\r\`), form feed (\`\\f\`), and vertical tab (\`\\v\`). To remove only spaces: \`tr -d ' '\`. To remove only Windows carriage returns: \`tr -d '\\r'\`. To COLLAPSE multiple consecutive spaces into one rather than remove them: use \`-s ' '\` (squeeze). \`tr\` reads from stdin only — it cannot take a filename argument like grep or awk.
 
 ## When to use
-
 - When sanitizing an API token that contains embedded spaces.
 - When generating a compact identifier from a phrase by removing all spaces.
 - When stripping Windows line endings (\`\\r\`) from a file for use on Linux.
@@ -8318,7 +8176,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`iconv\` converts between character encodings. \`-f\` specifies the source encoding (from), \`-t\` specifies the target encoding (to). \`ASCII//TRANSLIT\` is a glibc extension meaning 'do best-effort transliteration for characters that have no direct ASCII equivalent'. Without \`//TRANSLIT\`, unmappable characters cause an error or are silently dropped depending on the \`-c\` flag. The \`//IGNORE\` suffix drops untranslatable characters silently. Use \`iconv -l\` to list all supported encoding names.
 
-**When to use:**
+## When to use
 - When a downstream system or legacy database rejects non-ASCII input.
 - When normalizing user-submitted names for a system that cannot handle Unicode.
 - When converting a file received from a Windows system in Latin-1 or CP-1252 to UTF-8.
@@ -8342,7 +8200,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`lsb_release\` reads Linux Standard Base release information and formats it consistently across distributions. The \`-a\` flag shows all available fields: LSB Version, Distributor ID (e.g. Ubuntu), Description (the friendly long name), Release (version number), and Codename (e.g. 'noble'). This is more reliable than reading \`/etc/os-release\` manually because the output format is standardised. In scripts, \`lsb_release -cs\` returns just the codename (useful for building apt source lines). On RHEL-family systems, use \`cat /etc/redhat-release\` or \`cat /etc/os-release\` as alternatives.
 
 ## When to use
-
 - When you need to know the exact Ubuntu version before choosing a PPA or repository.
 - When a script must branch on the distro version to apply the right package names.
 - When documenting a server's OS version for an asset inventory.
@@ -8365,7 +8222,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`lsblk\` ('list block devices') reads from sysfs and displays a tree of block devices. Each row shows: NAME (e.g. \`sdb1\`), SIZE, TYPE (disk/part/lvm), and MOUNTPOINT (where it is mounted, or blank if unmounted). Unlike \`fdisk -l\`, it does not require root for the basic view. The \`-f\` flag adds FSTYPE, LABEL, and UUID columns — essential for writing \`/etc/fstab\` entries. Device names: \`sda\` = first SATA/USB disk, \`sda1\` = its first partition, \`nvme0n1\` = first NVMe SSD, \`nvme0n1p2\` = its second partition.
 
-**When to use:**
+## When to use
 - When identifying the device name of a newly plugged USB drive before mounting it.
 - When checking the disk and partition layout before partitioning a new server.
 - When verifying that a partition is mounted at the expected path.
@@ -8390,7 +8247,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`blkid\` ('block device ID') probes block devices and reports their UUID, filesystem type (TYPE), and optional label. UUIDs are the stable identifiers to use in \`/etc/fstab\` instead of \`/dev/sdX\` names, which can change between reboots if drive enumeration order changes. The output format is \`/dev/sdb1: UUID="abc-123" TYPE="ext4"\`. Use \`blkid -o export\` for shell-sourceable key=value output. Requires root to read all devices.
 
 ## When to use
-
 - When writing a new entry in /etc/fstab for a data partition.
 - When adding an external drive to the boot automount list.
 - When identifying the filesystem type of a partition before mounting it.
@@ -8414,7 +8270,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`findmnt\` searches the kernel's mount table and displays the entry matching the specified path or the nearest mount point above it. Output columns: TARGET (mount point), SOURCE (device or network path), FSTYPE (filesystem type like ext4, nfs, tmpfs), and OPTIONS. Without an argument, it shows all mounts as a tree. The \`-t ext4\` filter shows only mounts of a given filesystem type. The \`--df\` option adds disk usage statistics, combining the info from \`df\` and \`mount\`.
 
 ## When to use
-
 - When diagnosing why writes to a path are slow — checking if it's on NFS.
 - When confirming that a bind mount landed on the expected target.
 - When verifying the mount options (e.g., ro, noexec) for a security audit.
@@ -8438,7 +8293,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`last\` parses the binary file \`/var/log/wtmp\` and prints login records: USER, TTY (\`pts/0\` = SSH pseudo-terminal, \`tty1\` = physical console), FROM (source IP), LOGIN time, LOGOUT time (or 'still logged in'), and session duration. The special record \`reboot system boot\` marks each reboot. Use \`-n N\` to limit to the most recent N entries. The sibling \`sudo lastb\` reads \`/var/log/btmp\` (failed logins) — useful for spotting brute-force attempts. \`lastlog\` shows the most recent login per user.
 
 ## When to use
-
 - When investigating a potential unauthorized access by reviewing who has been logging in.
 - When confirming the reboot history of a production server after an incident.
 - When building a monthly access report for a compliance audit.
@@ -8464,7 +8318,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`vmstat\` ('virtual memory statistics') prints columns in groups: procs (runnable r, blocked b), memory (swpd, free, buff, cache), swap (si/so = swap-in/out per second), I/O (bi/bo = blocks in/out), system (interrupts in, context switches cs), and CPU (user us, system sy, idle id, I/O wait wa). The numeric argument sets the refresh interval in seconds. The first line shows averages since boot — skip it and read subsequent lines for current activity. High \`wa\` means I/O bottleneck; high \`si\`/\`so\` means memory pressure; high \`b\` means processes blocked on I/O.
 
 ## When to use
-
 - When a server is slow and you need to quickly determine whether the bottleneck is CPU, memory, or I/O.
 - When investigating suspected swap thrashing during a memory-pressure incident.
 - When baselining system behavior before and after a configuration change.
@@ -8488,7 +8341,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`iostat\` (from the \`sysstat\` package) reports CPU and per-disk I/O statistics. \`-x\` shows extended columns: \`r/s\` and \`w/s\` (reads/writes per second), \`rkB/s\` and \`wkB/s\` (throughput), \`await\` (average I/O latency in ms — over 10ms on an SSD indicates trouble), and \`%util\` (percent of wall time the disk was busy — 90%+ means saturated). \`-z\` hides devices with zero activity. The first output block shows averages since boot — read subsequent blocks for current activity. Install with \`sudo apt install sysstat\` or \`sudo dnf install sysstat\`.
 
 ## When to use
-
 - When a server is slow but CPU and RAM are idle — the bottleneck is usually disk I/O.
 - When comparing I/O patterns before and after adding a disk cache or upgrading storage.
 - When identifying which disk in a multi-disk system is handling the most load.
@@ -8512,7 +8364,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`lshw\` ('list hardware') pulls information from DMI/SMBIOS (BIOS-level data), sysfs, and \`/proc\`. By default it produces a verbose tree hundreds of lines long. \`-short\` collapses that into a one-row-per-device table with columns: H/W path, Device (kernel name like \`eth0\` or \`/dev/nvme0n1\`), Class (processor/memory/network/storage/display), and Description. Requires sudo to read full BIOS-level data. Use \`-C CLASS\` to filter: \`-C network\`, \`-C disk\`, \`-C memory\`. Install with \`sudo apt install lshw\` or \`sudo dnf install lshw\` if not present.
 
-**When to use:**
+## When to use
 - When doing a first-day inventory of an unfamiliar physical server.
 - When verifying that all expected RAM DIMMs are recognized by the system.
 - When checking the exact NIC model before downloading a driver.
@@ -8537,7 +8389,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`/proc/meminfo\` is a virtual file maintained by the kernel containing dozens of memory accounting fields. The most important are: \`MemTotal\` (total RAM), \`MemFree\` (completely unused pages — often misleadingly low because Linux aggressively uses spare RAM for cache), \`MemAvailable\` (estimated RAM available for a new process including reclaimable cache — this is the number that matters for OOM risk), \`Cached\` (page cache), and \`SwapTotal\`/\`SwapFree\`. The \`free\` command reads from this same file. Values are in kB.
 
 ## When to use
-
 - When investigating a suspected memory leak and wanting more detail than \`free -h\` provides.
 - When scripting a check that alerts when MemAvailable drops below a threshold.
 - When diagnosing an OOM kill — checking whether MemAvailable was truly exhausted.
@@ -8561,7 +8412,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical systemd's journal uses the syslog priority scale: 0 emerg, 1 alert, 2 crit, 3 err, 4 warning, 5 notice, 6 info, 7 debug. \`-p err\` shows levels 0-3 (err and more severe). Use \`-p warning\` to also include warnings (levels 0-4). Use a range like \`-p warning..err\` to show only those two levels. Combine with \`-b\` to limit to the current boot, \`-u nginx\` to filter by service, or \`--since '1 hour ago'\` to limit the time range.
 
 ## When to use
-
 - When skimming a noisy journal on a busy server for actual problems.
 - When investigating a failed service start — filter to errors for just that unit.
 - When doing a post-incident review and wanting only the signal without the noise.
@@ -8586,7 +8436,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`set -e\` (errexit): exit immediately when any command returns a non-zero exit code. \`set -u\` (nounset): treat reading an unset variable as an error — catches typos in variable names that would otherwise silently expand to empty strings. \`set -o pipefail\`: make a pipeline's exit code equal to the exit code of the last non-zero command in it, so \`false | grep x\` correctly fails instead of returning 0 (grep's exit code). A common companion is \`IFS=$'\\n\\t'\` to prevent word-splitting on spaces. To opt a single risky command out of \`-e\`: use \`risky_cmd || true\`. This is the most impactful single line you can add to a bash script.
 
 ## When to use
-
 - When writing any cron job or CI pipeline script where silent failure causes mysterious incidents.
 - When scripting deployment steps that must stop immediately on the first failure.
 - When your script modifies system state and continuing after a partial failure would cause data corruption.
@@ -8609,7 +8458,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`trap 'COMMAND' SIGNAL\` registers a handler that runs when the shell receives the named signal or pseudo-signal. \`EXIT\` is a pseudo-signal that fires for any termination: clean exit, \`exit 1\`, error under \`set -e\`, or receipt of a real signal. This makes it ideal for cleanup that MUST happen. Pattern: create the temp directory first, then IMMEDIATELY set the trap — that way even if the very next command fails, the cleanup runs. The \`ERR\` pseudo-signal fires only on command failure (useful for logging the failing line: \`trap 'echo "failed at line $LINENO"' ERR\`). Use \`trap '' SIGNAL\` to ignore a signal; \`trap - SIGNAL\` to reset to default.
 
-**When to use:**
+## When to use
 - When a script creates temp files and you must ensure they are removed even on crash.
 - When a script acquires a file lock that must be released on exit.
 - When a deployment script modifies a config and must restore the original if it fails.
@@ -8633,7 +8482,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`getopts\` is a bash builtin flag parser (distinct from the external \`getopt\` command). The spec string \`"f:v"\` declares two flags: \`-f\` (requires an argument, indicated by the colon) and \`-v\` (no argument). On each call, \`getopts\` stores the flag letter in \`$opt\` and any value in \`$OPTARG\`, then advances the position counter \`$OPTIND\`. When no more flags remain, \`getopts\` returns non-zero, ending the while loop. After the loop, run \`shift $((OPTIND-1))\` to drop parsed flags from \`$@\`, leaving non-flag arguments as \`$1\`, \`$2\`, etc. Limitation: \`getopts\` handles short flags only (\`-f\`), not long flags (\`--file\`).
 
-**When to use:**
+## When to use
 - When adding standard -h help, -v verbose, -f file flags to a script.
 - When writing a script that needs 3-5 short flags and you don't want a dependency.
 - When you want flag parsing to integrate cleanly with the shell's \`$@\` and \`$OPTIND\`.
@@ -8656,7 +8505,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`\${var:-default}\` evaluates to \`default\` if \`$var\` is unset OR empty, and evaluates to \`$var\` otherwise. It does not modify \`$var\`. Drop the colon (\`\${var-default}\`) to only trigger on truly UNSET (not empty). The assignment variant \`\${var:=default}\` also assigns \`$var\` to \`default\` if empty — use when you want the variable itself updated. The opposite \`\${var:+something}\` returns \`something\` only if \`$var\` IS set and non-empty. The error variant \`\${var:?message}\` exits the script with the message if empty. Works on positional args: \`name="\${1:-stranger}"\` gives a default if no argument was passed.
 
 ## When to use
-
 - When setting default values for environment variables like PORT, LOG_LEVEL, or DB_HOST.
 - When a script accepts an optional first argument and needs a sensible default.
 - When writing a function that has optional parameters.
@@ -8681,7 +8529,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`\${var:?message}\` is the 'loud' expansion: if \`$var\` is unset or empty, bash prints \`bash: var: message\` to stderr and exits the script (in a non-interactive shell). The leading \`:\` (the null/no-op command) executes the expansion purely for its side effect — the check and potential exit — without assigning or printing anything. Put these checks at the TOP of the script, before any destructive work. Multiple checks can chain on consecutive lines. Without the colon (\`\${var?msg}\`), only truly unset (not empty) triggers the error.
 
 ## When to use
-
 - When a script will take destructive action and must not proceed without a required variable.
 - When enforcing that a required positional argument was passed: \`TARGET="\${1:?Usage: $0 <hostname>}"\`.
 - When a script uses a secret that must come from the environment rather than being hardcoded.
@@ -8705,7 +8552,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`\${var//search/replace}\` replaces ALL occurrences of \`search\` in \`$var\` with \`replace\`. Single slash \`\${var/search/replace}\` replaces only the first occurrence. Anchors: \`\${var/#prefix/replace}\` only matches at the start; \`\${var/%suffix/replace}\` only at the end. Leave \`replace\` empty to delete: \`\${var//foo/}\` removes every 'foo'. Related suffix/prefix stripping: \`\${var%.JPG}\` strips the shortest matching suffix (useful for changing extensions); \`\${var##*/}\` strips the longest matching prefix (basename equivalent). These run entirely in the shell — faster than forking sed for simple variable transformations.
 
 ## When to use
-
 - When sanitizing a filename by replacing spaces with underscores before use in a script.
 - When stripping a file extension to build a new filename: \`\${f%.txt}.md\`.
 - When replacing a character across a variable's value without calling an external tool.
@@ -8730,7 +8576,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical Syntax: \`case VALUE in PATTERN1) actions ;; PATTERN2) actions ;; *) default ;; esac\` (esac = 'case' backwards). Patterns are GLOBS, not regex: \`*.txt\` matches any .txt, \`start|begin\` matches either word (pipe = OR), \`[0-9]*\` matches anything starting with a digit. Patterns are tested in order; first match wins. The \`*)\` catch-all is the default branch. Terminators: \`;;\` ends a branch; \`;&\` falls through to the next branch (rare); \`;;&\` continues testing remaining patterns. Always quote the value: \`case "\$x" in\` — an unquoted empty variable causes a syntax error.
 
 ## When to use
-
 - When dispatching subcommands in a script: build, test, deploy.
 - When routing different file extensions to different extraction commands.
 - When implementing a state machine with a fixed set of states.
@@ -8753,7 +8598,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`declare -A\` creates an associative (string-keyed) array — bash 4+ only (macOS ships bash 3.x which lacks this; install with \`brew install bash\` or rewrite using a different approach). You MUST declare before use; without \`declare -A\`, assigning \`name[key]=val\` treats the string key as zero, silently corrupting data. Access: \`\${url[dev]}\`. All keys: \`\${!url[@]}\`. All values: \`\${url[@]}\`. Count: \`\${#url[@]}\`. Delete a key: \`unset url[dev]\`. Check existence (bash 4.2+): \`[[ -v url[dev] ]]\`. Iterate with quotes: \`for k in "\${!url[@]}"; do echo "$k -> \${url[$k]}"; done\`.
 
-**When to use:**
+## When to use
 - When building a config lookup table mapping names to values.
 - When counting occurrences: use items as keys, counts as values.
 - When implementing subcommand dispatch mapping command names to handler functions.
@@ -8777,7 +8622,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`mapfile\` (alias \`readarray\`) is a bash 4+ builtin that reads stdin line-by-line into a named array. \`-t\` strips the trailing newline from each element — almost always desired. Without \`-t\`, every element ends with \`\\n\`, breaking downstream comparisons. Other flags: \`-n N\` (read at most N lines), \`-s N\` (skip first N lines, useful for skipping CSV headers), \`-O N\` (start writing at array index N for appending). For pipeline input, use process substitution: \`mapfile -t errors < <(grep ERROR /var/log/app.log)\` — you cannot pipe directly into mapfile and keep the array because pipe stages run in subshells. Bash 3.x (macOS default) lacks mapfile.
 
-**When to use:**
+## When to use
 - When you need random access to lines of a file (e.g., process line 5 and line 12).
 - When loading a list of servers, usernames, or paths for batch processing.
 - When you need the count of lines before processing: \`\${#hosts[@]}\`.
@@ -8802,7 +8647,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`(( expr ))\` is bash's arithmetic evaluation context. Inside it: variables don't need \`$\`, all C-like operators work (\`++ --\` inc/dec, \`+= -= *= /=\` compound assign, \`**\` power, \`% < <= > >= == !=\` comparisons). The return code is 0 when the expression result is non-zero (truthy), 1 when zero — so \`(( i > 5 ))\` works in an \`if\`. To capture a result: use \`$(( expr ))\` (arithmetic expansion). KEY DIFFERENCE: \`(( ))\` is a statement (no \`$\`), \`$(( ))\` is an expression (use the value). CAUTION under \`set -e\`: \`(( i++ ))\` when \`i=0\` returns exit code 1 (because the old value was 0/false), which kills the script. Use \`(( i++ )) || true\` or \`((++i))\` (pre-increment returns the new value).
 
-**When to use:**
+## When to use
 - When incrementing a loop counter inside a for or while loop.
 - When performing arithmetic comparisons: \`if (( count > 100 ))\`.
 - When computing a derived value: \`n=$(( 2 ** 10 ))\`.
@@ -8827,7 +8672,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`tar -czf\` means Create, gZip-compress, write to File. \`$(date +%F)\` is command substitution: \`date +%F\` is shorthand for \`%Y-%m-%d\`, producing the ISO 8601 date like \`2026-05-17\`. Always double-quote the filename: \`"backup-$(date +%F).tar.gz"\`. Add \`%H%M%S\` for sub-day precision if you run backups multiple times per day. To exclude certain paths: add \`--exclude='*.log'\`. To stream off-site: \`tar -czf - /etc | ssh user@backup 'cat > backup.tgz'\`. Pair with \`find /var/backups -name 'backup-*.tar.gz' -mtime +30 -delete\` to rotate old backups.
 
-**When to use:**
+## When to use
 - When running a nightly cron job that archives a configuration directory.
 - When taking a snapshot of /etc before applying a risky system change.
 - When generating daily backup files that must be kept for 30 days before rotating.
@@ -8852,7 +8697,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`find\` tests: \`-name '*.log'\` matches filename glob; \`-type f\` restricts to regular files (prevents accidentally deleting directories); \`-mtime +7\` matches files modified MORE THAN 7×24 hours ago. The \`+\` means 'greater than', \`-\` means 'less than', bare number means 'exactly'. The \`-delete\` action removes matched files — it must come LAST in the expression or find may delete files before evaluating other tests. For minutes instead of days: \`-mmin +60\`. ALWAYS preview with \`-print\` before \`-delete\` — deletions are irreversible.
 
 ## When to use
-
 - When rotating log files via cron to prevent /var/log from filling up.
 - When cleaning up temp files in /tmp older than an hour.
 - When removing old backup archives to keep only the last 30 days.
@@ -8877,7 +8721,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical The loop globs every \`.txt\` file into \`$f\`. \`\${f%.txt}\` uses the \`%\` suffix-stripping expansion: it removes the shortest suffix matching \`.txt\` from \`$f\`. Appending \`.md\` gives the new name. ALWAYS quote \`"\$f"\` and the destination — filenames with spaces would break \`mv\` without quotes. If no files match the glob, the loop still runs once with the literal \`*.txt\` — set \`shopt -s nullglob\` first to make an empty glob give an empty list. Use \`%%\` for greedy (longest-match) suffix stripping. For prefix stripping: \`\${f#prefix}\` (shortest) or \`\${f##prefix}\` (longest).
 
 ## When to use
-
 - When renaming a batch of files after a format conversion.
 - When adding or removing a prefix across many files.
 - When standardizing inconsistent file extensions across a directory.
@@ -8902,7 +8745,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`exec > FILE\` redirects this shell's stdout (FD 1) to FILE for all subsequent commands — not just one. \`>(tee -a /var/log/deploy.log)\` is process substitution: bash creates a \`tee\` process and provides a path-like handle to its stdin. \`tee -a\` reads from its stdin, writes to the log file (appending), and also writes to its own stdout (the terminal). The final \`2>&1\` makes stderr follow stdout into the same tee. Result: every line printed by the rest of the script appears on screen AND in the log file. Place after \`set -euo pipefail\` but before real work. Bash-only — process substitution is not available in sh/dash.
 
 ## When to use
-
 - When a cron job or deployment script must leave a permanent log and also show output interactively.
 - When you want complete script output captured without adding redirection to every command.
 - When debugging a cron job that runs silently and you need to see what it outputs.
@@ -8925,7 +8767,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`||\` (logical OR) short-circuits: the right side runs ONLY when the left side returns non-zero. \`{ ... ; }\` groups multiple commands into one conditional block — note the required space after \`{\` and required \`;\` before \`}\`. Without braces, only the first command is the fallback. The common mistake \`cmd && echo ok || echo fail\` is subtly broken: if \`echo ok\` fails, \`echo fail\` also runs. Use \`if cmd; then ... else ...; fi\` when correctness matters. Under \`set -e\`, the left side of \`||\` is exempt from auto-exit — this is how \`risky_cmd || true\` opts out of strict mode.
 
-**When to use:**
+## When to use
 - When a required precondition must succeed before the script proceeds.
 - When checking that a tool is installed before using it: \`command -v jq >/dev/null || { echo 'install jq'; exit 1; }\`.
 - When a network call in a script must not silently fail.
@@ -8949,7 +8791,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical Crontab syntax: \`MIN HOUR DAY-OF-MONTH MONTH DAY-OF-WEEK COMMAND\`. \`30 2 * * *\` means minute 30, hour 2, every day, every month, every weekday — i.e., 02:30 daily. Cron runs jobs with a minimal environment — short \`$PATH\`, no \`.bashrc\` — so always use ABSOLUTE PATHS for the command and any files it references. Always redirect output: by default cron emails any stdout/stderr output to the user, which fills a mailbox. Use \`>> log 2>&1\` to append to a log file, or \`>/dev/null 2>&1\` to silently discard. Edit with \`crontab -e\`, list with \`crontab -l\`.
 
-**When to use:**
+## When to use
 - When scheduling nightly backups, daily log rotation, or periodic maintenance jobs.
 - When automating any task that should run on a fixed time schedule.
 - When replacing a manual process with a scheduled automated equivalent.
@@ -8974,7 +8816,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`*/N\` in a cron field means 'every N units starting at 0'. In the minute field, \`*/15\` fires at 0, 15, 30, and 45 minutes past each hour. \`flock -n /path/to/lockfile command\` acquires an exclusive lock on the lockfile before running the command; \`-n\` (non-blocking) makes it exit immediately if the lock is already held (instead of waiting). Without flock, if the health check takes 16 minutes, two instances pile up. Always redirect output from frequent cron jobs (\`>> log 2>&1\` or \`>/dev/null 2>&1\`) to prevent repeated emails.
 
 ## When to use
-
 - When scheduling any job that might run longer than its interval.
 - When a monitoring script must not overlap with itself.
 - When a queue-draining script should skip if the previous run is still active.
@@ -8999,7 +8840,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`rsync -avz\`: \`-a\` (archive) preserves permissions, timestamps, symlinks, and recurses; \`-v\` verbose; \`-z\` compresses during transfer. \`--delete\` removes files at the destination that no longer exist at the source — DANGEROUS without preview. \`--dry-run\` (short: \`-n\`) prints what would be transferred/deleted without doing it. CRITICAL: the TRAILING SLASH on the source. \`./site/\` means 'the CONTENTS of site'; without the slash, rsync would create \`/var/www/html/site/\` instead of syncing the contents. Add \`-P\` for per-file progress, \`--exclude 'PATTERN'\` to skip files.
 
 ## When to use
-
 - When deploying a static website to a web server.
 - When replicating a build artifact directory to multiple servers.
 - When synchronizing a config directory to a set of servers.
@@ -9024,7 +8864,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`$#\` is the count of remaining positional arguments. \`$1\` is the next argument. \`shift\` drops \`$1\` and renumbers (decrement \`$#\`). \`shift 2\` drops two at once — used for a flag and its value. The loop continues until all arguments are consumed. Use a \`case\` statement inside for routing: handle known flags, and \`--\` as an explicit end-of-flags marker, \`-*\` for unknown flags (print error and exit), and \`*\` for positional arguments. ALWAYS quote \`"\$1"\` and \`"\$2"\`. This pattern handles long flags (\`--flag\`) where \`getopts\` cannot.
 
 ## When to use
-
 - When your script needs long flags like --config, --env, or --output.
 - When you need both --flag VALUE and --flag=VALUE forms.
 - When getopts is insufficient because you need long option support.
@@ -9046,7 +8885,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`logger\` sends messages to syslog/journald. \`-t TAG\` adds an identifier string (shown as the process name in journal output) — making your messages grep-able with \`journalctl -t TAG\`. \`-p FACILITY.PRIORITY\` sets the syslog facility and severity (e.g., \`user.notice\`, \`daemon.err\`, \`cron.warning\`). Without \`-t\` or \`-p\`, messages go in as the calling user with info priority. \`-i\` includes the PID. \`-s\` also prints to stderr (useful in interactive sessions). Pipe to logger for bulk logging: \`cmd 2>&1 | logger -t mytag\`. Read back with \`journalctl -t TAG --since today\`.
 
-**When to use:**
+## When to use
 - When a cron job should leave a searchable audit trail in the system journal.
 - When a deployment script should log its start, finish, and key metrics centrally.
 - When you need to correlate script events with system events during incident review.
@@ -9071,7 +8910,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`xz\` uses the LZMA2 algorithm (the same one inside 7-Zip) and compresses better than gzip on compressible data. Running \`xz file\` REPLACES the original with \`file.xz\`. Pass \`-k\` to keep both. Compression levels: \`-0\` (fastest) to \`-9\` (slowest, smallest), default is \`-6\`. For large files on multi-core machines, \`-T0\` uses all CPU threads and dramatically speeds up compression. For a directory: \`tar -cJf archive.tar.xz dir/\` (capital J). Decompress with \`unxz file.xz\` or \`xz -d file.xz\`.
 
 ## When to use
-
 - When compressing a large SQL dump or log file for long-term cold storage.
 - When upload bandwidth is expensive and every megabyte saved matters.
 - When creating a Linux kernel or software release tarball where download size affects users.
@@ -9097,7 +8935,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`unxz\` is a convenience name for \`xz -d\` — they are the same binary. Running \`unxz file.xz\` REPLACES the \`.xz\` file with the decompressed \`file\`. Use \`-k\` to keep both. To stream decompressed output without writing to disk: \`xzcat file.xz | grep ERROR\` (or \`xz -dc file.xz\`). For a \`.tar.xz\` archive, do NOT use unxz first and then tar — use \`tar -xJf archive.tar.xz\` directly, which handles both steps.
 
 ## When to use
-
 - When restoring a database from an xz-compressed backup.
 - When a vendor sends a large file compressed with xz.
 - When unpacking a Linux kernel source downloaded as a .tar.xz.
@@ -9123,7 +8960,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical Flags: \`c\`=Create, \`J\`=use xz (CAPITAL J — the most commonly forgotten tar letter), \`f\`=Filename follows. Compare the three: \`-z\` makes \`.tar.gz\` (fastest), \`-j\` makes \`.tar.bz2\` (middle), \`-J\` makes \`.tar.xz\` (smallest). To speed up xz: export \`XZ_OPT='-T0'\` before the command so xz uses all CPU cores. Extracting is \`tar -xJf archive.tar.xz\` or just \`tar -xf\` on modern tar (auto-detection). \`.tar.xz\` is the format used for Linux kernel source releases.
 
 ## When to use
-
 - When creating a release tarball to upload to GitHub Releases or a mirror.
 - When the download size directly affects user experience and bandwidth cost.
 - When creating a long-term backup destined for slow or expensive storage.
@@ -9148,7 +8984,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`tar -t\` lists the table of contents (like \`ls -la\` for the archive). \`-f\` specifies the archive filename. Modern tar auto-detects compression, so \`-tf\` works for \`.tar\`, \`.tar.gz\`, \`.tar.bz2\`, and \`.tar.xz\` without needing \`-z\`, \`-j\`, or \`-J\`. Add \`-v\` for a long listing showing permissions, owner, size, and date (\`tar -tvf\`). Look at the FIRST column: if all paths start with a common directory name (e.g. \`vendor-1.2/\`) the archive is well-structured; if they start with \`./\` or just filenames, it's a 'tar bomb' that will scatter files into your cwd.
 
-**When to use:**
+## When to use
 - When auditing an archive from an untrusted source before extracting it.
 - When confirming a specific configuration file is present in a backup before restoring.
 - When checking whether an archive has the expected top-level directory structure.
@@ -9173,7 +9009,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`-C TARGET\` tells tar to change directory to TARGET before extracting. The target directory must ALREADY EXIST — tar will not create it. Safe idiom: \`mkdir -p /opt/staging && tar -xzf release.tar.gz -C /opt/staging\`. This flag also applies on CREATE: \`tar -czf foo.tgz -C /src .\` packages the contents of /src without including \`/src/\` as a leading path in archive members. A common use of \`-C\` is extracting a 'tar bomb' (archive with no top-level dir) into a fresh directory to contain the scattered files.
 
 ## When to use
-
 - When extracting a release to a specific directory without changing your working directory.
 - When extracting a tar bomb safely into a fresh subdirectory to contain it.
 - When restoring a backup to a staging location before promoting it to production.
@@ -9198,7 +9033,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical Pass the archive-internal path(s) as extra arguments after the archive filename. Tar extracts only those paths. The path must match EXACTLY how it is stored inside the archive — preview first with \`tar -tf archive.tar.gz | grep nginx\` to find the exact path (paths usually start with the top-level directory, not \`/\`). For pattern matching: \`tar --wildcards -xzf big.tgz '*.yml'\`. To extract to stdout without writing to disk: \`tar -xzOf archive.tar.gz etc/nginx/nginx.conf | less\` (\`-O\` or \`--to-stdout\`).
 
 ## When to use
-
 - When recovering a single configuration file from a large system backup.
 - When pulling one source file from a downloaded release tarball.
 - When checking the contents of a specific file inside a backup without restoring everything.
@@ -9224,7 +9058,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`zip\` produces \`.zip\` archives — the native archive format on Windows and macOS. \`-r\` recurses into subdirectories (REQUIRED for directory trees; without it zip stores only the empty directory entry and ignores contents). Other flags: \`-9\` maximum compression, \`-1\` fastest, \`-e\` password encryption (weak ZipCrypto — use 7z for real security), \`-x 'PATTERN'\` exclude files, \`-j\` junk paths (store files flat without directory structure). Compared to \`.tar.gz\`: zip is slightly less efficient because it compresses each file independently rather than as a single stream, but it is far more compatible across platforms.
 
 ## When to use
-
 - When sharing files with Windows or macOS users who cannot easily open .tar.gz.
 - When attaching a project directory to an email or uploading to a file-sharing service.
 - When producing a release asset for a GitHub Releases page.
@@ -9250,7 +9083,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`unzip\` extracts \`.zip\` archives. Default: extract to the current directory. \`-d TARGET\` extracts elsewhere — the target directory will be created if it doesn't exist (unlike tar \`-C\` which requires the dir to exist). \`-l\` lists contents without extracting; \`-o\` overwrites existing files without prompting; \`-n\` never overwrites; \`-j\` junks paths (extract flat); \`-q\` quiet. Always preview with \`-l\` before extracting an untrusted archive. Modern faster alternative: \`7z x foo.zip\`.
 
 ## When to use
-
 - When opening a downloaded .zip release archive.
 - When extracting a zip sent by a Windows or macOS user.
 - When unpacking a vendor bundle or support file delivered as a .zip.
@@ -9276,7 +9108,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`7z\` (from \`p7zip-full\` on Debian/Ubuntu, \`p7zip-plugins\` on Fedora) supports the \`.7z\` format. Command verbs: \`a\` (add/create), \`x\` (extract with paths), \`e\` (extract flat), \`l\` (list), \`t\` (test). \`-p\` prompts for a password and encrypts file contents. \`-mhe=on\` encrypts the HEADER (filename table) too — without this, filenames are visible even to those without the password. Compression level: \`-mx=0\` to \`-mx=9\`. Limitation: 7z does not preserve Unix permissions well, making it unsuitable for Linux system backups (use tar for those).
 
 ## When to use
-
 - When archiving confidential files for transmission or storage where filename privacy matters.
 - When sharing sensitive data with a party over an untrusted channel.
 - When creating an encrypted archive where the list of files inside must also be secret.
@@ -9301,7 +9132,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`zcat\` streams decompressed output from a \`.gz\` file to stdout without writing a temp file. It is equivalent to \`gzip -dc file.gz\`. Pipe it into any tool: \`grep\`, \`wc\`, \`awk\`, \`head\`. The z-family tools follow the same pattern: \`zcat\` (= cat for .gz), \`zless\` (interactive pager), \`zgrep\` (grep), \`zdiff\` (diff). The xz family: \`xzcat\`, \`xzless\`, \`xzgrep\`. The bzip2 family: \`bzcat\`, \`bzgrep\`. Passing MULTIPLE \`.gz\` files to \`zcat\` concatenates them in order with no separators.
 
-**When to use:**
+## When to use
 - When counting lines or searching a compressed log without decompressing to disk.
 - When disk space is tight and you cannot afford to unpack a large compressed file.
 - When peeking at the first N lines of a compressed log: \`zcat log.gz | head -50\`.
@@ -9327,7 +9158,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`zgrep\` decompresses each \`.gz\` file on the fly and runs grep against the output. All standard grep flags work: \`-i\` case-insensitive, \`-c\` count, \`-l\` filenames only, \`-h\` suppress filenames, \`-C N\` context lines, \`-E\` extended regex. For \`.xz\` files use \`xzgrep\`; for \`.bz2\` use \`bzgrep\`. To search BOTH plaintext and compressed logs: \`zgrep PATTERN /var/log/nginx/error.log*\` (zgrep falls back to plain grep on non-compressed files). Modern alternative: \`rg --search-zip PATTERN /var/log/nginx/\`.
 
 ## When to use
-
 - When hunting for an error across all rotated log files without expanding them.
 - When auditing historical logs for a specific event or pattern.
 - When a security incident requires searching archived logs for indicators of compromise.
@@ -9353,7 +9183,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`--exclude='PATTERN'\` tells tar to skip matching paths. CRITICAL: place \`--exclude\` options BEFORE the source directory argument, and ALWAYS quote the patterns to prevent shell glob expansion before tar sees them. Multiple \`--exclude\` flags can be stacked. For a long list: use \`--exclude-from=.tarignore\` (one pattern per line, \`#\` for comments). To automatically exclude all VCS directories (.git, .svn, .hg): \`--exclude-vcs\`. Patterns match against the archive-internal path anywhere at any depth. Verify after: \`tar -tzf archive.tar.gz | grep node_modules | wc -l\` should return 0.
 
 ## When to use
-
 - When creating a source archive that must not include build artifacts or dependencies.
 - When backing up a directory but excluding log files and temp files.
 - When building a deployment artifact that excludes developer tooling.
@@ -9378,7 +9207,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`pigz\` ('parallel implementation of gzip') produces standard \`.gz\` output fully compatible with \`gunzip\`, \`zcat\`, and \`tar -xzf\`. Same flags as gzip: \`-k\` keep original, \`-1\` to \`-9\` compression levels, \`-d\` decompress. To integrate with tar: \`tar -I pigz -cf archive.tar.gz dir/\` (the \`-I\` flag specifies an external compressor). For even better results (faster AND smaller): consider \`zstd -T0\` which uses all cores natively and often outperforms pigz on both speed and compression ratio, though it produces \`.zst\` files rather than \`.gz\`.
 
-**When to use:**
+## When to use
 - When compressing a multi-GB file and single-threaded gzip would take too long.
 - When a CI build step needs to compress large artifacts within a time budget.
 - When you must produce \`.gz\` output (for compatibility) but want parallel speed.
@@ -9404,7 +9233,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical Ctrl+R activates readline's INCREMENTAL REVERSE SEARCH. The prompt changes to \`(reverse-i-search)\`': \` and as you type, bash narrows the display to the most recent history entry containing your text. Press Ctrl+R AGAIN to step to the next-older match. Press Enter to RUN the displayed command immediately. Press Esc (or left/right arrow) to put the command on your prompt for EDITING before running. Press Ctrl+G to CANCEL and return to an empty prompt. Ctrl+S searches forward (sometimes blocked by terminal flow control — \`stty -ixon\` in \`.bashrc\` re-enables it). Works in bash, zsh, and any readline-using REPL.
 
 ## When to use
-
 - When re-running a long SSH or kubectl command you used earlier today.
 - When finding 'that rsync command with the exclude flags' without scrolling.
 - When recovering a complex pipeline you composed earlier in the session.
@@ -9430,7 +9258,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`!$\` is a bash history expansion — it stands for the LAST WORD of the previous command. Other useful forms: \`!^\` = FIRST argument, \`!*\` = ALL arguments (everything except the command name), \`!:N\` = Nth word (0 = command itself). An interactive alternative: press \`Alt+.\` (or \`Esc .\`) to INSERT the last argument at the cursor position — press repeatedly to cycle through 'last arg of N-th-previous command'. This is friendlier than \`!$\` because you see the value inserted before running. Bash prints the expanded form before executing so you always know what was used.
 
 ## When to use
-
 - When you just listed a directory and want to cd into it.
 - When you cat'd a file and now want to vim it.
 - When you mkdir'd a path and want to cd into the new directory.
@@ -9455,7 +9282,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical Ctrl+L is a readline shortcut that sends the terminal a clear-screen sequence (ESC[2J) and redraws the prompt. It preserves: (1) your scrollback history (you can scroll up to see what was cleared) and (2) any text already typed at the prompt. Compare: the \`clear\` command produces the same visible effect but is an external command; \`reset\` is the nuclear option that resends the full terminal initialization sequence (useful after a binary file gets cat'd into the terminal and makes everything unreadable). Other essential readline shortcuts: Ctrl+A (start of line), Ctrl+E (end), Ctrl+U (erase to start), Ctrl+K (erase to end), Ctrl+W (erase word), Ctrl+R (reverse search).
 
 ## When to use
-
 - When hiding sensitive command output before a screen share.
 - When the terminal is cluttered and you want a clean visual without losing your command.
 - When you want a fresh start in the current session without opening a new terminal.
@@ -9479,7 +9305,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical Ctrl+A and Ctrl+E are the most-used readline cursor shortcuts: Ctrl+A jumps to the BEGINNING (Alpha/Start), Ctrl+E jumps to the END. Far faster than holding the left-arrow key. They work in bash, zsh, and any program using GNU readline (psql, python -i, node). For WORD-by-word navigation: Alt+B (back one word) and Alt+F (forward one word). Other key editing shortcuts: Ctrl+U (erase from cursor to start), Ctrl+K (erase to end), Ctrl+W (erase one word back), Ctrl+Y (paste what you just deleted with U/K/W), Ctrl+_ (undo).
 
 ## When to use
-
 - When you forgot 'sudo' at the beginning of a long command.
 - When there's a typo in the command name at the start of a 200-character line.
 - When you want to edit a long command without holding the left arrow for seconds.
@@ -9506,7 +9331,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`apropos KEYWORD\` searches the man-page database (built by \`mandb\` or \`makewhatis\`) and prints every entry whose one-line description contains the keyword. The output format is \`name (section) - short description\`. Equivalent to \`man -k KEYWORD\`. Multiple keywords are AND-ed. Use \`-e WORD\` for exact whole-word matching. If \`apropos\` returns 'nothing appropriate', the database may be stale — run \`sudo mandb\` to rebuild it. Companion: \`whatis CMD\` (or \`man -f CMD\`) gives a one-line summary of a SPECIFIC command you already know.
 
 ## When to use
-
 - When you know what a command does but not its name.
 - When discovering related commands you didn't know existed (e.g., apropos signal).
 - When exploring what tools are installed for a given task domain.
@@ -9531,7 +9355,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`command -v CMD\` is the POSIX-standard tool presence check. It prints the path of the executable (or function/alias definition) and exits 0 on success; exits non-zero and prints nothing on failure. It works in EVERY POSIX shell (\`sh\`, \`dash\`, \`bash\`, \`zsh\`). Redirect to \`/dev/null\` because you only care about the exit code. Avoid \`which\` in scripts — it's an external program, behavior varies across distros, doesn't see shell functions or aliases, and has surprising exit codes. Use \`type -a CMD\` (bash) to see ALL matches in \`$PATH\`.
 
-**When to use:**
+## When to use
 - When a script has an optional or required dependency that may not be installed.
 - When choosing between multiple available tools at runtime.
 - When writing a portable script that must work on minimal containers without assuming any tool is present.
@@ -9556,7 +9380,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`watch\` clears the screen, runs the given command, displays its output, sleeps, and repeats. The \`-n SECONDS\` flag sets the refresh interval (default 2). Key flags: \`-d\` highlights DIFFERENCES between refreshes — invaluable for spotting state transitions; \`-c\` preserves ANSI color codes; \`-t\` removes the header bar; \`-g\` exits when the output first CHANGES (useful for 'wait until X happens'); \`-e\` exits on non-zero command exit code. QUOTE the command so the shell doesn't expand it once and pass a static string to watch. Stop with Ctrl-C.
 
 ## When to use
-
 - When monitoring a Kubernetes deployment as pods transition through states.
 - When watching disk usage grow during a long-running job: \`watch -d 'df -h /'\`.
 - When waiting for a service to appear: \`watch -g 'curl -s http://localhost/health'\`.
@@ -9582,7 +9405,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`pv\` is a pipe monitor that reports throughput, elapsed time, byte count, and ETA to stderr while passing data through on stdout unchanged. Insert it between any two pipeline stages. Key flags: \`-s SIZE\` tells pv the expected total (for accurate percentage and ETA when reading from a stream); \`-L RATE\` throttles throughput to a maximum rate; \`-N NAME\` adds a label; \`-r\` shows only throughput. Install with \`sudo apt install pv\` or \`sudo dnf install pv\`. Multiple \`pv\` blocks in one pipeline show intermediate rates per stage.
 
 ## When to use
-
 - When a dd, cp, or tar operation is taking forever and you need to know the progress.
 - When monitoring a multi-GB network transfer.
 - When throttling a bandwidth-intensive operation to avoid saturating a shared link.
@@ -9606,7 +9428,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`du -s\` prints a SUMMARY (one line per argument, not a recursive listing of every subfile). \`-h\` adds human-readable units (K, M, G). Glob \`/var/*\` expands to every non-hidden entry. \`2>/dev/null\` suppresses permission-denied errors. \`sort -h\` ('human-numeric sort') understands K/M/G suffixes — without \`-h\`, sort would sort lexically and produce wrong ordering. For top 10 biggest: pipe to \`tail\` (after \`sort -h\`) or \`sort -hr | head\`. To find biggest INDIVIDUAL FILES: \`find . -type f -printf '%s %p\\n' | sort -rn | head\`.
 
-**When to use:**
+## When to use
 - When a filesystem alert fires and you need to find which directory caused it.
 - When auditing /var, ~/Downloads, or /home to decide what to delete.
 - When comparing space usage before and after a cleanup operation.
@@ -9632,7 +9454,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`fc\` ('fix command') is a POSIX shell builtin that opens the previous command in \`$FCEDIT\` (or \`$EDITOR\`) for editing. Save and exit to RUN the edited version. \`fc -l\` lists recent history with line numbers (like \`history\`). \`fc N\` edits a specific history entry. \`fc N M\` edits the range N-M as a single block and runs them as a script after saving. \`fc -s old=new\` replaces 'old' with 'new' in the last command and re-runs without opening the editor (same as \`^old^new^\`). An interactive alternative: \`Ctrl-X Ctrl-E\` opens the CURRENT (still-being-typed) line in the editor before running.
 
 ## When to use
-
 - When a long pipeline has a bug in the middle that's hard to fix with arrow keys.
 - When you want to compose a multi-line script from a sequence of recent commands.
 - When adding comments, variables, or structure to a one-liner to make it into a proper script.
@@ -9657,7 +9478,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`dnf\` (Dandified YUM) is the package manager on Fedora and RHEL 8+. Packages are distributed as \`.rpm\` files from repositories defined in \`/etc/yum.repos.d/*.repo\`. When you run \`dnf install\`, it (1) downloads fresh metadata if the cache is stale, (2) resolves all dependencies, and (3) downloads and installs everything via the underlying \`rpm\` tool. Requires \`sudo\` because installations write to system directories and the RPM database at \`/var/lib/rpm/\`. The \`-y\` flag auto-confirms — useful in scripts, risky interactively. \`dnf\` replaces the older \`yum\` command (still available as a symlink for compatibility).
 
-**When to use:**
+## When to use
 - When installing a web server, database, or other service on a fresh RHEL/Fedora system.
 - When pulling in a utility like htop, git, or curl that is missing from a minimal install.
 - When a script needs to ensure a tool is present before running.
@@ -9682,7 +9503,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`dnf remove\` (alias \`dnf erase\`) uninstalls the named package plus orphaned dependencies — packages whose only reason for being installed was to satisfy the removed package. dnf shows the full removal list before proceeding — always READ IT to avoid accidentally removing something important. If you remove a critical package by mistake, \`sudo dnf history undo last\` rolls back the most recent transaction. \`sudo dnf autoremove\` can clean up additional orphans afterward.
 
 ## When to use
-
 - When decommissioning a service you no longer need.
 - When freeing disk space by removing an unused application and its dependencies.
 - When an experimental package install went wrong and needs to be reversed.
@@ -9707,7 +9527,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`dnf upgrade\` (alias \`dnf update\` — unlike apt, these are identical on dnf) downloads fresh metadata, resolves all upgradable packages, and installs newer versions. \`--refresh\` forces re-download of repo metadata even if it hasn't expired. Kernel upgrades install a NEW kernel alongside the running one — a reboot is needed to activate it. After a big upgrade, run \`needs-restarting -r\` (from \`dnf-utils\`) or simply reboot if glibc or the kernel changed. \`dnf check-update\` is a safe dry-run that lists what would be upgraded (exits 100 if updates exist, 0 if not).
 
 ## When to use
-
 - When applying all pending security patches to a production server.
 - When preparing a server for a deployment that requires the latest packages.
 - When running as part of a weekly or monthly maintenance window.
@@ -9733,7 +9552,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`dnf search KEYWORD\` queries repo metadata for packages whose NAME or SUMMARY field contains the keyword. Output is grouped into 'Name & Summary Matched' (strong hits) and 'Summary Matched' (weaker). Add \`--all\` to also search the long DESCRIPTION field — slower but finds more results. No sudo needed — this is a read-only cache query. For exact-name listing use \`dnf list 'pattern*'\`. To find which package provides a specific file or binary: \`dnf provides /usr/bin/something\`.
 
 ## When to use
-
 - When you know what you want to accomplish but not the exact package name.
 - When discovering available plugins or extensions for an installed tool.
 - When comparing multiple packages that serve the same purpose.
@@ -9758,7 +9576,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`dnf info PKG\` prints the full metadata record: Name, Epoch/Version/Release, Architecture, Source RPM, Repository, Installed-Size, License, URL, Summary, and Description. If the package is installed, it shows both the installed version and any available newer version side-by-side so you can spot pending upgrades. Use \`--installed\` to limit to the local copy only, or \`--available\` for repo versions. The equivalent against the local RPM database only: \`rpm -qi PKG\`.
 
 ## When to use
-
 - When evaluating a package before installing it on a production system.
 - When checking a package's license to verify compliance before deploying.
 - When verifying which repository a package would come from.
@@ -9783,7 +9600,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`dnf history\` prints a numbered list of all transactions (newest first): ID, command line, date, action, and number of packages affected. \`dnf history info ID\` shows the exact packages changed in a specific transaction. \`sudo dnf history undo ID\` reverses a specific transaction — reinstalling what was removed and removing what was installed. \`sudo dnf history rollback ID\` undoes ALL transactions since that ID (time-travel). \`dnf history list PKG\` filters to only transactions involving a specific package. Transaction data lives in \`/var/lib/dnf/history.sqlite\`.
 
 ## When to use
-
 - When diagnosing what changed on a server after a breakage incident.
 - When needing to roll back a failed package upgrade.
 - When auditing what an automated maintenance script did overnight.
@@ -9809,7 +9625,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`dnf provides PATH\` (alias \`dnf whatprovides\`) searches repo metadata for packages containing the specified path, glob, or capability. Pass a full path (\`/usr/bin/jq\`), a glob (\`'*/jq'\` — quote it), or a library capability (\`'libssl.so.3()(64bit)'\`). Unlike \`rpm -qf /path\` which only queries locally-installed packages, \`dnf provides\` searches all repos. Multiple packages can provide the same path. No sudo needed.
 
 ## When to use
-
 - When translating 'command not found' into a package name.
 - When finding which package provides a missing shared library.
 - When checking whether a specific file will come from the official repo or a third-party one.
@@ -9834,7 +9649,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical dnf caches two things under \`/var/cache/dnf/\`: (1) repository metadata (package lists, checksums) and (2) downloaded \`.rpm\` files. \`dnf clean all\` deletes both, forcing a full re-fetch on the next operation. Narrower options: \`clean metadata\` (metadata only), \`clean packages\` (downloaded rpms only), \`clean expire-cache\` (marks metadata stale without deleting). After cleaning, run \`sudo dnf makecache\` to pre-warm the cache, or just run your next dnf command which will re-fetch automatically. Requires sudo because the cache is in \`/var/cache\` owned by root.
 
 ## When to use
-
 - When dnf reports download or signature errors after a repository configuration change.
 - When a new repo was added and dnf is not seeing its packages.
 - When freeing disk space on a small VM where the cache has grown large.
@@ -9860,7 +9674,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical A dnf group is a set of related packages defined in the repository metadata. \`group install NAME\` installs all mandatory packages in the group. Add \`--with-optional\` to also install optional packages. Always QUOTE the group name since most contain spaces. List available groups with \`dnf group list\` or \`dnf group list --hidden\` for all including hidden ones. Inspect a group's exact package list with \`dnf group info "Development Tools"\`. Remove the group with \`dnf group remove\`. The 'Development Tools' group on Fedora includes gcc, g++, make, autoconf, automake, libtool, git, and more.
 
 ## When to use
-
 - When setting up a build or development environment on a fresh VM.
 - When a CI image needs a complete toolchain and you don't want to list every package.
 - When installing a desktop environment on a headless server.
@@ -9886,7 +9699,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`rpm\` is the low-level package tool that dnf calls internally. The \`-q\` flag puts rpm in query mode; \`-a\` queries ALL installed packages. Output is in NEVRA format: \`nginx-1.24.0-1.fc40.x86_64\`. This is a read-only query against \`/var/lib/rpm/\` — no sudo needed. Pipe to \`sort\` for alphabetical order. Use \`--queryformat '%{NAME}\\n'\` (or \`--qf\`) for names-only output without version info. \`rpm -qa --last\` sorts by install date — useful for finding what was recently added.
 
 ## When to use
-
 - When generating a package manifest before a server migration.
 - When auditing a system you inherited to know what is installed.
 - When checking whether a specific package is installed: \`rpm -qa | grep -i nginx\`.
@@ -9912,7 +9724,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`rpm -qf\` ('query file') searches the local RPM database for the package that owns the specified path. Requires a full absolute path. Returns 'file ... is not owned by any package' if the file was created by the user or installed outside RPM (by pip, npm, make install, etc.). Pair with \`$(which CMD)\` for command lookup: \`rpm -qf $(which nc)\`. This is the LOCAL equivalent of \`dnf provides PATH\` which searches all repos — use \`rpm -qf\` when the file is already on your system.
 
 ## When to use
-
 - When an unexpected binary appears and you need to identify its package source.
 - When a binary is misbehaving and you want to know which package to reinstall.
 - When auditing files before editing them — knowing the owner warns you an upgrade may overwrite your changes.
@@ -9937,7 +9748,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`rpm -ql\` ('query list-files') queries the local RPM database and prints all owned paths. Useful variants: \`rpm -qc PKG\` lists ONLY config files (great for 'what do I back up?'); \`rpm -qd PKG\` lists ONLY documentation; \`rpm -qi PKG\` shows package info. For an UNINSTALLED .rpm file: add \`-p\` flag (\`rpm -qlp ./downloaded.rpm\`). Filter the output with \`grep\` to find specific types: \`grep /etc\` for configs, \`grep bin/\` for executables, \`grep systemd\` for unit files.
 
 ## When to use
-
 - When finding where nginx put its binary after installation.
 - When locating all config files to back up before uninstalling.
 - When checking the systemd unit file path to inspect or override it.
@@ -9963,7 +9773,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`systemctl start UNIT\` tells systemd to launch the unit immediately. It does NOT create the boot symlink — the service will not auto-start after a reboot unless it is also enabled. After starting, verify with \`systemctl status nginx\` or \`systemctl is-active nginx\`. If the service fails to start, \`journalctl -xeu nginx\` shows the logs with explanatory hints. Related verbs: \`stop\` (stop immediately), \`restart\` (stop then start), \`reload\` (re-read config without dropping connections — only if the service supports it).
 
 ## When to use
-
 - When a service stopped and you need to bring it back up immediately.
 - When testing a service configuration before deciding to enable it at boot.
 - When following up an install with a first-time start before enabling.
@@ -9988,7 +9797,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`systemctl enable UNIT\` creates a symlink in \`/etc/systemd/system/multi-user.target.wants/\` pointing to the unit file — that's how systemd knows to start the service at boot. By itself, \`enable\` only affects future boots, not the current state. The \`--now\` flag appends an immediate \`start\`. The mirror is \`disable --now\` which combines \`disable\` + \`stop\`. Check persistence with \`systemctl is-enabled UNIT\`: returns \`enabled\`, \`disabled\`, \`masked\`, or \`static\`. Important: on RHEL/Fedora (unlike Debian), \`dnf install\` does NOT auto-enable services — you must enable explicitly.
 
-**When to use:**
+## When to use
 - When wiring up a freshly installed service so it survives reboots.
 - When the standard post-install workflow on any RHEL/Fedora server.
 - When replacing a disabled service with an enabled one in a single step.
@@ -10013,7 +9822,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical systemd parses all \`.service\`, \`.timer\`, \`.socket\`, and \`.mount\` unit files at startup and caches them in memory. Editing a unit file without running \`daemon-reload\` means systemd still uses the old cached version — that's why a \`restart\` after an edit has no effect and shows a warning. \`daemon-reload\` forces a re-parse of all unit files without restarting anything. Then run \`systemctl restart UNIT\` to apply. The modern alternative: \`systemctl edit UNIT\` opens a drop-in override file AND auto-reloads when you exit — preferred because vendor upgrades won't clobber your changes.
 
-**When to use:**
+## When to use
 - After manually editing any file under /etc/systemd/system/ or /usr/lib/systemd/system/.
 - After creating a new .service file you wrote yourself.
 - After adding an Environment= or ExecStart= override to a unit.
@@ -10037,7 +9846,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical \`journalctl\` reads the structured binary journal that systemd uses to capture all service stdout/stderr output. Flags: \`-u nginx\` filters to just that unit's messages; \`-e\` jumps to the END (newest entries); \`-x\` ('explain') adds hint lines for known systemd error messages linking to documentation. Output opens in \`less\` — press \`q\` to quit, \`/\` to search. To follow live output: \`-f\`. To see only the current boot: \`-b\`. To bound by time: \`--since '10 min ago'\`. Requires sudo to see full system logs (non-root sees only their own services unless added to the \`systemd-journal\` group).
 
 ## When to use
-
 - When a service fails to start and systemctl status doesn't show enough context.
 - When debugging a service crash by reading its error output.
 - When tracing what a service did around the time of an incident.
@@ -10061,7 +9869,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`firewalld\` is the default firewall manager on RHEL/Fedora, wrapping \`nftables\` (or \`iptables\`) rules. Its key concept is the 'zone': a named trust level bound to network interfaces. \`--list-all\` shows the entire state of the default zone: interfaces, services (named port groups like \`ssh\`, \`http\`), raw ports, source addresses, and rich rules. To target a specific zone: \`--list-all --zone=public\`. To see which zones are active: \`--get-active-zones\`. Requires sudo because firewall state lives in a privileged D-Bus service.
 
-**When to use:**
+## When to use
 - When debugging why a port is unreachable from outside the server.
 - When performing a security audit of what is exposed.
 - When confirming that a port you just opened is actually in the active rules.
@@ -10085,7 +9893,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical \`--add-port=8080/tcp --permanent\` writes the port rule to the zone's XML file under \`/etc/firewalld/zones/\` but does NOT activate it immediately. \`--reload\` replaces the runtime config with the permanent config, making the change live without disrupting existing connections. Alternatively, use \`--add-service=NAME\` for named services (\`http\`, \`https\`, \`mysql\`) instead of raw port numbers — more readable and self-documenting. Without \`--permanent\`, changes are runtime-only and disappear on reboot (useful for testing).
 
-**When to use:**
+## When to use
 - When deploying a new application that listens on a non-standard port.
 - When adding a database port for internal service communication.
 - When the production firewall must be updated as part of a deployment.
@@ -10111,7 +9919,6 @@ Name Server: ns1.shadydomains.com`,
 ## Technical SELinux is a Mandatory Access Control layer built into the Linux kernel on RHEL/Fedora. Every file and process has a security context (label), and the kernel checks whether a process's type is allowed to access a file's type. Three modes: \`Enforcing\` (rules applied, violations blocked and logged), \`Permissive\` (violations logged but NOT blocked — good for debugging), \`Disabled\` (SELinux off, requires reboot to change). \`getenforce\` prints the RUNTIME mode. \`sestatus\` shows more detail including the policy name. \`setenforce 0\` switches to permissive at runtime to test if SELinux is the issue; \`setenforce 1\` re-enforces.
 
 ## When to use
-
 - When debugging permission errors that don't match file ownership or rwx permissions.
 - When a service breaks after copying files from one location to another.
 - When performing a security compliance audit that requires confirming SELinux is enforcing.
@@ -10136,7 +9943,7 @@ Name Server: ns1.shadydomains.com`,
 
 ## Technical Every file on an SELinux system has a security context stored in extended attributes — visible with \`ls -Z\`. The SELinux policy defines what context each path should have (e.g., files under \`/var/www/html\` should be \`httpd_sys_content_t\`). When you \`cp\` from \`~/\`, the copied files carry the source context (\`user_home_t\`), and the Apache/nginx process (type \`httpd_t\`) is not allowed to read \`user_home_t\` files. \`restorecon\` looks up the policy-defined context for each path and re-labels it. Flags: \`-R\` recurses, \`-v\` prints what was changed. Use \`ls -Z\` before and after to verify.
 
-**When to use:**
+## When to use
 - When SELinux is causing 403 Forbidden after copying files into /var/www/html/.
 - When a service fails after restoring files from a backup or tarball.
 - When a new file was created in the wrong context and a service cannot access it.
