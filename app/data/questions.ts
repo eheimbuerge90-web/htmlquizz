@@ -748,7 +748,7 @@ export const questions: Question[] = [
     answer: "rm -r directory",
     explanation: `**Plain English:** By default, the remove command refuses to touch a folder — it only deletes individual files. Adding this option tells it to go inside the folder, delete everything it finds at every level of nesting, and then remove the now-empty folders themselves. This is the digital equivalent of demolishing a building and everything inside it — there is no undo.
 
-**Technical:** Without -r (recursive), rm exits with an error when given a directory path: "rm: cannot remove 'dirname': Is a directory". The -r flag enables recursive descent: rm visits every file and subdirectory, unlinking files and removing directories after emptying them, from the deepest level upward. The -f flag (force) suppresses errors (such as "no such file") and interactive prompts, making rm proceed silently regardless of circumstances — the combination rm -rf is the most powerful deletion command on Linux. A critical safety hazard: rm -rf $VAR/ where $VAR is unset expands to rm -rf / and destroys the entire root filesystem. Always quote or validate variables: rm -rf "${VAR:?variable is unset}/" uses the :? syntax to abort if the variable is empty. The -i flag (interactive) adds per-file confirmation even during recursive descent: rm -ri dirname asks for each file, providing a last chance to abort. Safer alternatives include trash-put (from trash-cli package) which moves to a recoverable trash location, or simply mv to a temporary location before permanent deletion.
+**Technical:** Without -r (recursive), rm exits with an error when given a directory path: "rm: cannot remove 'dirname': Is a directory". The -r flag enables recursive descent: rm visits every file and subdirectory, unlinking files and removing directories after emptying them, from the deepest level upward. The -f flag (force) suppresses errors (such as "no such file") and interactive prompts, making rm proceed silently regardless of circumstances — the combination rm -rf is the most powerful deletion command on Linux. A critical safety hazard: rm -rf $VAR/ where $VAR is unset expands to rm -rf / and destroys the entire root filesystem. Always quote or validate variables: rm -rf "\${VAR:?variable is unset}/" uses the :? syntax to abort if the variable is empty. The -i flag (interactive) adds per-file confirmation even during recursive descent: rm -ri dirname asks for each file, providing a last chance to abort. Safer alternatives include trash-put (from trash-cli package) which moves to a recoverable trash location, or simply mv to a temporary location before permanent deletion.
 
 **When to use:** When cleaning up a build output directory before a fresh compilation run. When removing a project directory you no longer need and have confirmed contains no important untracked files. When a CI/CD pipeline must clean up workspace artifacts between runs. When the directory contains files you cannot individually address (node_modules with thousands of files).`,
     usage: "Delete an entire directory tree including all nested files and subdirectories — irreversible, use with care.",
@@ -756,7 +756,7 @@ export const questions: Question[] = [
       "rm -r old-logs/  # remove directory and all contents",
       "rm -rf node_modules/  # force remove without prompts (common in build scripts)",
       "rm -ri old_project/  # interactive recursive removal — confirms each file",
-      "rm -rf \"${BUILD_DIR:?variable must be set}/\"  # safe variable-based removal",
+      "rm -rf \"\${BUILD_DIR:?variable must be set}/\"  # safe variable-based removal",
       "trash-put old-logs/  # safer alternative: recoverable from trash"
     ],
     memoryTip: "'rm -r' = 'remove recursive'. Like demolishing a house and everything in it. NEVER combine -rf with unquoted shell variables.",
@@ -2099,7 +2099,7 @@ export const questions: Question[] = [
     answer: "command << EOF\ncontent\nEOF",
     explanation: `**Plain English:** A here-document lets you write multi-line text directly inside your script surrounded by a pair of delimiter words. Everything between the opening and closing delimiter is treated as if it came from a file. This keeps your script self-contained — no need for separate template files that could be missing when the script runs.
 
-**Technical:** The << DELIMITER syntax (here-document) works identically to << EOF described earlier — the delimiter word is arbitrary. Key detail repeated for emphasis: the closing delimiter must appear at the very beginning of a line with absolutely no leading whitespace unless you use the <<- variant (which strips leading tabs only). Variables are expanded by default: $USER, $(date), ${VAR:-default} all work. To suppress expansion for literal text, quote the opening delimiter: << 'EOF'. The here-document content is provided to the command's stdin exactly as written, with a newline after each line. Common pattern: cat << EOF > /path/to/config writes the here-doc content to a file, useful for generating configuration files from shell variables in deployment scripts.
+**Technical:** The << DELIMITER syntax (here-document) works identically to << EOF described earlier — the delimiter word is arbitrary. Key detail repeated for emphasis: the closing delimiter must appear at the very beginning of a line with absolutely no leading whitespace unless you use the <<- variant (which strips leading tabs only). Variables are expanded by default: $USER, $(date), \${VAR:-default} all work. To suppress expansion for literal text, quote the opening delimiter: << 'EOF'. The here-document content is provided to the command's stdin exactly as written, with a newline after each line. Common pattern: cat << EOF > /path/to/config writes the here-doc content to a file, useful for generating configuration files from shell variables in deployment scripts.
 
 **When to use:** When writing self-contained deployment scripts that must generate configuration files without relying on external templates. When running database commands inline in a script without a separate SQL file. When you need to provide structured multi-line input to any command that reads from stdin. When scripting remote SSH commands that involve multiple lines.`,
     usage: "Embed multi-line literal text directly in a script as stdin for any command — produces self-contained scripts without external template files.",
@@ -4621,7 +4621,7 @@ export const questions: Question[] = [
       "while IFS= read -r line; do echo \"got: $line\"; done < /etc/hosts  # line-by-line file read"
     ],
     memoryTip: "Flag cheat-sheet: `-p` PROMPT, `-r` RAW (use always), `-s` SILENT (password), `-n N` exactly N chars, `-t SECS` timeout, `-a ARR` into array. No variable name? Read into magic `$REPLY`. For file reading: `while IFS= read -r line` is the canonical safe loop.",
-    outputExample: "$ read -rp 'Enter name: ' name\nEnter name: Alice\n$ echo \"Hello $name\"\nHello Alice\n$ read -srp 'Password: ' pw; echo\nPassword: \n$ echo \"got ${#pw} chars\"\ngot 12 chars",
+    outputExample: "$ read -rp 'Enter name: ' name\nEnter name: Alice\n$ echo \"Hello $name\"\nHello Alice\n$ read -srp 'Password: ' pw; echo\nPassword: \n$ echo \"got \${#pw} chars\"\ngot 12 chars",
     category: "BASH SCRIPTING"
   },
   {
@@ -4639,14 +4639,14 @@ export const questions: Question[] = [
 - When saving a computed path: \`HOME=$(getent passwd alice | cut -d: -f6)\`.`,
     usage: "Capture the current date in YYYY-MM-DD format into a variable and use it to construct a timestamped backup filename.",
     examples: [
-      "today=$(date +%F)\nbackup=\"db_backup_${today}.sql\"  # produce db_backup_2026-05-19.sql",
+      "today=$(date +%F)\nbackup=\"db_backup_\${today}.sql\"  # produce db_backup_2026-05-19.sql",
       "count=$(grep -c ERROR /var/log/app/app.log)\necho \"$count errors found\"  # capture a number",
       "user_home=$(getent passwd alice | cut -d: -f6)  # nested chains work fine",
       "mapfile -t logfiles < <(find /var/log -name '*.log')  # array of paths, newline-safe",
       "size=$(stat -c%s \"$f\")  # file size in bytes"
     ],
     memoryTip: "`$(cmd)` modern, backtick legacy. Always QUOTE the result on use: `\"$var\"`. Captured command runs in a SUBSHELL — variables set inside don't leak out. For multi-word/newline output, prefer `mapfile -t arr < <(cmd)` over `arr=($(cmd))`.",
-    outputExample: "$ today=$(date +%F)\n$ echo \"Today is $today\"\nToday is 2026-05-19\n$ backup=\"db_backup_${today}.sql\"\n$ echo $backup\ndb_backup_2026-05-19.sql",
+    outputExample: "$ today=$(date +%F)\n$ echo \"Today is $today\"\nToday is 2026-05-19\n$ backup=\"db_backup_\${today}.sql\"\n$ echo $backup\ndb_backup_2026-05-19.sql",
     category: "BASH SCRIPTING"
   },
   {
@@ -4668,7 +4668,7 @@ export const questions: Question[] = [
       "if [ $# -lt 2 ]; then echo \"Usage: $0 HOST PATH\" >&2; exit 1; fi",
       "while [ $# -gt 0 ]; do echo \"processing: $1\"; shift; done  # consume args one by one",
       "for host in \"$@\"; do  # safely iterate over args with spaces\n  ssh \"$host\" uptime\ndone",
-      "echo \"Tenth arg: ${10}\"  # MUST use braces past 9"
+      "echo \"Tenth arg: \${10}\"  # MUST use braces past 9"
     ],
     memoryTip: "`$0` script name, `$1`..`$9` positional, `\${10}` and up need BRACES, `$#` count, `\"$@\"` all-as-words (use), `\"$*\"` all-as-one-string (avoid). Functions REDEFINE `$1`/`$2` inside — they don't see the script's args.",
     outputExample: "$ cat deploy.sh\n#!/bin/bash\necho \"Host: $1\"\necho \"Path: $2\"\necho \"Count: $#\"\n$ ./deploy.sh web1.example.com /opt/myapp\nHost: web1.example.com\nPath: /opt/myapp\nCount: 2",
@@ -4721,7 +4721,7 @@ export const questions: Question[] = [
       "declare -F  # list all defined functions"
     ],
     memoryTip: "`name() { ... }` defines, `name args` calls. `$1`..`$#` SHADOW the script's args inside. `local x=...` to avoid leaking variables. `return N` sets exit code (0-255), not a string — to 'return' data, echo it and let the caller use `$(...)`. Define before use.",
-    outputExample: "$ greet() { local name=$1; echo \"Hello, ${name:-stranger}\"; }\n$ greet World\nHello, World\n$ greet\nHello, stranger\n$ declare -F\ndeclare -f greet",
+    outputExample: "$ greet() { local name=$1; echo \"Hello, \${name:-stranger}\"; }\n$ greet World\nHello, World\n$ greet\nHello, stranger\n$ declare -F\ndeclare -f greet",
     category: "BASH SCRIPTING"
   },
   {
@@ -7011,7 +7011,7 @@ export const questions: Question[] = [
       "set -o pipefail  # standalone",
       "set -euo pipefail  # the standard strict-mode header for production scripts",
       "false | true; echo $?  # without pipefail: 0; with pipefail: 1",
-      "echo ${PIPESTATUS[@]}  # inspect each stage's exit code after a pipeline"
+      "echo \${PIPESTATUS[@]}  # inspect each stage's exit code after a pipeline"
     ],
     memoryTip: "pipefail = the pipe's exit code reflects any stage that failed.",
     outputExample: "$ set -o pipefail; false | true; echo $?\n1\n$ set -o pipefail; true | true; echo $?\n0",
@@ -7205,7 +7205,7 @@ export const questions: Question[] = [
       "mapfile -t ERRORS < <(grep ERROR /var/log/myapp/app.log)  # multiline into array"
     ],
     memoryTip: "$(...) = capture command stdout into a value.",
-    outputExample: "$ FQDN=$(hostname -f)\n$ echo \"This server is: $FQDN\"\nThis server is: web1.example.com\n$ LOGFILE=\"/var/log/myapp/${FQDN}-$(date +%Y%m%d).log\"\n$ echo $LOGFILE\n/var/log/myapp/web1.example.com-20260517.log",
+    outputExample: "$ FQDN=$(hostname -f)\n$ echo \"This server is: $FQDN\"\nThis server is: web1.example.com\n$ LOGFILE=\"/var/log/myapp/\${FQDN}-$(date +%Y%m%d).log\"\n$ echo $LOGFILE\n/var/log/myapp/web1.example.com-20260517.log",
     category: "PIPES & REDIRECT"
   },
   {
@@ -7730,7 +7730,7 @@ Name Server: ns1.shadydomains.com`,
       "apt list --installed 2>/dev/null | wc -l  # total count",
       "apt list --installed 2>/dev/null | grep ^python  # filter by name",
       "apt list --installed --manual-installed 2>/dev/null  # only your explicit installs",
-      "dpkg-query -W -f='${binary:Package}\\n' | sort > /tmp/manifest.txt  # script-friendly manifest",
+      "dpkg-query -W -f='\${binary:Package}\\n' | sort > /tmp/manifest.txt  # script-friendly manifest",
     ],
     memoryTip: "`apt list --installed` for humans; `dpkg-query -W` for scripts. `--manual-installed` separates 'I wanted this' from 'pulled in as dep'.",
     outputExample: "$ apt list --installed 2>/dev/null | head\nListing...\nadduser/now 3.137ubuntu1 all [installed,automatic]\napt/now 2.7.14build2 amd64 [installed]\nbash/now 5.2.21-2ubuntu4 amd64 [installed]\n...\n$ apt list --installed 2>/dev/null | wc -l\n812",
@@ -8499,7 +8499,7 @@ Name Server: ns1.shadydomains.com`,
   {
     id: "bash14",
     question: "Your script reads a PORT variable from the environment but needs to default to 8080 if the variable is unset or empty. What parameter expansion achieves this without an if statement?",
-    answer: "port=\"${PORT:-8080}\"",
+    answer: "port=\"\${PORT:-8080}\"",
     explanation: `**Plain English:** This shorthand checks whether a variable has a value and uses a fallback if it doesn't. You write the variable name and the default value in one expression, eliminating the need for a separate if-else block just to handle a missing value.
 
 **Technical:** \`\${var:-default}\` evaluates to \`default\` if \`$var\` is unset OR empty, and evaluates to \`$var\` otherwise. It does not modify \`$var\`. Drop the colon (\`\${var-default}\`) to only trigger on truly UNSET (not empty). The assignment variant \`\${var:=default}\` also assigns \`$var\` to \`default\` if empty — use when you want the variable itself updated. The opposite \`\${var:+something}\` returns \`something\` only if \`$var\` IS set and non-empty. The error variant \`\${var:?message}\` exits the script with the message if empty. Works on positional args: \`name="\${1:-stranger}"\` gives a default if no argument was passed.
@@ -8511,19 +8511,19 @@ Name Server: ns1.shadydomains.com`,
 - When building config-driven scripts that work both with and without a configuration.`,
     usage: "Provide a fallback value when a variable is unset or empty, without an if statement.",
     examples: [
-      "port=\"${PORT:-8080}\"  # default port",
-      "branch=\"${1:-main}\"  # default if no argument passed",
-      "echo \"Hello, ${NAME:-stranger}\"",
-      "log_dir=\"${LOG_DIR:=/var/log/myapp}\"  # set AND assign default (note :=)",
+      "port=\"\${PORT:-8080}\"  # default port",
+      "branch=\"\${1:-main}\"  # default if no argument passed",
+      "echo \"Hello, \${NAME:-stranger}\"",
+      "log_dir=\"\${LOG_DIR:=/var/log/myapp}\"  # set AND assign default (note :=)",
     ],
     memoryTip: "`:-` use-default (no assign), `:=` assign-and-use, `:+` use-only-if-set, `:?` error-if-empty. Colon = 'or empty also counts'.",
-    outputExample: "$ unset PORT\n$ port=\"${PORT:-8080}\"; echo $port\n8080\n$ PORT=9000 bash -c 'port=\"${PORT:-8080}\"; echo $port'\n9000",
+    outputExample: "$ unset PORT\n$ port=\"\${PORT:-8080}\"; echo $port\n8080\n$ PORT=9000 bash -c 'port=\"\${PORT:-8080}\"; echo $port'\n9000",
     category: "BASH SCRIPTING",
   },
   {
     id: "bash15",
     question: "Your deployment script requires the API_TOKEN environment variable to be set and must exit loudly with a clear message if it is not. What parameter expansion does this in one line?",
-    answer: ": \"${API_TOKEN:?API_TOKEN env var is required}\"",
+    answer: ": \"\${API_TOKEN:?API_TOKEN env var is required}\"",
     explanation: `**Plain English:** This line checks whether a required variable is set and exits the script with an informative error message if it is not. It is cleaner than writing a full if-then-exit block and communicates the requirement clearly to anyone reading the script.
 
 **Technical:** \`\${var:?message}\` is the 'loud' expansion: if \`$var\` is unset or empty, bash prints \`bash: var: message\` to stderr and exits the script (in a non-interactive shell). The leading \`:\` (the null/no-op command) executes the expansion purely for its side effect — the check and potential exit — without assigning or printing anything. Put these checks at the TOP of the script, before any destructive work. Multiple checks can chain on consecutive lines. Without the colon (\`\${var?msg}\`), only truly unset (not empty) triggers the error.
@@ -8535,18 +8535,18 @@ Name Server: ns1.shadydomains.com`,
 - When documenting which variables are required at the top of a script.`,
     usage: "Exit the script with a clear error message if a required environment variable is missing.",
     examples: [
-      ": \"${API_TOKEN:?API_TOKEN env var is required}\"  # canonical guard",
-      "TARGET=\"${1:?Usage: $0 <hostname>}\"  # required positional argument",
-      ": \"${DB_PASSWORD:?Set DB_PASSWORD before running}\"",
+      ": \"\${API_TOKEN:?API_TOKEN env var is required}\"  # canonical guard",
+      "TARGET=\"\${1:?Usage: $0 <hostname>}\"  # required positional argument",
+      ": \"\${DB_PASSWORD:?Set DB_PASSWORD before running}\"",
     ],
     memoryTip: "`:?` = error-if-empty (LOUD). `:-` = use-if-empty (QUIET). Leading `:` is the null command — runs the expansion for its check effect only. Exits the script; does NOT just warn.",
-    outputExample: "$ cat req.sh\n#!/usr/bin/env bash\nset -euo pipefail\n: \"${API_TOKEN:?API_TOKEN env var is required}\"\necho \"deploying with token\"\n$ bash req.sh\nreq.sh: line 3: API_TOKEN: API_TOKEN env var is required\n$ API_TOKEN=sk-abc bash req.sh\ndeploying with token",
+    outputExample: "$ cat req.sh\n#!/usr/bin/env bash\nset -euo pipefail\n: \"\${API_TOKEN:?API_TOKEN env var is required}\"\necho \"deploying with token\"\n$ bash req.sh\nreq.sh: line 3: API_TOKEN: API_TOKEN env var is required\n$ API_TOKEN=sk-abc bash req.sh\ndeploying with token",
     category: "BASH SCRIPTING",
   },
   {
     id: "bash16",
     question: "A bash variable $filename contains 'My Photo 2026.JPG' and you want to replace all spaces with underscores using only bash, without spawning a sed process. What parameter expansion does this?",
-    answer: "echo \"${filename// /_}\"",
+    answer: "echo \"\${filename// /_}\"",
     explanation: `**Plain English:** Bash has a built-in string substitution that can replace characters inside a variable without running an external command. The double slash means 'replace all occurrences', the first space is what to find, and the underscore is the replacement.
 
 **Technical:** \`\${var//search/replace}\` replaces ALL occurrences of \`search\` in \`$var\` with \`replace\`. Single slash \`\${var/search/replace}\` replaces only the first occurrence. Anchors: \`\${var/#prefix/replace}\` only matches at the start; \`\${var/%suffix/replace}\` only at the end. Leave \`replace\` empty to delete: \`\${var//foo/}\` removes every 'foo'. Related suffix/prefix stripping: \`\${var%.JPG}\` strips the shortest matching suffix (useful for changing extensions); \`\${var##*/}\` strips the longest matching prefix (basename equivalent). These run entirely in the shell — faster than forking sed for simple variable transformations.
@@ -8558,13 +8558,13 @@ Name Server: ns1.shadydomains.com`,
 - When building a URL slug from a display name.`,
     usage: "Replace all occurrences of a character or substring within a bash variable without forking sed.",
     examples: [
-      "echo \"${filename// /_}\"  # spaces to underscores",
-      "echo \"${filename,,}\"  # lowercase (bash 4+)",
-      "file=image.png; echo \"${file%.png}.jpg\"  # change extension",
-      "path=/tmp/foo/bar.txt; echo \"${path##*/}\"  # basename",
+      "echo \"\${filename// /_}\"  # spaces to underscores",
+      "echo \"\${filename,,}\"  # lowercase (bash 4+)",
+      "file=image.png; echo \"\${file%.png}.jpg\"  # change extension",
+      "path=/tmp/foo/bar.txt; echo \"\${path##*/}\"  # basename",
     ],
     memoryTip: "`/` first, `//` all, `/#` anchor start, `/%` anchor end. `%`/`%%` strip suffix, `#`/`##` strip prefix. Faster than `sed` for variable transformations.",
-    outputExample: "$ filename='My Photo 2026.JPG'\n$ echo \"${filename// /_}\"\nMy_Photo_2026.JPG\n$ echo \"${filename%.JPG}.jpg\"\nMy Photo 2026.jpg",
+    outputExample: "$ filename='My Photo 2026.JPG'\n$ echo \"\${filename// /_}\"\nMy_Photo_2026.JPG\n$ echo \"\${filename%.JPG}.jpg\"\nMy Photo 2026.jpg",
     category: "BASH SCRIPTING",
   },
   {
@@ -8605,13 +8605,13 @@ Name Server: ns1.shadydomains.com`,
 - When you need O(1) key lookup and a plain indexed array would require a loop to search.`,
     usage: "Create a string-keyed map in bash for O(1) lookups by environment name, hostname, or any string key.",
     examples: [
-      "declare -A url=([dev]=https://dev.example.com [prod]=https://example.com)\necho \"${url[prod]}\"",
+      "declare -A url=([dev]=https://dev.example.com [prod]=https://example.com)\necho \"\${url[prod]}\"",
       "declare -A count\nfor word in apple banana apple; do ((count[$word]++)); done",
-      "for k in \"${!url[@]}\"; do echo \"$k -> ${url[$k]}\"; done  # iterate keys",
+      "for k in \"\${!url[@]}\"; do echo \"$k -> \${url[$k]}\"; done  # iterate keys",
       "[[ -v url[dev] ]] && echo 'dev key exists'  # check key presence",
     ],
     memoryTip: "`-A` Associative (string keys). MUST declare before use. `\${!arr[@]}` = keys, `\${arr[@]}` = values. Bash 4+ only — macOS default bash is 3.x.",
-    outputExample: "$ declare -A url=([dev]=https://dev.x [prod]=https://x)\n$ echo \"${url[dev]}\"\nhttps://dev.x\n$ for k in \"${!url[@]}\"; do echo \"$k: ${url[$k]}\"; done\ndev: https://dev.x\nprod: https://x",
+    outputExample: "$ declare -A url=([dev]=https://dev.x [prod]=https://x)\n$ echo \"\${url[dev]}\"\nhttps://dev.x\n$ for k in \"\${!url[@]}\"; do echo \"$k: \${url[$k]}\"; done\ndev: https://dev.x\nprod: https://x",
     category: "BASH SCRIPTING",
   },
   {
@@ -8633,10 +8633,10 @@ Name Server: ns1.shadydomains.com`,
       "mapfile -t errors < <(grep ERROR /var/log/app.log)  # from a pipeline",
       "mapfile -t -n 10 first_ten < /var/log/app.log  # only first 10 lines",
       "mapfile -t -s 1 data < /var/data/report.csv  # skip CSV header",
-      "for h in \"${hosts[@]}\"; do ssh \"$h\" uptime; done  # iterate safely",
+      "for h in \"\${hosts[@]}\"; do ssh \"$h\" uptime; done  # iterate safely",
     ],
     memoryTip: "`mapfile -t arr < file` = lines into array, no trailing `\\n`. Pipeline input: use `< <(cmd)` not `|`. Bash 4+ only.",
-    outputExample: "$ cat /etc/deploy/hosts.txt\nweb1\nweb2\ndb1\n$ mapfile -t hosts < /etc/deploy/hosts.txt\n$ echo \"count: ${#hosts[@]}\"\ncount: 3\n$ echo \"${hosts[1]}\"\nweb2",
+    outputExample: "$ cat /etc/deploy/hosts.txt\nweb1\nweb2\ndb1\n$ mapfile -t hosts < /etc/deploy/hosts.txt\n$ echo \"count: \${#hosts[@]}\"\ncount: 3\n$ echo \"\${hosts[1]}\"\nweb2",
     category: "BASH SCRIPTING",
   },
   {
@@ -8715,7 +8715,7 @@ Name Server: ns1.shadydomains.com`,
   {
     id: "bash23",
     question: "You just converted a directory of .txt files to Markdown and want to rename them all from .txt to .md. What for loop with parameter expansion renames all of them?",
-    answer: "for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done",
+    answer: "for f in *.txt; do mv \"$f\" \"\${f%.txt}.md\"; done",
     explanation: `**Plain English:** This loop goes through every .txt file in the current directory and renames each one to have a .md extension instead. The parameter expansion strips the old extension and adds the new one — no external rename utility required.
 
 **Technical:** The loop globs every \`.txt\` file into \`$f\`. \`\${f%.txt}\` uses the \`%\` suffix-stripping expansion: it removes the shortest suffix matching \`.txt\` from \`$f\`. Appending \`.md\` gives the new name. ALWAYS quote \`"\$f"\` and the destination — filenames with spaces would break \`mv\` without quotes. If no files match the glob, the loop still runs once with the literal \`*.txt\` — set \`shopt -s nullglob\` first to make an empty glob give an empty list. Use \`%%\` for greedy (longest-match) suffix stripping. For prefix stripping: \`\${f#prefix}\` (shortest) or \`\${f##prefix}\` (longest).
@@ -8727,13 +8727,13 @@ Name Server: ns1.shadydomains.com`,
 - When numbering files sequentially with a counter inside the loop.`,
     usage: "Batch-rename files by changing their extension using bash parameter expansion and a for loop.",
     examples: [
-      "for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done",
-      "shopt -s nullglob; for f in *.jpg; do mv \"$f\" \"${f%.jpg}.jpeg\"; done  # safer",
-      "for f in IMG_*.JPG; do mv \"$f\" \"photo-${f#IMG_}\"; done  # strip prefix, add new one",
+      "for f in *.txt; do mv \"$f\" \"\${f%.txt}.md\"; done",
+      "shopt -s nullglob; for f in *.jpg; do mv \"$f\" \"\${f%.jpg}.jpeg\"; done  # safer",
+      "for f in IMG_*.JPG; do mv \"$f\" \"photo-\${f#IMG_}\"; done  # strip prefix, add new one",
       "rename 's/\\.txt$/.md/' *.txt  # if perl rename is installed",
     ],
     memoryTip: "`\${f%.txt}` = strip suffix (one `%` shortest, `%%` longest). `\${f#prefix}` = strip prefix. ALWAYS quote `\"$f\"`. Set `shopt -s nullglob` so empty globs give empty list.",
-    outputExample: "$ touch notes.txt draft.txt 'my doc.txt'\n$ for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done\n$ ls\ndraft.md  'my doc.md'  notes.md",
+    outputExample: "$ touch notes.txt draft.txt 'my doc.txt'\n$ for f in *.txt; do mv \"$f\" \"\${f%.txt}.md\"; done\n$ ls\ndraft.md  'my doc.md'  notes.md",
     category: "BASH SCRIPTING",
   },
   {
@@ -8870,7 +8870,7 @@ Name Server: ns1.shadydomains.com`,
 - When building a script with a mix of flags and positional arguments.`,
     usage: "Parse long command-line flags by consuming arguments one at a time in a while loop.",
     examples: [
-      "while [[ $# -gt 0 ]]; do\n  case \"$1\" in\n    --file) file=\"$2\"; shift 2 ;;\n    --verbose) verbose=1; shift ;;\n    --file=*) file=\"${1#--file=}\"; shift ;;\n    --) shift; break ;;\n    -*) echo \"unknown: $1\" >&2; exit 1 ;;\n    *) positional+=(\"$1\"); shift ;;\n  esac\ndone",
+      "while [[ $# -gt 0 ]]; do\n  case \"$1\" in\n    --file) file=\"$2\"; shift 2 ;;\n    --verbose) verbose=1; shift ;;\n    --file=*) file=\"\${1#--file=}\"; shift ;;\n    --) shift; break ;;\n    -*) echo \"unknown: $1\" >&2; exit 1 ;;\n    *) positional+=(\"$1\"); shift ;;\n  esac\ndone",
       "for arg in \"$@\"; do echo \"arg=$arg\"; done  # read-only iteration without consuming",
     ],
     memoryTip: "`$#` count, `$1` next, `shift` consume one, `shift 2` consume flag+value. Always quote `\"$1\"`. Combine with `case` for routing. Handles long flags unlike `getopts`.",
