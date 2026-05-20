@@ -1320,7 +1320,7 @@ export const questions: Question[] = [
   {
     "id": "perm13",
     "question": "You need to give your colleague bob read and write access to project-report.txt, but you don't want to change the file's group or the permissions of other users. What command grants per-user permissions beyond the standard owner/group/others model?",
-    "answer": "setfacl -m u:alice:rw project-file",
+    "answer": "setfacl -m u:bob:rw project-file",
     "explanation": "The standard Linux permission system only has three groups to assign permissions to: the file owner, the file's group, and everyone else. ACLs (Access Control Lists) break that limitation — they let you add individual permission entries for any specific user or group, like adding extra doors with their own keys to a room that already has standard locks.",
     "usage": "Grant or modify access for a specific user on a file — more precise than chmod when you need per-user control.",
     "examples": [
@@ -2085,7 +2085,7 @@ export const questions: Question[] = [
   {
     "id": "proc19",
     "question": "You want to run a video encoding job that will take hours, but you don't want it competing aggressively with your other work. What command starts a new process with a reduced CPU priority so it yields to more important processes?",
-    "answer": "nice -n 10 command",
+    "answer": "nice -n 10 ffmpeg -i video.mp4 output.mp4",
     "explanation": "Every process has a politeness setting that tells the system how aggressively to compete for CPU time. A normal process uses the default setting. By starting your encoding job with a higher politeness number, you're telling the system \"this job can wait whenever something more important needs the CPU.\" On a busy system, your encoding job will run slower but won't make your text editor or browser feel sluggish. On an idle system, it runs at full speed.",
     "usage": "Start a command with reduced CPU priority so it yields to more important processes when the CPU is contested.",
     "examples": [
@@ -4573,7 +4573,7 @@ export const questions: Question[] = [
   {
     "id": "nav30",
     "question": "You need to run `make` inside the `/opt/app/build` directory, but you don't want to change your shell's current directory permanently — your current location matters for subsequent commands. How do you run a command in another directory without affecting your shell's `$PWD`?",
-    "answer": "(cd /tmp && command)",
+    "answer": "(cd /opt/app/build && make)",
     "explanation": "Wrapping commands in parentheses creates an isolated mini-shell that inherits your environment but runs independently. Any directory change inside the parentheses stays inside — when the command finishes, the outer shell's location is unchanged. The double-ampersand ensures the second command runs only if the `cd` succeeded.",
     "usage": "Run a command in a different directory without changing your shell's current working directory — the parentheses create an isolated subshell.",
     "examples": [
@@ -5062,7 +5062,7 @@ export const questions: Question[] = [
   {
     "id": "perm30",
     "question": "Your web application is failing because it can't write to `/var/lib/myapp/data`. You want to test whether the `www-data` user can actually write to that directory without switching to that user's full shell. What `sudo` flag runs a single command as a specific non-root user?",
-    "answer": "sudo -u alice command",
+    "answer": "sudo -u www-data chmod u+w /var/www/app",
     "explanation": "File permission bits represent read (4), write (2), and execute (1). Combine these numbers to set permissions concisely in chmod commands.",
     "usage": "Run a single command as a specific user — test service account permissions or run service-specific commands.",
     "examples": [
