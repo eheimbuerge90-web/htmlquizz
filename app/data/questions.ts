@@ -756,7 +756,7 @@ export const questions: Question[] = [
       "rm -r old-logs/  # remove directory and all contents",
       "rm -rf node_modules/  # force remove without prompts (common in build scripts)",
       "rm -ri old_project/  # interactive recursive removal — confirms each file",
-      "rm -rf \"${BUILD_DIR:?variable must be set}/\"  # safe variable-based removal",
+      "rm -rf \"\${BUILD_DIR:?variable must be set}/\"  # safe variable-based removal",
       "trash-put old-logs/  # safer alternative: recoverable from trash"
     ],
     memoryTip: "'rm -r' = 'remove recursive'. Like demolishing a house and everything in it. NEVER combine -rf with unquoted shell variables.",
@@ -2099,7 +2099,7 @@ export const questions: Question[] = [
     answer: "command << EOF\ncontent\nEOF",
     explanation: `**Plain English:** A here-document lets you write multi-line text directly inside your script surrounded by a pair of delimiter words. Everything between the opening and closing delimiter is treated as if it came from a file. This keeps your script self-contained — no need for separate template files that could be missing when the script runs.
 
-**Technical:** The << DELIMITER syntax (here-document) works identically to << EOF described earlier — the delimiter word is arbitrary. Key detail repeated for emphasis: the closing delimiter must appear at the very beginning of a line with absolutely no leading whitespace unless you use the <<- variant (which strips leading tabs only). Variables are expanded by default: $USER, $(date), ${VAR:-default} all work. To suppress expansion for literal text, quote the opening delimiter: << 'EOF'. The here-document content is provided to the command's stdin exactly as written, with a newline after each line. Common pattern: cat << EOF > /path/to/config writes the here-doc content to a file, useful for generating configuration files from shell variables in deployment scripts.
+**Technical:** The << DELIMITER syntax (here-document) works identically to << EOF described earlier — the delimiter word is arbitrary. Key detail repeated for emphasis: the closing delimiter must appear at the very beginning of a line with absolutely no leading whitespace unless you use the <<- variant (which strips leading tabs only). Variables are expanded by default: $USER, $(date), \${VAR:-default} all work. To suppress expansion for literal text, quote the opening delimiter: << 'EOF'. The here-document content is provided to the command's stdin exactly as written, with a newline after each line. Common pattern: cat << EOF > /path/to/config writes the here-doc content to a file, useful for generating configuration files from shell variables in deployment scripts.
 
 **When to use:** When writing self-contained deployment scripts that must generate configuration files without relying on external templates. When running database commands inline in a script without a separate SQL file. When you need to provide structured multi-line input to any command that reads from stdin. When scripting remote SSH commands that involve multiple lines.`,
     usage: "Embed multi-line literal text directly in a script as stdin for any command — produces self-contained scripts without external template files.",
@@ -4721,7 +4721,7 @@ export const questions: Question[] = [
       "declare -F  # list all defined functions"
     ],
     memoryTip: "`name() { ... }` defines, `name args` calls. `$1`..`$#` SHADOW the script's args inside. `local x=...` to avoid leaking variables. `return N` sets exit code (0-255), not a string — to 'return' data, echo it and let the caller use `$(...)`. Define before use.",
-    outputExample: "$ greet() { local name=$1; echo \"Hello, ${name:-stranger}\"; }\n$ greet World\nHello, World\n$ greet\nHello, stranger\n$ declare -F\ndeclare -f greet",
+    outputExample: "$ greet() { local name=$1; echo \"Hello, \${name:-stranger}\"; }\n$ greet World\nHello, World\n$ greet\nHello, stranger\n$ declare -F\ndeclare -f greet",
     category: "BASH SCRIPTING"
   },
   {
@@ -8499,7 +8499,7 @@ Name Server: ns1.shadydomains.com`,
   {
     id: "bash14",
     question: "Your script reads a PORT variable from the environment but needs to default to 8080 if the variable is unset or empty. What parameter expansion achieves this without an if statement?",
-    answer: "port=\"${PORT:-8080}\"",
+    answer: "port=\"\${PORT:-8080}\"",
     explanation: `**Plain English:** This shorthand checks whether a variable has a value and uses a fallback if it doesn't. You write the variable name and the default value in one expression, eliminating the need for a separate if-else block just to handle a missing value.
 
 **Technical:** \`\${var:-default}\` evaluates to \`default\` if \`$var\` is unset OR empty, and evaluates to \`$var\` otherwise. It does not modify \`$var\`. Drop the colon (\`\${var-default}\`) to only trigger on truly UNSET (not empty). The assignment variant \`\${var:=default}\` also assigns \`$var\` to \`default\` if empty — use when you want the variable itself updated. The opposite \`\${var:+something}\` returns \`something\` only if \`$var\` IS set and non-empty. The error variant \`\${var:?message}\` exits the script with the message if empty. Works on positional args: \`name="\${1:-stranger}"\` gives a default if no argument was passed.
@@ -8511,36 +8511,36 @@ Name Server: ns1.shadydomains.com`,
 - When building config-driven scripts that work both with and without a configuration.`,
     usage: "Provide a fallback value when a variable is unset or empty, without an if statement.",
     examples: [
-      "port=\"${PORT:-8080}\"  # default port",
-      "branch=\"${1:-main}\"  # default if no argument passed",
-      "echo \"Hello, ${NAME:-stranger}\"",
+      "port=\"\${PORT:-8080}\"  # default port",
+      "branch=\"\${1:-main}\"  # default if no argument passed",
+      "echo \"Hello, \${NAME:-stranger}\"",
       "log_dir=\"${LOG_DIR:=/var/log/myapp}\"  # set AND assign default (note :=)",
     ],
     memoryTip: "`:-` use-default (no assign), `:=` assign-and-use, `:+` use-only-if-set, `:?` error-if-empty. Colon = 'or empty also counts'.",
-    outputExample: "$ unset PORT\n$ port=\"${PORT:-8080}\"; echo $port\n8080\n$ PORT=9000 bash -c 'port=\"${PORT:-8080}\"; echo $port'\n9000",
+    outputExample: "$ unset PORT\n$ port=\"\${PORT:-8080}\"; echo $port\n8080\n$ PORT=9000 bash -c 'port=\"\${PORT:-8080}\"; echo $port'\n9000",
     category: "BASH SCRIPTING",
   },
   {
     id: "bash15",
     question: "Your deployment script requires the API_TOKEN environment variable to be set and must exit loudly with a clear message if it is not. What parameter expansion does this in one line?",
-    answer: ": \"${API_TOKEN:?API_TOKEN env var is required}\"",
+    answer: ": \"\${API_TOKEN:?API_TOKEN env var is required}\"",
     explanation: `**Plain English:** This line checks whether a required variable is set and exits the script with an informative error message if it is not. It is cleaner than writing a full if-then-exit block and communicates the requirement clearly to anyone reading the script.
 
 **Technical:** \`\${var:?message}\` is the 'loud' expansion: if \`$var\` is unset or empty, bash prints \`bash: var: message\` to stderr and exits the script (in a non-interactive shell). The leading \`:\` (the null/no-op command) executes the expansion purely for its side effect — the check and potential exit — without assigning or printing anything. Put these checks at the TOP of the script, before any destructive work. Multiple checks can chain on consecutive lines. Without the colon (\`\${var?msg}\`), only truly unset (not empty) triggers the error.
 
 **When to use:**
 - When a script will take destructive action and must not proceed without a required variable.
-- When enforcing that a required positional argument was passed: \`TARGET="\${1:?Usage: $0 <hostname>}"\`.
+- When enforcing that a required positional argument was passed: \`TARGET="\\${1:?Usage: $0 <hostname>}"\`.
 - When a script uses a secret that must come from the environment rather than being hardcoded.
 - When documenting which variables are required at the top of a script.`,
     usage: "Exit the script with a clear error message if a required environment variable is missing.",
     examples: [
-      ": \"${API_TOKEN:?API_TOKEN env var is required}\"  # canonical guard",
-      "TARGET=\"${1:?Usage: $0 <hostname>}\"  # required positional argument",
-      ": \"${DB_PASSWORD:?Set DB_PASSWORD before running}\"",
+      ": \"\${API_TOKEN:?API_TOKEN env var is required}\"  # canonical guard",
+      "TARGET=\"\${1:?Usage: $0 <hostname>}\"  # required positional argument",
+      ": \"\${DB_PASSWORD:?Set DB_PASSWORD before running}\"",
     ],
     memoryTip: "`:?` = error-if-empty (LOUD). `:-` = use-if-empty (QUIET). Leading `:` is the null command — runs the expansion for its check effect only. Exits the script; does NOT just warn.",
-    outputExample: "$ cat req.sh\n#!/usr/bin/env bash\nset -euo pipefail\n: \"${API_TOKEN:?API_TOKEN env var is required}\"\necho \"deploying with token\"\n$ bash req.sh\nreq.sh: line 3: API_TOKEN: API_TOKEN env var is required\n$ API_TOKEN=sk-abc bash req.sh\ndeploying with token",
+    outputExample: "$ cat req.sh\n#!/usr/bin/env bash\nset -euo pipefail\n: \"\${API_TOKEN:?API_TOKEN env var is required}\"\necho \"deploying with token\"\n$ bash req.sh\nreq.sh: line 3: API_TOKEN: API_TOKEN env var is required\n$ API_TOKEN=sk-abc bash req.sh\ndeploying with token",
     category: "BASH SCRIPTING",
   },
   {
