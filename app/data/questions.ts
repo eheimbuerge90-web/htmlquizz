@@ -14,7 +14,7 @@ export const questions: Question[] = [
   {
     "id": "nav1",
     "question": "You are five directories deep inside a project folder. What single command — with no arguments and no path — returns you instantly to your home directory?",
-    "answer": "cd ~ (or just cd)",
+    "answer": "cd ~",
     "explanation": "Every user has a personal home folder — like your own desk drawer where your files and settings live. No matter how deep you've wandered through subfolders, one magic word brings you straight back to your personal folder without needing to remember how you got there.",
     "usage": "Fastest reset to your home directory from anywhere on the filesystem.",
     "examples": [
@@ -48,7 +48,7 @@ export const questions: Question[] = [
   {
     "id": "nav3",
     "question": "You've just changed into an unfamiliar directory and want to see the names of all files and folders it contains, displayed alphabetically in columns. What command shows the directory contents with no extra details?",
-    "answer": "ls (or ls -la for details)",
+    "answer": "ls",
     "explanation": "Think of this command as asking \"what's in this drawer?\" It shows you all the items in your current folder, laid out neatly in columns — like reading a table of contents. It intentionally hides files whose names start with a dot (configuration files), keeping the display clean for everyday use.",
     "usage": "Quick visual inventory of a directory's contents — the most-used command on any Linux system.",
     "examples": [
@@ -803,8 +803,8 @@ export const questions: Question[] = [
   },
   {
     "id": "view2",
-    "question": "You received a large CSV file and want to see just the header row and the first few data rows to understand its structure without printing all 50,000 lines. What command shows only the beginning of a file?",
-    "answer": "head names.csv",
+    "question": "You received a large CSV file called 'bigfile.csv' and want to see just the header row and the first few data rows to understand its structure without printing all 50,000 lines. What command shows only the beginning of a file?",
+    "answer": "head bigfile.csv",
     "explanation": "This command is like reading only the first page of a book to decide whether it's worth continuing. It shows the opening lines of a file and then stops — you never see the rest, which makes it extremely fast even on enormous files. It's the standard \"quick preview\" tool before committing to reading or processing an entire file.",
     "usage": "Preview the first lines of any file instantly — useful before committing to reading or processing a large file.",
     "examples": [
@@ -874,7 +874,7 @@ export const questions: Question[] = [
   },
   {
     "id": "view6",
-    "question": "You have a file of city names in random order and want to view them arranged alphabetically from A to Z, without modifying the original file. What command sorts the lines of a file and prints the result?",
+    "question": "You have 'cities.txt' with city names in random order and want to view them arranged alphabetically from A to Z, without modifying the original file. What command sorts the lines of a file and prints the result?",
     "answer": "sort cities.txt",
     "explanation": "This command reads through a file and rearranges all the lines into order before printing them. The file itself is never changed — it's like spreading index cards on a table, sorting them, and reading them out in sequence without rewriting any cards. If you want to keep the sorted version, you redirect the output to a new file.",
     "usage": "Sort the lines of a file alphabetically and print the result — does not modify the original file.",
@@ -891,7 +891,7 @@ export const questions: Question[] = [
   },
   {
     "id": "view7",
-    "question": "You have a sorted list of IP addresses and want to collapse consecutive duplicate entries into single lines, also showing how many times each address appeared. What command removes adjacent duplicate lines and can optionally count them?",
+    "question": "You have a sorted list of IP addresses in 'ips-sorted.txt' and want to collapse consecutive duplicate entries into single lines, also showing how many times each address appeared. What command removes adjacent duplicate lines and can optionally count them?",
     "answer": "uniq ips-sorted.txt",
     "explanation": "This command removes repeated lines that appear one after another — if the same entry appears three times in a row, it keeps only one copy. The counting option turns it into a frequency report: instead of just removing duplicates, it tells you how many times each line appeared. The important catch is that it only handles consecutive duplicates, so you almost always sort the data first to bring identical lines together.",
     "usage": "Remove adjacent duplicate lines from sorted input — combine with -c to count occurrences for frequency analysis.",
@@ -925,7 +925,7 @@ export const questions: Question[] = [
   },
   {
     "id": "view9",
-    "question": "A shell script you copied from a Windows machine is failing mysteriously. You suspect it contains invisible carriage return characters causing the problem. What command reveals all non-printable characters — showing line endings, tabs, and control characters explicitly?",
+    "question": "A shell script 'script.sh' you copied from a Windows machine is failing mysteriously. You suspect it contains invisible carriage return characters causing the problem. What command reveals all non-printable characters — showing line endings, tabs, and control characters explicitly?",
     "answer": "cat -A script.sh",
     "explanation": "Normally you can only see the text in a file, not the invisible control characters that surround it. This option is like switching on an ultraviolet light that makes hidden marks visible: every line ending appears as a dollar sign, tabs appear as ^I, and Windows-style carriage returns appear as ^M. This is invaluable for diagnosing \"the script looks fine but doesn't work\" problems.",
     "usage": "Reveal all invisible characters in a text file — essential for diagnosing Windows line endings and hidden whitespace problems.",
@@ -941,7 +941,7 @@ export const questions: Question[] = [
   },
   {
     "id": "view10",
-    "question": "You have an append-only log file where the newest entries are at the bottom, and you want to read it with the most recent entry first so you don't have to scroll to the end. What command reverses the line order of a file's output?",
+    "question": "You have 'access.log', an append-only log file where the newest entries are at the bottom, and you want to read it with the most recent entry first so you don't have to scroll to the end. What command reverses the line order of a file's output?",
     "answer": "tac access.log",
     "explanation": "This command reads a file from top to bottom but prints the lines in the opposite order — the last line comes out first, the first line comes out last. It's like reading a stack of papers from the bottom instead of the top. It's useful for logs where newer events are appended at the end and you want to see the most recent entries without scrolling past thousands of old ones.",
     "usage": "Print a file's lines in reverse order — newest-first viewing of append-style logs without needing tail.",
@@ -1007,7 +1007,7 @@ export const questions: Question[] = [
   {
     "id": "view14",
     "question": "You want to know how many lines in /var/log/nginx/error.log contain the word 'timeout' — just the count, not the lines themselves. What flag makes grep output only the count?",
-    "answer": "grep -c error /var/log/nginx/access.log",
+    "answer": "grep -c timeout /var/log/nginx/error.log",
     "explanation": "Normally grep shows you every matching line. Sometimes you just want a number — \"how many times does this problem appear?\" This option suppresses the actual lines and just reports the count, like a search tool that tells you \"47 results\" without displaying them all. It's a quick diagnostic: if the number is zero, the pattern isn't there; if it's in the thousands, you have a serious volume of that event.",
     "usage": "Get a count of matching lines rather than the lines themselves — the fastest way to measure how often something appears.",
     "examples": [
@@ -1037,7 +1037,7 @@ export const questions: Question[] = [
   },
   {
     "id": "view16",
-    "question": "You have a list of deployment timestamps and want to display them from newest to oldest — the most recent timestamp first and the oldest last. What flag reverses the sort order?",
+    "question": "You have a list of deployment timestamps in 'timestamps.txt' and want to display them from newest to oldest — the most recent timestamp first and the oldest last. What flag reverses the sort order?",
     "answer": "sort -r timestamps.txt",
     "explanation": "Normally sorting arranges items from smallest to largest, or A to Z. Adding this option flips the direction entirely — the largest value or the last letter comes first. It's like reading a sorted list from the bottom up rather than the top down. This is especially useful for timestamps and numbers where \"biggest first\" is what you care about.",
     "usage": "Reverse the sort direction so the largest, newest, or last-alphabetically items appear first.",
@@ -1136,7 +1136,7 @@ export const questions: Question[] = [
   },
   {
     "id": "perm2",
-    "question": "After extracting a tarball as root, the files are owned by root but need to be owned by the alice user and the developers group so alice can edit them. What command changes the owner and group simultaneously?",
+    "question": "After extracting a tarball as root, the file 'config.txt' is owned by root but needs to be owned by the alice user and the developers group so alice can edit them. What command changes the owner and group simultaneously?",
     "answer": "chown user:group config.txt",
     "explanation": "Every file on Linux has two labels attached to it: a user label (the person who owns it) and a group label (the team that has group-level access). This command lets you reassign both labels at once. Changing ownership is a privileged action — you need administrator permission to hand a file to someone else, just as you'd need authorization to retitle property in someone else's name.",
     "usage": "Reassign both the user owner and group of a file in a single command — the standard tool for fixing ownership after privileged file operations.",
@@ -1154,7 +1154,7 @@ export const questions: Question[] = [
   {
     "id": "perm3",
     "question": "You are trying to run a script and getting 'Permission denied'. You want to inspect the current permission settings on deploy.sh to understand who can read, write, and execute it. What command shows a file's detailed permissions?",
-    "answer": "ls -l script.sh",
+    "answer": "ls -l deploy.sh",
     "explanation": "When a file refuses to open or run, the first thing to check is who has what kind of access. This command shows each file on its own line with a ten-character code on the left that tells you everything about its access settings — whether it's a file or directory, and exactly what the owner, group members, and everyone else are allowed to do with it.",
     "usage": "Inspect the current permission bits, owner, and group of any file — the first diagnostic step for any permission-related problem.",
     "examples": [
@@ -1304,7 +1304,7 @@ export const questions: Question[] = [
   {
     "id": "perm12",
     "question": "You want to protect /etc/nginx/nginx.conf from any accidental modification — even by root — until you explicitly unlock it. What command sets the immutable attribute that prevents all writes?",
-    "answer": "sudo chattr +i /var/log/important.log",
+    "answer": "sudo chattr +i /etc/nginx/nginx.conf",
     "explanation": "Normal file permissions can always be overridden by the administrator, but this option creates a stronger lock. Once you apply it, the file becomes completely untouchable — nobody can change it, delete it, or rename it, not even the system administrator, until someone explicitly removes this lock. It's like putting a file in a sealed case with an extra lock that requires a separate key to open.",
     "usage": "Set the immutable filesystem attribute to prevent any modification or deletion of a file — stronger protection than permissions alone.",
     "examples": [
@@ -1431,7 +1431,7 @@ export const questions: Question[] = [
   },
   {
     "id": "perm20",
-    "question": "You're writing a deployment script that needs to read a file's current permission value as a number like 755 so it can check whether the file needs to be reconfigured. What command outputs just the octal permission number for a file?",
+    "question": "You're writing a deployment script that needs to read the current permission of '/tmp/upload.bin' as a number like 755 so it can check whether the file needs to be reconfigured. What command outputs just the octal permission number for a file?",
     "answer": "stat -c '%a' /tmp/upload.bin",
     "explanation": "The normal directory listing shows permissions as a letter code like rwxr-xr-x which is readable to humans but awkward for programs. This command outputs the same information as the number that chmod uses — like 755 or 644 — making it easy for a script to read, compare, and act on. It's the programmatic interface to file permissions.",
     "usage": "Output a file's permissions as an octal number like 755 — the scriptable way to read permissions for comparison or conditional logic.",
@@ -1448,7 +1448,7 @@ export const questions: Question[] = [
   {
     "id": "pipe1",
     "question": "You ran 'ls -lh /var/www/html' and want to save the directory listing to a file called filelist.txt for a report — overwriting any previous version of that file. What operator redirects a command's standard output into a file?",
-    "answer": "command > file.txt",
+    "answer": "ls -lh /var/www/html > filelist.txt",
     "explanation": "Normally, when a command finishes it prints its results directly to your screen and they're gone when you close the terminal. Adding this operator is like aiming the output away from your screen and into a file instead — the file captures everything the command would have printed. If the file already exists, it gets completely replaced with the new output.",
     "usage": "Redirect a command's standard output into a file — creates the file if needed, or overwrites it completely if it exists.",
     "examples": [
@@ -1465,7 +1465,7 @@ export const questions: Question[] = [
   {
     "id": "pipe2",
     "question": "You have a running deployment script that logs to build.log and you want each new run to add its output to the end of the file without erasing previous run records. What operator appends standard output to a file without overwriting it?",
-    "answer": "command >> file.txt",
+    "answer": "command >> build.log",
     "explanation": "Instead of replacing a file's contents each time, this operator adds new output to the bottom of whatever was already there. It's like adding entries to a running journal rather than starting a new page — previous content stays intact and new content accumulates at the end. If the file doesn't exist yet, it gets created.",
     "usage": "Append standard output to the end of a file — adds to existing content rather than replacing it.",
     "examples": [
@@ -1482,7 +1482,7 @@ export const questions: Question[] = [
   {
     "id": "pipe3",
     "question": "You want to run the tr command (which only reads from stdin, not from a file argument) on the contents of notes.txt to convert lowercase to uppercase. What operator feeds a file's contents into a command's standard input?",
-    "answer": "command < input.txt",
+    "answer": "tr a-z A-Z < notes.txt",
     "explanation": "This operator is the mirror image of the output redirect — instead of sending output to a file, it feeds a file's contents into the command as if someone had typed that file's text at the keyboard. It's particularly useful for commands that can only read from the keyboard (stdin) and don't accept a filename argument.",
     "usage": "Feed a file's contents as standard input to a command — useful for tools that only read from stdin or when you want output without filename annotations.",
     "examples": [
@@ -1515,8 +1515,8 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe5",
-    "question": "You are running 'find / -name sshd_config' which produces hundreds of 'Permission denied' lines mixed in with the real results. What redirect captures only the error messages so the real output remains clean on your terminal?",
-    "answer": "command 2> error.log",
+    "question": "You are running 'find / -name sshd_config' which produces hundreds of 'Permission denied' lines mixed in with the real results. You want to send those errors to a file called 'error.log'. What redirect captures only the error messages so the real output remains clean on your terminal?",
+    "answer": "find / -name sshd_config 2> error.log",
     "explanation": "Commands produce two kinds of output: normal results and error messages. Normally they both appear on your screen mixed together, which is confusing when you're looking for actual results buried in a flood of errors. This redirect sends the error messages to a file while the normal results continue printing to your screen — separating the two streams so each is useful on its own.",
     "usage": "Redirect error messages (stderr) to a file while leaving normal output printing to the terminal — separates errors from results.",
     "examples": [
@@ -1533,7 +1533,7 @@ export const questions: Question[] = [
   {
     "id": "pipe6",
     "question": "You are running a build script and want everything — both normal build output and any error messages — saved together in one log file. What bash shorthand redirects both stdout and stderr to the same file simultaneously?",
-    "answer": "command &> file.txt",
+    "answer": "command &> build.log",
     "explanation": "Normally, normal output and error messages are separate streams. Sometimes you just want everything in one place — a single log file that captures all of a command's output regardless of which stream it came from. This shorthand is the quickest way to achieve that.",
     "usage": "Capture both standard output and error messages in a single file — the simplest way to get a complete command log.",
     "examples": [
@@ -1615,7 +1615,7 @@ export const questions: Question[] = [
   {
     "id": "pipe11",
     "question": "Your hourly cron job runs a backup script and you want all its output — both normal messages and any error messages — appended to /var/log/backup.log without overwriting previous run records. What operator appends both stdout and stderr to a file?",
-    "answer": "command &>> file.txt",
+    "answer": "command &>> /var/log/backup.log",
     "explanation": "This is the combination of two things you've seen before: capturing both normal output and error messages together (like &>), and adding to the end of a file rather than replacing it (like >>). It's the right tool for cron job logging where you want a complete, growing record of every run in a single file.",
     "usage": "Append both stdout and stderr to a file without overwriting it — the right operator for accumulating cron job logs.",
     "examples": [
@@ -1648,7 +1648,7 @@ export const questions: Question[] = [
   {
     "id": "pipe13",
     "question": "Your backup script runs nightly via cron and you want its error messages appended to /var/log/backup-errors.log across each run, while the normal output still prints to the terminal (or wherever stdout goes). What redirect appends only stderr to a file?",
-    "answer": "command 2>> error.log",
+    "answer": "command 2>> /var/log/backup-errors.log",
     "explanation": "This is the append mode version of stderr redirection. Instead of replacing the error log with each run, new error messages are added to the end of whatever was already logged there. This lets you build up a history of errors over time — each night's errors accumulate after the previous nights' errors — so you can see patterns or investigate when something first went wrong.",
     "usage": "Append only error messages (stderr) to a file while leaving normal output unaffected — builds up an error history across multiple runs.",
     "examples": [
@@ -1664,7 +1664,7 @@ export const questions: Question[] = [
   {
     "id": "pipe14",
     "question": "You're running a long build and want to watch the output live on your terminal AND have it saved to build.log simultaneously — so you don't have to choose between seeing it now and having a record. What command splits output to both the screen and a file at the same time?",
-    "answer": "command | tee file.txt",
+    "answer": "command | tee build.log",
     "explanation": "When you redirect output to a file, it disappears from your screen. When you don't redirect, it stays on screen but doesn't get saved. This command solves that dilemma by acting like a T-junction in a pipe — it reads the stream and sends it in two directions at once: both to the file and to your screen. You see everything live and end up with a complete file record.",
     "usage": "See output live on screen AND save it to a file at the same time — the T-junction for command output.",
     "examples": [
@@ -1680,7 +1680,7 @@ export const questions: Question[] = [
   {
     "id": "pipe15",
     "question": "You want to run 'dmesg' and save its output to two places simultaneously: a local log file and a dated archive file. What command writes the same input stream to multiple destination files at once?",
-    "answer": "command | tee file1.txt file2.txt",
+    "answer": "dmesg | tee local.log archive.log",
     "explanation": "Just as a T-junction in plumbing can split one pipe into two, tee can send one stream of data to multiple destinations at once. You list as many destination files as you need, and each one gets an identical copy of everything that passes through. This is useful when you need the same output in multiple places without reading or running the command multiple times.",
     "usage": "Write the same stream to multiple files simultaneously — avoids re-running expensive commands when you need output in multiple places.",
     "examples": [
@@ -1743,7 +1743,7 @@ export const questions: Question[] = [
   {
     "id": "pipe19",
     "question": "You want to read names from names.txt, sort them alphabetically, and save the sorted result to sorted-names.txt — all in one command that reads from one file and writes to another. What command combines both input and output redirection?",
-    "answer": "sort < names.txt > sorted.txt",
+    "answer": "sort < names.txt > sorted-names.txt",
     "explanation": "You can combine the input-from-file and output-to-file redirects in a single command. The file on the left of < feeds in the data to be processed, and the file on the right of > receives the processed output. Think of the command sitting in the middle of a pipeline: data flows in from one file, gets transformed, and flows out to another.",
     "usage": "Process a file as input and save the output to another file in one command — combines input and output redirection.",
     "examples": [
@@ -2433,7 +2433,7 @@ export const questions: Question[] = [
   {
     "id": "net19",
     "question": "You need to call the GitHub REST API from a cron job, follow any redirects, suppress the progress bar, but still exit with a non-zero code if the server returns a 4xx or 5xx status. What curl flag combination achieves this?",
-    "answer": "curl -fsSL https://example.com",
+    "answer": "curl -fsSL https://api.github.com",
     "explanation": "This curl combination is designed for scripts that can't afford surprises. It downloads a URL quietly, follows any forwarding redirects automatically, and — critically — treats server-side errors as failures rather than silently handing an HTML error page to your script as if it were valid data.",
     "usage": "Call the GitHub REST API with curl in a cron job, following redirects silently, and failing with a non-zero exit code on any HTTP error response.",
     "examples": [
@@ -2484,7 +2484,7 @@ export const questions: Question[] = [
   {
     "id": "text2",
     "question": "An Nginx config file at /etc/nginx/sites-available/myapp.conf uses the old domain 'old.example.com' everywhere. What command replaces every occurrence with 'new.example.com' and saves the change in place?",
-    "answer": "sed 's/old/new/g' data.txt",
+    "answer": "sed -i 's/old.example.com/new.example.com/g' /etc/nginx/sites-available/myapp.conf",
     "explanation": "This command is a find-and-replace that works on files without opening an editor. You describe the old text, the new text, and tell it to swap every single occurrence throughout the file. Without the \"save in place\" flag, it just prints the result so you can preview the change before committing.",
     "usage": "Replace every occurrence of 'old.example.com' with 'new.example.com' directly in /etc/nginx/sites-available/myapp.conf, creating a .bak backup first.",
     "examples": [
@@ -2501,7 +2501,7 @@ export const questions: Question[] = [
   {
     "id": "text3",
     "question": "Your server's 'ps aux' output has many columns. You want to print only the second column (the PID) from each line. What command extracts a specific whitespace-delimited column from text?",
-    "answer": "awk '{print $1}' users.csv",
+    "answer": "ps aux | awk '{print $2}'",
     "explanation": "Some text files and command outputs are like spreadsheets — each line has the same structure with values separated by spaces. This command lets you say \"show me only column 2\" from every row, regardless of how many other columns exist, without any complex scripting.",
     "usage": "Extract the PID column (column 2) from 'ps aux' output to get a clean list of running process IDs.",
     "examples": [
@@ -2516,7 +2516,7 @@ export const questions: Question[] = [
   {
     "id": "text4",
     "question": "You have a file /tmp/hostnames.txt with one hostname per line in random order. What command arranges its lines alphabetically and prints the result?",
-    "answer": "sort numbers.txt",
+    "answer": "sort /tmp/hostnames.txt",
     "explanation": "This command reads every line of a file and rearranges them from top to bottom in a chosen order, like alphabetizing a pile of index cards. It prints the sorted result without modifying the original file, so you can preview it, redirect it, or pipe it into another command.",
     "usage": "Sort /tmp/hostnames.txt alphabetically and print the result to stdout.",
     "examples": [
@@ -2549,7 +2549,7 @@ export const questions: Question[] = [
   {
     "id": "text6",
     "question": "A config file /etc/myapp/settings.conf was created on Windows and contains carriage returns (\\r) at the end of each line, causing parse errors on Linux. What command strips all \\r characters from the file?",
-    "answer": "tr 'a-z' 'A-Z' < names.txt",
+    "answer": "tr -d '\\r' < /etc/myapp/settings.conf",
     "explanation": "This command is a character-by-character substitution machine. You tell it which characters to look for and what to replace them with (or delete them entirely). It's perfect for mechanical transformations like stripping Windows line endings or converting uppercase to lowercase throughout a stream.",
     "usage": "Remove all carriage return characters (\\r) from /etc/myapp/settings.conf to fix Windows line endings.",
     "examples": [
@@ -2619,7 +2619,7 @@ export const questions: Question[] = [
   {
     "id": "text10",
     "question": "You wrote a script and want to know how many lines of code are in ~/code/myapp/src/main.py. What is the fastest single command for this?",
-    "answer": "wc data.txt",
+    "answer": "wc -l ~/code/myapp/src/main.py",
     "explanation": "This command is the terminal equivalent of a \"document statistics\" dialog. Feed it a file and it reports three numbers: how many lines, how many words, and how many bytes. You can ask for just one statistic at a time with a flag, which is perfect for scripts that need to check a file's size or line count.",
     "usage": "Count the number of lines in ~/code/myapp/src/main.py to get the code line count.",
     "examples": [
@@ -2634,7 +2634,7 @@ export const questions: Question[] = [
   {
     "id": "text11",
     "question": "The hostname 'dev-server' appears on hundreds of lines across /etc/hosts and needs to be updated to 'prod-server'. What command replaces every occurrence in the file directly?",
-    "answer": "sed 's/old/new/g' data.txt",
+    "answer": "sudo sed -i 's/dev-server/prod-server/g' /etc/hosts",
     "explanation": "This is the command-line equivalent of \"Replace All\" in a text editor. You provide the text to find and the text to substitute, and it updates every single matching occurrence throughout the entire file — without you having to open an editor at all.",
     "usage": "Replace every occurrence of 'dev-server' with 'prod-server' in /etc/hosts, modifying the file in place.",
     "examples": [
@@ -2649,7 +2649,7 @@ export const questions: Question[] = [
   {
     "id": "text12",
     "question": "The 'df -h' output has multiple space-separated columns. You want to print only the filesystem name (column 1) and percent-used (column 5) for each line. What command does this?",
-    "answer": "awk '{print $1}' users.csv",
+    "answer": "df -h | awk '{print $1, $5}'",
     "explanation": "When a command outputs a table with many columns, this tool lets you cherry-pick exactly which columns to display. Unlike a simpler column-slicer, it's smart enough to handle variable amounts of whitespace between columns and can combine fields with custom formatting.",
     "usage": "Extract columns 1 (filesystem) and 5 (percent used) from 'df -h' output to build a compact disk usage summary.",
     "examples": [
@@ -2679,7 +2679,7 @@ export const questions: Question[] = [
   {
     "id": "text14",
     "question": "A CSV file /tmp/report.csv has fields separated by commas. You want to extract just the third field from every line without writing a script. What command does this?",
-    "answer": "cut -d: -f1 /etc/passwd",
+    "answer": "cut -d, -f3 /tmp/report.csv",
     "explanation": "This command splits each line at a specified separator character and hands back only the column number you want — like telling a CSV viewer \"show me column 3 only.\" It's much faster to type than writing an awk or Python script for this common task.",
     "usage": "Extract the third comma-separated field from every line in /tmp/report.csv.",
     "examples": [
@@ -2694,7 +2694,7 @@ export const questions: Question[] = [
   {
     "id": "text15",
     "question": "A build script outputs hostnames in uppercase (WEBSERVER1, DBSERVER1) but your config file expects them in lowercase. What command converts uppercase letters to lowercase on stdin?",
-    "answer": "tr 'a-z' 'A-Z' < names.txt",
+    "answer": "tr 'A-Z' 'a-z'",
     "explanation": "This command is a character-level find-and-replace. You give it two sets of characters — \"replace each character from set one with the matching character from set two.\" Mapping all uppercase letters to their lowercase counterparts makes every capital letter in the stream switch to lowercase.",
     "usage": "Convert uppercase hostnames from a build script to lowercase for use in configuration files.",
     "examples": [
@@ -2739,7 +2739,7 @@ export const questions: Question[] = [
   {
     "id": "text18",
     "question": "You want to find lines in /var/log/auth.log that contain either 'Failed password' or 'Invalid user'. What single grep command matches both patterns on the same file?",
-    "answer": "grep -E '[0-9]{3}-[0-9]{4}' phonelist.txt",
+    "answer": "grep -E 'Failed password|Invalid user' /var/log/auth.log",
     "explanation": "Extended regular expressions let you describe \"match this OR that\" patterns in a single command. Instead of running grep twice and combining the output, you write a single pattern with a pipe character between the alternatives, and every line matching either phrase is returned.",
     "usage": "Find all lines in /var/log/auth.log that contain either 'Failed password' or 'Invalid user' to identify login attack patterns.",
     "examples": [
@@ -2754,7 +2754,7 @@ export const questions: Question[] = [
   {
     "id": "text19",
     "question": "You want to sort a list of domain names in /tmp/domains.txt by their top-level domain suffix (the part after the last dot). What trick uses a command that reverses each line's characters to accomplish this?",
-    "answer": "rev words.txt",
+    "answer": "rev /tmp/domains.txt | sort | rev",
     "explanation": "Sometimes sorting backward is the trick you need. Reversing every line character-by-character turns \"example.com\" into \"moc.elpmaxe\" — now a normal alphabetical sort groups all .com domains together, all .org domains together, and so on. Reversing again at the end restores the original names in suffix-sorted order.",
     "usage": "Sort /tmp/domains.txt by TLD suffix using the reverse-sort-reverse technique.",
     "examples": [
@@ -2771,7 +2771,7 @@ export const questions: Question[] = [
   {
     "id": "text20",
     "question": "A Python source file /home/alice/code/myapp/app.py uses real tab characters for indentation. Your team's style guide requires 4-space indentation. What command converts all tabs to 4-space groups?",
-    "answer": "expand file.txt",
+    "answer": "expand -t 4 /home/alice/code/myapp/app.py",
     "explanation": "This command converts the invisible tab characters that indent code into the equivalent number of spaces, respecting where each tab stop falls. The result looks identical on screen but uses spaces internally, which is what most style guides and linters expect.",
     "usage": "Convert all tab indentation in /home/alice/code/myapp/app.py to 4 spaces and save the result.",
     "examples": [
@@ -2958,7 +2958,7 @@ export const questions: Question[] = [
     "id": "sys11",
     "question": "A backup script needs to name output files with today's date in YYYY-MM-DD format, like 'backup_2026-05-19.tar.gz'. What command prints the current date in that exact format?",
     "answer": "date",
-    "explanation": "The date command displays or sets the system time. Essential for understanding when events occurred in logs.",
+    "explanation": "Every Linux system keeps a real-time clock. The date command reads it and formats the output however you need — ISO 8601, epoch seconds, custom strings. In scripts it creates timestamped filenames and log entries that sort chronologically. With +FORMAT you control every character. With -d you parse and reformat date strings or do relative arithmetic like \"7 days ago\". The system clock can be queried or set (with sudo), and hardware clock sync is handled by systemd-timesyncd or ntpd.",
     "usage": "Print today's date in YYYY-MM-DD format to use in a backup filename.",
     "examples": [
       "date  # Current date and time in default locale format",
@@ -3323,7 +3323,7 @@ export const questions: Question[] = [
   {
     "id": "pkg13",
     "question": "You need Python 3.12 on Ubuntu 22.04 but the official repos only ship 3.10. A colleague says to use the deadsnakes PPA. What command adds that PPA and automatically updates the package catalog?",
-    "answer": "apt-add-repository 'ppa:user/ppa-name'",
+    "answer": "sudo add-apt-repository -y ppa:deadsnakes/ppa && sudo apt update",
     "explanation": "A PPA is a personal software repository hosted by a developer or team that contains packages not in the official Ubuntu repositories — often newer versions. Adding one makes those packages available to APT as if they were in the official repos, and this command handles the whole process in one step.",
     "usage": "Add the deadsnakes PPA to install Python 3.12 on Ubuntu 22.04 and automatically update the package catalog.",
     "examples": [
@@ -3411,7 +3411,7 @@ export const questions: Question[] = [
   {
     "id": "bash1",
     "question": "You want to automate your project's build-and-deploy sequence as a shell script. The file will start with two lines: the shebang telling the kernel to use bash, and an echo statement. What do those two lines look like?",
-    "answer": "#!/bin/bash echo 'Hello World'",
+    "answer": "#!/bin/bash\necho 'Hello World'",
     "explanation": "A shell script is just a text file containing the same commands you'd type in the terminal, saved so you can replay them anytime. The first line is a special instruction telling the operating system which program to use to run the file — without it, the system doesn't know how to interpret the rest.",
     "usage": "Create a bash script that automates the project build-and-deploy sequence, starting with the shebang and a status echo.",
     "examples": [
@@ -3513,7 +3513,7 @@ export const questions: Question[] = [
   {
     "id": "bash7",
     "question": "A nightly backup script runs 'mysqldump' and you want successful output saved to /var/log/backup.log while errors go separately to /var/log/backup.err. What redirection syntax achieves this?",
-    "answer": "command > output.txt 2> error.txt",
+    "answer": "command > /var/log/backup.log 2> /var/log/backup.err",
     "explanation": "Every program has two separate output streams: one for normal results and one for error messages. By default both appear mixed together on the terminal. Redirection lets you route each stream to a different file, so you can review successes and failures independently.",
     "usage": "Run mysqldump, saving normal output to /var/log/backup.log and error messages to /var/log/backup.err.",
     "examples": [
@@ -3564,7 +3564,7 @@ export const questions: Question[] = [
   {
     "id": "bash10",
     "question": "A script needs to process every line from /etc/hosts and print lines that contain a real IP address. What loop reads the file line-by-line without creating a subshell?",
-    "answer": "while IFS= read -r line; do echo $line; done < file.txt",
+    "answer": "while IFS= read -r line; do echo \"$line\"; done < /etc/hosts",
     "explanation": "Reading a file line-by-line in bash requires a specific pattern to work correctly. This pattern uses a while loop with the \"read\" built-in, feeding the file as input from the right side. The key parts prevent common bugs: one flag stops backslash from being interpreted as an escape, and the IFS setting preserves leading whitespace on each line.",
     "usage": "Read /etc/hosts line-by-line and print only the lines that contain a real IP address (not comments).",
     "examples": [
@@ -3581,7 +3581,7 @@ export const questions: Question[] = [
   {
     "id": "arch1",
     "question": "You need to bundle the entire /home/alice/code/myapp/ directory into a single file to send to a colleague, preserving the directory structure. What tar command creates an uncompressed archive?",
-    "answer": "tar -cvf archive.tar files/",
+    "answer": "tar -cvf myapp.tar /home/alice/code/myapp/",
     "explanation": "The tar command is the packing tape of Linux — it takes a whole directory tree with all its subdirectories and files and wraps them into a single portable file. \"Archiving\" just means bundling; without a compression flag the resulting file is the same size as the original contents, just packaged together.",
     "usage": "Bundle the entire /home/alice/code/myapp/ directory into a single myapp.tar file, preserving all structure and permissions.",
     "examples": [
@@ -3598,7 +3598,7 @@ export const questions: Question[] = [
   {
     "id": "arch2",
     "question": "A colleague sent you a release archive at /tmp/myapp-1.0.tar. What command extracts all its contents into the current directory?",
-    "answer": "tar -xvf archive.tar",
+    "answer": "tar -xvf /tmp/myapp-1.0.tar",
     "explanation": "Extracting a tar archive is the reverse of creating one. The command unpacks the bundled file and recreates all the original files and directories in your current location, showing you each file's name as it appears.",
     "usage": "Extract all contents of /tmp/myapp-1.0.tar into the current directory.",
     "examples": [
@@ -3615,7 +3615,7 @@ export const questions: Question[] = [
   {
     "id": "arch3",
     "question": "Your Nginx access log at /var/log/nginx/access.log has grown to 8GB. You need to compress it in place to free disk space. What command compresses it to a .gz file?",
-    "answer": "gzip file.txt",
+    "answer": "gzip /var/log/nginx/access.log",
     "explanation": "This command shrinks a single file using a standard compression algorithm. The original file disappears and is replaced by a smaller compressed version with a .gz extension. You can decompress it later to get the original back, or read it directly with tools that understand the compressed format.",
     "usage": "Compress /var/log/nginx/access.log to access.log.gz, replacing the original to free disk space.",
     "examples": [
@@ -3632,7 +3632,7 @@ export const questions: Question[] = [
   {
     "id": "arch4",
     "question": "A support ticket requires you to read /var/log/nginx/access.log.1.gz. What command decompresses it back to the original .log file?",
-    "answer": "gunzip file.txt.gz",
+    "answer": "gunzip /var/log/nginx/access.log.1.gz",
     "explanation": "The reverse of compression — this takes a .gz compressed file and expands it back to its original form. The compressed version is removed and replaced by the decompressed original, just as if you'd never compressed it in the first place.",
     "usage": "Decompress /var/log/nginx/access.log.1.gz back to access.log.1 to allow reading with standard text tools.",
     "examples": [
@@ -3649,7 +3649,7 @@ export const questions: Question[] = [
   {
     "id": "arch5",
     "question": "Before a major upgrade you want to create a compressed backup of /etc/nginx/ named 'nginx_backup_2026-05-19.tar.gz'. What tar command creates a gzip-compressed archive of that directory?",
-    "answer": "tar -czvf archive.tar.gz directory/",
+    "answer": "tar -czvf nginx_backup_2026-05-19.tar.gz /etc/nginx/",
     "explanation": "This is the most common archiving operation on Linux: bundle a directory and compress it in one step. The result is a single small file that contains your entire directory tree and can be unpacked later to restore everything exactly as it was.",
     "usage": "Create a gzip-compressed archive of /etc/nginx/ named nginx_backup_2026-05-19.tar.gz as a pre-upgrade backup.",
     "examples": [
@@ -3666,7 +3666,7 @@ export const questions: Question[] = [
   {
     "id": "arch6",
     "question": "A deployment script downloads myapp-2.0.tar.gz from the release server and needs to extract it to /opt/myapp/. What command extracts a gzip-compressed tarball to a specific directory?",
-    "answer": "tar -xzvf archive.tar.gz",
+    "answer": "tar -xzvf myapp-2.0.tar.gz -C /opt/myapp/",
     "explanation": "This is the reverse of creating a compressed archive — it both decompresses and unpacks the tarball in one step, recreating all the original files and directories. Specifying a target directory with -C tells tar where to put everything instead of dumping it in the current directory.",
     "usage": "Extract myapp-2.0.tar.gz into /opt/myapp/ during a deployment.",
     "examples": [
@@ -3682,7 +3682,7 @@ export const questions: Question[] = [
   {
     "id": "arch7",
     "question": "You need to compress a 500MB PostgreSQL dump file /var/backups/db.sql and bzip2 is preferred for its tighter compression than gzip. What command compresses it with bzip2?",
-    "answer": "bzip2 file.txt",
+    "answer": "bzip2 /var/backups/db.sql",
     "explanation": "Bzip2 is a compression tool that typically squeezes files somewhat smaller than gzip — at the cost of taking longer. Like gzip, it compresses one file at a time and replaces the original with the compressed version by default.",
     "usage": "Compress /var/backups/db.sql with bzip2 to produce a smaller archive than gzip would provide.",
     "examples": [
@@ -3895,7 +3895,7 @@ export const questions: Question[] = [
     "id": "daily12",
     "question": "You just cloned a TypeScript project from GitHub. The `src/` folder exists but nothing runs yet. What command reads `package.json` and downloads all the declared dependencies into `node_modules/`?",
     "answer": "npm install",
-    "explanation": "Keep track of directory history using the stack. With pushd and popd, navigate between multiple directories without typing full paths repeatedly.",
+    "explanation": "Shell directory navigation has a built-in stack. pushd /var/log saves your current directory AND moves you to /var/log simultaneously. popd returns you to where you were. dirs shows the entire stack. Unlike cd - which only remembers one previous location, the stack is unlimited depth. This makes it the right tool for scripts that temporarily change directories, or for interactive sessions where you ping-pong between several deeply nested directories. The stack persists for the entire session.",
     "usage": "Install all Node.js project dependencies from package.json into node_modules — the first command to run in any cloned JS project.",
     "examples": [
       "npm install  # install everything from package.json + package-lock.json",
@@ -3966,7 +3966,7 @@ export const questions: Question[] = [
     "id": "daily16",
     "question": "Your application is throwing errors and you want to watch `/var/log/myapp/error.log` in real time as new lines are written, so you can see errors the moment they happen. What command keeps the file open and prints new lines continuously?",
     "answer": "tail -f /var/log/myapp/error.log",
-    "explanation": "Real-time monitoring is essential for debugging. Using tail -f shows new log entries as they appear, letting you watch behavior instantly.",
+    "explanation": "Watching a log file update in real-time is one of the most effective debugging techniques. tail -f opens the file, prints the last 10 lines, then keeps watching — any new bytes written to the file are immediately printed to your terminal. Press Ctrl+C to stop following. Use tail -F (capital F) when the log might be rotated: it reopens the file if it disappears and reappears under the same name. Filter live output with grep: tail -f app.log | grep ERROR shows only error lines as they arrive, cutting out the noise.",
     "usage": "Watch a log file in real time as new lines are appended — the first tool to reach for when investigating live issues.",
     "examples": [
       "tail -f /var/log/syslog  # follow syslog live",
@@ -4019,7 +4019,7 @@ export const questions: Question[] = [
   {
     "id": "daily19",
     "question": "A config file at `/etc/myapp/settings.conf` uses `localhost` as the database host everywhere, but you need to change it to `db.internal`. What `sed` command replaces every occurrence on every line, printing the result to stdout first so you can verify before modifying the file?",
-    "answer": "sed 's/old/new/g'",
+    "answer": "sudo sed -i 's/localhost/db.internal/g' /etc/myapp/settings.conf",
     "explanation": "This stream editor reads text line by line and applies a substitution command to each line. The pattern `s/old/new/g` means \"substitute: find 'old', replace with 'new', g = do it globally (every match on the line, not just the first).\" Without the `-i` flag, the original file is untouched — the modified output goes to the screen. Once you're happy with what you see, re-run with `-i.bak` to edit the file in place and create a backup first.",
     "usage": "Replace text patterns across a file or stream — inspect output without `-i`, then add `-i.bak` to modify in place with a backup.",
     "examples": [
@@ -4037,7 +4037,7 @@ export const questions: Question[] = [
   {
     "id": "daily20",
     "question": "The output of `ps aux` has 11 columns. You want to extract only the first column (usernames) from every line using a command-line tool that understands fields. What command does that?",
-    "answer": "awk '{print $1}' file.txt",
+    "answer": "ps aux | awk '{print $1}'",
     "explanation": "This tool reads text line by line and splits each line into numbered fields based on whitespace (or any delimiter you choose). Referring to the fields as `$1`, `$2`, and so on, you tell it what to do with each line. `{print $1}` means \"for every line, print the first field.\" It's like a tiny programming language designed specifically for working with tabular text data.",
     "usage": "Extract, filter, or aggregate columns from tabular text — the right tool when cut is too simple but Python is overkill.",
     "examples": [
@@ -4217,7 +4217,7 @@ export const questions: Question[] = [
   {
     "id": "daily30",
     "question": "You need to kick off a 20-minute database reindex operation on a remote server but want the terminal prompt back immediately so you can do other work while it runs. How do you start the command so it runs in the background?",
-    "answer": "nohup database-reindex.sh &",
+    "answer": "nohup ./database-reindex.sh &",
     "explanation": "Adding an ampersand at the end of a command immediately returns your prompt, while the command continues running in the background. The shell prints a job number and process ID so you can refer to it later. Be aware: the command's output will still appear in your terminal interleaved with whatever else you type, so redirect it to a log file to keep things tidy.",
     "usage": "Start a long-running command in the background so the shell prompt returns immediately.",
     "examples": [
@@ -4235,7 +4235,7 @@ export const questions: Question[] = [
   {
     "id": "daily31",
     "question": "Your script generates a report and you want to save it to `/tmp/daily-report.txt`, replacing the file's contents completely each time the script runs. What redirection operator writes to a file and truncates it first?",
-    "answer": "command > file.txt",
+    "answer": "command > /tmp/daily-report.txt",
     "explanation": "The single right-angle bracket sends a command's output to a file. If the file already exists, its contents are erased first — then the new output is written. If the file doesn't exist, it's created. This is the basic \"save output to a file\" operator, but be careful: there's no undo if you overwrite something you needed.",
     "usage": "Redirect a command's output to a file, creating it if new or overwriting it if it exists.",
     "examples": [
@@ -4253,7 +4253,7 @@ export const questions: Question[] = [
   {
     "id": "daily32",
     "question": "A cron job writes a timestamped entry to `/var/log/myapp/events.log` on each run and you need each run's entry to be added to the file without overwriting previous entries. What redirection operator appends to a file instead of overwriting it?",
-    "answer": "command >> file.txt",
+    "answer": "command >> /var/log/myapp/events.log",
     "explanation": "The double right-angle bracket is exactly like the single one, except it adds new output at the END of the file instead of erasing the existing content first. Every run accumulates another entry, building up a history. Use this for log files, audit trails, or any situation where you want to keep adding to a file over time.",
     "usage": "Append output to the end of a file without erasing existing content — for log files and accumulating records.",
     "examples": [
@@ -4270,7 +4270,7 @@ export const questions: Question[] = [
   {
     "id": "daily33",
     "question": "You're running `find / -name 'config.yml'` but it floods the output with hundreds of 'Permission denied' lines for directories you can't read, drowning out the actual results. How do you redirect only the error messages away so only the real results appear on screen?",
-    "answer": "command 2> error.log",
+    "answer": "find / -name 'config.yml' 2> error.log",
     "explanation": "Every program sends two separate streams of text to your terminal: normal output (results, data) and error output (warnings, problems). Normally both appear mixed together on the screen. This redirection sends only the error stream to a file (or to the void if you use `/dev/null`), while normal output continues to appear on screen — letting you see just the results you care about.",
     "usage": "Redirect only error output to a file or `/dev/null`, leaving normal output on screen.",
     "examples": [
@@ -4361,7 +4361,7 @@ export const questions: Question[] = [
     "id": "daily38",
     "question": "You just typed `apt update` and got 'Permission denied'. Instead of retyping the whole command, what two-token shortcut re-runs your last command with `sudo` prepended?",
     "answer": "sudo !!",
-    "explanation": "The double exclamation mark (!!) is a bash history expansion that runs your last command again. Useful when you forgot to use sudo.",
+    "explanation": "History expansion lets you reference and reuse previous commands without retyping. !! expands to the entire last command before execution. The most common pattern: you run something and get \"permission denied\", so you run sudo !! to repeat it with sudo without retyping. Other expansions: !$ = last argument of previous command (great for mkdir dir then cd !$), !* = all arguments, !vim = last command starting with \"vim\", ^old^new = rerun last command with \"old\" replaced by \"new\". These save significant keystrokes in long sessions.",
     "usage": "Re-run the last command with `sudo` — the fastest recovery when you forgot to use elevated privileges.",
     "examples": [
       "apt update  # Permission denied\nsudo !!  # retry with sudo → sudo apt update",
@@ -4413,7 +4413,7 @@ export const questions: Question[] = [
     "id": "nav21",
     "question": "You're deep inside `/var/log/nginx` debugging an issue and need to jump to `/etc/nginx` to check the config, then jump back to where you were. What command saves your current directory on a stack and changes to the new one simultaneously?",
     "answer": "pushd /tmp",
-    "explanation": "Know your location in the filesystem with pwd. This command shows your absolute path, essential for understanding where you are navigating.",
+    "explanation": "Your shell always has a current directory — the folder where commands run unless you specify a full path. pwd shows you exactly where that is as a full absolute path from root. This matters most when you are deep in a directory tree and unsure where you landed after a series of cd commands, or when writing scripts that need to know their own working directory to construct relative paths correctly. The shell variable $PWD holds the same value and is updated automatically on every cd.",
     "usage": "Jump to a new directory while bookmarking the current one on a stack, so `popd` can bring you back.",
     "examples": [
       "pushd /tmp  # save current, cd to /tmp",
@@ -4431,7 +4431,7 @@ export const questions: Question[] = [
     "id": "nav22",
     "question": "You used `pushd` three times to navigate into different directories. Now you want to undo the last jump and return to where you were before. What command removes the current directory from the stack and takes you to the previous one?",
     "answer": "popd",
-    "explanation": "Return to previous directories efficiently. The popd command removes from the stack and changes directory in one action.",
+    "explanation": "When you are juggling multiple directories — hopping between a build directory, config directory, and log directory — the directory stack keeps your history. pushd saves your current location and moves you to a new one. popd undoes that: it removes the top of the stack and returns you to where you were. Think of it as a browser back button for the terminal. The stack depth is unlimited, so you can push three directories and pop back through them in reverse order without typing any paths.",
     "usage": "Return to the previous `pushd` location by removing the current directory from the stack.",
     "examples": [
       "popd  # remove top, cd to new top",
@@ -4485,7 +4485,7 @@ export const questions: Question[] = [
     "id": "nav25",
     "question": "Your script uses `../../configs/app.yml` as a path. You need to know what absolute path that resolves to from the script's current working directory, with all `..` components eliminated. What command prints the canonical absolute path?",
     "answer": "realpath ../../configs/app.yml",
-    "explanation": "Get the true path of symlinks with realpath. This shows absolute paths with all symbolic links resolved to their actual targets.",
+    "explanation": "Symlinks are aliases — they point to a real file or directory somewhere else on the filesystem. Commands like pwd show the logical path through the symlink, not the physical path where the file actually lives. realpath resolves every symlink in a path and gives you the canonical absolute path to the actual file on disk. This is critical in scripts that need to know where a file truly is, not just the name it was accessed through. It also expands relative paths to absolute, which is useful for logging and constructing reliable paths in scripts.",
     "usage": "Convert any path — relative, with `..`, with symlinks — to its single canonical absolute path.",
     "examples": [
       "realpath ../../configs/app.yml  # resolve from current directory",
@@ -4521,7 +4521,7 @@ export const questions: Question[] = [
     "id": "nav27",
     "question": "You're in `~/code/myapp` and want a listing that shows only directories (not regular files), without the command descending into them. What `ls` invocation filters to subdirectory names only?",
     "answer": "ls -d */",
-    "explanation": "Change your working directory with cd. This fundamental command supports both relative paths (./, ../) and absolute paths (/var/log).",
+    "explanation": "Every action in the terminal happens relative to your current directory. cd changes that context. With an absolute path like /var/log you go directly there from anywhere. With a relative path like ../sibling you navigate based on where you are now. The shortcuts make common moves instant: bare cd or cd ~ goes home, cd - returns to the previous directory (a toggle between two locations), cd .. goes up one level. Mastering these shortcuts eliminates typing long paths dozens of times per session.",
     "usage": "List only subdirectory names in the current directory, ignoring regular files.",
     "examples": [
       "ls -d */  # visible subdirectories only",
@@ -4539,7 +4539,7 @@ export const questions: Question[] = [
     "id": "nav28",
     "question": "You're piping a file list into `wc -l` to count entries but `ls` is outputting multiple columns. What flag forces `ls` to output exactly one filename per line regardless of terminal width?",
     "answer": "ls -1",
-    "explanation": "Navigate home quickly with the tilde shorthand. The ~ represents your home directory, getting you there instantly from anywhere.",
+    "explanation": "The tilde is shell shorthand for your home directory — the full path stored in $HOME. It expands before the command runs, so ~/projects becomes /home/alice/projects transparently. You can use it in any argument: cp report.pdf ~/Desktop/, ls ~/bin/, vim ~/.bashrc. It also expands for other users: ~bob means bob's home directory if you have access. It is faster than typing the full path and works identically in any shell context.",
     "usage": "Force `ls` to output one filename per line — useful for consistent output regardless of piping context.",
     "examples": [
       "ls -1  # one per line",
@@ -4557,7 +4557,7 @@ export const questions: Question[] = [
     "id": "nav29",
     "question": "You want to see the top two levels of directory structure under `~/code/myapp` — direct subdirectories and their immediate children — but stop there so you don't descend into `node_modules` and hundreds of other deep paths. What `find` command limits recursion depth to 2 levels and shows only directories?",
     "answer": "find . -maxdepth 2 -type d",
-    "explanation": "Save your location for later with pushd. This command saves your current directory to a stack then changes to a new one.",
+    "explanation": "The directory stack is a memory system for navigation. pushd /var/log does two things simultaneously: saves your current directory on a stack and changes to /var/log. Later, popd reverses it — returns you to exactly where you were before the push. dirs shows the full stack. This pattern is extremely useful in scripts that temporarily work in a different directory: push, do work, pop. It is cleaner and safer than manually storing $(pwd) in a variable and then cd-ing back.",
     "usage": "List directories up to 2 levels deep — the controlled-depth alternative to an unlimited recursive find.",
     "examples": [
       "find . -maxdepth 2 -type d  # the everyday shallow dir overview",
@@ -4589,9 +4589,9 @@ export const questions: Question[] = [
   },
   {
     "id": "file26",
-    "question": "You wrote a deploy script at `~/scripts/deploy.sh` and want to copy it to `/usr/local/bin/` with owner-read/write/execute and group/other read-execute permissions (755) in one command, without a separate `chmod` step. What command does the copy and sets permissions atomically?",
+    "question": "You wrote a deploy script at `script.sh` and want to copy it to `/usr/local/bin/` with owner-read/write/execute and group/other read-execute permissions (755) in one command, without a separate `chmod` step. What command does the copy and sets permissions atomically?",
     "answer": "install -m 755 script.sh /usr/local/bin/",
-    "explanation": "The tee command bridges output and files perfectly. It reads from stdin and writes to both stdout and a file, useful for logging while watching.",
+    "explanation": "Named after a T-shaped pipe fitting, tee splits a data stream in two directions. Data flows in from stdin, and tee sends identical copies to both stdout AND a file. This is essential when you want to see command output in real-time AND save it: make 2>&1 | tee build.log shows the build on screen while saving every line. Without tee you would have to choose. tee -a appends instead of overwriting. Multiple filenames accepted: command | tee file1.txt file2.txt writes to both simultaneously.",
     "usage": "Copy a file to a destination and set its permissions in one atomic step — the standard Makefile install idiom.",
     "examples": [
       "sudo install -m 755 ~/scripts/deploy.sh /usr/local/bin/",
@@ -4639,7 +4639,7 @@ export const questions: Question[] = [
     "id": "file29",
     "question": "You need to set up a project directory structure with `app/logs/2026` and `app/data/2026`. What single `mkdir` command using brace expansion creates both subdirectory trees at once?",
     "answer": "mkdir -p app/{logs,data}/2026",
-    "explanation": "Batch operations on search results are powerful. Using find with -exec runs commands on matching files, automating tasks across many files.",
+    "explanation": "find with -exec is the standard way to run a command on every file matching a set of criteria. The {} placeholder is replaced by each matched filename. \\; runs the command once per file. + is faster: it batches multiple filenames into a single command call. Preview results first with -print before committing to a destructive -exec. Common patterns: find . -name \"*.log\" -mtime +30 -exec rm {} \\; deletes logs older than 30 days. find . -type f -exec chmod 644 {} + fixes permissions in bulk.",
     "usage": "Create multiple parallel directory paths in one command using bash brace expansion.",
     "examples": [
       "mkdir -p app/{logs,data}/2026",
@@ -4655,7 +4655,7 @@ export const questions: Question[] = [
     "id": "file30",
     "question": "Before editing `/etc/nginx/nginx.conf` you want to save a quick backup copy as `nginx.conf.bak` in the same directory. What compact brace-expansion `cp` command does this in one token?",
     "answer": "cp config.yml{,.bak}",
-    "explanation": "Bash brace expansion creates compact commands. The syntax {,.bak} expands to multiple paths, perfect for creating backups with minimal typing.",
+    "explanation": "Brace expansion is a shell feature that generates multiple strings from a compact pattern before the command runs. {,.bak} means \"and also with .bak appended\" — so file.txt{,.bak} expands to file.txt file.txt.bak, giving you both names in one go. {a,b,c} expands to three separate words. {1..10} generates a sequence. This happens entirely in the shell before the command sees it, so it works with any command. The most useful patterns: cp file.txt{,.bak} to backup, mkdir {src,tests,docs} to create multiple directories at once.",
     "usage": "Create a `.bak` backup copy of a file in one compact command before editing.",
     "examples": [
       "sudo cp /etc/nginx/nginx.conf{,.bak}  # backup before editing",
@@ -4671,7 +4671,7 @@ export const questions: Question[] = [
     "id": "file31",
     "question": "Your project directory has accumulated dozens of `.tmp` scratch files scattered across subdirectories. What `find` command recursively locates and immediately deletes all files matching `*.tmp` without piping to `xargs rm`?",
     "answer": "find . -name '*.tmp' -delete",
-    "explanation": "Find open files across your system with lsof. This shows which processes have files open, essential for troubleshooting locked files.",
+    "explanation": "Every open file in Linux is tracked by the kernel. lsof (list open files) queries this information and shows which process has which file open. This is invaluable when trying to delete or unmount a filesystem and getting \"device or resource busy\" — lsof -u username or lsof /path shows exactly what is holding the file open. lsof -i :8080 shows what process is listening on port 8080. lsof -p PID shows all files a process has open. It is also useful for security auditing: what network connections is a suspicious process maintaining?",
     "usage": "Recursively find and delete all files matching a name pattern in one command — no pipe to `rm` needed.",
     "examples": [
       "find . -name '*.tmp' -delete",
@@ -4688,7 +4688,7 @@ export const questions: Question[] = [
     "id": "file32",
     "question": "A file shows 0 bytes in `ls -l` but `du` says it's using 8KB of disk space. You need to see the inode-level metadata including exact byte size, allocated blocks, all three timestamps, and the inode number. What command shows all of that?",
     "answer": "stat server",
-    "explanation": "Detailed file metadata reveals inode info. The stat command shows exact permissions, ownership, and timestamps down to nanoseconds.",
+    "explanation": "ls -l shows file metadata but in a human-readable format that is hard to parse. stat shows the same information in a structured way designed for scripts and investigation. The output includes: inode number, block count, access/modify/change timestamps (three different times), file type, permissions in both octal and symbolic, owner UID/GID, and device information. The octal permissions (like 644) are what chmod expects, so stat saves you from mentally converting rwxr-xr-x. The three timestamps are: atime (last accessed), mtime (content modified), ctime (metadata changed).",
     "usage": "Show the complete inode-level metadata for a file — everything `ls -l` shows plus blocks, inode number, and all three timestamps.",
     "examples": [
       "stat /etc/nginx/nginx.conf  # full metadata",
@@ -4705,7 +4705,7 @@ export const questions: Question[] = [
     "id": "file33",
     "question": "Your deploy script needs to atomically switch `/opt/app/current` to point to the new release at `/opt/app/releases/v2.1.0`. The symlink already exists pointing to the old release. What `ln` command replaces the existing symlink without a 'file exists' error?",
     "answer": "ln -sf newtarget linkname",
-    "explanation": "Compression during archiving reduces size dramatically. Adding -z for gzip reduces backups significantly, crucial for storage and transfers.",
+    "explanation": "Adding -z to a tar command enables gzip compression, turning the archive operation into compress-and-bundle in one step. The resulting .tar.gz file (also written .tgz) is typically 40-70% smaller than the uncompressed .tar. The compression happens in a pipeline: tar streams the archive to gzip which compresses it on the fly. For better compression at the cost of speed use -j (bzip2) or -J (xz). The trade-off: compressed archives cannot be seeked randomly, so extracting a single file from a large compressed archive requires decompressing everything up to that point.",
     "usage": "Create or replace a symlink atomically — the standard pattern for deploy cutover.",
     "examples": [
       "ln -sf /opt/app/releases/v2.1.0 /opt/app/current  # deploy cutover",
@@ -4721,7 +4721,7 @@ export const questions: Question[] = [
     "id": "file34",
     "question": "A script receives the full path `/var/log/nginx/access.log.1` as input and needs to extract just the filename `access.log.1` (without the directory prefix) to use as an output file name. What command strips the directory portion?",
     "answer": "basename /var/log/syslog.1",
-    "explanation": "Efficient syncing finds only changed files. Rsync transfers only differences, making backups and migrations much faster than copying everything.",
+    "explanation": "rsync is the standard tool for incremental file synchronization. Unlike cp which blindly copies everything, rsync computes differences and transfers only what has changed. -a (archive mode) enables recursive copy, preserves permissions, timestamps, symlinks, and owner. -v shows progress. --delete removes files from the destination that no longer exist in the source, making it a true mirror. --exclude patterns skip matching files. The source and destination can be local paths or remote paths using SSH notation (user@host:/path). rsync is idempotent: running it twice produces the same result.",
     "usage": "Extract just the filename from a full path — the inverse of `dirname`.",
     "examples": [
       "basename /var/log/nginx/access.log.1  # → access.log.1",
@@ -4738,7 +4738,7 @@ export const questions: Question[] = [
     "id": "file35",
     "question": "Your script processes a file whose path is stored in `$INFILE`. Before writing output you need to create the directory that will hold the output file. You need just the directory portion of the input path. What command extracts that directory?",
     "answer": "dirname /var/log/syslog.1",
-    "explanation": "Find and delete safely in one command. Use find -print first to preview results before adding -delete to avoid accidents.",
+    "explanation": "find with -exec rm is the standard way to delete files matching multiple criteria in one command. But it is dangerous without a preview step: always run the same find command with -print first (or just without -exec) to see exactly what will be deleted. -name matches filenames with glob patterns. -type f restricts to regular files. -mtime +30 matches files older than 30 days. -size +100M matches large files. These criteria compose: find /tmp -type f -name \"*.tmp\" -mtime +7 -exec rm {} \\; deletes old temp files. Never use -exec rm -rf {} \\; without absolute certainty.",
     "usage": "Extract the directory portion of a path — the inverse of `basename`.",
     "examples": [
       "dirname /var/log/nginx/access.log  # → /var/log/nginx",
@@ -4784,7 +4784,7 @@ export const questions: Question[] = [
   },
   {
     "id": "view23",
-    "question": "A bash script copied from a Windows machine fails with mysterious errors. You suspect it has Windows-style CRLF line endings (carriage return + newline). What `cat` flag makes invisible characters like `^M` (carriage return) and trailing spaces visible?",
+    "question": "A bash script 'script.sh' copied from a Windows machine fails with mysterious errors. You suspect it has Windows-style CRLF line endings (carriage return + newline). What `cat` flag makes invisible characters like `^M` (carriage return) and trailing spaces visible?",
     "answer": "cat -E script.sh",
     "explanation": "This flag adds a visible dollar sign at the end of every line just before the newline character. In a clean Unix file you see `text$`. In a file with Windows line endings you see `text^M$` — the carriage return is exposed as `^M`. In a file with trailing spaces you see `text   $`. This immediately reveals the hidden characters that are breaking your script.",
     "usage": "Reveal invisible line endings and trailing whitespace that break scripts and config files.",
@@ -4819,7 +4819,7 @@ export const questions: Question[] = [
     "id": "view25",
     "question": "A CSV report file has a summary/totals section in the last 3 lines that you want to exclude from processing. What `head` flag prints all lines except the last N lines?",
     "answer": "head -n -3 report.csv",
-    "explanation": "The head command shows the first lines of a file. Using head -n -3 skips the last 3 lines, removing summary footers.",
+    "explanation": "By default head prints the first 10 lines — enough to see a file's format, headers, or first few log entries without loading the entire file. The -n flag controls the count. The unusual syntax head -n -3 means \"all lines except the last 3\" — useful when the last lines are footers or incomplete records. -c reads bytes instead of lines, which matters for binary files or when you need exactly N bytes. Combine with tail to extract any range: head -n 50 file | tail -n 10 gets lines 41-50.",
     "usage": "Print all lines except the last N — strip trailers and footers before piping to processing tools.",
     "examples": [
       "head -n -3 /tmp/report.csv  # skip last 3 summary lines",
@@ -4835,7 +4835,7 @@ export const questions: Question[] = [
     "id": "view26",
     "question": "A CSV file at `/tmp/users.csv` has a header on line 1 that you want to skip before piping the data rows to `awk` for processing. What `tail` flag starts printing from line 2 instead of from the end?",
     "answer": "tail -n +5 /tmp/users.csv",
-    "explanation": "The tail command shows the last lines of a file. Using tail -n +5 starts from line 5, removing header rows.",
+    "explanation": "Most useful for log files where the newest events are at the bottom. By default prints the last 10 lines. The -f flag makes it follow a file in real-time: it keeps watching and prints new lines as they arrive, the standard way to monitor a live service log. The unusual syntax tail -n +5 means \"start from line 5 and print everything to the end\" — skip a CSV header and dump the data section. -F (capital) handles log rotation by reopening the file if it gets replaced by a new one.",
     "usage": "Skip the first N-1 lines and print everything from line N to the end — the standard header-skipping idiom.",
     "examples": [
       "tail -n +2 /tmp/users.csv  # skip CSV header, pipe data rows to awk",
@@ -4851,7 +4851,7 @@ export const questions: Question[] = [
     "id": "view27",
     "question": "A configuration file at `/etc/myapp/settings.conf` has 500 lines. You need to quickly inspect only lines 50 through 65 without opening the file in an editor. What `sed` one-liner extracts just that range and exits?",
     "answer": "sed -n '10,20p' /var/log/syslog",
-    "explanation": "The sed command does stream editing with patterns and actions. It is powerful for text substitution and manipulation of files.",
+    "explanation": "sed is a stream editor — it reads input line by line, applies text transformation rules, and writes the result. Unlike interactive editors you use it in pipelines and scripts without opening a file. The s/old/new/ substitution is the workhorse: substitute the first match per line; add g for all matches. -i edits in place with an optional backup suffix. -n suppresses default output, used with p to print only matching lines. -e allows multiple expressions in one command. Think of sed as find-and-replace for the terminal.",
     "usage": "Print a specific line range from a file without loading the whole file — faster than an editor for spot-checking.",
     "examples": [
       "sed -n '50,65p' /etc/myapp/settings.conf",
@@ -4865,9 +4865,9 @@ export const questions: Question[] = [
   },
   {
     "id": "view28",
-    "question": "You're debugging a generated file and need to inspect only line 42. What `awk` one-liner uses the built-in record counter to print exactly that line and nothing else?",
+    "question": "You're debugging 'access.log' and need to inspect only line 5. What `awk` one-liner uses the built-in record counter to print exactly that line and nothing else?",
     "answer": "awk 'NR==5' access.log",
-    "explanation": "The awk command processes text by patterns and actions. It is excellent for structured text analysis and field extraction.",
+    "explanation": "awk is a complete programming language designed for processing structured text. It reads input line by line, splits each line into fields ($1, $2, $NF for last), and applies pattern-action rules. The pattern is a condition; the action runs when the condition is true. BEGIN runs before any input; END runs after all input. This makes awk ideal for column extraction, field math, and filtered reporting. It has variables, loops, arrays, and printf formatting, making it more powerful than grep or sed for anything involving arithmetic or multi-column logic.",
     "usage": "Print a specific line number or range using awk's built-in line counter NR.",
     "examples": [
       "awk 'NR==42' /tmp/generated.conf  # print only line 42",
@@ -4947,7 +4947,7 @@ export const questions: Question[] = [
   {
     "id": "perm23",
     "question": "You added your user to the `docker` group but you're not sure if the change is reflected in your current session. What command shows your current user ID, primary group ID, and all supplementary groups?",
-    "answer": "id (or id -a)",
+    "answer": "id",
     "explanation": "This command displays your identity as the Linux kernel sees it right now: your numeric user ID, your primary group, and every supplementary group your account belongs to. If you just added yourself to a group and it doesn't show up here, you need to log out and back in (or start a new login shell) for the kernel to pick up the change.",
     "usage": "Show your current user ID, primary group, and all group memberships — the 'who am I and what can I access' command.",
     "examples": [
@@ -5063,7 +5063,7 @@ export const questions: Question[] = [
     "id": "perm30",
     "question": "Your web application is failing because it can't write to `/var/lib/myapp/data`. You want to test whether the `www-data` user can actually write to that directory without switching to that user's full shell. What `sudo` flag runs a single command as a specific non-root user?",
     "answer": "sudo -u www-data chmod u+w /var/www/app",
-    "explanation": "File permission bits represent read (4), write (2), and execute (1). Combine these numbers to set permissions concisely in chmod commands.",
+    "explanation": "Linux file permissions are stored as a 12-bit number. The lower 9 bits represent three groups of three: owner (user), group, others. Within each group: read=4, write=2, execute=1. Add them to get the octal digit for that group. 7=rwx (4+2+1), 6=rw- (4+2), 5=r-x (4+1), 4=r-- (4), 0=--- (none). So 644 = rw-r--r-- (owner can read/write, everyone can read), 755 = rwxr-xr-x (owner can do anything, everyone can read/execute), 600 = rw------- (owner only, private). The top 3 bits are setuid, setgid, sticky — handled separately.",
     "usage": "Run a single command as a specific user — test service account permissions or run service-specific commands.",
     "examples": [
       "sudo -u www-data ls -la /var/lib/myapp/data  # can www-data list this dir?",
@@ -5112,7 +5112,7 @@ export const questions: Question[] = [
     "id": "pipe23",
     "question": "You have a file `servers.txt` with one hostname per line. You want to run `ssh HOST uptime` for each hostname, substituting the hostname into the middle of the command. What `xargs` invocation uses a placeholder to insert each line into an arbitrary position in the command?",
     "answer": "xargs -I {} cmd {} < list.txt",
-    "explanation": "Redirection operators change where input and output go. The > redirects stdout, < provides stdin, and 2> redirects stderr separately.",
+    "explanation": "Redirection changes the source or destination of a command's input and output. Every process has three standard streams: stdin (0, keyboard by default), stdout (1, terminal by default), stderr (2, terminal by default). > redirects stdout to a file (overwrite). >> appends stdout to a file. < reads stdin from a file instead of keyboard. 2> redirects stderr. 2>&1 merges stderr into stdout. 2>/dev/null discards all errors. These can combine: command > output.txt 2>&1 sends both stdout and stderr to the file.",
     "usage": "Run a command for each input line with the line substituted into a specific position via a placeholder.",
     "examples": [
       "xargs -I {} ssh {} uptime < servers.txt  # run uptime on each server",
@@ -5128,7 +5128,7 @@ export const questions: Question[] = [
     "id": "pipe24",
     "question": "You have 200 log files to gzip and the process is CPU-bound. You want to compress up to 8 files simultaneously to use all CPU cores. What `xargs` flags enable parallel execution with exactly 8 concurrent workers and one file per invocation?",
     "answer": "xargs -P 4 -n 1 cmd < list.txt",
-    "explanation": "Using tee in pipelines saves output to a file while displaying it. Perfect for logging command results while monitoring them live.",
+    "explanation": "tee is inserted in the middle of a pipeline to branch the data stream. It reads from stdin, writes to stdout (continuing the pipeline), and simultaneously writes to a file. This solves the problem of wanting to both process data through more commands AND save the intermediate state. Example: curl api.example.com/data | tee raw.json | python3 process.py — saves the raw API response while also passing it to the processor. -a appends to the file. Multiple files can be given. Use process substitution for more branching: tee >(filter1) >(filter2) > combined.txt.",
     "usage": "Process a list of inputs in parallel with N simultaneous workers — dramatically speeds up batch tasks.",
     "examples": [
       "find . -name '*.log' | xargs -P 8 -n 1 gzip  # compress 8 files at a time",
@@ -5144,7 +5144,7 @@ export const questions: Question[] = [
     "id": "pipe25",
     "question": "You want two separate processes — a data generator and a data consumer — to communicate through a named file in the filesystem instead of a shell pipe, so they can run independently and asynchronously. What command creates a named pipe at `/tmp/data_stream`?",
     "answer": "mkfifo /tmp/myfifo",
-    "explanation": "The xargs command converts stdin into command arguments. Essential for processing lists of files from find or other commands.",
+    "explanation": "xargs bridges commands that produce output (like find or grep -l) with commands that take filenames as arguments (like rm, chmod, wc). By default xargs reads whitespace-separated tokens from stdin and appends them as arguments. -n1 passes one argument per command invocation. -I{} lets you place the argument anywhere in the command: find . -name \"*.tmp\" | xargs -I{} mv {} /tmp/old/. -P4 runs 4 processes in parallel for speed. The -0 flag paired with find's -print0 handles filenames with spaces safely.",
     "usage": "Create a named pipe in the filesystem so independent processes can communicate without a temporary file.",
     "examples": [
       "mkfifo /tmp/data_stream  # create the named pipe",
@@ -5160,7 +5160,7 @@ export const questions: Question[] = [
     "id": "pipe26",
     "question": "You're writing a cron script and want ALL output (stdout and stderr) from every command in the script to go to `/var/log/myjob.log` automatically, without appending a redirect to every single line. What `exec` redirection at the top of the script achieves this?",
     "answer": "exec > script.log 2>&1",
-    "explanation": "Command substitution with $(command) captures command output and uses it as input for another command or variable value.",
+    "explanation": "Command substitution $() captures the stdout of a command and injects it into another command or variable assignment as text. The inner command runs in a subshell, its output is stripped of trailing newlines, and the result is substituted in place. This is how you make commands talk to each other without intermediate files. Common uses: TODAY=$(date +%F) for timestamps, COUNT=$(wc -l < file.txt) for counting, DIR=$(dirname \"$0\") to find where a script is located. Can be nested: $(echo $(date +%Y)).",
     "usage": "Redirect all subsequent output in a script to a log file with one line at the top.",
     "examples": [
       "exec > /var/log/myjob.log 2>&1  # overwrite on each run",
@@ -5175,7 +5175,7 @@ export const questions: Question[] = [
     "id": "pipe27",
     "question": "Your script initializes a log file at the start of each run. You want to create the file if it doesn't exist, or empty it if it does, using only bash built-in syntax without any external command. What shell construct does this?",
     "answer": ": > /var/log/app.log",
-    "explanation": "Using : > filename creates or clears a file by redirecting empty output to it. More efficient than touch for clearing large files.",
+    "explanation": ": is the bash no-op command — it always succeeds and produces no output. Combined with redirection, : > filename is an idiomatic way to create an empty file or truncate an existing one to zero bytes. It is marginally more explicit than just > filename which also works. The real power comes in scripts: : > \"$LOGFILE\" at the start of a script ensures a clean empty log file regardless of whether one existed before. Also used in script skeletons where a code block is syntactically required but should do nothing.",
     "usage": "Create or empty a file using only bash built-ins — no external commands required.",
     "examples": [
       ": > /var/log/myjob.log  # clear the log before each run",
@@ -5207,7 +5207,7 @@ export const questions: Question[] = [
     "id": "pipe29",
     "question": "You're running a long deploy script and want to see its output live on screen while also saving a complete transcript to `/var/log/deploy.log` for postmortem review. What command does both simultaneously?",
     "answer": "command | tee -a app.log",
-    "explanation": "The /dev/null device discards all data written to it. Use 2>/dev/null to suppress error messages from commands completely.",
+    "explanation": "/dev/null is a special file that discards everything written to it and returns nothing when read. It is the trash bin of Unix. Redirecting stderr to /dev/null with 2>/dev/null silences error messages you do not care about. Redirecting stdout the same way runs a command for its side effects only. Redirecting both suppresses all output: command > /dev/null 2>&1. Reading from /dev/null gives instant EOF, useful for commands expecting input you want to skip. It has no size limit and writes are instantaneous.",
     "usage": "Write output to the terminal AND to a file simultaneously — watch live and keep a log.",
     "examples": [
       "./deploy.sh 2>&1 | tee -a /var/log/deploy.log  # capture everything, show live",
@@ -5223,7 +5223,7 @@ export const questions: Question[] = [
     "id": "pipe30",
     "question": "Your bash script needs to capture the output of `hostname -f` into a variable called `FQDN` so you can use it later in log messages and config file paths. What syntax captures a command's stdout into a variable?",
     "answer": "FQDN=$(hostname -f)",
-    "explanation": "Variable assignment with $(command) captures command output into a variable for later use in the same command or script.",
+    "explanation": "Variable assignment with command substitution captures command output for later use. VAR=$(command) runs command in a subshell, captures its stdout, strips trailing newlines, and stores the result. The variable can then be used in conditions, as arguments to other commands, or in string construction. This avoids temporary files for intermediate results. Important: always quote \"$VAR\" when using it to prevent word splitting if it contains spaces. Use local in functions to avoid polluting the global scope.",
     "usage": "Capture a command's standard output into a bash variable for use in subsequent commands.",
     "examples": [
       "FQDN=$(hostname -f)  # capture fully qualified hostname",
@@ -5256,7 +5256,7 @@ export const questions: Question[] = [
     "id": "proc22",
     "question": "You started a background job with `&` and now realize you need to log out. The job is still running as `[1] 5678`. How do you detach it from your shell so it won't be killed when you exit?",
     "answer": "disown %1",
-    "explanation": "The nice command runs a process with lower priority, allowing other tasks more CPU time when resources are contended.",
+    "explanation": "Every Linux process has a scheduling priority called niceness — from -20 (highest priority, greediest) to 19 (lowest priority, most polite). By default processes start at 0. nice -n 10 command starts the command at niceness 10, meaning the kernel will deprioritize it whenever other processes need CPU. This is essential when running CPU-intensive tasks like backups, compiles, or data processing on a production server — you want them to finish eventually but not starve the services users depend on. renice adjusts the priority of an already-running process.",
     "usage": "Remove a background job from the shell's job table so it won't be killed when you log out — the 'forgot nohup' rescue.",
     "examples": [
       "disown %1  # detach job 1 from shell",
@@ -5325,7 +5325,7 @@ export const questions: Question[] = [
     "id": "proc26",
     "question": "You're comparing two implementations of a function and want to know which one finishes faster, including how much CPU time each uses. What built-in shell command measures wall-clock time, user CPU time, and system CPU time for any command?",
     "answer": "time ./function1.sh",
-    "explanation": "The time command measures how long a process takes to execute, showing real, user, and system time spent.",
+    "explanation": "Performance debugging starts with measurement. time command runs the command normally and afterward prints three numbers: real (wall-clock time from start to finish), user (CPU time spent in your code), sys (CPU time spent in kernel calls on your behalf). If real is much larger than user+sys, your program is waiting for I/O or sleeping. If user is large, the program is CPU-bound. If sys is large, there is heavy filesystem or network activity. These three numbers together diagnose WHERE time is spent and what kind of optimization to pursue.",
     "usage": "Measure wall-clock and CPU time for any command — the built-in benchmark tool.",
     "examples": [
       "time ./build.sh  # real/user/sys summary",
@@ -5376,7 +5376,7 @@ export const questions: Question[] = [
     "id": "proc29",
     "question": "You need a scriptable snapshot of processes sorted by CPU usage — something you can pipe to `grep`, log to a file, or embed in an alert script, unlike the interactive `top`. What `ps` command with custom columns outputs a sorted CPU ranking?",
     "answer": "ps -eo pid,user,%cpu,cmd --sort=-%cpu | head",
-    "explanation": "The bg command resumes a stopped job in the background, letting you continue using the shell without interruption.",
+    "explanation": "When you press Ctrl+Z, the current foreground process is suspended — paused and moved to the job list. bg takes the most recently suspended job and restarts it running in the background so your terminal prompt returns immediately. bg %2 resumes job number 2 specifically. jobs lists all background and suspended jobs with their numbers. fg brings a background job back to the foreground. This trio — Ctrl+Z, bg, fg — is how you juggle multiple tasks in a single terminal session without opening multiple windows.",
     "usage": "Produce a scriptable ranked list of processes by CPU usage — the `top`-alternative that can be piped and logged.",
     "examples": [
       "ps -eo pid,user,%cpu,cmd --sort=-%cpu | head  # top 9 CPU consumers",
@@ -5857,7 +5857,7 @@ export const questions: Question[] = [
     "id": "text30",
     "question": "A CSV export from a European database uses accented characters like é and ü, but your downstream parser only accepts ASCII. How do you convert the file to ASCII, substituting accented characters with their closest ASCII equivalents?",
     "answer": "iconv -f UTF-8 -t ASCII//TRANSLIT /var/data/export.csv > /var/data/export_ascii.csv",
-    "explanation": "Converting character encodings is important for international text. The iconv command translates files between UTF-8, ASCII, and ISO-8859-1.",
+    "explanation": "Different systems, programs, and historical files use different character encodings. UTF-8 is the modern standard, but you will encounter Latin-1 (ISO-8859-1), Windows-1252, Shift-JIS, and others. iconv converts between them. -f specifies the FROM encoding, -t specifies the TO encoding. -l lists all supported encodings. Without knowing the source encoding the conversion is impossible — file --mime-encoding filename can often detect it. Incorrect encoding causes mojibake (garbled characters). UTF-8 with BOM (byte order mark) is a common Windows legacy that iconv can strip: convert from UTF-8-BOM to UTF-8.",
     "usage": "Convert a UTF-8 text file to ASCII, substituting accented characters with close ASCII equivalents.",
     "examples": [
       "iconv -f UTF-8 -t ASCII//TRANSLIT /var/data/export.csv > /var/data/export_ascii.csv",
@@ -6709,7 +6709,7 @@ export const questions: Question[] = [
   {
     "id": "daily50",
     "question": "You just typed a complex 300-character pipeline and realize there is a mistake in the middle. Instead of editing it character-by-character at the shell prompt, how do you open it in your $EDITOR for comfortable editing before running?",
-    "answer": "fc (or history)",
+    "answer": "fc",
     "explanation": "The fc command opens your most recent command in your text editor. You can fix typos, restructure the pipeline, and make any changes you want. When you save and exit the editor, the edited command runs automatically.",
     "usage": "Open the previous command in your text editor for comfortable multi-line editing before re-running.",
     "examples": [
