@@ -423,7 +423,7 @@ export default function Home() {
               {`// TERMINAL MASTERY THROUGH BRUTE FORCE REPETITION //`}
             </p>
             <p className="text-lg" style={{ color: '#38bdf8' }}>
-              v3.3.0 — SPACED REPETITION + ENTER KEY NAVIGATION
+              v3.4.0 — SPACED REPETITION + ENTER KEY + OUTPUT EXAMPLES
             </p>
           </div>
 
@@ -670,7 +670,25 @@ export default function Home() {
                 <h3 className="font-semibold mb-2">Explanation:</h3>
                 <p className="mb-4">{currentQuestion.explanation}</p>
                 <h3 className="font-semibold mb-2">When to Use:</h3>
-                <p>{currentQuestion.usage}</p>
+                <p className="mb-4">{currentQuestion.usage}</p>
+                {currentQuestion.outputExample && (
+                  <>
+                    <h3 className="font-semibold mb-2">Example Output:</h3>
+                    <div className="bg-black bg-opacity-40 p-3 rounded font-mono text-sm mb-4 border border-cyan-900 overflow-auto max-h-32">
+                      <pre style={{ color: '#86efac' }}>{currentQuestion.outputExample}</pre>
+                    </div>
+                  </>
+                )}
+                {currentQuestion.examples && currentQuestion.examples.length > 0 && (
+                  <>
+                    <h3 className="font-semibold mb-2">More Examples:</h3>
+                    <ul style={{ color: '#a7f3d0' }} className="text-sm space-y-1 list-disc list-inside">
+                      {currentQuestion.examples.map((ex, i) => (
+                        <li key={i}>{ex}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
               </div>
 
               <button
