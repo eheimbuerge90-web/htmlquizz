@@ -319,6 +319,34 @@ export default function Home() {
 
   const nextQuestion = () => {
     if (!selectedCategory) return;
+
+    // ✅ SPACED REPETITION FIX: Re-insert wrong questions early
+    // 40% chance to inject a missed question 2-4 positions ahead
+    if (wrongQueue.length > 0 && Math.random() < 0.4) {
+      const wrongToRetry = wrongQueue[Math.floor(Math.random() * wrongQueue.length)];
+      const spacingGap = 2 + Math.floor(Math.random() * 3); // 2-4 positions
+      const insertPos = Math.min(currentQuestionIndex + spacingGap, currentQuestions.length);
+
+      const updatedQuestions = [...currentQuestions];
+      updatedQuestions.splice(insertPos, 0, wrongToRetry);
+      setCurrentQuestions(updatedQuestions);
+
+      // Remove from wrongQueue to avoid duplicates
+      const updatedWrong = wrongQueue.filter((q) => q.id !== wrongToRetry.id);
+      setWrongQueue(updatedWrong);
+
+      // Update resume with new state
+      writeResume(selectedCategory, {
+        list: updatedQuestions,
+        index: currentQuestionIndex + 1,
+        score,
+        totalAnswered,
+        streak,
+        bestStreak,
+        wrong: updatedWrong,
+      });
+    }
+
     if (currentQuestionIndex < currentQuestions.length - 1) {
       const newIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(newIndex);
@@ -380,7 +408,7 @@ export default function Home() {
               {`// TERMINAL MASTERY THROUGH BRUTE FORCE REPETITION //`}
             </p>
             <p className="text-lg" style={{ color: '#38bdf8' }}>
-              v3.1.0 — PROGRESS PERSISTENCE → PER-CATEGORY RESETS → SVG AVATAR
+              v3.2.0 — EARLY WRONG QUESTION RE-INSERTION → SPACED REPETITION
             </p>
           </div>
 
@@ -563,129 +591,82 @@ export default function Home() {
                 value={userAnswer}
                 onChange={(e) => setUserAnswer(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') checkAnswer();
+                  if (e.key === 'Enter' && userAnswer.trim()) checkAnswer();
                 }}
-                placeholder="Type your command here..."
+                placeholder="Type your answer here..."
+                className="w-full px-4 py-3 rounded-lg font-mono text-lg"
                 style={{
-                  color: '#38bdf8',
                   background: '#1f2937',
                   border: '2px solid #38bdf8',
-                  fontFamily: 'monospace',
-                  fontSize: '1.125rem',
+                  color: '#38bdf8',
                 }}
-                className="w-full p-4 rounded-lg focus:outline-none"
                 autoFocus
               />
-              <button
-                onClick={checkAnswer}
-                className="w-full py-3 rounded-lg transition-colors text-lg font-semibold"
-                style={{ background: '#38bdf8', color: '#111827', border: '1px solid #38bdf8' }}
-              >
-                Check Answer
-              </button>
-              <button
-                onClick={revealAnswer}
-                className="w-full py-3 rounded-lg transition-colors text-sm font-semibold"
-                style={{
-                  background: 'transparent',
-                  color: '#fbbf24',
-                  border: '1px dashed #fbbf24',
-                }}
-                title="Show the answer and add this question to the repetition queue"
-              >
-                👁 Reveal Answer (adds to repetition queue)
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={checkAnswer}
+                  disabled={!userAnswer.trim()}
+                  className="flex-1 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50"
+                  style={{
+                    background: userAnswer.trim() ? '#38bdf8' : '#64748b',
+                    color: '#111827',
+                  }}
+                >
+                  Check Answer
+                </button>
+                <button
+                  onClick={revealAnswer}
+                  className="flex-1 py-3 rounded-lg font-semibold transition-colors"
+                  style={{ background: '#64748b', color: '#111827' }}
+                >
+                  Reveal Answer
+                </button>
+              </div>
             </div>
           ) : (
             <div className="space-y-6">
               <div
+                className="p-4 rounded-lg"
                 style={{
-                  padding: '1rem',
-                  borderRadius: '0.5rem',
-                  background: isCorrect ? '#1a3a1a' : '#23303f',
-                  border: `2px solid ${isCorrect ? '#38bdf8' : '#ff4444'}`,
+                  background: isCorrect ? '#065f46' : '#7c2d12',
+                  border: `2px solid ${isCorrect ? '#38bdf8' : '#f97316'}`,
                 }}
               >
-                <div className="flex items-center mb-2">
-                  <span className="text-2xl mr-2">{isCorrect ? '✅' : '❌'}</span>
-                  <span style={{ fontWeight: 'bold', color: isCorrect ? '#38bdf8' : '#ff4444' }}>
-                    {isCorrect ? 'Correct!' : 'Incorrect'}
-                  </span>
+                <div
+                  style={{ color: isCorrect ? '#86efac' : '#fed7aa' }}
+                  className="font-semibold text-lg mb-2"
+                >
+                  {isCorrect ? '✅ Correct!' : '❌ Incorrect'}
                 </div>
-                <div className="font-mono text-lg mb-2" style={{ color: '#38bdf8' }}>
-                  Your answer: <span style={{ color: isCorrect ? '#38bdf8' : '#ff4444' }}>{userAnswer}</span>
+                <div
+                  style={{ color: isCorrect ? '#d1fae5' : '#fed7aa' }}
+                  className="font-mono text-sm"
+                >
+                  Correct Answer: <span className="font-bold">{currentQuestion.answer}</span>
                 </div>
-                {!isCorrect && (
-                  <div className="font-mono text-lg" style={{ color: '#38bdf8' }}>
-                    Correct answer:{' '}
-                    <span style={{ color: '#38bdf8', fontWeight: 'bold' }}>{currentQuestion.answer}</span>
+                {userAnswer !== '(revealed)' && (
+                  <div
+                    style={{ color: isCorrect ? '#a7f3d0' : '#fbddc6' }}
+                    className="font-mono text-sm mt-2"
+                  >
+                    Your Answer: <span className="font-bold">{userAnswer || '(blank)'}</span>
                   </div>
                 )}
               </div>
 
-              <div
-                style={{
-                  background: '#111827',
-                  padding: '1.5rem',
-                  borderRadius: '0.5rem',
-                  border: '1px solid #38bdf8',
-                  boxShadow: '0 0 10px rgba(56,189,248,0.2)',
-                }}
-              >
-                <h3 className="font-semibold mb-3" style={{ color: '#38bdf8' }}>📚 Deep Explanation</h3>
-                <p style={{ color: '#38bdf8', marginBottom: '1rem' }}>{currentQuestion.explanation}</p>
-
-                <h4 className="font-semibold mb-2" style={{ color: '#38bdf8' }}>🎯 When to Use</h4>
-                <p style={{ color: '#38bdf8', marginBottom: '1rem' }}>{currentQuestion.usage}</p>
-
-                <h4 className="font-semibold mb-2" style={{ color: '#38bdf8' }}>🧠 Memory Technique</h4>
-                <p style={{ color: '#38bdf8', marginBottom: '1rem', fontStyle: 'italic' }}>
-                  {currentQuestion.memoryTip}
-                </p>
-
-                <h4 className="font-semibold mb-2" style={{ color: '#38bdf8' }}>💡 Examples</h4>
-                <ul className="space-y-1 mb-4">
-                  {currentQuestion.examples.map((example, index) => (
-                    <li
-                      key={index}
-                      style={{
-                        fontFamily: 'monospace',
-                        fontSize: '0.875rem',
-                        background: '#1f2937',
-                        padding: '0.5rem',
-                        borderRadius: '0.25rem',
-                        border: '1px solid #38bdf8',
-                        color: '#38bdf8',
-                      }}
-                    >
-                      {example}
-                    </li>
-                  ))}
-                </ul>
-
-                <h4 className="font-semibold mb-2" style={{ color: '#38bdf8' }}>🖥️ Terminal Output Example</h4>
-                <div
-                  style={{
-                    background: '#111827',
-                    color: '#38bdf8',
-                    padding: '1rem',
-                    borderRadius: '0.5rem',
-                    fontFamily: 'monospace',
-                    fontSize: '0.875rem',
-                    overflowX: 'auto',
-                    border: '1px solid #38bdf8',
-                  }}
-                >
-                  <pre style={{ color: '#38bdf8' }}>{currentQuestion.outputExample}</pre>
-                </div>
+              <div style={{ color: '#38bdf8' }}>
+                <h3 className="font-semibold mb-2">Explanation:</h3>
+                <p className="mb-4">{currentQuestion.explanation}</p>
+                <h3 className="font-semibold mb-2">When to Use:</h3>
+                <p>{currentQuestion.usage}</p>
               </div>
 
               <button
                 onClick={nextQuestion}
-                className="w-full py-3 rounded-lg transition-colors text-lg font-semibold"
-                style={{ background: '#38bdf8', color: '#111827', border: '1px solid #38bdf8' }}
+                className="w-full py-4 rounded-lg font-bold text-lg transition-colors"
+                style={{ background: '#38bdf8', color: '#111827' }}
               >
-                {currentQuestionIndex < currentQuestions.length - 1 ? 'Next Question' : 'Finish Quiz'}
+                Continue
               </button>
             </div>
           )}
@@ -695,66 +676,41 @@ export default function Home() {
   );
 }
 
-const StatTile = ({ label, value }: { label: string; value: string }) => (
-  <div className="p-3 rounded-lg" style={{ background: '#1f2937', border: '1px solid #38bdf8' }}>
-    <div className="text-2xl font-bold" style={{ color: '#38bdf8' }}>{value}</div>
-    <div className="text-sm" style={{ color: '#38bdf8' }}>{label}</div>
-  </div>
-);
-
-const CategoryMeta = ({
-  progress,
-  onReset,
-}: {
-  progress: CategoryProgress | undefined;
-  onReset: () => void;
-}) => {
-  const best = progress?.best;
-  const resume = progress?.resume;
-  const hasAny = Boolean(best || resume);
-
-  if (!hasAny) {
-    return (
-      <div className="mt-3 flex items-center justify-between text-xs" style={{ color: '#38bdf8', opacity: 0.55 }}>
-        <span>No attempts yet</span>
+function StatTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div
+      className="p-4 rounded-lg"
+      style={{ border: '2px solid #38bdf8', boxShadow: '0 0 10px rgba(56,189,248,0.2)', background: '#1f2937' }}
+    >
+      <div className="text-xs font-bold mb-1" style={{ color: '#38bdf8', opacity: 0.7 }}>
+        {label}
       </div>
-    );
-  }
+      <div className="text-2xl font-bold" style={{ color: '#38bdf8' }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function CategoryMeta({ progress, onReset }: { progress?: CategoryProgress; onReset: () => void }) {
+  if (!progress?.best && !progress?.resume) return null;
 
   return (
-    <div className="mt-3 flex items-center justify-between gap-2 text-xs" style={{ color: '#38bdf8' }}>
-      <div className="flex flex-col items-start gap-1">
-        {best ? (
-          <span>
-            BEST: <strong>{best.score}/{best.total}</strong> · {best.accuracy}% · 🔥{best.bestStreak}
-          </span>
-        ) : (
-          <span style={{ opacity: 0.6 }}>No completed run yet</span>
-        )}
-        {resume && (
-          <span style={{ opacity: 0.85 }}>
-            IN PROGRESS: {resume.currentIndex + 1}/{resume.questionIds.length} · {resume.score}✓
-          </span>
-        )}
-      </div>
+    <div className="mt-3 space-y-1 text-xs" style={{ color: '#38bdf8', opacity: 0.7 }}>
+      {progress.best && (
+        <>
+          <div>Best: {progress.best.score}/{progress.best.total} ({progress.best.accuracy}%)</div>
+          <div>Streak: {progress.best.bestStreak}</div>
+        </>
+      )}
+      {progress.resume && <div>📌 Progress saved</div>}
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onReset();
-        }}
-        className="px-2 py-1 rounded transition-colors"
-        style={{
-          background: 'transparent',
-          color: '#38bdf8',
-          border: '1px solid #38bdf8',
-          fontSize: '0.7rem',
-          fontWeight: 'bold',
-          whiteSpace: 'nowrap',
-        }}
-        title="Reset this category's progress"
+        onClick={onReset}
+        className="text-xs underline hover:opacity-100 transition-opacity"
+        style={{ color: '#38bdf8', opacity: 0.6 }}
       >
-        ↺ RESET
+        Reset
       </button>
     </div>
   );
-};
+}
