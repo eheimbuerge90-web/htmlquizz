@@ -13,7 +13,7 @@ export interface Question {
 export const questions: Question[] = [
   {
     "id": "nav1",
-    "question": "You are five directories deep inside a project folder. What single command — with no arguments and no path — returns you instantly to your home directory?",
+    "question": "You are five directories deep inside a project folder. What command using the tilde shortcut takes you directly to your home directory?",
     "answer": "cd ~",
     "explanation": "Every user has a personal home folder — like your own desk drawer where your files and settings live. No matter how deep you've wandered through subfolders, one magic word brings you straight back to your personal folder without needing to remember how you got there.",
     "usage": "Fastest reset to your home directory from anywhere on the filesystem.",
@@ -311,20 +311,19 @@ export const questions: Question[] = [
   },
   {
     "id": "nav18",
-    "question": "You start typing 'cd /usr/lo' and don't want to type the rest of the path by hand. What key do you press to have the shell automatically complete the path for you?",
-    "answer": "<TAB>",
-    "explanation": "Instead of typing every letter of a long path, you type just enough to identify what you mean and then press a special key. The shell fills in the rest automatically, like a search engine autocompleting your query. If there are multiple possible completions, pressing the key twice shows you all the options.",
-    "usage": "Let the shell complete filenames, paths, and commands for you — eliminates typos and speeds up every command you type.",
+    "question": "You are inside ~/code/myapp/src/components and want to move up exactly two directory levels to ~/code/myapp in a single command. What path do you use with cd?",
+    "answer": "cd ../..",
+    "explanation": "Each `..` in a path means 'the directory one level up'. Chaining them with slashes — `../..` — means 'two levels up' from your current position. This works in any command that takes a path, not just `cd`. It's faster than typing the full absolute path and works regardless of where you are in the tree. You can chain as many as needed: `../../..` jumps three levels up.",
+    "usage": "Navigate up multiple directory levels in one command instead of running `cd ..` repeatedly, especially when working deep inside nested project folders.",
     "examples": [
-      "cd Doc<TAB>  # completes to Documents/",
-      "ls /et<TAB>  # completes to /etc/",
-      "cat /etc/pas<TAB>  # completes to /etc/passwd",
-      "git che<TAB>  # completes to 'git checkout' (with bash-completion)",
-      "cd /usr/lo<TAB><TAB>  # double-Tab: shows both 'local/' and 'lost+found/'",
-      "echo $HO<TAB>  # completes the variable name to $HOME"
+      "cd ..  # up one level",
+      "cd ../..  # up two levels",
+      "cd ../../..  # up three levels",
+      "cd ../sibling-dir  # up one then into a sibling",
+      "ls ../  # list contents of parent without changing into it"
     ],
-    "memoryTip": "Tab once = complete; Tab twice = list possibilities. Linux users press Tab more than any other key — train your fingers: type 2-3 letters then Tab, ALWAYS. If nothing happens, hit Tab a second time to see why.",
-    "outputExample": "$ cd /usr/lo<TAB><TAB>\nlocal/      lost+found/\n$ cd /usr/loc<TAB>\n$ cd /usr/local/",
+    "memoryTip": "Each `..` = one step up. Two dots = parent. Two pairs (`../..`) = grandparent. Count the slashes: one slash, one level up beyond the first `..`.",
+    "outputExample": "$ pwd\\n/home/elias/code/myapp/src/components\\n$ cd ../..\\n$ pwd\\n/home/elias/code/myapp",
     "category": "NAVIGATION"
   },
   {
@@ -1465,7 +1464,7 @@ export const questions: Question[] = [
   {
     "id": "pipe2",
     "question": "You have a running deployment script that logs to build.log and you want each new run to add its output to the end of the file without erasing previous run records. What operator appends standard output to a file without overwriting it?",
-    "answer": "command >> build.log",
+    "answer": "./deploy.sh >> build.log",
     "explanation": "Instead of replacing a file's contents each time, this operator adds new output to the bottom of whatever was already there. It's like adding entries to a running journal rather than starting a new page — previous content stays intact and new content accumulates at the end. If the file doesn't exist yet, it gets created.",
     "usage": "Append standard output to the end of a file — adds to existing content rather than replacing it.",
     "examples": [
@@ -1499,7 +1498,7 @@ export const questions: Question[] = [
   {
     "id": "pipe4",
     "question": "You want to filter the output of 'ps aux' to show only lines mentioning 'nginx' — without saving to a temporary file. What operator connects one command's output directly into another command's input?",
-    "answer": "command1 | command2",
+    "answer": "ps aux | grep nginx",
     "explanation": "Instead of saving a command's output to a temporary file and then reading that file with the next command, this operator connects them directly — the output from the first flows instantly into the input of the second, like a water pipe between two processing stations. You can chain as many stages as you need, each one transforming or filtering the data it receives.",
     "usage": "Connect two commands so the first command's output becomes the second command's input — the fundamental Unix composition operator.",
     "examples": [
@@ -1533,7 +1532,7 @@ export const questions: Question[] = [
   {
     "id": "pipe6",
     "question": "You are running a build script and want everything — both normal build output and any error messages — saved together in one log file. What bash shorthand redirects both stdout and stderr to the same file simultaneously?",
-    "answer": "command &> build.log",
+    "answer": "make &> build.log",
     "explanation": "Normally, normal output and error messages are separate streams. Sometimes you just want everything in one place — a single log file that captures all of a command's output regardless of which stream it came from. This shorthand is the quickest way to achieve that.",
     "usage": "Capture both standard output and error messages in a single file — the simplest way to get a complete command log.",
     "examples": [
@@ -1549,7 +1548,7 @@ export const questions: Question[] = [
   {
     "id": "pipe7",
     "question": "You want to write a script that generates a multi-line nginx configuration block inline — embedding several lines of text into a command without creating a separate template file. What shell syntax feeds a block of literal text to a command's stdin?",
-    "answer": "command << EOF content EOF",
+    "answer": "cat << EOF\nserver { listen 80; }\nEOF",
     "explanation": "Instead of creating a separate text file to feed into a command, you can embed the text directly in your script between special marker lines. Everything between the opening marker and the matching closing marker is treated as the command's input — as if someone had typed those lines at the keyboard. This makes scripts self-contained without needing external template files.",
     "usage": "Embed multi-line text directly in a script as standard input to a command — no external file needed.",
     "examples": [
@@ -1565,7 +1564,7 @@ export const questions: Question[] = [
   {
     "id": "pipe8",
     "question": "You are running 'find / -name passwd' and it produces thousands of 'Permission denied' error lines along with a few actual results. You want only the real results displayed with no error clutter. How do you discard all error output by redirecting it to the special discard device?",
-    "answer": "command > /dev/null",
+    "answer": "find / -name passwd 2> /dev/null",
     "explanation": "Linux has a special virtual file that acts like a bottomless trash can — anything you write to it disappears instantly without taking up any space. By redirecting unwanted output (usually error messages) to this virtual trash can, you can clean up noisy command output while keeping the useful parts visible on your screen.",
     "usage": "Discard command output completely by redirecting to /dev/null — use selectively for stdout, stderr, or both.",
     "examples": [
@@ -1582,7 +1581,7 @@ export const questions: Question[] = [
   {
     "id": "pipe9",
     "question": "You want to change into /tmp/build-workspace and then run make — but only if the directory change actually succeeded. What operator runs the second command only when the first one exits with success?",
-    "answer": "command1 && command2",
+    "answer": "cd /tmp/build-workspace && make",
     "explanation": "Normally, when you put two commands on the same line separated by a semicolon, the second one runs regardless of whether the first succeeded or failed. This operator adds a condition: \"only proceed if the previous step worked.\" It's the digital equivalent of \"and only then\" — if step one fails, the whole chain stops and step two never runs. This is a critical safety mechanism for sequences where later steps depend on earlier ones.",
     "usage": "Chain two commands so the second runs only if the first succeeded — the essential safety operator for dependent command sequences.",
     "examples": [
@@ -1599,7 +1598,7 @@ export const questions: Question[] = [
   {
     "id": "pipe10",
     "question": "You want to run three diagnostic commands — show the current date, system uptime, and disk usage — one after another on a single line, where each runs regardless of whether the previous one failed. What separator runs commands sequentially and unconditionally?",
-    "answer": "command1 ; command2",
+    "answer": "date ; uptime ; df -h",
     "explanation": "Sometimes you just want to run several commands one after another with no conditions attached — each one runs whether the previous succeeded or failed. The semicolon separator is the \"next\" without any judgment. It's useful for independent status-checking commands or cleanup operations where it doesn't matter if an individual step encounters an error.",
     "usage": "Run multiple commands in sequence with no dependency between them — each runs unconditionally after the previous one finishes.",
     "examples": [
@@ -1615,7 +1614,7 @@ export const questions: Question[] = [
   {
     "id": "pipe11",
     "question": "Your hourly cron job runs a backup script and you want all its output — both normal messages and any error messages — appended to /var/log/backup.log without overwriting previous run records. What operator appends both stdout and stderr to a file?",
-    "answer": "command &>> /var/log/backup.log",
+    "answer": "./backup.sh &>> /var/log/backup.log",
     "explanation": "This is the combination of two things you've seen before: capturing both normal output and error messages together (like &>), and adding to the end of a file rather than replacing it (like >>). It's the right tool for cron job logging where you want a complete, growing record of every run in a single file.",
     "usage": "Append both stdout and stderr to a file without overwriting it — the right operator for accumulating cron job logs.",
     "examples": [
@@ -1631,7 +1630,7 @@ export const questions: Question[] = [
   {
     "id": "pipe12",
     "question": "In a deployment script, if the main deploy command fails you want to immediately print an error message. What operator runs a fallback command only when the preceding command exits with an error?",
-    "answer": "command1 || command2",
+    "answer": "./deploy.sh || echo \"deploy failed\"",
     "explanation": "This operator is the \"or else\" counterpart to the \"and then\" operator. Instead of running the next command when the previous one succeeds, it runs the next command only when the previous one fails. It's useful for error handling, fallback behaviors, and ensuring that something always happens even when the primary step breaks.",
     "usage": "Run a fallback or error-handling command only when the preceding command fails — the essential operator for error recovery and defensive scripting.",
     "examples": [
@@ -1648,7 +1647,7 @@ export const questions: Question[] = [
   {
     "id": "pipe13",
     "question": "Your backup script runs nightly via cron and you want its error messages appended to /var/log/backup-errors.log across each run, while the normal output still prints to the terminal (or wherever stdout goes). What redirect appends only stderr to a file?",
-    "answer": "command 2>> /var/log/backup-errors.log",
+    "answer": "./backup.sh 2>> /var/log/backup-errors.log",
     "explanation": "This is the append mode version of stderr redirection. Instead of replacing the error log with each run, new error messages are added to the end of whatever was already logged there. This lets you build up a history of errors over time — each night's errors accumulate after the previous nights' errors — so you can see patterns or investigate when something first went wrong.",
     "usage": "Append only error messages (stderr) to a file while leaving normal output unaffected — builds up an error history across multiple runs.",
     "examples": [
@@ -1664,7 +1663,7 @@ export const questions: Question[] = [
   {
     "id": "pipe14",
     "question": "You're running a long build and want to watch the output live on your terminal AND have it saved to build.log simultaneously — so you don't have to choose between seeing it now and having a record. What command splits output to both the screen and a file at the same time?",
-    "answer": "command | tee build.log",
+    "answer": "make | tee build.log",
     "explanation": "When you redirect output to a file, it disappears from your screen. When you don't redirect, it stays on screen but doesn't get saved. This command solves that dilemma by acting like a T-junction in a pipe — it reads the stream and sends it in two directions at once: both to the file and to your screen. You see everything live and end up with a complete file record.",
     "usage": "See output live on screen AND save it to a file at the same time — the T-junction for command output.",
     "examples": [
@@ -1696,7 +1695,7 @@ export const questions: Question[] = [
   {
     "id": "pipe16",
     "question": "You want to write a script that creates an nginx server block configuration file using inline text rather than an external template file. What shell syntax lets you type multi-line content directly in a script and feed it as input to a command?",
-    "answer": "command << EOF content EOF",
+    "answer": "cat > /etc/nginx/sites-available/app << EOF\nserver { listen 80; }\nEOF",
     "explanation": "A here-document lets you write multi-line text directly inside your script surrounded by a pair of delimiter words. Everything between the opening and closing delimiter is treated as if it came from a file. This keeps your script self-contained — no need for separate template files that could be missing when the script runs.",
     "usage": "Embed multi-line literal text directly in a script as stdin for any command — produces self-contained scripts without external template files.",
     "examples": [
@@ -1711,7 +1710,7 @@ export const questions: Question[] = [
   {
     "id": "pipe17",
     "question": "You have a string stored in a shell variable and want to pass it directly as input to grep without using a pipe or a temporary file. What three-angle-bracket operator feeds a single string as stdin to a command?",
-    "answer": "command <<< 'string input'",
+    "answer": "grep error <<< \"$LOG_LINE\"",
     "explanation": "This operator is a compact way to hand a single line of text directly to a command as its input, as if you had typed that text at the keyboard. Instead of using a pipe from echo or creating a file, you just write the text right there in the command. It's cleaner and faster for one-liner situations where you have a variable or a short string to process.",
     "usage": "Feed a single string directly as standard input to a command — cleaner than echo | for variable-based inputs.",
     "examples": [
@@ -1727,7 +1726,7 @@ export const questions: Question[] = [
   {
     "id": "pipe18",
     "question": "You want to count how many nginx processes are currently running by listing all processes, keeping only the nginx-related lines, and then counting those lines — all in a single expression. What construct chains multiple commands so each one's output flows into the next?",
-    "answer": "command1 | command2 | command3",
+    "answer": "ps aux | grep nginx | wc -l",
     "explanation": "Pipelines connect multiple specialized tools in sequence — the output of each one becomes the raw material for the next. Each tool does one job well (list processes, filter lines, count lines) and the combination accomplishes something none of them could do alone. This is the Unix philosophy in action: small, composable tools chained into powerful workflows.",
     "usage": "Chain multiple commands into a pipeline where each transforms the stream — the fundamental Unix composition pattern.",
     "examples": [
@@ -1758,7 +1757,7 @@ export const questions: Question[] = [
   {
     "id": "pipe20",
     "question": "Your cron job runs a maintenance script and sends you email every time it produces output. You want the job to run completely silently — no output from stdout or stderr — so it only emails you when something actually breaks. What redirect suppresses all output from a command?",
-    "answer": "command > /dev/null 2>&1",
+    "answer": "/usr/local/bin/maintenance.sh > /dev/null 2>&1",
     "explanation": "This redirect combination sends everything the command produces — both normal output and error messages — into the virtual trash can, making the command run in complete silence. Cron sends email when a job produces output, so silencing everything prevents the daily noise while still running the maintenance tasks.",
     "usage": "Suppress all output from a command — both stdout and stderr — so it runs completely silently.",
     "examples": [
@@ -2066,7 +2065,7 @@ export const questions: Question[] = [
   {
     "id": "proc18",
     "question": "You need to understand the complete job control workflow: how to start a command in the background, pause it, switch it between foreground and background, list all jobs, and kill one by job number. What are the key commands and keystrokes in this workflow?",
-    "answer": "command & # background fg # foreground",
+    "answer": "sleep 100 &",
     "explanation": "The shell gives you complete control over commands you've started — you can pause them, resume them, push them to the background, bring them back, and kill them, all using simple commands and keyboard shortcuts. Understanding this workflow lets you manage multiple long-running tasks from a single terminal without needing to open multiple windows.",
     "usage": "Manage multiple running jobs from a single terminal — start, pause, resume, foreground, background, and kill by job number.",
     "examples": [
@@ -2397,7 +2396,7 @@ export const questions: Question[] = [
   {
     "id": "net17",
     "question": "You need to temporarily host a service on a second IP address (10.10.0.100/24) on eth0 for a migration test without rebooting. What command adds that address at runtime?",
-    "answer": "sudo ip addr add 192.168.1.50/24 dev eth0",
+    "answer": "sudo ip addr add 10.10.0.100/24 dev eth0",
     "explanation": "Linux lets you assign more than one address to the same network card — like having two phone extensions on the same physical desk phone. Adding an address at runtime is instant and doesn't affect existing connections, but it only lasts until the next reboot unless you also update your network configuration files.",
     "usage": "Temporarily bind a second IP 10.10.0.100/24 to eth0 so a migration test service can be reached at that address without a reboot.",
     "examples": [
@@ -3513,7 +3512,7 @@ export const questions: Question[] = [
   {
     "id": "bash7",
     "question": "A nightly backup script runs 'mysqldump' and you want successful output saved to /var/log/backup.log while errors go separately to /var/log/backup.err. What redirection syntax achieves this?",
-    "answer": "command > /var/log/backup.log 2> /var/log/backup.err",
+    "answer": "mysqldump --all-databases > /var/log/backup.log 2> /var/log/backup.err",
     "explanation": "Every program has two separate output streams: one for normal results and one for error messages. By default both appear mixed together on the terminal. Redirection lets you route each stream to a different file, so you can review successes and failures independently.",
     "usage": "Run mysqldump, saving normal output to /var/log/backup.log and error messages to /var/log/backup.err.",
     "examples": [
@@ -3547,7 +3546,7 @@ export const questions: Question[] = [
   {
     "id": "bash9",
     "question": "A script needs to create a directory, and if mkdir fails, it should print an error and exit. What if-statement directly tests whether a command succeeded or failed?",
-    "answer": "if command; then echo 'success'; fi",
+    "answer": "if mkdir /var/run/myapp; then echo 'created'; else echo 'failed' >&2; exit 1; fi",
     "explanation": "In bash, the if-statement doesn't take a \"true or false\" expression — it runs a command and checks whether that command succeeded. Success means the command's exit code is 0; any non-zero exit code means failure. This lets you test the outcome of any command directly.",
     "usage": "Attempt to create /opt/myapp/deployments and exit the script with an error message if mkdir fails.",
     "examples": [
@@ -3581,7 +3580,7 @@ export const questions: Question[] = [
   {
     "id": "arch1",
     "question": "You need to bundle the entire /home/alice/code/myapp/ directory into a single file to send to a colleague, preserving the directory structure. What tar command creates an uncompressed archive?",
-    "answer": "tar -cvf myapp.tar /home/alice/code/myapp/",
+    "answer": "tar -cvf myapp.tar /home/alice/code/myapp",
     "explanation": "The tar command is the packing tape of Linux — it takes a whole directory tree with all its subdirectories and files and wraps them into a single portable file. \"Archiving\" just means bundling; without a compression flag the resulting file is the same size as the original contents, just packaged together.",
     "usage": "Bundle the entire /home/alice/code/myapp/ directory into a single myapp.tar file, preserving all structure and permissions.",
     "examples": [
@@ -3649,7 +3648,7 @@ export const questions: Question[] = [
   {
     "id": "arch5",
     "question": "Before a major upgrade you want to create a compressed backup of /etc/nginx/ named 'nginx_backup_2026-05-19.tar.gz'. What tar command creates a gzip-compressed archive of that directory?",
-    "answer": "tar -czvf nginx_backup_2026-05-19.tar.gz /etc/nginx/",
+    "answer": "tar -czvf nginx_backup_2026-05-19.tar.gz /etc/nginx",
     "explanation": "This is the most common archiving operation on Linux: bundle a directory and compress it in one step. The result is a single small file that contains your entire directory tree and can be unpacked later to restore everything exactly as it was.",
     "usage": "Create a gzip-compressed archive of /etc/nginx/ named nginx_backup_2026-05-19.tar.gz as a pre-upgrade backup.",
     "examples": [
@@ -3666,7 +3665,7 @@ export const questions: Question[] = [
   {
     "id": "arch6",
     "question": "A deployment script downloads myapp-2.0.tar.gz from the release server and needs to extract it to /opt/myapp/. What command extracts a gzip-compressed tarball to a specific directory?",
-    "answer": "tar -xzvf myapp-2.0.tar.gz -C /opt/myapp/",
+    "answer": "tar -xzvf myapp-2.0.tar.gz -C /opt/myapp",
     "explanation": "This is the reverse of creating a compressed archive — it both decompresses and unpacks the tarball in one step, recreating all the original files and directories. Specifying a target directory with -C tells tar where to put everything instead of dumping it in the current directory.",
     "usage": "Extract myapp-2.0.tar.gz into /opt/myapp/ during a deployment.",
     "examples": [
@@ -4001,7 +4000,7 @@ export const questions: Question[] = [
   {
     "id": "daily18",
     "question": "You need to find every file in `~/code/myapp` that contains the string `DATABASE_URL`, including files in subdirectories. What command recursively searches through all files and prints the filename and line for each match?",
-    "answer": "grep -r \"pattern\" .",
+    "answer": "grep -r \"DATABASE_URL\" ~/code/myapp",
     "explanation": "The standard text-search tool by default searches only one file or reads from the keyboard. Adding the recursive flag tells it to walk every subdirectory and search every file it finds, printing the file path and line content for each match. It's the fastest way to find \"where in this whole codebase does X appear?\"",
     "usage": "Search every file under a directory for a text pattern — the standard 'find where this string appears' command.",
     "examples": [
@@ -4145,7 +4144,7 @@ export const questions: Question[] = [
   {
     "id": "daily26",
     "question": "In a shell script you want to run `cd /deploy/app`, then `tar -xzf release.tar.gz`, then `systemctl restart myapp` — all in sequence, regardless of whether any of the previous steps fail. How do you write all three on one line?",
-    "answer": "command1 ; command2",
+    "answer": "cd /deploy/app ; tar -xzf release.tar.gz ; systemctl restart myapp",
     "explanation": "The semicolon is the simplest way to chain commands: run the first one, wait for it to finish, then run the second one — no matter what happened. It's like listing steps in a recipe where you continue to the next step regardless of whether the last one went well. Compare this to double-ampersand (`&&`), which stops the chain if any step fails.",
     "usage": "Chain commands that should all run sequentially regardless of success or failure — use `&&` instead when later steps depend on earlier ones succeeding.",
     "examples": [
@@ -4163,7 +4162,7 @@ export const questions: Question[] = [
   {
     "id": "daily27",
     "question": "Your deploy script does: pull the latest code, then install dependencies, then run tests. If any step fails, the remaining steps should be skipped. What operator chains these three commands so each one only runs if the previous one succeeded?",
-    "answer": "command1 && command2",
+    "answer": "git pull && npm install && npm test",
     "explanation": "The double-ampersand is the \"and then, but only if that worked\" operator. If the left command fails (returns a non-zero exit code), the right command is skipped — the whole chain short-circuits. Chain many commands: `cmd1 && cmd2 && cmd3` and the first failure stops everything. This is the safe way to write dependent steps.",
     "usage": "Chain dependent commands so each step only runs if the previous succeeded — the safe way to write multi-step sequences.",
     "examples": [
@@ -4181,7 +4180,7 @@ export const questions: Question[] = [
   {
     "id": "daily28",
     "question": "In a bash script you want to download a config file from an internal server, but if the download fails you want to fall back to copying a local default instead of crashing. What operator runs the fallback command only when the primary command fails?",
-    "answer": "command1 || command2",
+    "answer": "curl -fsS https://internal/config > config.yml || cp /etc/myapp/default.yml config.yml",
     "explanation": "The double-pipe is the \"or else\" operator — it runs the right command only when the left one fails. It's the fallback direction, the opposite of double-ampersand. Use it for error recovery, default-value patterns, and providing alternatives when something is unavailable.",
     "usage": "Run a fallback command only when the primary fails — the 'or else' direction for inline error handling.",
     "examples": [
@@ -4199,7 +4198,7 @@ export const questions: Question[] = [
   {
     "id": "daily29",
     "question": "You want to find all lines containing 'ERROR' in `/var/log/myapp/app.log`, then count how many there are, using only built-in text tools and no temp files. How do you connect the output of the first command directly into the input of the second?",
-    "answer": "command1 | command2",
+    "answer": "grep ERROR /var/log/myapp/app.log | wc -l",
     "explanation": "The pipe character connects two commands so the output of the first flows directly into the input of the second, without needing a temporary file. Both programs run at the same time — the first writes, the second reads. This is one of Unix's core design ideas: build small tools that do one thing well, then chain them together. Most complex shell one-liners are just three or four tools piped together.",
     "usage": "Connect two commands so the first's output feeds directly into the second's input — the core Unix composition operator.",
     "examples": [
@@ -4216,8 +4215,8 @@ export const questions: Question[] = [
   },
   {
     "id": "daily30",
-    "question": "You need to kick off a 20-minute database reindex operation on a remote server but want the terminal prompt back immediately so you can do other work while it runs. How do you start the command so it runs in the background?",
-    "answer": "nohup ./database-reindex.sh &",
+    "question": "You need to kick off a 20-minute database reindex script called `reindex.sh` on a remote server but want the terminal prompt back immediately so you can do other work while it runs. How do you start the command so it runs in the background?",
+    "answer": "nohup ./reindex.sh &",
     "explanation": "Adding an ampersand at the end of a command immediately returns your prompt, while the command continues running in the background. The shell prints a job number and process ID so you can refer to it later. Be aware: the command's output will still appear in your terminal interleaved with whatever else you type, so redirect it to a log file to keep things tidy.",
     "usage": "Start a long-running command in the background so the shell prompt returns immediately.",
     "examples": [
@@ -4234,8 +4233,8 @@ export const questions: Question[] = [
   },
   {
     "id": "daily31",
-    "question": "Your script generates a report and you want to save it to `/tmp/daily-report.txt`, replacing the file's contents completely each time the script runs. What redirection operator writes to a file and truncates it first?",
-    "answer": "command > /tmp/daily-report.txt",
+    "question": "Your script `generate-report.sh` generates a report and you want to save it to `/tmp/daily-report.txt`, replacing the file's contents completely each time the script runs. What redirection operator writes to a file and truncates it first?",
+    "answer": "./generate-report.sh > /tmp/daily-report.txt",
     "explanation": "The single right-angle bracket sends a command's output to a file. If the file already exists, its contents are erased first — then the new output is written. If the file doesn't exist, it's created. This is the basic \"save output to a file\" operator, but be careful: there's no undo if you overwrite something you needed.",
     "usage": "Redirect a command's output to a file, creating it if new or overwriting it if it exists.",
     "examples": [
@@ -4253,7 +4252,7 @@ export const questions: Question[] = [
   {
     "id": "daily32",
     "question": "A cron job writes a timestamped entry to `/var/log/myapp/events.log` on each run and you need each run's entry to be added to the file without overwriting previous entries. What redirection operator appends to a file instead of overwriting it?",
-    "answer": "command >> /var/log/myapp/events.log",
+    "answer": "echo \"[$(date)] event\" >> /var/log/myapp/events.log",
     "explanation": "The double right-angle bracket is exactly like the single one, except it adds new output at the END of the file instead of erasing the existing content first. Every run accumulates another entry, building up a history. Use this for log files, audit trails, or any situation where you want to keep adding to a file over time.",
     "usage": "Append output to the end of a file without erasing existing content — for log files and accumulating records.",
     "examples": [
@@ -4288,7 +4287,7 @@ export const questions: Question[] = [
   {
     "id": "daily34",
     "question": "You're running a deploy script and want to save absolutely everything — both normal output and any error messages — into a single timestamped log file so you can review it afterward. What is the bash shorthand redirection that sends both stdout and stderr to one file?",
-    "answer": "command &> output.log",
+    "answer": "./deploy.sh &> deploy-$(date +%F).log",
     "explanation": "Programs produce two output streams — normal results and error messages. Usually both end up on screen mixed together. This shorthand captures both into a single file at once. It's the cleanest way to save the complete transcript of a script run for later review.",
     "usage": "Capture both normal output and errors into one file — use `&>` for overwrite or `&>>` to append.",
     "examples": [
@@ -4412,19 +4411,18 @@ export const questions: Question[] = [
   {
     "id": "nav21",
     "question": "You're deep inside `/var/log/nginx` debugging an issue and need to jump to `/etc/nginx` to check the config, then jump back to where you were. What command saves your current directory on a stack and changes to the new one simultaneously?",
-    "answer": "pushd /tmp",
-    "explanation": "Your shell always has a current directory — the folder where commands run unless you specify a full path. pwd shows you exactly where that is as a full absolute path from root. This matters most when you are deep in a directory tree and unsure where you landed after a series of cd commands, or when writing scripts that need to know their own working directory to construct relative paths correctly. The shell variable $PWD holds the same value and is updated automatically on every cd.",
+    "answer": "pushd /etc/nginx",
+    "explanation": "The directory stack is a built-in shell feature for tracking multiple working directories. `pushd /etc/nginx` does two things at once: saves your current location on the stack AND changes to /etc/nginx. Later, `popd` removes the top of the stack and returns you exactly where you were. Unlike `cd -` which only remembers one previous directory, the stack has unlimited depth. This is invaluable when bouncing between several deeply nested directories.",
     "usage": "Jump to a new directory while bookmarking the current one on a stack, so `popd` can bring you back.",
     "examples": [
-      "pushd /tmp  # save current, cd to /tmp",
-      "pushd /etc/nginx  # save /tmp on stack, cd to /etc/nginx",
-      "pushd  # no args: swap top two, toggling",
-      "pushd +1  # rotate to the second stack entry",
-      "dirs -v  # show the full stack with indexes",
-      "popd  # pop one entry and cd back"
+      "pushd /etc/nginx  # save current dir, cd to /etc/nginx",
+      "pushd /var/log  # save /etc/nginx on stack, cd to /var/log",
+      "dirs -v  # show numbered stack: top is current",
+      "popd  # return to /etc/nginx (top of stack removed)",
+      "pushd +1  # rotate to stack position 1 without modifying"
     ],
     "memoryTip": "`pushd` PUSHES a directory onto the stack; `popd` POPS one off. Pair-think `pushd`/`popd`/`dirs` — three commands, one mental model: a stack of bookmarks.",
-    "outputExample": "$ pwd\n/home/alice/projects\n$ pushd /tmp\n/tmp ~/projects\n$ pushd /var/log\n/var/log /tmp ~/projects\n$ dirs -v\n 0  /var/log\n 1  /tmp\n 2  ~/projects",
+    "outputExample": "$ pwd\n/var/log/nginx\n$ pushd /etc/nginx\n/etc/nginx /var/log/nginx\n$ pushd /etc/ssh\n/etc/ssh /etc/nginx /var/log/nginx\n$ dirs -v\n 0  /etc/ssh\n 1  /etc/nginx\n 2  /var/log/nginx",
     "category": "NAVIGATION"
   },
   {
@@ -4466,7 +4464,7 @@ export const questions: Question[] = [
   {
     "id": "nav24",
     "question": "You need to inspect files in the home directory of user `deploy` on this server. What `cd` syntax takes you directly to another user's home directory without typing its full path?",
-    "answer": "cd ~user",
+    "answer": "cd ~deploy",
     "explanation": "The tilde character is a shortcut that the shell replaces with a home directory path before running the command. On its own it becomes your home. When followed immediately by a username (no space), it becomes that user's home directory. The shell looks up where that user lives in the system's user database and substitutes the correct path automatically.",
     "usage": "Jump to any user's home directory using tilde expansion — no need to know or type the full path.",
     "examples": [
@@ -4477,7 +4475,7 @@ export const questions: Question[] = [
       "sudo -u alice ls ~alice  # list as alice to bypass permission walls",
       "getent passwd deploy | cut -d: -f6  # alternative: look up the home directly"
     ],
-    "memoryTip": "`~` alone = your home. `~user` = that user's home. The shell turns the tilde into a path BEFORE the command runs — confirm with `echo ~user`.",
+    "memoryTip": "`~` alone = your home. `~deploy` = user deploy's home. `~root` = root's home. The shell turns the tilde into a real path BEFORE the command runs — confirm with `echo ~deploy`.",
     "outputExample": "$ echo ~alice\n/home/alice\n$ echo ~root\n/root\n$ sudo -u deploy bash -c 'cd ~ && pwd'\n/home/deploy",
     "category": "NAVIGATION"
   },
@@ -4502,19 +4500,18 @@ export const questions: Question[] = [
   {
     "id": "nav26",
     "question": "`/usr/bin/vim` is a symlink that points to another symlink, which eventually points to the actual binary. What command follows the entire chain of symlinks and prints the final real file path?",
-    "answer": "readlink -f symlink",
+    "answer": "readlink -f /usr/bin/vim",
     "explanation": "A symlink is a file whose entire content is \"go look over there instead.\" They can form chains — link A points to link B which points to the actual file. The basic version of this command shows only the first hop. Adding the flag makes it keep following until it reaches a real file and shows you that final destination.",
     "usage": "Follow an entire symlink chain to the final real file — goes deeper than a single `readlink` call.",
     "examples": [
-      "readlink -f /usr/bin/vi  # final binary at the end of the chain",
-      "readlink /usr/bin/vi  # ONE hop only (e.g. /etc/alternatives/vi)",
-      "readlink -e /usr/bin/vi  # error if any part of the chain is broken",
-      "ls -l /usr/bin/vi  # see the immediate link without using readlink",
-      "find /opt/app -xtype l 2>/dev/null  # find broken symlinks under /opt/app",
-      "readlink -f /opt/app/current  # follow a deploy 'current' symlink"
+      "readlink -f /usr/bin/vim  # follow chain to final binary",
+      "readlink /usr/bin/vim  # ONE hop only (often /etc/alternatives/vim)",
+      "realpath /usr/bin/vim  # equivalent on most systems",
+      "ls -l /usr/bin/vim  # show what the symlink points to",
+      "file /usr/bin/vim  # describe what the file is"
     ],
     "memoryTip": "`readlink -f` = Follow the link, fully. Without `-f`, you get just the first hop (often `/etc/alternatives/...`) which is rarely what you want. For a quick view of the immediate link target, plain `ls -l` shows `link -> target`.",
-    "outputExample": "$ ls -l /usr/bin/vi\nlrwxrwxrwx 1 root root 20 May 14 /usr/bin/vi -> /etc/alternatives/vi\n$ readlink /usr/bin/vi\n/etc/alternatives/vi\n$ readlink -f /usr/bin/vi\n/usr/bin/vim.basic",
+    "outputExample": "$ ls -l /usr/bin/vim\nlrwxrwxrwx 1 root root 20 May 14 /usr/bin/vim -> /etc/alternatives/vi\n$ readlink /usr/bin/vim\n/etc/alternatives/vi\n$ readlink -f /usr/bin/vim\n/usr/bin/vim.basic",
     "category": "NAVIGATION"
   },
   {
@@ -4590,7 +4587,7 @@ export const questions: Question[] = [
   {
     "id": "file26",
     "question": "You wrote a deploy script at `script.sh` and want to copy it to `/usr/local/bin/` with owner-read/write/execute and group/other read-execute permissions (755) in one command, without a separate `chmod` step. What command does the copy and sets permissions atomically?",
-    "answer": "install -m 755 script.sh /usr/local/bin/",
+    "answer": "install -m 755 script.sh /usr/local/bin",
     "explanation": "Named after a T-shaped pipe fitting, tee splits a data stream in two directions. Data flows in from stdin, and tee sends identical copies to both stdout AND a file. This is essential when you want to see command output in real-time AND save it: make 2>&1 | tee build.log shows the build on screen while saving every line. Without tee you would have to choose. tee -a appends instead of overwriting. Multiple filenames accepted: command | tee file1.txt file2.txt writes to both simultaneously.",
     "usage": "Copy a file to a destination and set its permissions in one atomic step — the standard Makefile install idiom.",
     "examples": [
@@ -4654,14 +4651,15 @@ export const questions: Question[] = [
   {
     "id": "file30",
     "question": "Before editing `/etc/nginx/nginx.conf` you want to save a quick backup copy as `nginx.conf.bak` in the same directory. What compact brace-expansion `cp` command does this in one token?",
-    "answer": "cp config.yml{,.bak}",
+    "answer": "sudo cp /etc/nginx/nginx.conf{,.bak}",
     "explanation": "Brace expansion is a shell feature that generates multiple strings from a compact pattern before the command runs. {,.bak} means \"and also with .bak appended\" — so file.txt{,.bak} expands to file.txt file.txt.bak, giving you both names in one go. {a,b,c} expands to three separate words. {1..10} generates a sequence. This happens entirely in the shell before the command sees it, so it works with any command. The most useful patterns: cp file.txt{,.bak} to backup, mkdir {src,tests,docs} to create multiple directories at once.",
     "usage": "Create a `.bak` backup copy of a file in one compact command before editing.",
     "examples": [
       "sudo cp /etc/nginx/nginx.conf{,.bak}  # backup before editing",
-      "mv config.yml{,.old}  # rename with .old suffix using the same trick",
-      "cp -a /etc/nginx{,.bak}  # recursive copy with all attributes preserved",
-      "cp nginx.conf{,.$(date +%Y%m%d)}  # dated backup: nginx.conf.20260519"
+      "mv myapp.conf{,.old}  # rename with .old suffix",
+      "cp file.txt{,.$(date +%F)}  # backup with date stamp",
+      "mkdir -p project/{src,tests,docs}  # create 3 dirs in one command",
+      "echo file_{1..5}.txt  # generates file_1.txt file_2.txt ... file_5.txt"
     ],
     "memoryTip": "{,.bak} = expand to '' and '.bak' — instant backup.",
     "outputExample": "$ sudo cp /etc/nginx/nginx.conf{,.bak}\n$ ls /etc/nginx/\nnginx.conf  nginx.conf.bak  sites-available/  sites-enabled/",
@@ -4753,7 +4751,7 @@ export const questions: Question[] = [
   {
     "id": "view21",
     "question": "You have a CSV export from your database at `/tmp/users.csv` with columns `id,name,email,role` and the values are hard to read because the column widths vary wildly. What command reformats it into neatly aligned columns on the terminal?",
-    "answer": "column -t -s, file.csv",
+    "answer": "column -t -s, /tmp/users.csv",
     "explanation": "This command reads your comma-separated file and automatically widens each column to fit the longest value in that column, producing a neatly aligned table. It's for display only — the original file is untouched. Pipe it into `less` for files longer than your screen.",
     "usage": "Align a CSV or delimited file into readable fixed-width columns for terminal display.",
     "examples": [
@@ -5079,7 +5077,7 @@ export const questions: Question[] = [
   {
     "id": "pipe21",
     "question": "You're running `make` and the build is failing, but errors are going to stderr while the rest of the output goes to stdout. You want to pipe ALL output (both streams) into `grep` to search for the word 'error'. How do you merge stderr into stdout before the pipe?",
-    "answer": "command 2>&1 | grep error",
+    "answer": "make 2>&1 | grep error",
     "explanation": "Programs send two separate output streams to your terminal: normal output (stdout) and error messages (stderr). A pipe only connects stdout by default — errors bypass it and appear separately on screen. The `2>&1` redirection, placed before the pipe, merges the error stream into the normal output stream so everything flows through the pipe together.",
     "usage": "Merge stderr into stdout so a pipe or grep sees both streams together.",
     "examples": [
@@ -5111,7 +5109,7 @@ export const questions: Question[] = [
   {
     "id": "pipe23",
     "question": "You have a file `servers.txt` with one hostname per line. You want to run `ssh HOST uptime` for each hostname, substituting the hostname into the middle of the command. What `xargs` invocation uses a placeholder to insert each line into an arbitrary position in the command?",
-    "answer": "xargs -I {} cmd {} < list.txt",
+    "answer": "xargs -I {} ssh {} uptime < servers.txt",
     "explanation": "Redirection changes the source or destination of a command's input and output. Every process has three standard streams: stdin (0, keyboard by default), stdout (1, terminal by default), stderr (2, terminal by default). > redirects stdout to a file (overwrite). >> appends stdout to a file. < reads stdin from a file instead of keyboard. 2> redirects stderr. 2>&1 merges stderr into stdout. 2>/dev/null discards all errors. These can combine: command > output.txt 2>&1 sends both stdout and stderr to the file.",
     "usage": "Run a command for each input line with the line substituted into a specific position via a placeholder.",
     "examples": [
@@ -5127,7 +5125,7 @@ export const questions: Question[] = [
   {
     "id": "pipe24",
     "question": "You have 200 log files to gzip and the process is CPU-bound. You want to compress up to 8 files simultaneously to use all CPU cores. What `xargs` flags enable parallel execution with exactly 8 concurrent workers and one file per invocation?",
-    "answer": "xargs -P 4 -n 1 cmd < list.txt",
+    "answer": "ls *.log | xargs -P 8 -n 1 gzip",
     "explanation": "tee is inserted in the middle of a pipeline to branch the data stream. It reads from stdin, writes to stdout (continuing the pipeline), and simultaneously writes to a file. This solves the problem of wanting to both process data through more commands AND save the intermediate state. Example: curl api.example.com/data | tee raw.json | python3 process.py — saves the raw API response while also passing it to the processor. -a appends to the file. Multiple files can be given. Use process substitution for more branching: tee >(filter1) >(filter2) > combined.txt.",
     "usage": "Process a list of inputs in parallel with N simultaneous workers — dramatically speeds up batch tasks.",
     "examples": [
@@ -5173,8 +5171,8 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe27",
-    "question": "Your script initializes a log file at the start of each run. You want to create the file if it doesn't exist, or empty it if it does, using only bash built-in syntax without any external command. What shell construct does this?",
-    "answer": ": > /var/log/app.log",
+    "question": "Your script initializes a log file called `app.log` at the start of each run. You want to create the file if it doesn't exist, or empty it if it does, using only bash built-in syntax without any external command. What shell construct does this?",
+    "answer": ": > app.log",
     "explanation": ": is the bash no-op command — it always succeeds and produces no output. Combined with redirection, : > filename is an idiomatic way to create an empty file or truncate an existing one to zero bytes. It is marginally more explicit than just > filename which also works. The real power comes in scripts: : > \"$LOGFILE\" at the start of a script ensures a clean empty log file regardless of whether one existed before. Also used in script skeletons where a code block is syntactically required but should do nothing.",
     "usage": "Create or empty a file using only bash built-ins — no external commands required.",
     "examples": [
@@ -5190,7 +5188,7 @@ export const questions: Question[] = [
   {
     "id": "pipe28",
     "question": "You're running `find / -name 'config.yml'` and the output is buried under hundreds of 'Permission denied' error lines. You want to see only the real results on screen and discard all the errors silently. How do you redirect only stderr to nowhere?",
-    "answer": "command 2>/dev/null",
+    "answer": "find / -name 'config.yml' 2>/dev/null",
     "explanation": "Programs produce two separate output streams. Normal results go one way; error messages go another. This redirect sends the error stream into the void — a special system device that accepts and discards everything written to it. Your normal results still appear on screen as if the errors never existed. Use it when you're certain the errors are expected noise.",
     "usage": "Discard all error output from a command while keeping normal output — suppress expected noise.",
     "examples": [
@@ -5205,8 +5203,8 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe29",
-    "question": "You're running a long deploy script and want to see its output live on screen while also saving a complete transcript to `/var/log/deploy.log` for postmortem review. What command does both simultaneously?",
-    "answer": "command | tee -a app.log",
+    "question": "You're running a long deploy script and want to see its output live on screen while also saving a complete transcript to `deploy.log`, `/var/log/deploy.log` for postmortem review. What command does both simultaneously?",
+    "answer": "./deploy.sh | tee -a deploy.log",
     "explanation": "/dev/null is a special file that discards everything written to it and returns nothing when read. It is the trash bin of Unix. Redirecting stderr to /dev/null with 2>/dev/null silences error messages you do not care about. Redirecting stdout the same way runs a command for its side effects only. Redirecting both suppresses all output: command > /dev/null 2>&1. Reading from /dev/null gives instant EOF, useful for commands expecting input you want to skip. It has no size limit and writes are instantaneous.",
     "usage": "Write output to the terminal AND to a file simultaneously — watch live and keep a log.",
     "examples": [
@@ -5237,8 +5235,8 @@ export const questions: Question[] = [
   },
   {
     "id": "proc21",
-    "question": "You're SSH'd into a server and kick off a database import that takes 6 hours. You're worried your SSH connection might drop and kill the process. What command starts the import so it continues running even if the terminal closes?",
-    "answer": "nohup command &",
+    "question": "You're SSH'd into a server and kick off a database import script `db-import.sh` that takes 6 hours. You're worried your SSH connection might drop and kill the process. What command starts the import so it continues running even if the terminal closes?",
+    "answer": "nohup ./db-import.sh &",
     "explanation": "When a terminal closes (or an SSH connection drops), Linux sends a \"hangup\" signal to every process attached to that terminal, which kills them by default. This wrapper program makes the launched command ignore that signal, so it survives. The ampersand at the end returns your prompt immediately. Any output that wasn't redirected goes to a file called `nohup.out` in the current directory.",
     "usage": "Start a command that keeps running after the terminal closes or the SSH session disconnects.",
     "examples": [
@@ -5323,8 +5321,8 @@ export const questions: Question[] = [
   },
   {
     "id": "proc26",
-    "question": "You're comparing two implementations of a function and want to know which one finishes faster, including how much CPU time each uses. What built-in shell command measures wall-clock time, user CPU time, and system CPU time for any command?",
-    "answer": "time ./function1.sh",
+    "question": "You're comparing two implementations of a function in a script called `impl.sh` and want to know which one finishes faster, including how much CPU time each uses. What built-in shell command measures wall-clock time, user CPU time, and system CPU time for any command?",
+    "answer": "time ./impl.sh",
     "explanation": "Performance debugging starts with measurement. time command runs the command normally and afterward prints three numbers: real (wall-clock time from start to finish), user (CPU time spent in your code), sys (CPU time spent in kernel calls on your behalf). If real is much larger than user+sys, your program is waiting for I/O or sleeping. If user is large, the program is CPU-bound. If sys is large, there is heavy filesystem or network activity. These three numbers together diagnose WHERE time is spent and what kind of optimization to pursue.",
     "usage": "Measure wall-clock and CPU time for any command — the built-in benchmark tool.",
     "examples": [
@@ -5855,7 +5853,7 @@ export const questions: Question[] = [
   },
   {
     "id": "text30",
-    "question": "A CSV export from a European database uses accented characters like é and ü, but your downstream parser only accepts ASCII. How do you convert the file to ASCII, substituting accented characters with their closest ASCII equivalents?",
+    "question": "A CSV export from a European database uses accented characters like é and ü, but your downstream parser only accepts ASCII. Output the converted file as `/var/data/export_ascii.csv`. How do you convert the file to ASCII, substituting accented characters with their closest ASCII equivalents?",
     "answer": "iconv -f UTF-8 -t ASCII//TRANSLIT /var/data/export.csv > /var/data/export_ascii.csv",
     "explanation": "Different systems, programs, and historical files use different character encodings. UTF-8 is the modern standard, but you will encounter Latin-1 (ISO-8859-1), Windows-1252, Shift-JIS, and others. iconv converts between them. -f specifies the FROM encoding, -t specifies the TO encoding. -l lists all supported encodings. Without knowing the source encoding the conversion is impossible — file --mime-encoding filename can often detect it. Incorrect encoding causes mojibake (garbled characters). UTF-8 with BOM (byte order mark) is a common Windows legacy that iconv can strip: convert from UTF-8-BOM to UTF-8.",
     "usage": "Convert a UTF-8 text file to ASCII, substituting accented characters with close ASCII equivalents.",
@@ -6247,14 +6245,15 @@ export const questions: Question[] = [
   {
     "id": "bash25",
     "question": "Your script runs a curl command to fetch a config and must exit with an error message if the fetch fails. What idiom provides a clean fallback in a single line?",
-    "answer": "curl -fsS https://config.example.com/app.json || { echo 'fetch failed' >&2; exit 1; }",
+    "answer": "curl -fsS https://config.example.com/config || { echo 'fetch failed' >&2; exit 1; }",
     "explanation": "The double pipe means \"if the command on the left fails, run what is on the right\". Using curly braces lets you group multiple actions as the fallback, so you can both print an error message and exit in one logical block.",
     "usage": "Run a fallback action (print error and exit) if a command fails, using inline conditional syntax.",
     "examples": [
-      "curl -fsS https://config.example.com/app.json || { echo 'fetch failed' >&2; exit 1; }",
-      "mkdir -p /var/run/myapp || exit 1  # single statement, no braces",
-      "command -v jq >/dev/null || { echo 'install jq first' >&2; exit 1; }",
-      "risky_cmd || true  # explicit opt-out of set -e for one command"
+      "curl -fsS https://config.example.com/config || { echo 'fetch failed' >&2; exit 1; }",
+      "mkdir -p /var/run/app || { echo 'cannot create dir' >&2; exit 1; }",
+      "command -v jq >/dev/null || { echo 'jq not installed' >&2; exit 1; }",
+      "[ -f config.txt ] || { echo 'config missing' >&2; exit 1; }",
+      "systemctl is-active nginx >/dev/null || { echo 'nginx not running' >&2; exit 1; }"
     ],
     "memoryTip": "`cmd || action` = run action ON FAILURE. `{ a; b; }` groups (note spaces + closing `;`). Under `set -e`, left of `||` is exempt. The `&& X || Y` pattern is NOT a clean if/else — use real `if` when it matters.",
     "outputExample": "$ false || { echo 'first'; echo 'second'; exit 1; }\nfirst\nsecond\n$ echo $?\n1\n$ curl -fsS https://nope.invalid || echo 'fallback'\nfallback",
@@ -6278,7 +6277,7 @@ export const questions: Question[] = [
   },
   {
     "id": "bash27",
-    "question": "You want a health check script to run every 15 minutes but must ensure two instances never overlap if the script takes too long. What crontab line uses flock to prevent overlap?",
+    "question": "You want `/opt/healthcheck.sh` to run every 15 minutes (logging to `/var/log/healthcheck.log`) but must ensure two instances never overlap if the script takes too long. What crontab line uses flock to prevent overlap?",
     "answer": "*/15 * * * * /usr/bin/flock -n /var/lock/healthcheck.lock /opt/healthcheck.sh >> /var/log/healthcheck.log 2>&1",
     "explanation": "The */15 syntax means every 15 minutes. Wrapping the script with flock means the second instance will skip itself immediately if the first one is still running, preventing them from running at the same time and potentially corrupting shared state.",
     "usage": "Run a cron job every 15 minutes with overlap prevention using an exclusive file lock.",
@@ -6542,7 +6541,7 @@ export const questions: Question[] = [
   },
   {
     "id": "arch20",
-    "question": "You need to gzip a 4 GB log file for archiving and the default single-threaded gzip is too slow on this 16-core server. Which drop-in replacement uses all CPU cores and produces standard .gz output?",
+    "question": "You need to gzip a 4 GB log file `/var/log/myapp/app.log` for archiving and the default single-threaded gzip is too slow on this 16-core server. Which drop-in replacement uses all CPU cores and produces standard .gz output?",
     "answer": "pigz /var/log/myapp/app.log",
     "explanation": "pigz is a parallelized version of gzip that uses all available CPU cores simultaneously, making compression several times faster on modern multi-core servers. The output is a standard .gz file that any other tool can decompress normally.",
     "usage": "Compress a large file using all CPU cores to produce a standard .gz file much faster than single-threaded gzip.",
