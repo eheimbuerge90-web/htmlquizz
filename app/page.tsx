@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore, useEffect } from 'react';
 import { questions, categories, Question } from './data/questions';
 
 const STORAGE_KEY = 'linux-drill:v2';
@@ -168,6 +168,21 @@ export default function Home() {
   const [wrongQueue, setWrongQueue] = useState<Question[]>([]);
   const [showExplanation, setShowExplanation] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (showExplanation) {
+          nextQuestion();
+        } else if (userAnswer.trim()) {
+          checkAnswer();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [showExplanation, userAnswer, currentQuestionIndex, currentQuestions, wrongQueue]);
 
   const writeResume = (categoryId: string, snapshot: {
     list: Question[];
@@ -408,7 +423,7 @@ export default function Home() {
               {`// TERMINAL MASTERY THROUGH BRUTE FORCE REPETITION //`}
             </p>
             <p className="text-lg" style={{ color: '#38bdf8' }}>
-              v3.2.0 — EARLY WRONG QUESTION RE-INSERTION → SPACED REPETITION
+              v3.3.0 — SPACED REPETITION + ENTER KEY NAVIGATION
             </p>
           </div>
 
@@ -590,10 +605,7 @@ export default function Home() {
                 type="text"
                 value={userAnswer}
                 onChange={(e) => setUserAnswer(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && userAnswer.trim()) checkAnswer();
-                }}
-                placeholder="Type your answer here..."
+                placeholder="Type your answer here... (Press Enter to submit)"
                 className="w-full px-4 py-3 rounded-lg font-mono text-lg"
                 style={{
                   background: '#1f2937',
@@ -666,7 +678,7 @@ export default function Home() {
                 className="w-full py-4 rounded-lg font-bold text-lg transition-colors"
                 style={{ background: '#38bdf8', color: '#111827' }}
               >
-                Continue
+                Continue (or press Enter)
               </button>
             </div>
           )}
