@@ -18,37 +18,42 @@ An interactive, comprehensive quiz application designed to master Linux terminal
 - **Category Selection**: Focus on specific command types or take the full gauntlet
 
 ### 📚 Comprehensive Content
-- **12 Categories**: From basic navigation to advanced bash scripting
-- **133 Questions**: Extensive coverage of essential Linux commands
-- **Daily Linux Life Section**: Real-world workflows and best practices
-- **Repository Management**: Package management and system maintenance guides
+- **15 Categories**: From terminal fundamentals to advanced bash scripting and RHEL/Fedora
+- **442 Questions**: Extensive coverage of essential Linux commands — every question audited for a single, deterministic answer
+- **Alternative Answers**: Equivalent commands (`apt` vs `apt-get`, `tar xzf` vs `tar -xzf`) are accepted
+- **Daily Linux Tips Section**: Real-world workflows and best practices
 
 ## 🗂️ Quiz Categories
 
-### 🏠 BASICS (47 questions)
-- **Navigation** (14): pwd, cd, ls, mkdir, rmdir, tree, find, file
-- **File Operations** (12): cp, mv, rm, touch, cat, ln, du, diff
-- **Viewing Text** (12): less, head, tail, grep, wc, sort, uniq, nl, cat -A, tac, split, cat (merge)
-- **Permissions** (10): chmod, chown, chgrp, umask, whoami, groups, sudo, su
+### 🏠 BASICS (145 questions)
+- **Terminal Basics** (20): command anatomy (command → options → arguments), what flags are, short vs long flags, man/--help/whatis/apropos, history & !!, Ctrl+C / Ctrl+R, aliases, $PATH
+- **Navigation** (30): pwd, cd, ls, mkdir, rmdir, tree, find, file, du
+- **File Operations** (35): cp, mv, rm, touch, cat, ln, rsync, shred, dd
+- **Viewing Text** (30): less, head, tail, grep, wc, sort, uniq, nl, cat -A, tac, split, cut
+- **Permissions** (30): chmod, chown, chgrp, umask, whoami, groups, sudo, su, setuid/setgid
 
-### 🚀 INTERMEDIATE (39 questions)
-- **Pipes & Redirect** (10): >, >>, <, |, 2>, &>, here documents, tee, &&, ||, ;
-- **Processes** (10): ps, pstree, kill, bg, fg, jobs, top, pgrep, pkill
-- **Networking** (10): ping, ip addr, wget, scp, ssh, netstat, nslookup, ip route, telnet, netstat -antp
-- **Packages** (9): apt update/install/remove/search/show/upgrade, dpkg, source installation
+### 🚀 INTERMEDIATE (117 questions)
+- **Pipes & Redirect** (30): >, >>, <, |, 2>, &>, here documents, tee, &&, ||, ;, xargs
+- **Processes** (30): ps, pstree, kill, bg, fg, jobs, top, pgrep, pkill, nice, tmux
+- **Networking** (30): ping, ip, wget, curl, scp, ssh, ss/netstat, nslookup, dig, tcpdump
+- **Packages — Debian/Ubuntu** (27): apt, apt-get, dpkg, PPAs, apt-file
 
-### ⚡ ADVANCED (47 questions)
-- **Text Processing** (10): grep, sed, awk, sort, uniq, tr, cut, paste, diff, wc
-- **System Info** (10): uname, df, free, uptime, lscpu, lspci, lsusb, lsmod, env, hostname
-- **Bash Scripting** (10): shebang, conditionals, loops, input, substitution, arguments, redirects, functions, error handling, while read
-- **Archives & Compress** (7): tar, gzip, gunzip, tar.gz, bzip2
+### ⚡ ADVANCED (130 questions)
+- **Text Processing** (30): grep, sed, awk, sort, uniq, tr, cut, paste, diff, iconv
+- **System Info** (30): uname, df, free, uptime, lscpu, lspci, lsblk, journalctl, /proc
+- **Bash Scripting** (30): shebang, conditionals, loops, getopts, arrays, traps, functions, flock
+- **Archives & Compress** (20): tar, gzip, gunzip, xz, bzip2, zip, 7z
+- **RHEL / Fedora** (20): dnf, rpm, systemctl, firewall-cmd, SELinux
+
+### 📖 DAILY TIPS (50 questions)
+- Real-world workflows: morning health checks, log watching, deploy patterns, shell productivity
 
 ## 🎨 Beautiful UI/UX
 
-### 🖼️ Enhanced Avatar
-- Replaced pixel art with a stunning gradient penguin avatar
-- Modern, professional design that scales beautifully
-- Color-coordinated with the overall theme
+### 🖼️ Evolving Avatar
+- Tux levels up with **every correct answer**: progress ring, tick dots, aura hue, and body size all change per point
+- **24 named gear evolutions** unlock across each drill — from `chmod +sparkle` and `/boot Boots` to `Root Crown` and `TUX PRIME`
+- Pop animation on every evolution; final form shown on the completion screen
 
 ### 🎭 Visual Design
 - **Gradient Backgrounds**: Beautiful purple-to-blue gradients

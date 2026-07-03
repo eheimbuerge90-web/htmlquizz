@@ -2,6 +2,7 @@ export interface Question {
   id: string;
   question: string;
   answer: string;
+  altAnswers?: string[];
   explanation: string;
   usage: string;
   examples: string[];
@@ -224,6 +225,7 @@ export const questions: Question[] = [
     "id": "nav13",
     "question": "You need to locate all files with a .log extension anywhere inside /var/log and its subdirectories. What command searches recursively by filename pattern starting from that directory?",
     "answer": "find /var/log -name \"*.log\"",
+    "altAnswers": ["find /var/log -name *.log"],
     "explanation": "This command is like sending a search party through every room, closet, and drawer in a building looking for items whose labels match a pattern you specify. Unlike a simple directory listing, it digs through every level of nesting automatically and reports back every match it finds, no matter how deeply buried.",
     "usage": "Recursively search a directory tree for files matching a name pattern — the go-to tool for locating files anywhere on disk.",
     "examples": [
@@ -277,7 +279,8 @@ export const questions: Question[] = [
   {
     "id": "nav16",
     "question": "You are in your Downloads folder and want to identify which file takes up the most space — displayed in the long format so you can see sizes. What command lists the files sorted from largest to smallest?",
-    "answer": "ls -S",
+    "answer": "ls -lS",
+    "altAnswers": ["ls -Sl"],
     "explanation": "Normally a directory listing sorts items alphabetically, like a phone book. This command re-sorts the same information by size instead — biggest items appear first, smallest last — so you can immediately spot what's hogging space without scanning the whole list.",
     "usage": "Sort directory contents by file size with the largest files first — the quick way to spot space hogs in the current directory.",
     "examples": [
@@ -288,13 +291,14 @@ export const questions: Question[] = [
       "ls -lSh /var/log  # find the fattest log file"
     ],
     "memoryTip": "Capital-`S` = Size. Lowercase `-s` (different!) prints allocated blocks per file. Memorize: `-lSh` = 'long, by Size, human' — the everyday combo.",
-    "outputExample": "$ ls -lSh\ntotal 1.2G\n-rw-r--r-- 1 alice alice 800M May 15 10:30 bigmovie.mp4\n-rw-r--r-- 1 alice alice 256M May 14 18:01 backup.zip\n-rw-r--r-- 1 alice alice 1.2M May 15 09:55 screenshot.png\ndrwxr-xr-x 2 alice alice 4.0K May 12 11:20 Documents\n-rw-r--r-- 1 alice alice  142 May 15 10:30 notes.txt",
+    "outputExample": "$ ls -lS\ntotal 1081360\n-rw-r--r-- 1 alice alice 838860800 May 15 10:30 bigmovie.mp4\n-rw-r--r-- 1 alice alice 268435456 May 14 18:01 backup.zip\n-rw-r--r-- 1 alice alice   1258291 May 15 09:55 screenshot.png\ndrwxr-xr-x 2 alice alice      4096 May 12 11:20 Documents\n-rw-r--r-- 1 alice alice       142 May 15 10:30 notes.txt",
     "category": "NAVIGATION"
   },
   {
     "id": "nav17",
     "question": "After a deployment you want to see which files in your current directory were modified most recently. What command lists the directory contents sorted by modification time with the newest entries at the top, showing only the first ten results?",
     "answer": "ls -lt | head",
+    "altAnswers": ["ls -lt | head -10", "ls -lt | head -n 10"],
     "explanation": "Instead of an alphabetical listing, this command re-sorts the directory by the clock — the most recently touched file appears first. Piping it through a filter shows only the top ten results so you're not overwhelmed by a long list. It's like reading a \"recently edited\" list in a document editor.",
     "usage": "Show the ten most recently modified files in the current directory — the fastest way to find what changed last.",
     "examples": [
@@ -323,13 +327,14 @@ export const questions: Question[] = [
       "ls ../  # list contents of parent without changing into it"
     ],
     "memoryTip": "Each `..` = one step up. Two dots = parent. Two pairs (`../..`) = grandparent. Count the slashes: one slash, one level up beyond the first `..`.",
-    "outputExample": "$ pwd\\n/home/elias/code/myapp/src/components\\n$ cd ../..\\n$ pwd\\n/home/elias/code/myapp",
+    "outputExample": "$ pwd\n/home/elias/code/myapp/src/components\n$ cd ../..\n$ pwd\n/home/elias/code/myapp",
     "category": "NAVIGATION"
   },
   {
     "id": "nav19",
     "question": "You want to know the total disk space consumed by the entire ~/code/myapp directory — a single summary number in human-readable form rather than a per-file breakdown. What command produces that single total?",
     "answer": "du -sh ~/code/myapp",
+    "altAnswers": ["du -hs ~/code/myapp"],
     "explanation": "Imagine your project folder is a storage unit full of boxes and sub-units. This command walks through every box in every room and comes back with a single total — \"this whole unit takes up 2.3 gigabytes\" — instead of listing each box separately. It's the answer to \"how big is this folder, really?\"",
     "usage": "Get the total disk space used by an entire directory tree condensed into one human-readable number.",
     "examples": [
@@ -347,7 +352,7 @@ export const questions: Question[] = [
   {
     "id": "nav20",
     "question": "You want to see every single file inside ~/code/myapp and all of its subdirectories — the complete recursive listing including files nested at any depth. What command produces this full recursive output?",
-    "answer": "ls -R",
+    "answer": "ls -R ~/code/myapp",
     "explanation": "A normal directory listing shows only what's directly in the folder you're looking at — like opening one drawer. This command opens every drawer inside every cabinet inside every room, listing everything it finds. The output groups items by directory so you can see where each file lives.",
     "usage": "List all files in the current directory and every subdirectory recursively — a complete inventory of the entire tree.",
     "examples": [
@@ -359,7 +364,7 @@ export const questions: Question[] = [
       "tree  # prettier visualization (needs install)"
     ],
     "memoryTip": "Capital `-R` = Recursive. Lowercase `-r` = Reverse (different!). For huge trees, switch to `find` or `tree` — `ls -R` was designed for small directories.",
-    "outputExample": "$ ls -R\n.:\nDocuments  Pictures  projects\n\n./Documents:\nnotes.txt  resume.pdf\n\n./Pictures:\nvacation.jpg\n\n./projects:\nmyapp\n\n./projects/myapp:\nREADME.md  src",
+    "outputExample": "$ ls -R ~/code/myapp\n/home/alice/code/myapp:\nREADME.md  package.json  src\n\n/home/alice/code/myapp/src:\nindex.ts  utils.ts",
     "category": "NAVIGATION"
   },
   {
@@ -472,7 +477,7 @@ export const questions: Question[] = [
   {
     "id": "file7",
     "question": "You want to rename report-draft.md to report-final.md but report-final.md might already exist and you don't want to silently destroy it. What flag makes the move command ask before overwriting?",
-    "answer": "mv -i source destination",
+    "answer": "mv -i report-draft.md report-final.md",
     "explanation": "Normally, moving or renaming a file onto an existing file name causes the existing file to vanish without any warning — it's replaced instantly and silently. Adding this option changes that behavior so the command pauses and asks you to confirm before overwriting anything, protecting you from accidental data loss.",
     "usage": "Rename or move files with a confirmation prompt before any overwrite — the safe interactive mode for mv.",
     "examples": [
@@ -505,8 +510,8 @@ export const questions: Question[] = [
   },
   {
     "id": "file9",
-    "question": "You are backing up /etc/nginx to /etc/nginx.bak and need the copy to have identical permissions, ownership, and timestamps as the original — not the defaults your shell would apply. What flag preserves all of that metadata?",
-    "answer": "cp -p source destination",
+    "question": "You are backing up nginx.conf to nginx.conf.bak in your current directory and need the copy to have identical permissions, ownership, and timestamps as the original — not the defaults your shell would apply. What flag preserves all of that metadata?",
+    "answer": "cp -p nginx.conf nginx.conf.bak",
     "explanation": "When you normally copy a file, the copy gets a fresh birth certificate — your username as owner, the current time as creation date, and your default permission settings. This option is like making a certified copy instead: every piece of identifying information from the original — who owns it, when it was last changed, what access it allows — is reproduced exactly on the copy.",
     "usage": "Copy a file while keeping its original permissions, ownership, and timestamps intact — essential for backups and deployments.",
     "examples": [
@@ -523,7 +528,7 @@ export const questions: Question[] = [
   {
     "id": "file10",
     "question": "You want /usr/local/bin/python to be a shortcut that transparently points to /usr/bin/python3.11, so that running 'python' actually executes python3.11. What command creates this kind of pointer file?",
-    "answer": "ln -s /usr/bin/python3 /usr/local/bin/python",
+    "answer": "ln -s /usr/bin/python3.11 /usr/local/bin/python",
     "explanation": "A symbolic link is like a sticky note on a filing cabinet drawer that says \"the real thing is over there.\" When you open the drawer (run the link), the system automatically follows the note and brings you to the actual file. The link itself contains only a path — no copy of the data. If you move the real file, the link breaks and points to nothing.",
     "usage": "Create a symbolic link — a pointer file that transparently redirects access to a target path elsewhere on the filesystem.",
     "examples": [
@@ -539,9 +544,10 @@ export const questions: Question[] = [
   },
   {
     "id": "file11",
-    "question": "Your disk is filling up and you want to see which folders inside your home directory are consuming the most space — one size per folder, displayed in human-readable units like G, M, and K. What command lists that breakdown?",
-    "answer": "du -h",
-    "explanation": "This command walks through every folder and reports how much space each one is using. Without any options it lists every single subdirectory, which can be overwhelming. The human-readable option converts raw byte counts into familiar units like megabytes and gigabytes so you can immediately tell which folder is the space hog.",
+    "question": "Your disk is filling up and you want to see which items inside your current directory are consuming the most space — one summary size per item, displayed in human-readable units like G, M, and K. What command (using the * wildcard) lists that breakdown?",
+    "answer": "du -sh *",
+    "altAnswers": ["du -hs *"],
+    "explanation": "This command walks through every folder and reports how much space each one is using. Without any options it lists every single subdirectory, which can be overwhelming. The summary option condenses each argument to a single total, and the human-readable option converts raw byte counts into familiar units like megabytes and gigabytes so you can immediately tell which folder is the space hog.",
     "usage": "Measure how much disk space each directory and its contents consume — the key tool for tracking down space usage.",
     "examples": [
       "du -sh *  # one-line size per item in current folder — the everyday command",
@@ -556,8 +562,9 @@ export const questions: Question[] = [
   },
   {
     "id": "file12",
-    "question": "You edited /etc/nginx/nginx.conf and want to see exactly which lines changed compared to the backup at /etc/nginx/nginx.conf.bak — showing the differences side by side in a readable format. What command compares two text files line by line?",
-    "answer": "diff file1 file2",
+    "question": "You edited nginx.conf in your current directory and want to see exactly which lines changed compared to the backup copy nginx.conf.bak — showing removed, added, and changed lines. What command compares the two files line by line?",
+    "answer": "diff nginx.conf nginx.conf.bak",
+    "altAnswers": ["diff nginx.conf.bak nginx.conf"],
     "explanation": "This command reads two files and acts like a teacher marking differences between two essays — it shows you exactly which lines were removed, added, or changed, and where those changes appear. Lines marked with < exist only in the first file, and lines marked with > exist only in the second. The unified format (-u) is even friendlier, showing a few lines of context around each change like a code review comment.",
     "usage": "Compare two text files line by line and show exactly what differs — essential for reviewing configuration changes before deployment.",
     "examples": [
@@ -574,7 +581,7 @@ export const questions: Question[] = [
   {
     "id": "file13",
     "question": "You want to copy the entire ~/code/myapp directory and all of its subdirectories and files into ~/backups/myapp-copy. What flag is required to make cp descend into directories?",
-    "answer": "cp -r ~/code/myapp ~/code/myapp-backup",
+    "answer": "cp -r ~/code/myapp ~/backups/myapp-copy",
     "explanation": "By default, the copy command refuses to copy a folder — it only knows how to copy individual files. Adding this option tells it to dig inside the folder, then inside all the subfolders inside that, and so on, copying every file it finds no matter how deeply nested. It's like telling a moving company to pack the entire contents of a filing cabinet rather than just one drawer.",
     "usage": "Copy an entire directory tree including all nested subdirectories and files.",
     "examples": [
@@ -591,7 +598,8 @@ export const questions: Question[] = [
   {
     "id": "file14",
     "question": "You want to move the entire project_v1 directory and everything inside it to the archive folder in one command, without specifying any recursion flag. What command handles moving entire directory trees natively?",
-    "answer": "mv source_dir destination_dir",
+    "answer": "mv project_v1 archive/",
+    "altAnswers": ["mv project_v1 archive"],
     "explanation": "Moving a folder is simpler than copying one — you don't need any special option to handle the contents inside, because the folder itself just gets picked up and put down elsewhere. If you're staying on the same storage device, it happens instantly regardless of how many files are inside. If you're crossing to a different storage device, it copies everything over first and then removes the original.",
     "usage": "Move or rename an entire directory tree in one command — no recursion flag needed, and instant on the same filesystem.",
     "examples": [
@@ -602,13 +610,14 @@ export const questions: Question[] = [
       "mv -v src/ /mnt/usb/  # verbose; on a different filesystem this becomes a real copy+delete"
     ],
     "memoryTip": "`mv` already walks directories — no `-r`. Mnemonic: `mv` doesn't need `-r` because moving a folder is usually just renaming one entry, not touching the contents. Compare: `cp -r`, `rm -r`, `mv` (no flag).",
-    "outputExample": "$ ls\nproject_v1/\n$ mv project_v1 project_v1-archived\n$ ls\nproject_v1-archived/\n$ mv project_v1-archived archive/\n$ ls archive/\nproject_v1-archived/",
+    "outputExample": "$ ls\narchive/  project_v1/\n$ mv project_v1 archive/\n$ ls archive/\nproject_v1/",
     "category": "FILE OPS"
   },
   {
     "id": "file15",
     "question": "You have a directory called old-logs that contains hundreds of files in nested subdirectories, and you want to delete the entire directory and all of its contents. What flag enables rm to descend into and remove directory trees?",
     "answer": "rm -r old-logs",
+    "altAnswers": ["rm -r old-logs/"],
     "explanation": "By default, the remove command refuses to touch a folder — it only deletes individual files. Adding this option tells it to go inside the folder, delete everything it finds at every level of nesting, and then remove the now-empty folders themselves. This is the digital equivalent of demolishing a building and everything inside it — there is no undo.",
     "usage": "Delete an entire directory tree including all nested files and subdirectories — irreversible, use with care.",
     "examples": [
@@ -624,8 +633,9 @@ export const questions: Question[] = [
   },
   {
     "id": "file16",
-    "question": "You are copying a large number of files from ~/Downloads to an external drive and want to see each filename printed as it gets copied so you can monitor progress. What flag makes cp narrate every file operation?",
-    "answer": "cp -v source destination",
+    "question": "You are copying all *.txt files from your current directory to ~/backup/ and want to see each filename printed as it gets copied so you can monitor progress. What flag makes cp narrate every file operation?",
+    "answer": "cp -v *.txt ~/backup/",
+    "altAnswers": ["cp -v *.txt ~/backup"],
     "explanation": "Normally, the copy command works in complete silence — success is invisible and you only hear about failures. Adding this option makes it narrate its work, printing a line for every file it processes. It's like having a moving crew read out each box's label as they carry it, so you know exactly what's happening and can spot if something unexpected is being moved.",
     "usage": "Show each file as it is copied — turns silent success into a visible confirmation log.",
     "examples": [
@@ -641,13 +651,14 @@ export const questions: Question[] = [
   {
     "id": "file17",
     "question": "You are moving several *.log files from the current directory to /var/archive/ and want each filename printed as it gets relocated so you can confirm the operation. What flag makes mv show each move?",
-    "answer": "mv -v source destination",
+    "answer": "mv -v *.log /var/archive/",
+    "altAnswers": ["mv -v *.log /var/archive"],
     "explanation": "The move command is normally silent — it does its job without saying a word unless something goes wrong. Adding this option makes it announce each file as it's moved, printing the old name and the new location. It's reassuring confirmation that the right files ended up in the right place, especially when moving many files at once with a wildcard.",
     "usage": "Show each file as it is moved or renamed — visual confirmation that the right files went to the right place.",
     "examples": [
       "mv -v *.log /var/archive/  # show each log file being moved",
       "mv -v report-draft.md report-final.md  # show rename operation",
-      "mv -rv old-project/ archive/  # verbose move of entire directory",
+      "mv -v old-project/ archive/  # verbose move of an entire directory (no -r flag needed)",
       "rsync -av --remove-source-files src/ dst/  # alternative: shows progress + moves files"
     ],
     "memoryTip": "'mv -v' = 'move verbose'. Like the moving company telling you each item they're taking.",
@@ -656,8 +667,8 @@ export const questions: Question[] = [
   },
   {
     "id": "file18",
-    "question": "You want to delete all *.tmp files in /tmp and see a confirmation line printed for each file as it is removed. What flag makes the remove command report each deletion?",
-    "answer": "rm -v *.tmp /tmp",
+    "question": "You want to delete all *.tmp files in your current directory and see a confirmation line printed for each file as it is removed. What flag makes the remove command report each deletion?",
+    "answer": "rm -v *.tmp",
     "explanation": "When you delete files normally the command runs quietly — nothing is printed when it works, and you have to trust it did what you asked. Adding this option makes each deletion visible: it prints the filename as it's removed, giving you a receipt for every file that gets deleted. This is especially reassuring when deleting by wildcard, since you can see the full list of what was matched and removed.",
     "usage": "Print each filename as it is deleted — turns silent removal into a visible deletion log.",
     "examples": [
@@ -672,8 +683,8 @@ export const questions: Question[] = [
   },
   {
     "id": "file19",
-    "question": "You want report.txt to be accessible under two different names in two different directories — changes made through either name should immediately be visible through the other. What command creates this second name that shares the same underlying data?",
-    "answer": "ln report.txt report-link",
+    "question": "You want report.txt to also be accessible as current-report.txt inside the reports subdirectory — a second name for the same file, where changes made through either name are immediately visible through the other. What command creates this second name that shares the same underlying data?",
+    "answer": "ln report.txt reports/current-report.txt",
     "explanation": "A hard link is like having two different labels on the exact same physical drawer in a filing cabinet. Both names point to the same stored content — there is no \"original\" and \"copy.\" Editing the file through either name changes both immediately, because they are the same thing viewed from different angles. The content only disappears when every single label pointing to it is removed.",
     "usage": "Create a second filesystem name for the same file — both names access identical content and changes through either name are immediately reflected in both.",
     "examples": [
@@ -690,6 +701,7 @@ export const questions: Question[] = [
     "id": "file20",
     "question": "After creating a hard link to report.txt, you want to verify that two directory entries now share the same underlying data. What command shows the hard link count for a file?",
     "answer": "ls -l report.txt",
+    "altAnswers": ["stat report.txt", "ls -li report.txt"],
     "explanation": "When you list files in the detailed view, there's a number in the second column that tells you how many names point to this file's data. Normally that number is 1 — one name, one file. After creating a hard link, that number becomes 2, confirming that two different names now both lead to the same stored content. It's like a library book that has two catalog cards filed under different subject headings, both pointing to the same physical book on the shelf.",
     "usage": "Inspect the hard link count for a file — the second column shows how many filesystem names point to the same underlying data.",
     "examples": [
@@ -705,14 +717,14 @@ export const questions: Question[] = [
   {
     "id": "file21",
     "question": "You want to copy /etc/nginx to /backup/nginx and have the backup preserve all permissions, timestamps, ownership, and symbolic links exactly as they are on the original. What single flag enables this complete metadata preservation?",
-    "answer": "cp -a source destination",
+    "answer": "cp -a /etc/nginx /backup/nginx",
     "explanation": "Normally copying a folder produces a copy with today's date as its creation time, your username as its owner, and your default file permissions. This option is like shrink-wrapping the original before copying it — every attribute, label, and permission tag is reproduced exactly on the copy, making it functionally identical to the original.",
     "usage": "Create a complete archive-quality copy that preserves all metadata — the right choice for backups and deployments.",
     "examples": [
       "cp -a /etc/nginx /backup/nginx  # archive backup of nginx config",
       "cp -a ~/code/myapp ~/backups/myapp-$(date +%F)  # dated archive backup",
       "cp -a /var/www/html /var/www/html.bak  # backup web root before upgrade",
-      "cp -r /etc/nginx /backup/nginx  # recursive only — does NOT preserve symlinks as symlinks"
+      "cp -r /etc/nginx /backup/nginx  # recursive only — does NOT preserve timestamps or ownership"
     ],
     "memoryTip": "'cp -a' = 'copy archive'. Like making a perfect museum replica that preserves everything.",
     "outputExample": "$ ls -la /etc/nginx/\nlrwxrwxrwx 1 root root   14 May 01 sites-enabled -> ../sites-available\n$ cp -a /etc/nginx /backup/nginx\n$ ls -la /backup/nginx/\nlrwxrwxrwx 1 root root   14 May 01 sites-enabled -> ../sites-available  # symlink preserved",
@@ -720,8 +732,9 @@ export const questions: Question[] = [
   },
   {
     "id": "file22",
-    "question": "You want to move a new config file onto an existing one, but you want the old config automatically saved as a backup file before it's overwritten, in case you need to roll back. What option enables automatic backup creation during a move?",
-    "answer": "mv --backup source destination",
+    "question": "You want to move new-nginx.conf onto the existing config /etc/nginx/nginx.conf, but you want the old config automatically saved as a backup file (nginx.conf~) before it's overwritten, in case you need to roll back. What option enables automatic backup creation during a move?",
+    "answer": "mv --backup new-nginx.conf /etc/nginx/nginx.conf",
+    "altAnswers": ["mv -b new-nginx.conf /etc/nginx/nginx.conf"],
     "explanation": "Normally moving a file onto an existing file destroys the original silently. This option tells the move command to save the old file first by appending a tilde to its name, like config.txt~, creating an automatic safety copy before the replacement happens. It's like an undo button that triggers automatically — even if you forget to back up manually, the old version is preserved.",
     "usage": "Automatically preserve the existing destination file as a backup before overwriting it during a move.",
     "examples": [
@@ -736,8 +749,9 @@ export const questions: Question[] = [
   },
   {
     "id": "file23",
-    "question": "You ran a build process and want to delete all *.tmp files under /tmp that were created after the build started — using a reference file created at the start of the build as the time marker. What find command selects and deletes only those newer files?",
-    "answer": "find . -name \"*.tmp\" -newer reference -delete",
+    "question": "You ran a build process and want to delete all *.tmp files under /tmp that were created after the build started — using the marker file /tmp/build-start (created at the start of the build) as the time reference. What find command searches /tmp and deletes only the *.tmp files newer than that marker?",
+    "answer": "find /tmp -name \"*.tmp\" -newer /tmp/build-start -delete",
+    "altAnswers": ["find /tmp -name *.tmp -newer /tmp/build-start -delete"],
     "explanation": "This command is like telling a search party \"find every file in this area that is dated after this reference document, and throw those away.\" The reference file acts as a timestamp anchor — anything older than it is left alone, and only items created or modified more recently get removed.",
     "usage": "Delete all files matching a pattern that are newer than a reference file — precise time-bounded cleanup without touching older files.",
     "examples": [
@@ -752,8 +766,9 @@ export const questions: Question[] = [
   },
   {
     "id": "file24",
-    "question": "You want to copy a 4GB ISO file to an external drive and see a live progress indicator showing transfer speed and percentage as it goes. What command provides this progress-aware copy with a real-time display?",
-    "answer": "rsync -av --progress source destination",
+    "question": "You want to copy the 4GB file ubuntu.iso to an external drive mounted at /media/usb/ and see a live progress indicator showing transfer speed and percentage as it goes. What command (using rsync in archive-verbose mode) provides this progress-aware copy?",
+    "answer": "rsync -av --progress ubuntu.iso /media/usb/",
+    "altAnswers": ["rsync -av --progress ubuntu.iso /media/usb"],
     "explanation": "The standard copy command works in complete silence with no indication of how far along a large transfer is. This command is like hiring a delivery service that sends you live updates — it shows which file is being transferred, how fast data is moving, and how much is left, so you can see the transfer is actually progressing rather than wondering if it's frozen.",
     "usage": "Copy files with a live progress display showing speed, percentage, and estimated time — far more informative than cp for large transfers.",
     "examples": [
@@ -763,23 +778,23 @@ export const questions: Question[] = [
       "rsync -av --progress user@server:/var/www/html/ ~/web-backup/  # remote copy over SSH"
     ],
     "memoryTip": "'rsync --progress' shows a progress bar. Like watching a download progress bar.",
-    "outputExample": "$ rsync -av --progress ubuntu.iso /media/usb/\nsending incremental file list\nubuntu.iso\n  1,073,741,824  45%   52.00MB/s    0:08:15",
+    "outputExample": "$ rsync -av --progress ubuntu.iso /media/usb/\nsending incremental file list\nubuntu.iso\n  1,073,741,824  25%   52.00MB/s    0:01:02",
     "category": "FILE OPS"
   },
   {
     "id": "file25",
-    "question": "You need to permanently destroy a file containing a private SSH key so that data recovery tools cannot retrieve it. What command overwrites the file's content with random data multiple times before deleting it?",
+    "question": "You need to permanently destroy the file private-key.pem containing a private SSH key so that data recovery tools cannot retrieve it. What command overwrites the file's content with random data multiple times before deleting it?",
     "answer": "shred -u private-key.pem",
     "explanation": "When you normally delete a file, the data sits on disk until something else is written over it — recovery software can often read it back. This command is like a paper shredder for digital files: it scribbles random data over the file's contents several times so the original information can no longer be recovered, then deletes the filename. It's the appropriate tool when you need to dispose of genuinely sensitive data.",
     "usage": "Overwrite a file's data with random bytes multiple times before deleting it — prevents recovery of sensitive content.",
     "examples": [
-      "shred -u private_key.pem  # overwrite 3 times then delete",
+      "shred -u private-key.pem  # overwrite 3 times then delete",
       "shred -n 7 -u confidential.pdf  # 7 overwrite passes then delete",
       "shred -uz passwords.txt  # overwrite + zero fill + delete",
       "shred -v -u secret.txt  # verbose: shows each pass as it runs"
     ],
     "memoryTip": "'shred' = 'destroy beyond recognition'. Like shredding a document so it can't be pieced back together.",
-    "outputExample": "$ shred -u private_key.pem\n$ ls private_key.pem\nls: cannot access 'private_key.pem': No such file or directory",
+    "outputExample": "$ shred -u private-key.pem\n$ ls private-key.pem\nls: cannot access 'private-key.pem': No such file or directory",
     "category": "FILE OPS"
   },
   {
@@ -804,6 +819,7 @@ export const questions: Question[] = [
     "id": "view2",
     "question": "You received a large CSV file called 'bigfile.csv' and want to see just the header row and the first few data rows to understand its structure without printing all 50,000 lines. What command shows only the beginning of a file?",
     "answer": "head bigfile.csv",
+    "altAnswers": ["head -n 10 bigfile.csv", "head -10 bigfile.csv"],
     "explanation": "This command is like reading only the first page of a book to decide whether it's worth continuing. It shows the opening lines of a file and then stops — you never see the rest, which makes it extremely fast even on enormous files. It's the standard \"quick preview\" tool before committing to reading or processing an entire file.",
     "usage": "Preview the first lines of any file instantly — useful before committing to reading or processing a large file.",
     "examples": [
@@ -838,7 +854,8 @@ export const questions: Question[] = [
   {
     "id": "view4",
     "question": "You want to scan /var/log/nginx/error.log and print only the lines that contain the word 'upstream' — ignoring all other lines. What command filters a file to show only matching lines?",
-    "answer": "grep error /var/log/nginx/error.log",
+    "answer": "grep upstream /var/log/nginx/error.log",
+    "altAnswers": ["grep 'upstream' /var/log/nginx/error.log"],
     "explanation": "This command reads through a file line by line and acts as a filter — it keeps only the lines that contain the word or phrase you're looking for and discards everything else. Instead of reading thousands of log lines, you instantly see only the ones relevant to your investigation. You can also feed the output of other commands into it as a second stage of filtering.",
     "usage": "Filter any file or command output to show only lines containing a specific pattern — the most-used text tool on Linux.",
     "examples": [
@@ -850,13 +867,13 @@ export const questions: Question[] = [
       "grep -w 'cat' notes.txt  # match 'cat' but not 'category' or 'concatenate'"
     ],
     "memoryTip": "`grep` came from an old `ed` editor command: `g/re/p` — Globally search for a Regular Expression and Print matches. That literal acronym is the name.",
-    "outputExample": "$ grep -i error /var/log/nginx/error.log\n2026-05-15 09:12:43 [error] upstream timed out\n2026-05-15 09:13:01 [error] upstream connection refused\n2026-05-15 09:13:08 [error] client sent invalid header",
+    "outputExample": "$ grep upstream /var/log/nginx/error.log\n2026-05-15 09:12:43 [error] upstream timed out\n2026-05-15 09:13:01 [error] upstream connection refused",
     "category": "VIEWING TEXT"
   },
   {
     "id": "view5",
     "question": "You want to know exactly how many lines are in /etc/passwd and also see the total word count and byte count for the file. What command reports all three counts at once?",
-    "answer": "wc -l /etc/passwd",
+    "answer": "wc /etc/passwd",
     "explanation": "This command counts things in a file and reports back three numbers: how many lines it has, how many words, and how many bytes. It's a quick measurement tool — like a ruler for text files. The most common use is counting lines, which answers questions like \"how many user accounts are defined?\" or \"how many errors did today's log produce?\"",
     "usage": "Count lines, words, and bytes in a file — most commonly used as wc -l for a quick line count.",
     "examples": [
@@ -890,8 +907,8 @@ export const questions: Question[] = [
   },
   {
     "id": "view7",
-    "question": "You have a sorted list of IP addresses in 'ips-sorted.txt' and want to collapse consecutive duplicate entries into single lines, also showing how many times each address appeared. What command removes adjacent duplicate lines and can optionally count them?",
-    "answer": "uniq ips-sorted.txt",
+    "question": "You have a sorted list of IP addresses in 'ips-sorted.txt' and want to collapse consecutive duplicate entries into single lines, also showing how many times each address appeared. What command removes adjacent duplicate lines and counts how many times each occurred?",
+    "answer": "uniq -c ips-sorted.txt",
     "explanation": "This command removes repeated lines that appear one after another — if the same entry appears three times in a row, it keeps only one copy. The counting option turns it into a frequency report: instead of just removing duplicates, it tells you how many times each line appeared. The important catch is that it only handles consecutive duplicates, so you almost always sort the data first to bring identical lines together.",
     "usage": "Remove adjacent duplicate lines from sorted input — combine with -c to count occurrences for frequency analysis.",
     "examples": [
@@ -909,6 +926,7 @@ export const questions: Question[] = [
     "id": "view8",
     "question": "You want to display deploy.sh with every line preceded by its line number so you can reference specific lines when discussing the script with a colleague. What command adds line numbers to a file's output?",
     "answer": "nl deploy.sh",
+    "altAnswers": ["cat -n deploy.sh", "nl -ba deploy.sh"],
     "explanation": "This command acts like a word processor that adds line numbers in the margin before printing. The file itself is not changed — the numbers are only part of the display. This makes it easy to say \"the problem is on line 42\" when reviewing code or a configuration file with someone else.",
     "usage": "Display a file with sequential line numbers added to each content line — useful for code reviews and precise line references.",
     "examples": [
@@ -957,9 +975,9 @@ export const questions: Question[] = [
   },
   {
     "id": "view11",
-    "question": "You need to email a 1.5GB database dump but email has a 25MB attachment limit. What command breaks it into multiple smaller pieces that can later be reassembled?",
+    "question": "You need to email a 1.5GB database dump called 'database.dump' but email has a 25MB attachment limit. What command breaks it into 20MB pieces (using the default xaa, xab, ... naming) that can later be reassembled?",
     "answer": "split -b 20M database.dump",
-    "explanation": "This command is like cutting a long document into chapters for easier handling — each piece gets a sequential name like piece_aa, piece_ab, and so on. You can specify how big each piece should be. When you're ready to put it back together, you concatenate all the pieces in order and the original content is restored exactly.",
+    "explanation": "This command is like cutting a long document into chapters for easier handling — each piece gets a sequential name like xaa, xab, and so on. You can specify how big each piece should be. When you're ready to put it back together, you concatenate all the pieces in order and the original content is restored exactly.",
     "usage": "Divide a large file into smaller pieces for transport or parallel processing — reassemble with cat.",
     "examples": [
       "split -b 20M database-dump.sql email-part_  # 20 MB chunks named email-part_aa, email-part_ab, ...",
@@ -969,13 +987,14 @@ export const questions: Question[] = [
       "sha256sum database-dump.sql restored-dump.sql  # verify reassembly is bit-identical"
     ],
     "memoryTip": "`split` defaults to 1000-line text chunks named `xaa, xab, ...`. Always pass a prefix (second arg) so you get readable filenames. Reassemble with plain `cat prefix_* > original`. For binary files use `-b SIZE`; for line-oriented files use `-l N`.",
-    "outputExample": "$ ls -lh database-dump.sql\n-rw-r--r-- 1 alice alice 1.5G May 15 10:00 database-dump.sql\n$ split -b 20M database-dump.sql email-part_\n$ ls -lh email-part_*\n-rw-r--r-- 1 alice alice 20M May 15 10:00 email-part_aa\n-rw-r--r-- 1 alice alice 20M May 15 10:00 email-part_ab\n...",
+    "outputExample": "$ ls -lh database.dump\n-rw-r--r-- 1 alice alice 1.5G May 15 10:00 database.dump\n$ split -b 20M database.dump\n$ ls -lh xa*\n-rw-r--r-- 1 alice alice 20M May 15 10:05 xaa\n-rw-r--r-- 1 alice alice 20M May 15 10:05 xab\n...",
     "category": "VIEWING TEXT"
   },
   {
     "id": "view12",
-    "question": "You received a large ISO file as three email attachments named piece_aa, piece_ab, and piece_ac and want to reassemble them into the original file. What command concatenates multiple files into one in the correct order?",
-    "answer": "cat xaa xab xac > original_file",
+    "question": "You received a large ISO file as three email attachments named piece_aa, piece_ab, and piece_ac and want to reassemble them into the original file as 'ubuntu.iso'. What command concatenates multiple files into one in the correct order?",
+    "answer": "cat piece_aa piece_ab piece_ac > ubuntu.iso",
+    "altAnswers": ["cat piece_* > ubuntu.iso"],
     "explanation": "This command reads several files in sequence and pours their contents one after another into a single destination file. The order of the names you list determines the assembly order — if you get it wrong, the result is corrupted. It's like taping the torn pages of a book back together: page one, then page two, then page three, in exact order.",
     "usage": "Reassemble files that were split into numbered or sequentially named pieces back into the original single file.",
     "examples": [
@@ -1007,6 +1026,7 @@ export const questions: Question[] = [
     "id": "view14",
     "question": "You want to know how many lines in /var/log/nginx/error.log contain the word 'timeout' — just the count, not the lines themselves. What flag makes grep output only the count?",
     "answer": "grep -c timeout /var/log/nginx/error.log",
+    "altAnswers": ["grep -c 'timeout' /var/log/nginx/error.log"],
     "explanation": "Normally grep shows you every matching line. Sometimes you just want a number — \"how many times does this problem appear?\" This option suppresses the actual lines and just reports the count, like a search tool that tells you \"47 results\" without displaying them all. It's a quick diagnostic: if the number is zero, the pattern isn't there; if it's in the thousands, you have a serious volume of that event.",
     "usage": "Get a count of matching lines rather than the lines themselves — the fastest way to measure how often something appears.",
     "examples": [
@@ -1023,6 +1043,7 @@ export const questions: Question[] = [
     "id": "view15",
     "question": "You want to share a snippet of /etc/ssh/sshd_config with a colleague via a chat message and need each line to have a reference number prepended. What command displays a file with sequential numbers at the start of every line?",
     "answer": "cat -n /etc/ssh/sshd_config",
+    "altAnswers": ["nl -ba /etc/ssh/sshd_config"],
     "explanation": "This command is like printing a legal document with line numbers in the margin. Every single line — even blank ones — gets a sequential number prepended before the content. The file itself is never altered; the numbers only appear in the terminal output. This makes it easy for two people to discuss a file and say \"look at line 23\" rather than \"it's about halfway down.\"",
     "usage": "Display a file with sequential line numbers prepended — useful for precise line references in code reviews and discussions.",
     "examples": [
@@ -1053,8 +1074,9 @@ export const questions: Question[] = [
   },
   {
     "id": "view17",
-    "question": "You have a log file with thousands of event types and want to see a frequency table — each unique event name listed alongside how many times it occurred, so you can identify the most common events. What pipeline produces that count-per-unique-value output?",
-    "answer": "sort filename | uniq -c",
+    "question": "You have a log file 'events.log' with thousands of event entries and want to see a frequency table — each unique event name listed alongside how many times it occurred, so you can identify the most common events. What pipeline produces that count-per-unique-value output?",
+    "answer": "sort events.log | uniq -c",
+    "altAnswers": ["sort events.log | uniq -c | sort -rn"],
     "explanation": "This two-step process first lines up all identical entries together (like sorting a deck of cards so all the aces are together, all the kings together, and so on), and then counts how many are in each group. The result is a list showing each unique value alongside how many times it appeared. It's the command-line equivalent of a spreadsheet pivot table's \"count\" summary.",
     "usage": "Build a frequency table of all unique values in a file — the canonical 'count occurrences of each value' pipeline.",
     "examples": [
@@ -1069,8 +1091,9 @@ export const questions: Question[] = [
   },
   {
     "id": "view18",
-    "question": "You have a fixed-width data file where the timestamp always occupies the first 19 characters of each line. What command extracts exactly those first 19 characters from every line?",
-    "answer": "cut -b 1-10 /etc/passwd",
+    "question": "You have a fixed-width data file 'app.log' where the timestamp always occupies the first 19 characters (bytes) of each line. What command extracts exactly those first 19 characters from every line?",
+    "answer": "cut -b 1-19 app.log",
+    "altAnswers": ["cut -c 1-19 app.log"],
     "explanation": "This command acts like a precise pair of scissors that cuts the same slice from every line of a file. You specify which character positions you want by number, and it extracts exactly those positions — discarding everything else. It's ideal for fixed-width data where every field is always in the same column positions regardless of the content.",
     "usage": "Extract a specific byte-position range from every line of a file — the right tool for fixed-width columnar data.",
     "examples": [
@@ -1087,6 +1110,7 @@ export const questions: Question[] = [
     "id": "view19",
     "question": "You want to extract just the username column from /etc/passwd — a colon-delimited file where the username is the first field on each line. What command extracts a specific field from a delimited file?",
     "answer": "cut -d: -f1 /etc/passwd",
+    "altAnswers": ["cut -d ':' -f1 /etc/passwd", "cut -d: -f 1 /etc/passwd", "awk -F: '{print $1}' /etc/passwd"],
     "explanation": "This command is like asking a spreadsheet program to show you only one specific column. You tell it what character separates the columns (the colon in /etc/passwd) and which column number you want, and it extracts that column from every row. It's the quick way to pull a single field out of a structured text file without a full programming language.",
     "usage": "Extract a specific field by position from any delimiter-separated text file — faster than awk for simple column extraction.",
     "examples": [
@@ -1103,7 +1127,7 @@ export const questions: Question[] = [
   {
     "id": "view20",
     "question": "You have names.txt with one name per line and scores.txt with one score per line, and you want to combine them side by side so each line shows 'name\\tscore'. What command merges files horizontally by joining corresponding lines?",
-    "answer": "paste file1 file2",
+    "answer": "paste names.txt scores.txt",
     "explanation": "The cat command stacks files on top of each other vertically. This command instead places them next to each other horizontally — it reads one line from each file simultaneously and joins them side by side with a tab between them. The result looks like a two-column table where the left column comes from the first file and the right column from the second.",
     "usage": "Merge files horizontally by joining corresponding lines with a delimiter — the side-by-side complement to cat's vertical stacking.",
     "examples": [
@@ -1136,7 +1160,7 @@ export const questions: Question[] = [
   {
     "id": "perm2",
     "question": "After extracting a tarball as root, the file 'config.txt' is owned by root but needs to be owned by the alice user and the developers group so alice can edit them. What command changes the owner and group simultaneously?",
-    "answer": "chown user:group config.txt",
+    "answer": "chown alice:developers config.txt",
     "explanation": "Every file on Linux has two labels attached to it: a user label (the person who owns it) and a group label (the team that has group-level access). This command lets you reassign both labels at once. Changing ownership is a privileged action — you need administrator permission to hand a file to someone else, just as you'd need authorization to retitle property in someone else's name.",
     "usage": "Reassign both the user owner and group of a file in a single command — the standard tool for fixing ownership after privileged file operations.",
     "examples": [
@@ -1147,13 +1171,14 @@ export const questions: Question[] = [
       "sudo chown --reference=template.conf new.conf  # copy ownership from another file"
     ],
     "memoryTip": "`chown` = 'change owner'. Format mirrors `ls -l` columns: `USER:GROUP`. The colon is the separator; either side can be omitted.",
-    "outputExample": "$ ls -l report.pdf\n-rw-r--r-- 1 root root 18K May 15 09:00 report.pdf\n$ sudo chown alice:staff report.pdf\n$ ls -l report.pdf\n-rw-r--r-- 1 alice staff 18K May 15 09:00 report.pdf",
+    "outputExample": "$ ls -l config.txt\n-rw-r--r-- 1 root root 2048 May 15 09:00 config.txt\n$ sudo chown alice:developers config.txt\n$ ls -l config.txt\n-rw-r--r-- 1 alice developers 2048 May 15 09:00 config.txt",
     "category": "PERMISSIONS"
   },
   {
     "id": "perm3",
     "question": "You are trying to run a script and getting 'Permission denied'. You want to inspect the current permission settings on deploy.sh to understand who can read, write, and execute it. What command shows a file's detailed permissions?",
     "answer": "ls -l deploy.sh",
+    "altAnswers": ["stat deploy.sh", "ls -la deploy.sh"],
     "explanation": "When a file refuses to open or run, the first thing to check is who has what kind of access. This command shows each file on its own line with a ten-character code on the left that tells you everything about its access settings — whether it's a file or directory, and exactly what the owner, group members, and everyone else are allowed to do with it.",
     "usage": "Inspect the current permission bits, owner, and group of any file — the first diagnostic step for any permission-related problem.",
     "examples": [
@@ -1170,6 +1195,7 @@ export const questions: Question[] = [
     "id": "perm4",
     "question": "You just wrote a shell script called setup.sh. When you try to run it with ./setup.sh you get 'Permission denied' even though you own the file. What command adds the execute permission so you can run it?",
     "answer": "chmod +x setup.sh",
+    "altAnswers": ["chmod u+x setup.sh", "chmod a+x setup.sh"],
     "explanation": "A text file containing shell commands is just a text file until you mark it as executable. Without the execute permission, the operating system won't run it as a program, even if you wrote it and own it. Adding this permission is like stamping a \"licensed to run\" label on the script — after that, typing ./script.sh actually runs it.",
     "usage": "Grant the execute bit to a script or program so it can be run directly — a one-time setup step after writing any new script.",
     "examples": [
@@ -1187,6 +1213,7 @@ export const questions: Question[] = [
     "id": "perm5",
     "question": "You deployed a web application to /var/www/myapp and need every file and subdirectory in that entire tree to have permissions 755 so the web server can read and traverse them all. What flag makes chmod apply to the entire directory tree?",
     "answer": "chmod -R 755 /var/www/myapp",
+    "altAnswers": ["chmod 755 -R /var/www/myapp"],
     "explanation": "Normally the permissions command only changes the one specific file or folder you name. Adding this option tells it to go inside that folder, and inside every subfolder inside that, applying the new permissions to absolutely every file and directory it finds. It's like changing the lock settings on every room in a building at once rather than going door by door.",
     "usage": "Apply a permission change to every file and subdirectory within an entire directory tree in one operation.",
     "examples": [
@@ -1203,6 +1230,7 @@ export const questions: Question[] = [
     "id": "perm6",
     "question": "You want to give the www-data group ownership of /var/www/html so the web server process (which runs as www-data) can read and write files there, without changing the user owner. What command changes only the group associated with a file or directory?",
     "answer": "chgrp www-data /var/www/html",
+    "altAnswers": ["chown :www-data /var/www/html"],
     "explanation": "Every file has two ownership labels: one for an individual user and one for a group of users. This command changes only the group label, leaving the individual user label unchanged. Groups are like access badges — belonging to the right group grants you whatever permissions that group has on a file. This is useful for sharing files among a team or giving a service process the right group to access the files it needs.",
     "usage": "Change the group ownership of a file or directory — leaves the user owner unchanged.",
     "examples": [
@@ -1219,7 +1247,7 @@ export const questions: Question[] = [
   {
     "id": "perm7",
     "question": "You are setting up a shared build server where all team members compile code and their output files should be readable and writable by the whole team by default. What command controls the default permission bits applied to all newly created files?",
-    "answer": "umask 022",
+    "answer": "umask 002",
     "explanation": "When you create a new file, the system applies a set of default permission rules. Think of these defaults as a template with some slots pre-blocked. This command sets which permission slots are blocked by default — so you can ensure that every new file you create starts with the right access level without having to chmod it every time.",
     "usage": "Set the default permission mask for all newly created files and directories — controls what permissions they start with without manual chmod.",
     "examples": [
@@ -1230,13 +1258,14 @@ export const questions: Question[] = [
       "umask 002  # group-friendly: new files 664, new dirs 775 (collaboration on shared dirs)"
     ],
     "memoryTip": "`umask` = User MASK. Think 'subtract-from-max'. Numerically: file_max(666) - umask = actual_perm. So umask of `022` → `666 - 022 = 644`. The leading zero you sometimes see (`0022`) is the special-bits digit (setuid/sticky), almost always 0.",
-    "outputExample": "$ umask\n0022\n$ umask -S\nu=rwx,g=rx,o=rx\n$ touch newfile && ls -l newfile\n-rw-r--r-- 1 alice alice 0 May 15 10:00 newfile\n$ umask 077\n$ touch secret && ls -l secret\n-rw------- 1 alice alice 0 May 15 10:00 secret",
+    "outputExample": "$ umask 002\n$ touch build.log && ls -l build.log\n-rw-rw-r-- 1 alice developers 0 May 15 10:00 build.log\n$ mkdir out && ls -ld out\ndrwxrwxr-x 2 alice developers 4096 May 15 10:00 out\n$ umask\n0002",
     "category": "PERMISSIONS"
   },
   {
     "id": "perm8",
     "question": "After running a sudo command that switched your identity, you want to confirm which user this shell is currently running as before proceeding with a privileged operation. What command prints the current effective username?",
     "answer": "whoami",
+    "altAnswers": ["id -un"],
     "explanation": "After switching users with sudo or su, it can be easy to lose track of which identity your current terminal session is running as. This command answers that single question with one word — your current username. It's the quickest possible sanity check before doing anything that depends on running as a specific user.",
     "usage": "Print the current effective username — the one-line answer to 'who am I right now?'",
     "examples": [
@@ -1254,6 +1283,7 @@ export const questions: Question[] = [
     "id": "perm9",
     "question": "You need to install several packages, edit multiple config files, and restart services — a sequence of tasks that all require root access. Instead of prefixing every line with sudo, how do you open a persistent root shell for an entire administrative session?",
     "answer": "sudo -i",
+    "altAnswers": ["sudo -s", "sudo su -"],
     "explanation": "Normally, asking for administrative permission only works for one command at a time — you have to ask again for each one. This option opens a whole new command-line session logged in as the administrator, where every command you type automatically has full system access. When you're done, you close it and return to your regular session. It's like temporarily moving into the server room versus making individual calls through an intercom.",
     "usage": "Open a persistent root shell for an administrative session — every subsequent command runs with full system privileges until you exit.",
     "examples": [
@@ -1271,6 +1301,7 @@ export const questions: Question[] = [
     "id": "perm10",
     "question": "A colleague says 'you need to be in the docker group to run Docker without sudo' — but you're not sure which groups your account currently belongs to. What command lists all group memberships for your user?",
     "answer": "groups",
+    "altAnswers": ["id -Gn"],
     "explanation": "Think of groups as access clubs you belong to. Being in the right club (group) unlocks certain resources — the audio club gives you sound access, the docker club lets you use Docker, the sudo club lets you run admin commands. This command tells you which clubs your account currently belongs to, so you can quickly determine whether you have the access you need or whether you need to be added to a group.",
     "usage": "List all Unix group memberships for your account — the first diagnostic step when a permission requires a specific group.",
     "examples": [
@@ -1286,7 +1317,7 @@ export const questions: Question[] = [
   },
   {
     "id": "perm11",
-    "question": "You have correct ownership and chmod permissions on a file but still cannot delete or modify it. You suspect a filesystem-level attribute is blocking you. What command reveals these hidden filesystem attributes on a file?",
+    "question": "You have correct ownership and chmod permissions on 'config.php' but still cannot delete or modify it. You suspect a filesystem-level attribute is blocking you. What command reveals these hidden filesystem attributes on the file?",
     "answer": "lsattr config.php",
     "explanation": "Beyond the normal read/write/execute permissions that chmod controls, Linux filesystems can attach a second layer of special properties to files that affect how they behave — properties that even the root administrator cannot override without explicitly removing them. This command reveals those hidden properties so you can see if one of them is the reason a file is resisting your changes.",
     "usage": "Reveal filesystem-level attributes that can block file operations even when permissions appear correct — the diagnostic tool for mysterious 'Operation not permitted' errors.",
@@ -1319,7 +1350,8 @@ export const questions: Question[] = [
   {
     "id": "perm13",
     "question": "You need to give your colleague bob read and write access to project-report.txt, but you don't want to change the file's group or the permissions of other users. What command grants per-user permissions beyond the standard owner/group/others model?",
-    "answer": "setfacl -m u:bob:rw project-file",
+    "answer": "setfacl -m u:bob:rw project-report.txt",
+    "altAnswers": ["setfacl -m user:bob:rw project-report.txt"],
     "explanation": "The standard Linux permission system only has three groups to assign permissions to: the file owner, the file's group, and everyone else. ACLs (Access Control Lists) break that limitation — they let you add individual permission entries for any specific user or group, like adding extra doors with their own keys to a room that already has standard locks.",
     "usage": "Grant or modify access for a specific user on a file — more precise than chmod when you need per-user control.",
     "examples": [
@@ -1353,6 +1385,7 @@ export const questions: Question[] = [
     "id": "perm15",
     "question": "During a security audit you need to find every executable on the system that runs with elevated root privileges because of the setuid bit — these are potential privilege escalation targets. What command searches the filesystem for setuid files?",
     "answer": "find / -perm -4000",
+    "altAnswers": ["find / -perm -4000 2>/dev/null", "find / -perm /4000", "find / -perm /4000 2>/dev/null"],
     "explanation": "Normally when you run a program, it runs with your permissions. The setuid bit is a special flag that makes a program run with the file owner's permissions instead — so a setuid program owned by root runs as root even when a regular user launches it. This is how commands like passwd change your own password (it needs root access to write /etc/shadow). This command finds every program on the system that has this special elevated-privilege flag, which is important for security reviews.",
     "usage": "Find every executable with the setuid bit set — the security audit command for identifying potential privilege escalation vectors.",
     "examples": [
@@ -1369,6 +1402,7 @@ export const questions: Question[] = [
     "id": "perm16",
     "question": "A security scan reported 'world-writable files' on your server and you need to locate every file that any user on the system can modify. What command finds files with the world-write bit set?",
     "answer": "find / -perm -2",
+    "altAnswers": ["find / -perm -002", "find / -perm -2 2>/dev/null", "find / -perm -002 2>/dev/null"],
     "explanation": "\"World-writable\" means any user logged into the system — whether they're an administrator, a service account, or a low-privileged user — can write to and modify that file. This is a serious security concern for anything that isn't a scratch area like /tmp: a world-writable config file means any user could sabotage the application it configures. This command hunts down every such file so you can review and fix them.",
     "usage": "Find all files that any system user can write to — a key security audit command for detecting dangerous world-writable file misconfigurations.",
     "examples": [
@@ -1399,7 +1433,7 @@ export const questions: Question[] = [
   {
     "id": "perm18",
     "question": "After deploying your application to /var/www/myapp, you need every file and directory inside it to be owned by the www-data user and www-data group so the web server can read and write them all. What command recursively changes ownership throughout the entire directory?",
-    "answer": "sudo chown -R apache:apache /var/www/myapp",
+    "answer": "sudo chown -R www-data:www-data /var/www/myapp",
     "explanation": "Changing the owner of a folder normally only affects that one folder, leaving all the files inside belonging to whoever put them there. Adding the recursive option applies the ownership change to every file, every subfolder, and every file inside every subfolder throughout the entire tree — no matter how deeply nested. It's like re-labeling every item in a filing cabinet at once rather than one drawer at a time.",
     "usage": "Recursively change the owner and group of an entire directory tree — the standard setup step for application deployments.",
     "examples": [
@@ -1416,6 +1450,7 @@ export const questions: Question[] = [
     "id": "perm19",
     "question": "You are creating /tmp/shared-workspace where all users can create files, but you want to prevent users from deleting files that don't belong to them. What special permission bit makes a shared directory respect file ownership for deletions?",
     "answer": "chmod +t /tmp/shared-workspace",
+    "altAnswers": ["chmod o+t /tmp/shared-workspace", "chmod 1777 /tmp/shared-workspace"],
     "explanation": "In a folder where everyone can write (like a shared workspace), normally any user with write permission on the folder can delete anyone else's files inside it. The sticky bit is a special protective flag for directories: with it set, you can only delete files that you own, even if you have write permission on the folder itself. It's how /tmp works on every Linux system — anyone can create files there, but only the creator can delete their own files.",
     "usage": "Set the sticky bit on a shared directory so users can only delete their own files — the standard protection for multi-user scratch spaces.",
     "examples": [
@@ -1432,6 +1467,7 @@ export const questions: Question[] = [
     "id": "perm20",
     "question": "You're writing a deployment script that needs to read the current permission of '/tmp/upload.bin' as a number like 755 so it can check whether the file needs to be reconfigured. What command outputs just the octal permission number for a file?",
     "answer": "stat -c '%a' /tmp/upload.bin",
+    "altAnswers": ["stat -c %a /tmp/upload.bin"],
     "explanation": "The normal directory listing shows permissions as a letter code like rwxr-xr-x which is readable to humans but awkward for programs. This command outputs the same information as the number that chmod uses — like 755 or 644 — making it easy for a script to read, compare, and act on. It's the programmatic interface to file permissions.",
     "usage": "Output a file's permissions as an octal number like 755 — the scriptable way to read permissions for comparison or conditional logic.",
     "examples": [
@@ -1448,6 +1484,7 @@ export const questions: Question[] = [
     "id": "pipe1",
     "question": "You ran 'ls -lh /var/www/html' and want to save the directory listing to a file called filelist.txt for a report — overwriting any previous version of that file. What operator redirects a command's standard output into a file?",
     "answer": "ls -lh /var/www/html > filelist.txt",
+    "altAnswers": ["ls -lh /var/www/html >filelist.txt"],
     "explanation": "Normally, when a command finishes it prints its results directly to your screen and they're gone when you close the terminal. Adding this operator is like aiming the output away from your screen and into a file instead — the file captures everything the command would have printed. If the file already exists, it gets completely replaced with the new output.",
     "usage": "Redirect a command's standard output into a file — creates the file if needed, or overwrites it completely if it exists.",
     "examples": [
@@ -1463,8 +1500,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe2",
-    "question": "You have a running deployment script that logs to build.log and you want each new run to add its output to the end of the file without erasing previous run records. What operator appends standard output to a file without overwriting it?",
+    "question": "Each run of your deployment script ./deploy.sh should add its output to the end of build.log without erasing previous run records. What operator appends standard output to a file without overwriting it?",
     "answer": "./deploy.sh >> build.log",
+    "altAnswers": ["./deploy.sh >>build.log"],
     "explanation": "Instead of replacing a file's contents each time, this operator adds new output to the bottom of whatever was already there. It's like adding entries to a running journal rather than starting a new page — previous content stays intact and new content accumulates at the end. If the file doesn't exist yet, it gets created.",
     "usage": "Append standard output to the end of a file — adds to existing content rather than replacing it.",
     "examples": [
@@ -1482,6 +1520,7 @@ export const questions: Question[] = [
     "id": "pipe3",
     "question": "You want to run the tr command (which only reads from stdin, not from a file argument) on the contents of notes.txt to convert lowercase to uppercase. What operator feeds a file's contents into a command's standard input?",
     "answer": "tr a-z A-Z < notes.txt",
+    "altAnswers": ["tr 'a-z' 'A-Z' < notes.txt", "tr '[:lower:]' '[:upper:]' < notes.txt", "tr [:lower:] [:upper:] < notes.txt"],
     "explanation": "This operator is the mirror image of the output redirect — instead of sending output to a file, it feeds a file's contents into the command as if someone had typed that file's text at the keyboard. It's particularly useful for commands that can only read from the keyboard (stdin) and don't accept a filename argument.",
     "usage": "Feed a file's contents as standard input to a command — useful for tools that only read from stdin or when you want output without filename annotations.",
     "examples": [
@@ -1516,6 +1555,7 @@ export const questions: Question[] = [
     "id": "pipe5",
     "question": "You are running 'find / -name sshd_config' which produces hundreds of 'Permission denied' lines mixed in with the real results. You want to send those errors to a file called 'error.log'. What redirect captures only the error messages so the real output remains clean on your terminal?",
     "answer": "find / -name sshd_config 2> error.log",
+    "altAnswers": ["find / -name sshd_config 2>error.log"],
     "explanation": "Commands produce two kinds of output: normal results and error messages. Normally they both appear on your screen mixed together, which is confusing when you're looking for actual results buried in a flood of errors. This redirect sends the error messages to a file while the normal results continue printing to your screen — separating the two streams so each is useful on its own.",
     "usage": "Redirect error messages (stderr) to a file while leaving normal output printing to the terminal — separates errors from results.",
     "examples": [
@@ -1531,8 +1571,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe6",
-    "question": "You are running a build script and want everything — both normal build output and any error messages — saved together in one log file. What bash shorthand redirects both stdout and stderr to the same file simultaneously?",
+    "question": "You are running a build with 'make' and want everything — both normal build output and any error messages — saved together in build.log. What bash shorthand redirects both stdout and stderr to the same file simultaneously?",
     "answer": "make &> build.log",
+    "altAnswers": ["make &>build.log"],
     "explanation": "Normally, normal output and error messages are separate streams. Sometimes you just want everything in one place — a single log file that captures all of a command's output regardless of which stream it came from. This shorthand is the quickest way to achieve that.",
     "usage": "Capture both standard output and error messages in a single file — the simplest way to get a complete command log.",
     "examples": [
@@ -1547,7 +1588,7 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe7",
-    "question": "You want to write a script that generates a multi-line nginx configuration block inline — embedding several lines of text into a command without creating a separate template file. What shell syntax feeds a block of literal text to a command's stdin?",
+    "question": "In a script you want to feed the literal nginx configuration line 'server { listen 80; }' to cat's stdin inline — using a here-document with the delimiter EOF instead of a separate template file. What shell syntax does that?",
     "answer": "cat << EOF\nserver { listen 80; }\nEOF",
     "explanation": "Instead of creating a separate text file to feed into a command, you can embed the text directly in your script between special marker lines. Everything between the opening marker and the matching closing marker is treated as the command's input — as if someone had typed those lines at the keyboard. This makes scripts self-contained without needing external template files.",
     "usage": "Embed multi-line text directly in a script as standard input to a command — no external file needed.",
@@ -1565,6 +1606,7 @@ export const questions: Question[] = [
     "id": "pipe8",
     "question": "You are running 'find / -name passwd' and it produces thousands of 'Permission denied' error lines along with a few actual results. You want only the real results displayed with no error clutter. How do you discard all error output by redirecting it to the special discard device?",
     "answer": "find / -name passwd 2> /dev/null",
+    "altAnswers": ["find / -name passwd 2>/dev/null"],
     "explanation": "Linux has a special virtual file that acts like a bottomless trash can — anything you write to it disappears instantly without taking up any space. By redirecting unwanted output (usually error messages) to this virtual trash can, you can clean up noisy command output while keeping the useful parts visible on your screen.",
     "usage": "Discard command output completely by redirecting to /dev/null — use selectively for stdout, stderr, or both.",
     "examples": [
@@ -1599,6 +1641,7 @@ export const questions: Question[] = [
     "id": "pipe10",
     "question": "You want to run three diagnostic commands — show the current date, system uptime, and disk usage — one after another on a single line, where each runs regardless of whether the previous one failed. What separator runs commands sequentially and unconditionally?",
     "answer": "date ; uptime ; df -h",
+    "altAnswers": ["date; uptime; df -h", "date;uptime;df -h", "date; uptime; df"],
     "explanation": "Sometimes you just want to run several commands one after another with no conditions attached — each one runs whether the previous succeeded or failed. The semicolon separator is the \"next\" without any judgment. It's useful for independent status-checking commands or cleanup operations where it doesn't matter if an individual step encounters an error.",
     "usage": "Run multiple commands in sequence with no dependency between them — each runs unconditionally after the previous one finishes.",
     "examples": [
@@ -1613,8 +1656,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe11",
-    "question": "Your hourly cron job runs a backup script and you want all its output — both normal messages and any error messages — appended to /var/log/backup.log without overwriting previous run records. What operator appends both stdout and stderr to a file?",
+    "question": "Your hourly cron job runs ./backup.sh and you want all its output — both normal messages and any error messages — appended to /var/log/backup.log without overwriting previous run records. What operator appends both stdout and stderr to a file?",
     "answer": "./backup.sh &>> /var/log/backup.log",
+    "altAnswers": ["./backup.sh &>>/var/log/backup.log", "./backup.sh >> /var/log/backup.log 2>&1"],
     "explanation": "This is the combination of two things you've seen before: capturing both normal output and error messages together (like &>), and adding to the end of a file rather than replacing it (like >>). It's the right tool for cron job logging where you want a complete, growing record of every run in a single file.",
     "usage": "Append both stdout and stderr to a file without overwriting it — the right operator for accumulating cron job logs.",
     "examples": [
@@ -1629,7 +1673,7 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe12",
-    "question": "In a deployment script, if the main deploy command fails you want to immediately print an error message. What operator runs a fallback command only when the preceding command exits with an error?",
+    "question": "In a deployment script, if ./deploy.sh fails you want to immediately print the message 'deploy failed' with echo. What operator runs a fallback command only when the preceding command exits with an error?",
     "answer": "./deploy.sh || echo \"deploy failed\"",
     "explanation": "This operator is the \"or else\" counterpart to the \"and then\" operator. Instead of running the next command when the previous one succeeds, it runs the next command only when the previous one fails. It's useful for error handling, fallback behaviors, and ensuring that something always happens even when the primary step breaks.",
     "usage": "Run a fallback or error-handling command only when the preceding command fails — the essential operator for error recovery and defensive scripting.",
@@ -1646,8 +1690,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe13",
-    "question": "Your backup script runs nightly via cron and you want its error messages appended to /var/log/backup-errors.log across each run, while the normal output still prints to the terminal (or wherever stdout goes). What redirect appends only stderr to a file?",
+    "question": "Your backup script ./backup.sh runs nightly via cron and you want its error messages appended to /var/log/backup-errors.log across each run, while the normal output still prints to the terminal (or wherever stdout goes). What redirect appends only stderr to a file?",
     "answer": "./backup.sh 2>> /var/log/backup-errors.log",
+    "altAnswers": ["./backup.sh 2>>/var/log/backup-errors.log"],
     "explanation": "This is the append mode version of stderr redirection. Instead of replacing the error log with each run, new error messages are added to the end of whatever was already logged there. This lets you build up a history of errors over time — each night's errors accumulate after the previous nights' errors — so you can see patterns or investigate when something first went wrong.",
     "usage": "Append only error messages (stderr) to a file while leaving normal output unaffected — builds up an error history across multiple runs.",
     "examples": [
@@ -1662,8 +1707,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe14",
-    "question": "You're running a long build and want to watch the output live on your terminal AND have it saved to build.log simultaneously — so you don't have to choose between seeing it now and having a record. What command splits output to both the screen and a file at the same time?",
+    "question": "You're running a long build with 'make' and want to watch the output live on your terminal AND have it saved to build.log simultaneously — so you don't have to choose between seeing it now and having a record. What command splits output to both the screen and a file at the same time?",
     "answer": "make | tee build.log",
+    "altAnswers": ["make 2>&1 | tee build.log"],
     "explanation": "When you redirect output to a file, it disappears from your screen. When you don't redirect, it stays on screen but doesn't get saved. This command solves that dilemma by acting like a T-junction in a pipe — it reads the stream and sends it in two directions at once: both to the file and to your screen. You see everything live and end up with a complete file record.",
     "usage": "See output live on screen AND save it to a file at the same time — the T-junction for command output.",
     "examples": [
@@ -1678,7 +1724,7 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe15",
-    "question": "You want to run 'dmesg' and save its output to two places simultaneously: a local log file and a dated archive file. What command writes the same input stream to multiple destination files at once?",
+    "question": "You want to run 'dmesg' and save its output to two files simultaneously: local.log and archive.log. What command writes the same input stream to multiple destination files at once?",
     "answer": "dmesg | tee local.log archive.log",
     "explanation": "Just as a T-junction in plumbing can split one pipe into two, tee can send one stream of data to multiple destinations at once. You list as many destination files as you need, and each one gets an identical copy of everything that passes through. This is useful when you need the same output in multiple places without reading or running the command multiple times.",
     "usage": "Write the same stream to multiple files simultaneously — avoids re-running expensive commands when you need output in multiple places.",
@@ -1694,8 +1740,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe16",
-    "question": "You want to write a script that creates an nginx server block configuration file using inline text rather than an external template file. What shell syntax lets you type multi-line content directly in a script and feed it as input to a command?",
+    "question": "You want a script to create /etc/nginx/sites-available/app containing the line 'server { listen 80; }' by redirecting cat's output there and feeding the text inline as a here-document with the delimiter EOF — no external template file. What shell syntax does that?",
     "answer": "cat > /etc/nginx/sites-available/app << EOF\nserver { listen 80; }\nEOF",
+    "altAnswers": ["cat << EOF > /etc/nginx/sites-available/app\nserver { listen 80; }\nEOF"],
     "explanation": "A here-document lets you write multi-line text directly inside your script surrounded by a pair of delimiter words. Everything between the opening and closing delimiter is treated as if it came from a file. This keeps your script self-contained — no need for separate template files that could be missing when the script runs.",
     "usage": "Embed multi-line literal text directly in a script as stdin for any command — produces self-contained scripts without external template files.",
     "examples": [
@@ -1709,8 +1756,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe17",
-    "question": "You have a string stored in a shell variable and want to pass it directly as input to grep without using a pipe or a temporary file. What three-angle-bracket operator feeds a single string as stdin to a command?",
+    "question": "You have a log line stored in the shell variable LOG_LINE and want to search it for 'error' by passing the variable directly as input to grep — without using a pipe or a temporary file. What three-angle-bracket operator feeds a single string as stdin to a command?",
     "answer": "grep error <<< \"$LOG_LINE\"",
+    "altAnswers": ["grep 'error' <<< \"$LOG_LINE\""],
     "explanation": "This operator is a compact way to hand a single line of text directly to a command as its input, as if you had typed that text at the keyboard. Instead of using a pipe from echo or creating a file, you just write the text right there in the command. It's cleaner and faster for one-liner situations where you have a variable or a short string to process.",
     "usage": "Feed a single string directly as standard input to a command — cleaner than echo | for variable-based inputs.",
     "examples": [
@@ -1756,8 +1804,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe20",
-    "question": "Your cron job runs a maintenance script and sends you email every time it produces output. You want the job to run completely silently — no output from stdout or stderr — so it only emails you when something actually breaks. What redirect suppresses all output from a command?",
+    "question": "Your cron job runs /usr/local/bin/maintenance.sh and sends you email every time it produces output. You want the job to run completely silently — no output from stdout or stderr — so it only emails you when something actually breaks. What redirect suppresses all output from a command?",
     "answer": "/usr/local/bin/maintenance.sh > /dev/null 2>&1",
+    "altAnswers": ["/usr/local/bin/maintenance.sh >/dev/null 2>&1", "/usr/local/bin/maintenance.sh &> /dev/null", "/usr/local/bin/maintenance.sh &>/dev/null"],
     "explanation": "This redirect combination sends everything the command produces — both normal output and error messages — into the virtual trash can, making the command run in complete silence. Cron sends email when a job produces output, so silencing everything prevents the daily noise while still running the maintenance tasks.",
     "usage": "Suppress all output from a command — both stdout and stderr — so it runs completely silently.",
     "examples": [
@@ -1792,6 +1841,7 @@ export const questions: Question[] = [
     "id": "proc2",
     "question": "A process is behaving unexpectedly and you want to see which other processes launched it and which child processes it has spawned — the full family tree. What command shows all processes as an indented hierarchy with their parent-child relationships?",
     "answer": "pstree",
+    "altAnswers": ["pstree -p"],
     "explanation": "Every process on Linux was started by another process — just like how every employee was hired by a manager. This command draws the entire organizational chart of processes as a tree diagram, with the very first process at the top and all its descendants branching below it. You can immediately see which parent started which children and how they all relate.",
     "usage": "Visualize the entire process hierarchy as an indented tree — immediately shows parent-child relationships that ps aux doesn't make obvious.",
     "examples": [
@@ -1808,8 +1858,9 @@ export const questions: Question[] = [
   },
   {
     "id": "proc3",
-    "question": "Firefox has become unresponsive and the GUI close button is doing nothing. After finding its PID with ps aux, what command sends it a polite 'please shut down' request that gives it a chance to clean up before exiting?",
-    "answer": "kill PID",
+    "question": "Firefox has become unresponsive and the GUI close button is doing nothing. After finding its PID (2412) with ps aux, what command sends it a polite 'please shut down' request that gives it a chance to clean up before exiting?",
+    "answer": "kill 2412",
+    "altAnswers": ["kill -15 2412", "kill -TERM 2412"],
     "explanation": "Despite the dramatic name, this command doesn't instantly destroy a process — it sends a message to the process asking it to stop. The default message is a polite request, and a well-behaved program will finish what it's doing, save any open files, and exit cleanly. If the program is frozen and ignores your polite request, there's a more forceful version that the kernel enforces regardless.",
     "usage": "Send a graceful shutdown request to a process — try this before reaching for the more forceful kill -9.",
     "examples": [
@@ -1826,7 +1877,7 @@ export const questions: Question[] = [
   },
   {
     "id": "proc4",
-    "question": "You want to start a long-running build script that may take an hour, but you don't want to sit watching it — you want your terminal prompt back immediately so you can do other work while it runs. What shell syntax starts a command without waiting for it to finish?",
+    "question": "You want to start the long-running build script ./build.sh, which may take an hour, but you don't want to sit watching it — you want your terminal prompt back immediately so you can do other work while it runs. What shell syntax starts a command without waiting for it to finish?",
     "answer": "./build.sh &",
     "explanation": "Normally when you run a command, your terminal freezes until it finishes — you can't type anything or run other commands. Adding this symbol at the end of a command changes that: the command starts running, but you get your prompt back immediately. The command runs \"in the background\" simultaneously with whatever else you do in the terminal.",
     "usage": "Start a command and return the prompt immediately — the command continues running concurrently in the background.",
@@ -1843,8 +1894,9 @@ export const questions: Question[] = [
   },
   {
     "id": "proc5",
-    "question": "You suspended a long-running command with Ctrl+Z to answer a quick question, and now you want it to take over your terminal again and continue running interactively. What command brings a background or stopped job back to the foreground?",
-    "answer": "fg %job_number",
+    "question": "You suspended a long-running command with Ctrl+Z to answer a quick question, and now you want it to take over your terminal again and continue running interactively. It is job number 1 in the jobs list. What command brings it back to the foreground?",
+    "answer": "fg %1",
+    "altAnswers": ["fg 1", "fg"],
     "explanation": "When you press Ctrl+Z, a running command gets paused and frozen — like hitting pause on a video. Your prompt comes back, but the job is still there, waiting. This command is like pressing play again, but it also takes the command back to your main screen so you can interact with it. Your terminal reconnects to that job as if you never left.",
     "usage": "Resume a stopped or backgrounded job and make it the active foreground process — reconnects your terminal to it.",
     "examples": [
@@ -1859,8 +1911,9 @@ export const questions: Question[] = [
   },
   {
     "id": "proc6",
-    "question": "You accidentally started a long compilation in the foreground and want it to continue running but give you your terminal prompt back without stopping it. What is the two-step sequence to move a running foreground job to the background?",
-    "answer": "bg %job_number",
+    "question": "You accidentally started a long compilation in the foreground and want it to continue running but give you your terminal prompt back without stopping it. You have already suspended it with Ctrl+Z and it became job 1. What command resumes it in the background?",
+    "answer": "bg %1",
+    "altAnswers": ["bg 1", "bg"],
     "explanation": "When you realize a command you're already running is going to take a long time, you can pause it with Ctrl+Z (which freezes it without losing any work), and then tell it to continue running in the background while your prompt comes back. The job resumes from exactly where it paused, now running alongside your terminal session.",
     "usage": "Resume a stopped (Ctrl+Z) job in the background — lets it continue running while freeing up your terminal prompt.",
     "examples": [
@@ -1894,6 +1947,7 @@ export const questions: Question[] = [
     "id": "proc8",
     "question": "Your server's performance has degraded and you want to see which processes are consuming the most CPU and memory right now, updated in real time. What command opens an interactive live process monitor?",
     "answer": "top",
+    "altAnswers": ["htop"],
     "explanation": "This command is like a constantly-updating dashboard for your computer's processes. It refreshes every few seconds, showing which programs are running and how much CPU and memory each one is using, ranked by the most resource-hungry first. You can sort, filter, and even kill processes without leaving the monitor. It's available on every Linux system, even minimal or containerized installations.",
     "usage": "Open an interactive real-time process monitor — shows CPU and memory usage per process, continuously updated.",
     "examples": [
@@ -1927,8 +1981,9 @@ export const questions: Question[] = [
   },
   {
     "id": "proc10",
-    "question": "All Firefox browser processes have become unresponsive and you want to terminate every one of them at once without looking up individual PIDs. What command sends a signal to all processes matching a name pattern?",
+    "question": "All Firefox browser processes are completely frozen and you want to force-kill every one of them at once with SIGKILL (signal 9), without looking up individual PIDs. What command sends that signal to all processes matching the name firefox?",
     "answer": "pkill -9 firefox",
+    "altAnswers": ["pkill -KILL firefox", "killall -9 firefox"],
     "explanation": "Instead of finding PIDs one by one and then killing each individually, this command combines the search and the kill in one step — it finds every process matching the name you give and signals them all simultaneously. It's the \"close all windows\" approach for command-line processes.",
     "usage": "Send a signal to all processes matching a name pattern — the efficient way to terminate or signal multiple processes at once.",
     "examples": [
@@ -1945,9 +2000,9 @@ export const questions: Question[] = [
   },
   {
     "id": "proc11",
-    "question": "You're inside the top monitor and want to sort the process list by memory usage instead of CPU to find the process using the most RAM. What key do you press inside top to re-sort by memory?",
-    "answer": "top",
-    "explanation": "The live process monitor has a full set of keyboard shortcuts you can use while it's running without leaving the screen. Pressing a single letter immediately changes how the list is sorted — the next refresh will show processes in the new order. These shortcuts make top a powerful interactive tool rather than just a passive display.",
+    "question": "You want to launch the top monitor already sorted by memory usage instead of CPU, to find the process using the most RAM. What command starts top sorted by the %MEM column?",
+    "answer": "top -o %MEM",
+    "explanation": "top normally sorts by CPU usage, but the -o flag lets you pick the sort column at launch — starting it with %MEM puts the biggest memory consumers at the top immediately. Once inside, single-key shortcuts (M for memory, P for CPU) re-sort the live view without restarting. These shortcuts make top a powerful interactive tool rather than just a passive display.",
     "usage": "Use top's interactive keyboard shortcuts to sort, filter, and act on processes without leaving the live monitor.",
     "examples": [
       "top  # launch, then press M to sort by memory",
@@ -1957,13 +2012,13 @@ export const questions: Question[] = [
       "top -H -p 1234  # show individual THREADS of PID 1234"
     ],
     "memoryTip": "Inside top, capital letters sort: P=Processor (CPU), M=Memory, T=Time. Lowercase do other things: k=kill, r=renice, q=quit, u=filter user, h=help. `top` is your fallback when `htop` is missing.",
-    "outputExample": "$ top\n# Press M to sort by memory...\n   PID USER      PR  NI    VIRT    RES  %MEM     TIME+ COMMAND\n  2412 alice     20   0 2400000 524288  3.1   1:42.10 firefox\n  3821 alice     20   0  819200 122880  0.7   0:08.20 code",
+    "outputExample": "$ top -o %MEM\n   PID USER      PR  NI    VIRT    RES  %MEM     TIME+ COMMAND\n  2412 alice     20   0 2400000 524288  3.1   1:42.10 firefox\n  3821 alice     20   0  819200 122880  0.7   0:08.20 code",
     "category": "PROCESSES"
   },
   {
     "id": "proc12",
-    "question": "You know the PID of a running nginx master process and want to see all the worker processes it has spawned, displayed as a tree with their own PIDs visible. What command shows the process hierarchy rooted at a specific PID?",
-    "answer": "pstree",
+    "question": "The nginx master process is running as PID 1832 and you want to see all the worker processes it has spawned, displayed as a tree with their own PIDs visible. What command shows the process hierarchy rooted at that PID?",
+    "answer": "pstree -p 1832",
     "explanation": "When you have the PID of a specific process and want to see its entire family — all its children, grandchildren, and so on — you can focus the tree diagram on just that branch. This is much less overwhelming than the complete system tree and immediately shows you whether a process has the expected number of workers or whether any unexpected children have appeared.",
     "usage": "Show the process subtree rooted at a specific PID — all its children and descendants in a visual hierarchy.",
     "examples": [
@@ -1979,8 +2034,8 @@ export const questions: Question[] = [
   },
   {
     "id": "proc13",
-    "question": "A monitoring alert references a specific PID from a .pid file. You want to see exactly how long that process has been running and what its CPU usage is — just those fields, no irrelevant columns. What command queries a specific PID with a custom output format?",
-    "answer": "ps -p PID -o pid,cmd,etime,cpu",
+    "question": "A monitoring alert references PID 1234 from a .pid file. You want to see how long that process has been running and what its CPU usage is — showing only the pid, cmd, etime, and %cpu columns, no irrelevant ones. What command queries that PID with this custom output format?",
+    "answer": "ps -p 1234 -o pid,cmd,etime,%cpu",
     "explanation": "The default process listing shows many columns of information you might not need. You can ask for only the specific pieces of information you care about — just the elapsed time, or just the command name, or just the CPU percentage — without the noise of 15 other columns. This makes it much easier to script around and parse programmatically.",
     "usage": "Query a specific PID with a custom-selected set of output columns — the scriptable way to get exactly the process information you need.",
     "examples": [
@@ -1991,13 +2046,13 @@ export const questions: Question[] = [
       "ps -p $(pgrep -o nginx) -o pid,etimes,rss,cmd"
     ],
     "memoryTip": "Mnemonic: `-p` for PID, `-o` for Output format. Append `=` to a column name to hide the header. `etime` is human-readable, `etimes` is plain seconds — pick the right one for scripts.",
-    "outputExample": "$ ps -p 1234 -o pid,user,etime,%cpu,cmd\n    PID USER         ELAPSED %CPU CMD\n   1234 alice       02:14:33 12.5 /usr/lib/firefox/firefox\n$ ps -p 1234 -o etime=\n02:14:33",
+    "outputExample": "$ ps -p 1234 -o pid,cmd,etime,%cpu\n    PID CMD                          ELAPSED %CPU\n   1234 /usr/lib/firefox/firefox    02:14:33 12.5\n$ ps -p 1234 -o etime=\n02:14:33",
     "category": "PROCESSES"
   },
   {
     "id": "proc14",
-    "question": "A process is consuming more disk space than expected and you suspect it has a deleted file still open, preventing the space from being reclaimed. What command lists every open file, socket, and pipe currently held by a specific process?",
-    "answer": "lsof -p PID",
+    "question": "A process is consuming more disk space than expected and you suspect it has a deleted file still open, preventing the space from being reclaimed. What command lists every open file, socket, and pipe currently held by the process with PID 1234?",
+    "answer": "lsof -p 1234",
     "explanation": "On Linux, almost everything is represented as a file — not just text files and images, but also network connections, devices, pipes between programs, and even the program's own executable. This command shows every \"file\" that a specific process currently has open, which reveals what it's reading, what it's writing to, what network connections it has, and critically, whether it's holding onto any files that have been deleted but whose disk space can't be recovered until the process closes them.",
     "usage": "List every open file, network connection, and pipe held by a process — the diagnostic tool for file descriptor and disk space mysteries.",
     "examples": [
@@ -2015,7 +2070,7 @@ export const questions: Question[] = [
   {
     "id": "proc15",
     "question": "Your script launches several background downloads with & and must wait for all of them to complete before continuing to the next step. What built-in command blocks execution until all background child processes have finished?",
-    "answer": "wait PID",
+    "answer": "wait",
     "explanation": "When you launch multiple things in the background at once, they all run simultaneously but your script doesn't automatically wait for them to finish before moving on. This command is a pause button that holds your script at that line until all the background tasks have completed, then releases it to continue. You can wait for all background jobs at once, or wait for a specific one and check whether it succeeded.",
     "usage": "Block script execution until all background child processes finish — the synchronization point for parallel shell scripts.",
     "examples": [
@@ -2030,8 +2085,8 @@ export const questions: Question[] = [
   },
   {
     "id": "proc16",
-    "question": "You ran 'ps aux | grep java' and the COMMAND column is truncated, so you can't tell which Java application this is or what arguments it was started with. What flag tells ps to print the complete untruncated command line?",
-    "answer": "ps aux",
+    "question": "You ran 'ps aux | grep java' and the COMMAND column is truncated, so you can't tell which Java application this is or what arguments it was started with. What variant of ps aux prints the complete untruncated command line for all processes?",
+    "answer": "ps auxww",
     "explanation": "The standard process listing cuts off long command lines at your terminal's edge, so a long Java or Python command with many arguments gets truncated with no indication. Adding this width flag tells ps to ignore terminal width limits and print the complete command no matter how long it is — essential when you need to see the actual configuration flags and file paths used to start a process.",
     "usage": "Print untruncated full command lines in ps output — essential when the COMMAND column is cut short and arguments are hidden.",
     "examples": [
@@ -2047,8 +2102,9 @@ export const questions: Question[] = [
   },
   {
     "id": "proc17",
-    "question": "After installing a new version of nginx, you want to ask the running nginx master process to reload its configuration file without a full restart — avoiding any downtime. What command sends a specific named signal to a process?",
-    "answer": "kill -SIGNAL PID",
+    "question": "After installing a new version of nginx, you want to ask the running nginx master process (PID 1832) to reload its configuration file without a full restart — avoiding any downtime. What command sends the named HUP signal to that PID?",
+    "answer": "kill -HUP 1832",
+    "altAnswers": ["kill -1 1832", "kill -SIGHUP 1832"],
     "explanation": "Processes can receive many different types of messages beyond just \"stop.\" Each message type has a name and a number, and different programs respond to them in different ways. The \"hangup\" message, despite its old-fashioned name, is commonly used to tell running servers to re-read their configuration files without stopping. Sending this message to nginx tells it to reload its config while continuing to serve requests.",
     "usage": "Send a specific named or numbered signal to a process — enables graceful config reloads, pausing, and controlled shutdown.",
     "examples": [
@@ -2064,7 +2120,7 @@ export const questions: Question[] = [
   },
   {
     "id": "proc18",
-    "question": "You need to understand the complete job control workflow: how to start a command in the background, pause it, switch it between foreground and background, list all jobs, and kill one by job number. What are the key commands and keystrokes in this workflow?",
+    "question": "You are practicing the job control workflow and want to begin by starting the command 'sleep 100' in the background so your prompt returns immediately while it runs. What exactly do you type?",
     "answer": "sleep 100 &",
     "explanation": "The shell gives you complete control over commands you've started — you can pause them, resume them, push them to the background, bring them back, and kill them, all using simple commands and keyboard shortcuts. Understanding this workflow lets you manage multiple long-running tasks from a single terminal without needing to open multiple windows.",
     "usage": "Manage multiple running jobs from a single terminal — start, pause, resume, foreground, background, and kill by job number.",
@@ -2083,7 +2139,7 @@ export const questions: Question[] = [
   },
   {
     "id": "proc19",
-    "question": "You want to run a video encoding job that will take hours, but you don't want it competing aggressively with your other work. What command starts a new process with a reduced CPU priority so it yields to more important processes?",
+    "question": "You want to run the encoding job 'ffmpeg -i video.mp4 output.mp4', which will take hours, but you don't want it competing aggressively with your other work. What command starts it with a niceness of 10 so it yields to more important processes?",
     "answer": "nice -n 10 ffmpeg -i video.mp4 output.mp4",
     "explanation": "Every process has a politeness setting that tells the system how aggressively to compete for CPU time. A normal process uses the default setting. By starting your encoding job with a higher politeness number, you're telling the system \"this job can wait whenever something more important needs the CPU.\" On a busy system, your encoding job will run slower but won't make your text editor or browser feel sluggish. On an idle system, it runs at full speed.",
     "usage": "Start a command with reduced CPU priority so it yields to more important processes when the CPU is contested.",
@@ -2102,6 +2158,7 @@ export const questions: Question[] = [
     "id": "proc20",
     "question": "A service is failing to start with 'Address already in use' on port 8080. You need to find out which process is currently bound to that port. What command shows which processes are listening on which network ports?",
     "answer": "netstat -tlnp",
+    "altAnswers": ["ss -tlnp", "ss -tulnp", "netstat -tulnp"],
     "explanation": "When a program listens for network connections, it claims a specific port number — like reserving a specific table at a restaurant. If someone else tries to use the same port, they get an error. This command shows you the complete seating chart: every port that's currently occupied, what process is sitting there, and what address it's listening on (whether it's accepting connections from anywhere or just from the local machine).",
     "usage": "Show all TCP listening ports and the process bound to each — the diagnostic tool for 'Address already in use' errors.",
     "examples": [
@@ -2118,7 +2175,7 @@ export const questions: Question[] = [
   {
     "id": "net1",
     "question": "Your team's staging server at 10.20.30.40 stopped responding. What command sends three ICMP test packets to it and automatically stops, telling you if the network path is alive?",
-    "answer": "ping hostname",
+    "answer": "ping -c 3 10.20.30.40",
     "explanation": "Sending a ping is like knocking on someone's door and listening for an answer. You tap the remote machine with tiny network messages and wait to hear back. If you get replies, the path between your computer and that machine is working. No reply usually means something is blocking or the machine is down.",
     "usage": "Verify network reachability to 10.20.30.40 by sending three packets and viewing round-trip latency and packet-loss statistics.",
     "examples": [
@@ -2136,6 +2193,7 @@ export const questions: Question[] = [
     "id": "net2",
     "question": "Your laptop just connected to the office network. What command shows every network interface on the machine together with its current IP address and link state?",
     "answer": "ip addr show",
+    "altAnswers": ["ip addr", "ip a"],
     "explanation": "Your computer can have several different \"doorways\" to the network — a wired port, a wireless card, a VPN tunnel. This command lists all of them and shows what address each one has been given, like checking which phone lines are active and what numbers they have.",
     "usage": "Display all network interfaces and their IP addresses on a freshly connected machine to confirm the correct addresses were assigned by DHCP.",
     "examples": [
@@ -2151,8 +2209,9 @@ export const questions: Question[] = [
   },
   {
     "id": "net3",
-    "question": "You need to download the latest Ubuntu 24.04 ISO from a URL to the current directory using a single command. Which command does this and also supports resuming if interrupted?",
-    "answer": "wget URL",
+    "question": "You need to download the Ubuntu 24.04 ISO from https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso to the current directory using a single command. Which command does this and also supports resuming if interrupted?",
+    "answer": "wget https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso",
+    "altAnswers": ["curl -O https://releases.ubuntu.com/24.04/ubuntu-24.04-desktop-amd64.iso"],
     "explanation": "Think of this command as a download manager you control from the terminal. You give it a web address and it saves the file to your current folder, showing a progress bar. If the download gets cut off partway through, you can re-run it with a resume flag and it picks up where it left off instead of starting over.",
     "usage": "Download the Ubuntu 24.04 ISO to the current directory, resuming any previous partial download with `-c` if the connection drops.",
     "examples": [
@@ -2169,7 +2228,7 @@ export const questions: Question[] = [
   {
     "id": "net4",
     "question": "You built a new binary at ~/code/myapp/dist/server and need to send it to the deploy user on web1.example.com so it lands in /opt/myapp/. What single command accomplishes this over an encrypted connection?",
-    "answer": "scp file user@host:destination",
+    "answer": "scp ~/code/myapp/dist/server deploy@web1.example.com:/opt/myapp/",
     "explanation": "This command is like emailing a file attachment, but the connection is always encrypted and the delivery goes straight to the remote server's filesystem. You say which file to send, who to send it to, and exactly which folder on the other machine should receive it.",
     "usage": "Copy ~/code/myapp/dist/server to deploy@web1.example.com:/opt/myapp/ over SSH in a single command.",
     "examples": [
@@ -2186,7 +2245,7 @@ export const questions: Question[] = [
   {
     "id": "net5",
     "question": "You need to log into the remote host web1.example.com as the user deploy to run administrative commands. What command opens an encrypted interactive shell on that machine?",
-    "answer": "ssh user@hostname",
+    "answer": "ssh deploy@web1.example.com",
     "explanation": "This command is your secure remote control panel. It opens an encrypted tunnel to another computer and gives you a command prompt there, as if you were sitting at its keyboard. Everything you type travels through the internet encrypted so no one can eavesdrop.",
     "usage": "Open an interactive encrypted shell on web1.example.com as deploy to run administrative commands.",
     "examples": [
@@ -2204,6 +2263,7 @@ export const questions: Question[] = [
     "id": "net6",
     "question": "You want to start an nginx web server but suspect port 80 is already occupied. What command shows which process is bound to each listening TCP port?",
     "answer": "netstat -tlnp",
+    "altAnswers": ["ss -tlnp", "ss -tulnp", "netstat -tulnp"],
     "explanation": "Every service that accepts network connections is like a business with a street address (port number). This command lists all the \"open for business\" addresses and shows you which program is sitting at each one — so you can see immediately whether port 80 is already claimed before you try to start something new there.",
     "usage": "List every TCP port currently in the LISTEN state along with the process name and PID holding each socket.",
     "examples": [
@@ -2220,7 +2280,8 @@ export const questions: Question[] = [
   {
     "id": "net7",
     "question": "A colleague reports that api.example.com is unreachable. You want to confirm what IP address that hostname currently resolves to using the simplest available DNS query tool. What command do you run?",
-    "answer": "nslookup domain",
+    "answer": "nslookup api.example.com",
+    "altAnswers": ["host api.example.com", "dig api.example.com", "dig +short api.example.com"],
     "explanation": "Every website name like \"api.example.com\" is secretly an IP address in disguise. This command asks your DNS server — the internet's phone book — to look up what number goes with that name, and also tells you which phone book it asked so you know whether your local network's DNS is involved.",
     "usage": "Resolve api.example.com to its current IP address and display which DNS server answered the query.",
     "examples": [
@@ -2238,6 +2299,7 @@ export const questions: Question[] = [
     "id": "net8",
     "question": "After a system reboot the server can no longer reach the internet. You suspect the default gateway is missing. What command prints the kernel's routing table so you can check?",
     "answer": "ip route show",
+    "altAnswers": ["ip route", "ip r"],
     "explanation": "The routing table is your computer's road map for where to send network traffic. Every destination gets a road; the \"default\" road handles everything that doesn't match a more specific address. Printing this map lets you see immediately whether the road to the internet (the default route) is present.",
     "usage": "Print the kernel routing table and check for a `default via` entry pointing to the expected gateway.",
     "examples": [
@@ -2253,8 +2315,9 @@ export const questions: Question[] = [
   },
   {
     "id": "net9",
-    "question": "You deployed a new microservice on web1.example.com and need to verify that port 9090 is actually accepting TCP connections from your laptop. What command checks this without starting an interactive session?",
-    "answer": "telnet host port",
+    "question": "You deployed a new microservice on web1.example.com and need to verify that port 9090 is actually accepting TCP connections from your laptop. What classic command lets you test whether that port accepts a connection?",
+    "answer": "telnet web1.example.com 9090",
+    "altAnswers": ["nc -zv web1.example.com 9090"],
     "explanation": "This command is like walking up to a door and testing whether the doorbell works. You knock on a specific port on a remote machine and immediately find out whether someone is listening there or whether the door is locked (the port is closed or firewalled).",
     "usage": "Verify that TCP port 9090 on web1.example.com is accepting connections from your workstation.",
     "examples": [
@@ -2272,6 +2335,7 @@ export const questions: Question[] = [
     "id": "net10",
     "question": "Your web server is under heavy load and you need to see every active TCP connection — not just listening ports, but all established sessions — along with the process owning each socket. What command does this?",
     "answer": "sudo ss -antp",
+    "altAnswers": ["ss -tanp", "netstat -antp"],
     "explanation": "The listening-ports view is like a list of open storefronts. This broader view also shows every customer currently inside — every live connection. It tells you who (which process), where they're connecting from, and what state the conversation is in, giving you a full picture of your server's current network activity.",
     "usage": "Show all TCP sockets in every state with their owning process to audit live connections on a loaded web server.",
     "examples": [
@@ -2289,7 +2353,7 @@ export const questions: Question[] = [
   {
     "id": "net11",
     "question": "You are writing a shell script that monitors database availability and must stop pinging automatically rather than run forever. What command sends exactly four ICMP packets to db1.internal and then exits?",
-    "answer": "ping -c 4 hostname",
+    "answer": "ping -c 4 db1.internal",
     "explanation": "Without a stop condition, pinging runs until you press Ctrl+C — which is fine in a terminal but breaks automation. The count flag is like setting a timer: ping exactly this many times, then stop and report whether any replies came back.",
     "usage": "Send exactly four ICMP packets to db1.internal and exit with code 0 if the host replies, non-zero if all packets are lost.",
     "examples": [
@@ -2307,7 +2371,8 @@ export const questions: Question[] = [
   {
     "id": "net12",
     "question": "An IP address 203.0.113.55 appeared in your nginx access log and you want to know what hostname it belongs to. What is the fastest one-line DNS tool for this reverse lookup?",
-    "answer": "host google.com",
+    "answer": "host 203.0.113.55",
+    "altAnswers": ["dig -x 203.0.113.55", "nslookup 203.0.113.55"],
     "explanation": "Just as you can look up a phone number to find whose name it belongs to, this command lets you give an IP address and get back the hostname it's registered under. It's the fastest and friendliest DNS lookup tool for a quick answer, forward or backward.",
     "usage": "Perform a reverse DNS lookup on 203.0.113.55 to identify the registered hostname in a single short command.",
     "examples": [
@@ -2325,7 +2390,8 @@ export const questions: Question[] = [
   {
     "id": "net13",
     "question": "API calls from your office to api.partner.com are slow and you need to find which router hop along the path is introducing the latency. What command reveals every network hop between you and the destination?",
-    "answer": "traceroute hostname",
+    "answer": "traceroute api.partner.com",
+    "altAnswers": ["mtr api.partner.com", "tracepath api.partner.com"],
     "explanation": "Imagine sending a series of letters, each addressed to travel one stop further than the last. Every post office (router) along the route has to write back and say \"I got this letter.\" By reading all the return postcards in order, you build a map of the entire path and see how long each leg of the journey takes.",
     "usage": "Trace the network path from your office to api.partner.com and identify which hop introduces the most latency.",
     "examples": [
@@ -2342,7 +2408,7 @@ export const questions: Question[] = [
   },
   {
     "id": "net14",
-    "question": "After changing a cable on the server, eth0 no longer shows LOWER_UP in its flags. You want to toggle the interface off and back on to reset the link. What two commands do this?",
+    "question": "After changing a cable on the server, eth0 no longer shows LOWER_UP in its flags. You want to toggle the interface off and back on to reset the link. After taking it down with 'sudo ip link set eth0 down', what command brings it back up?",
     "answer": "sudo ip link set eth0 up",
     "explanation": "A network interface is like a light switch for a network socket. Even if the hardware is physically connected, the operating system can turn the port on or off in software. Taking it down and bringing it back up forces the system to renegotiate the connection, which often fixes stuck states.",
     "usage": "Bring eth0 down and then up again to reset the link after a cable swap.",
@@ -2361,7 +2427,7 @@ export const questions: Question[] = [
   {
     "id": "net15",
     "question": "Your server has both a VPN tunnel (tun0) and a LAN interface (eth0). You need to verify that traffic to 10.10.5.20 will go through the VPN and not out the LAN gateway. What single command confirms this?",
-    "answer": "ip route get 8.8.8.8",
+    "answer": "ip route get 10.10.5.20",
     "explanation": "Instead of reading the whole routing table and figuring out which entry wins, this command does the kernel's own evaluation for you: give it a destination IP and it tells you exactly which road (interface and gateway) the kernel would choose to reach it, including what source address the packet would carry.",
     "usage": "Confirm that the kernel would route packets to 10.10.5.20 through the VPN interface tun0 rather than through eth0.",
     "examples": [
@@ -2373,13 +2439,13 @@ export const questions: Question[] = [
       "ip route show table all | head -20  # ALL tables, not just 'main'"
     ],
     "memoryTip": "`ip route show` = whole table. `ip route get DEST` = 'for THIS dest, which rule wins?'. Pair with `ip rule list` for policy-based routing (multiple tables). Read fields: `via GW` (gateway), `dev IF` (interface), `src ADDR` (source IP we'd use).",
-    "outputExample": "$ ip route get 8.8.8.8\n8.8.8.8 via 192.168.1.1 dev wlan0 src 192.168.1.42 uid 1000\n    cache\n$ ip route get 10.0.0.5\n10.0.0.5 via 10.8.0.1 dev tun0 src 10.8.0.42 uid 1000\n    cache\n$ ip rule list\n0:      from all lookup local\n100:    from 10.8.0.0/24 lookup vpn\n32766:  from all lookup main\n32767:  from all lookup default",
+    "outputExample": "$ ip route get 8.8.8.8\n8.8.8.8 via 192.168.1.1 dev wlan0 src 192.168.1.42 uid 1000\n    cache\n$ ip route get 10.10.5.20\n10.10.5.20 via 10.8.0.1 dev tun0 src 10.8.0.42 uid 1000\n    cache\n$ ip rule list\n0:      from all lookup local\n100:    from 10.8.0.0/24 lookup vpn\n32766:  from all lookup main\n32767:  from all lookup default",
     "category": "NETWORKING"
   },
   {
     "id": "net16",
-    "question": "You suspect a microservice is sending unexpected outbound requests. What command lets you capture every packet crossing eth0 and save it to a file for later inspection in Wireshark?",
-    "answer": "tcpdump -i eth0",
+    "question": "You suspect a microservice is sending unexpected outbound requests. What command lets you capture every packet crossing eth0 and save it to /tmp/capture.pcap for later inspection in Wireshark?",
+    "answer": "tcpdump -i eth0 -w /tmp/capture.pcap",
     "explanation": "This command is a wiretap for your network interface. It copies every packet flowing in or out and lets you read them — or save them to a file. You can add filters so you only see the traffic you care about, like conversations on a specific port or to a specific address.",
     "usage": "Capture all traffic on eth0 and write it to /tmp/capture.pcap for analysis in Wireshark.",
     "examples": [
@@ -2397,6 +2463,7 @@ export const questions: Question[] = [
     "id": "net17",
     "question": "You need to temporarily host a service on a second IP address (10.10.0.100/24) on eth0 for a migration test without rebooting. What command adds that address at runtime?",
     "answer": "sudo ip addr add 10.10.0.100/24 dev eth0",
+    "altAnswers": ["ip a add 10.10.0.100/24 dev eth0"],
     "explanation": "Linux lets you assign more than one address to the same network card — like having two phone extensions on the same physical desk phone. Adding an address at runtime is instant and doesn't affect existing connections, but it only lasts until the next reboot unless you also update your network configuration files.",
     "usage": "Temporarily bind a second IP 10.10.0.100/24 to eth0 so a migration test service can be reached at that address without a reboot.",
     "examples": [
@@ -2413,8 +2480,8 @@ export const questions: Question[] = [
   },
   {
     "id": "net18",
-    "question": "A deployment script needs to verify that ports 22, 80, and 443 are open on db.prod.internal before proceeding. What command tests a single TCP port and exits with a meaningful success or failure code — without starting an interactive session?",
-    "answer": "nc -zv hostname port",
+    "question": "A deployment script needs to verify that ports on db.prod.internal are open before proceeding. What command tests TCP port 443 there and exits with a meaningful success or failure code — without starting an interactive session?",
+    "answer": "nc -zv db.prod.internal 443",
     "explanation": "This command is a no-nonsense port knock. It connects to a specific port on a remote machine, immediately reports whether the door opened or was slammed shut, and exits with a code your script can read — all without any interactive session or data exchange.",
     "usage": "Check whether TCP port 443 on db.prod.internal is reachable from the deployment script's host, with a 2-second timeout.",
     "examples": [
@@ -2431,7 +2498,7 @@ export const questions: Question[] = [
   },
   {
     "id": "net19",
-    "question": "You need to call the GitHub REST API from a cron job, follow any redirects, suppress the progress bar, but still exit with a non-zero code if the server returns a 4xx or 5xx status. What curl flag combination achieves this?",
+    "question": "You need to call the GitHub REST API at https://api.github.com from a cron job, follow any redirects, suppress the progress bar, but still exit with a non-zero code if the server returns a 4xx or 5xx status. What curl flag combination achieves this?",
     "answer": "curl -fsSL https://api.github.com",
     "explanation": "This curl combination is designed for scripts that can't afford surprises. It downloads a URL quietly, follows any forwarding redirects automatically, and — critically — treats server-side errors as failures rather than silently handing an HTML error page to your script as if it were valid data.",
     "usage": "Call the GitHub REST API with curl in a cron job, following redirects silently, and failing with a non-zero exit code on any HTTP error response.",
@@ -2450,7 +2517,8 @@ export const questions: Question[] = [
   {
     "id": "net20",
     "question": "You changed an A record for staging.example.com and need to verify the new IP is returning correctly from Google's public resolver (8.8.8.8) before announcing the change. What command queries that specific resolver with full detail?",
-    "answer": "dig google.com",
+    "answer": "dig @8.8.8.8 staging.example.com",
+    "altAnswers": ["dig staging.example.com @8.8.8.8"],
     "explanation": "This is the power tool for DNS lookups. Unlike simpler alternatives that just give you an answer, this command shows the full conversation: what you asked, what the server replied, which server answered, how long it took, and the validity of the response. It's the choice of engineers who need to be certain about DNS.",
     "usage": "Query 8.8.8.8 specifically for the current A record of staging.example.com and display the full DNS response including which server answered.",
     "examples": [
@@ -2468,7 +2536,8 @@ export const questions: Question[] = [
   {
     "id": "text1",
     "question": "Your Nginx error log at /var/log/nginx/error.log has thousands of lines. You need to see only the lines that contain the word 'upstream'. What is the simplest command for this?",
-    "answer": "grep error /var/log/nginx/error.log",
+    "answer": "grep upstream /var/log/nginx/error.log",
+    "altAnswers": ["grep 'upstream' /var/log/nginx/error.log"],
     "explanation": "Think of this command as the terminal version of Ctrl+F. You describe what you're looking for and it scans through potentially huge files and prints only the lines that match, no matter how many thousands of unrelated lines it has to skip.",
     "usage": "Search /var/log/nginx/error.log for all lines containing 'upstream' to diagnose reverse-proxy errors.",
     "examples": [
@@ -2485,7 +2554,7 @@ export const questions: Question[] = [
     "question": "An Nginx config file at /etc/nginx/sites-available/myapp.conf uses the old domain 'old.example.com' everywhere. What command replaces every occurrence with 'new.example.com' and saves the change in place?",
     "answer": "sed -i 's/old.example.com/new.example.com/g' /etc/nginx/sites-available/myapp.conf",
     "explanation": "This command is a find-and-replace that works on files without opening an editor. You describe the old text, the new text, and tell it to swap every single occurrence throughout the file. Without the \"save in place\" flag, it just prints the result so you can preview the change before committing.",
-    "usage": "Replace every occurrence of 'old.example.com' with 'new.example.com' directly in /etc/nginx/sites-available/myapp.conf, creating a .bak backup first.",
+    "usage": "Replace every occurrence of 'old.example.com' with 'new.example.com' directly in /etc/nginx/sites-available/myapp.conf, modifying the file in place.",
     "examples": [
       "sed 's/old/new/g' /etc/nginx/nginx.conf  # print result to stdout — file unchanged",
       "sed -i 's/old.example.com/new.example.com/g' /etc/nginx/sites-available/myapp.conf  # modify the file IN PLACE (GNU sed)",
@@ -2530,7 +2599,8 @@ export const questions: Question[] = [
   {
     "id": "text5",
     "question": "You generated a list of 500 email addresses in /tmp/emails.txt but suspect many are repeated. What pipeline deduplicates the list, keeping only one copy of each address?",
-    "answer": "sort file | uniq",
+    "answer": "sort /tmp/emails.txt | uniq",
+    "altAnswers": ["sort -u /tmp/emails.txt"],
     "explanation": "This two-step pipeline is like sorting a stack of business cards alphabetically so all duplicates end up next to each other, then going through the stack and keeping only the first card when you see two identical ones in a row.",
     "usage": "Sort /tmp/emails.txt and remove duplicate lines so each email address appears only once.",
     "examples": [
@@ -2549,6 +2619,7 @@ export const questions: Question[] = [
     "id": "text6",
     "question": "A config file /etc/myapp/settings.conf was created on Windows and contains carriage returns (\\r) at the end of each line, causing parse errors on Linux. What command strips all \\r characters from the file?",
     "answer": "tr -d '\\r' < /etc/myapp/settings.conf",
+    "altAnswers": ["dos2unix /etc/myapp/settings.conf"],
     "explanation": "This command is a character-by-character substitution machine. You tell it which characters to look for and what to replace them with (or delete them entirely). It's perfect for mechanical transformations like stripping Windows line endings or converting uppercase to lowercase throughout a stream.",
     "usage": "Remove all carriage return characters (\\r) from /etc/myapp/settings.conf to fix Windows line endings.",
     "examples": [
@@ -2582,9 +2653,9 @@ export const questions: Question[] = [
   {
     "id": "text8",
     "question": "You have two files: /tmp/usernames.txt (one username per line) and /tmp/emails.txt (one email per line, same order). What command combines them into a single two-column tab-separated file?",
-    "answer": "paste file1 file2",
+    "answer": "paste /tmp/usernames.txt /tmp/emails.txt",
     "explanation": "Where stacking files on top of each other gives you more rows, this command puts files side by side to give you more columns. The first line from file one and the first line from file two become one combined line, separated by a tab. It's the horizontal equivalent of stacking.",
-    "usage": "Combine /tmp/usernames.txt and /tmp/emails.txt side by side with a comma delimiter to produce a user-email mapping.",
+    "usage": "Combine /tmp/usernames.txt and /tmp/emails.txt side by side with the default tab delimiter to produce a user-email mapping.",
     "examples": [
       "paste /tmp/usernames.txt /tmp/emails.txt  # tab-separated: username<TAB>email",
       "paste -d, /tmp/usernames.txt /tmp/emails.txt  # CSV: username,email",
@@ -2600,7 +2671,7 @@ export const questions: Question[] = [
   {
     "id": "text9",
     "question": "A colleague deployed a new version of /etc/nginx/nginx.conf and you want to see exactly what lines changed compared to the backup at /etc/nginx/nginx.conf.bak. What command shows the differences in a format that looks like a git diff?",
-    "answer": "diff file1 file2",
+    "answer": "diff -u /etc/nginx/nginx.conf.bak /etc/nginx/nginx.conf",
     "explanation": "This command places two files side by side in memory and lists every line that is present in one but not the other. The unified format output (with `-u`) uses `+` to mark lines added and `-` for lines removed, with surrounding context lines shown for reference — exactly like the output you see in `git diff`.",
     "usage": "Show what changed between /etc/nginx/nginx.conf.bak and the current /etc/nginx/nginx.conf in unified diff format.",
     "examples": [
@@ -2649,6 +2720,7 @@ export const questions: Question[] = [
     "id": "text12",
     "question": "The 'df -h' output has multiple space-separated columns. You want to print only the filesystem name (column 1) and percent-used (column 5) for each line. What command does this?",
     "answer": "df -h | awk '{print $1, $5}'",
+    "altAnswers": ["df -h | awk '{print $1,$5}'"],
     "explanation": "When a command outputs a table with many columns, this tool lets you cherry-pick exactly which columns to display. Unlike a simpler column-slicer, it's smart enough to handle variable amounts of whitespace between columns and can combine fields with custom formatting.",
     "usage": "Extract columns 1 (filesystem) and 5 (percent used) from 'df -h' output to build a compact disk usage summary.",
     "examples": [
@@ -2663,7 +2735,8 @@ export const questions: Question[] = [
   {
     "id": "text13",
     "question": "You collected 300 IP addresses from your access log into /tmp/ips.txt (one per line) and want to see a unique sorted list. What pipeline accomplishes this?",
-    "answer": "sort file | uniq",
+    "answer": "sort /tmp/ips.txt | uniq",
+    "altAnswers": ["sort -u /tmp/ips.txt"],
     "explanation": "This two-step pipeline is the classic recipe for deduplication. First it alphabetizes the list so all copies of the same address end up next to each other, then it walks through and removes any line that's identical to the one above it. The result is a sorted list with exactly one copy of each unique entry.",
     "usage": "Produce a sorted deduplicated list of unique IP addresses from /tmp/ips.txt.",
     "examples": [
@@ -2694,6 +2767,7 @@ export const questions: Question[] = [
     "id": "text15",
     "question": "A build script outputs hostnames in uppercase (WEBSERVER1, DBSERVER1) but your config file expects them in lowercase. What command converts uppercase letters to lowercase on stdin?",
     "answer": "tr 'A-Z' 'a-z'",
+    "altAnswers": ["tr '[:upper:]' '[:lower:]'"],
     "explanation": "This command is a character-level find-and-replace. You give it two sets of characters — \"replace each character from set one with the matching character from set two.\" Mapping all uppercase letters to their lowercase counterparts makes every capital letter in the stream switch to lowercase.",
     "usage": "Convert uppercase hostnames from a build script to lowercase for use in configuration files.",
     "examples": [
@@ -2708,7 +2782,7 @@ export const questions: Question[] = [
   {
     "id": "text16",
     "question": "You have /tmp/firstnames.txt and /tmp/lastnames.txt, each with one name per line in the same order. What command produces a tab-separated file combining them side by side?",
-    "answer": "paste file1 file2",
+    "answer": "paste /tmp/firstnames.txt /tmp/lastnames.txt",
     "explanation": "While stacking files on top of each other makes them taller, this command makes them wider. It reads the first line from each file simultaneously and joins them with a tab, then the second lines, and so on — like zipping two lists together into two columns.",
     "usage": "Merge /tmp/firstnames.txt and /tmp/lastnames.txt into one tab-separated file with two columns.",
     "examples": [
@@ -2722,8 +2796,8 @@ export const questions: Question[] = [
   },
   {
     "id": "text17",
-    "question": "A monitoring script needs to print a formatted status line like 'web1: 99%' using a variable for the hostname and a variable for the percentage. Which command produces consistent, predictable formatted output in a shell script?",
-    "answer": "printf '%s: %d\\n' name age",
+    "question": "A monitoring script needs to print a formatted status line like 'web1: 99%' from the hostname web1 and the numeric value 99. Which command produces consistent, predictable formatted output in a shell script?",
+    "answer": "printf '%s: %d%%\\n' web1 99",
     "explanation": "This command works like a fill-in-the-blank template. You write the format with placeholders that say \"put a string here\" or \"put a number here,\" then supply the actual values afterward. The result is precisely formatted, consistent output — unlike `echo`, which behaves differently across shells.",
     "usage": "Print a formatted status line 'web1: 99%' with consistent field widths using variables for hostname and percentage.",
     "examples": [
@@ -2739,6 +2813,7 @@ export const questions: Question[] = [
     "id": "text18",
     "question": "You want to find lines in /var/log/auth.log that contain either 'Failed password' or 'Invalid user'. What single grep command matches both patterns on the same file?",
     "answer": "grep -E 'Failed password|Invalid user' /var/log/auth.log",
+    "altAnswers": ["grep -E '(Failed password|Invalid user)' /var/log/auth.log", "egrep 'Failed password|Invalid user' /var/log/auth.log"],
     "explanation": "Extended regular expressions let you describe \"match this OR that\" patterns in a single command. Instead of running grep twice and combining the output, you write a single pattern with a pipe character between the alternatives, and every line matching either phrase is returned.",
     "usage": "Find all lines in /var/log/auth.log that contain either 'Failed password' or 'Invalid user' to identify login attack patterns.",
     "examples": [
@@ -2805,6 +2880,7 @@ export const questions: Question[] = [
     "id": "sys2",
     "question": "A cron job that writes to /var/log/ fails with 'No space left on device', but you don't know which filesystem is full. What command shows free and used disk space on every mounted filesystem?",
     "answer": "df -h",
+    "altAnswers": ["df"],
     "explanation": "Your server's storage is divided into separate filing cabinets (filesystems), each mounted at a different directory. This command lists all of them with how much is used and how much is left, so you can immediately see which cabinet is overflowing.",
     "usage": "Show disk usage for every mounted filesystem in human-readable format to find which one is causing 'No space left on device'.",
     "examples": [
@@ -2822,6 +2898,7 @@ export const questions: Question[] = [
     "id": "sys3",
     "question": "Your Node.js application is unexpectedly slow and you suspect memory pressure. What command shows total RAM, how much is genuinely available for new processes, and whether the system is swapping?",
     "answer": "free -h",
+    "altAnswers": ["free", "free -m"],
     "explanation": "This command prints a concise memory report. The key number is not \"used\" but \"available\" — Linux deliberately fills unused RAM with file caches to speed things up, so the \"used\" column looks scary but most of it is reclaimable. If \"available\" is tiny and the swap row shows significant usage, the machine is under real memory pressure.",
     "usage": "Check how much RAM is genuinely available for new processes and whether the system has started using swap.",
     "examples": [
@@ -2839,6 +2916,7 @@ export const questions: Question[] = [
     "id": "sys4",
     "question": "Before launching a parallel build job that uses all CPU cores, you want to check whether the server is already under load. What command shows how long the server has been running and the current 1/5/15-minute load averages?",
     "answer": "uptime",
+    "altAnswers": ["w"],
     "explanation": "This command gives you a three-number traffic report for your CPU. Each number is the average \"busyness\" over the last 1, 5, and 15 minutes. Compare them to the number of CPU cores: if the load matches the core count, the machine is fully busy; double the core count means things are already queueing up.",
     "usage": "Check whether the 12-core build server is already under significant load before launching an additional parallel make job.",
     "examples": [
@@ -2872,7 +2950,8 @@ export const questions: Question[] = [
   {
     "id": "sys6",
     "question": "Wi-Fi stopped working after a kernel update. You need to identify the network card's hardware name and confirm which kernel driver (if any) is currently bound to it. What command lists all PCI devices with driver information?",
-    "answer": "lspci",
+    "answer": "lspci -k",
+    "altAnswers": ["lspci -v"],
     "explanation": "Your computer's expansion cards — graphics, Wi-Fi, wired network, sound — connect through an internal bus called PCI. This command asks the kernel to list every device on that bus along with its name and, with the right flag, which driver software is currently managing it.",
     "usage": "List all PCI devices with their current kernel driver to diagnose why the Wi-Fi card lost its driver after a kernel update.",
     "examples": [
@@ -2883,7 +2962,7 @@ export const questions: Question[] = [
       "lspci -k  # show kernel driver and modules per device"
     ],
     "memoryTip": "`ls*` family: `lspci` = list PCI. Sister commands: `lsusb`, `lscpu`, `lsblk`, `lsmod`. All print 'what hardware/kernel objects are present'. If `lspci` shows a device but `-k` shows no driver, that's typically why the device isn't working.",
-    "outputExample": "$ lspci\n00:00.0 Host bridge: Intel Corporation Coffee Lake HOST and DRAM Controller\n00:02.0 VGA compatible controller: Intel Corporation UHD Graphics 630\n00:14.0 USB controller: Intel Corporation Cannon Lake PCH USB 3.1 xHCI\n00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection (7) I219-LM\n01:00.0 VGA compatible controller: NVIDIA Corporation TU117M [GeForce GTX 1650 Mobile]",
+    "outputExample": "$ lspci -k\n00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection (7) I219-LM\n\tKernel driver in use: e1000e\n\tKernel modules: e1000e\n02:00.0 Network controller: Intel Corporation Wi-Fi 6 AX200\n\tKernel modules: iwlwifi\n# Wi-Fi card has no 'Kernel driver in use' line — the driver failed to bind",
     "category": "SYSTEM INFO"
   },
   {
@@ -2924,6 +3003,7 @@ export const questions: Question[] = [
     "id": "sys9",
     "question": "A Python script is picking up unexpected configuration because an environment variable is set somewhere. What command prints every environment variable currently exported in your shell session?",
     "answer": "env",
+    "altAnswers": ["printenv"],
     "explanation": "Environment variables are name-value pairs that get passed automatically to every program you launch. They're used to configure tools, pass secrets, and set preferences. This command prints all of them at once so you can see what \"invisible\" context your programs are inheriting.",
     "usage": "Print all environment variables in the current shell session to find which one is providing unexpected configuration to a Python script.",
     "examples": [
@@ -2942,6 +3022,7 @@ export const questions: Question[] = [
     "id": "sys10",
     "question": "A new team member asks what the server's hostname is before setting up an SSH config alias. What single command prints just the machine's hostname?",
     "answer": "hostname",
+    "altAnswers": ["uname -n"],
     "explanation": "Every computer on a network has a human-readable name — its hostname. It's what appears in the terminal prompt before the `$` and what other machines use to refer to it by name. This command simply prints that name.",
     "usage": "Print the server's hostname to use as the Host value in an SSH client config alias.",
     "examples": [
@@ -2956,7 +3037,8 @@ export const questions: Question[] = [
   {
     "id": "sys11",
     "question": "A backup script needs to name output files with today's date in YYYY-MM-DD format, like 'backup_2026-05-19.tar.gz'. What command prints the current date in that exact format?",
-    "answer": "date",
+    "answer": "date +%Y-%m-%d",
+    "altAnswers": ["date '+%Y-%m-%d'"],
     "explanation": "Every Linux system keeps a real-time clock. The date command reads it and formats the output however you need — ISO 8601, epoch seconds, custom strings. In scripts it creates timestamped filenames and log entries that sort chronologically. With +FORMAT you control every character. With -d you parse and reformat date strings or do relative arithmetic like \"7 days ago\". The system clock can be queried or set (with sudo), and hardware clock sync is handled by systemd-timesyncd or ntpd.",
     "usage": "Print today's date in YYYY-MM-DD format to use in a backup filename.",
     "examples": [
@@ -2974,6 +3056,7 @@ export const questions: Question[] = [
     "id": "sys12",
     "question": "During a post-incident review, you need to know how long the production server has been running since its last reboot. What command shows both the uptime and the current CPU load?",
     "answer": "uptime",
+    "altAnswers": ["w"],
     "explanation": "This command answers two questions at once: how long has this machine been running since it was last rebooted, and how busy is the CPU right now? The load numbers give you a quick sense of whether the server is handling its workload comfortably or struggling.",
     "usage": "Check how long the production server has been running and its current load averages for an incident post-mortem.",
     "examples": [
@@ -2989,7 +3072,7 @@ export const questions: Question[] = [
   {
     "id": "sys13",
     "question": "A suspicious login alert arrived. You need to see which users are currently logged into the server and what commands they are running. What command shows all active sessions with their current activity?",
-    "answer": "hostnamectl status",
+    "answer": "w",
     "explanation": "This command is the security desk's visitor log for your server. It shows who is logged in, where they connected from, how long they've been idle, and what command they're currently running. Unlike a simple login list, it gives you enough context to spot unusual activity.",
     "usage": "List all currently logged-in users, their source IPs, and what commands they are executing to respond to a suspicious login alert.",
     "examples": [
@@ -3005,6 +3088,7 @@ export const questions: Question[] = [
     "id": "sys14",
     "question": "You plugged in a new USB hard drive but the system doesn't mount it automatically. You want to check the kernel's hardware event log to see if Linux detected the device. What command shows recent kernel messages?",
     "answer": "dmesg",
+    "altAnswers": ["journalctl -k"],
     "explanation": "The kernel is constantly writing notes to itself as it deals with hardware events — plug in a USB device, load a driver, detect a disk error. This command reads those notes, which are stored in a circular memory buffer. It's the first place to look when something at the hardware level is behaving unexpectedly.",
     "usage": "Show the last 20 kernel messages to see whether the recently plugged-in USB hard drive was detected.",
     "examples": [
@@ -3052,6 +3136,7 @@ export const questions: Question[] = [
     "id": "sys17",
     "question": "An nginx service failed to start and you need to see the systemd service logs from the current boot to find the error. What command shows those journal log entries?",
     "answer": "journalctl --boot",
+    "altAnswers": ["journalctl -b", "journalctl -u nginx -b", "journalctl -u nginx --boot"],
     "explanation": "On modern systemd-based Linux systems, logs from all services flow into a central journal. This command opens that journal and shows you everything from the current boot session — from the very first system message to right now — so you can trace exactly what happened when a service failed to start.",
     "usage": "View all systemd journal entries from the current boot to find the nginx startup error message.",
     "examples": [
@@ -3068,6 +3153,7 @@ export const questions: Question[] = [
     "id": "sys18",
     "question": "Your application server is being considered for an upgrade from 8GB to 16GB RAM. Before ordering, you want to know the current memory utilization at peak load. What command gives a concise summary of RAM and swap usage?",
     "answer": "free -h",
+    "altAnswers": ["free", "free -m"],
     "explanation": "This command prints a compact three-row table showing your total RAM, how much is genuinely in use vs. reserved for caching, and how much of the slower swap space is being used. The \"available\" column tells you the honest answer to \"how much room is left for new programs.\"",
     "usage": "Show total, used, available RAM, and swap usage to measure peak-load memory consumption before deciding on a RAM upgrade.",
     "examples": [
@@ -3096,7 +3182,7 @@ export const questions: Question[] = [
   },
   {
     "id": "sys20",
-    "question": "A new colleague runs a script on a server and the script needs to detect the Linux distribution to choose the right package manager. What file contains the standard machine-readable distribution identity information?",
+    "question": "A new colleague runs a script on a server and the script needs to detect the Linux distribution to choose the right package manager. What command prints /etc/os-release, the standard machine-readable distribution identity file?",
     "answer": "cat /etc/os-release",
     "explanation": "Every mainstream Linux distribution ships a small text file that acts as its identity card. It contains the official name, version, and a short identifier in a standardized format that scripts can read without parsing complex command output.",
     "usage": "Read /etc/os-release to determine the distribution name and version for a package-manager detection script.",
@@ -3113,7 +3199,8 @@ export const questions: Question[] = [
   {
     "id": "pkg1",
     "question": "A fresh Ubuntu 24.04 server needs the git package installed for a CI pipeline. What command installs it from the official repositories?",
-    "answer": "apt-get install git",
+    "answer": "apt install git",
+    "altAnswers": ["apt-get install git"],
     "explanation": "A package manager is like an app store for your Linux server. You type the name of the software you want and the manager downloads it, installs it, and automatically handles everything else it needs to work — no hunting for download links or manual setup.",
     "usage": "Install the git package on a fresh Ubuntu server so the CI pipeline can check out repositories.",
     "examples": [
@@ -3130,7 +3217,8 @@ export const questions: Question[] = [
   {
     "id": "pkg2",
     "question": "You want to remove the apache2 package from a server and also delete its configuration files in /etc/apache2/ so a clean reinstall will use default settings. What command completely removes both the package and its configs?",
-    "answer": "apt-get remove --purge apache2",
+    "answer": "apt purge apache2",
+    "altAnswers": ["apt-get purge apache2", "apt remove --purge apache2", "apt-get remove --purge apache2"],
     "explanation": "Removing a package has two levels. The basic removal takes the programs away but leaves your customized settings behind in case you want them when you reinstall. The complete removal wipes everything — programs AND config files — giving you a clean slate.",
     "usage": "Completely remove the apache2 package and all its config files in /etc/apache2/ so a fresh reinstall starts from defaults.",
     "examples": [
@@ -3147,7 +3235,8 @@ export const questions: Question[] = [
   {
     "id": "pkg3",
     "question": "Before installing a new package on an Ubuntu server, you want to make sure APT has the latest information about available packages. What command refreshes the package catalog without installing anything?",
-    "answer": "apt-get update",
+    "answer": "apt update",
+    "altAnswers": ["apt-get update"],
     "explanation": "Your package manager keeps a local copy of the software catalog, listing what's available and which versions. Over time that catalog gets stale. This command downloads a fresh copy from all your configured software sources — it's like hitting \"refresh\" on the app store before browsing. It doesn't install anything; it just updates the list.",
     "usage": "Refresh the APT package catalog to ensure the latest package versions and security updates are visible before installing anything.",
     "examples": [
@@ -3164,7 +3253,8 @@ export const questions: Question[] = [
   {
     "id": "pkg4",
     "question": "After refreshing the package catalog, you want to install all available security patches and updates for every installed package. What command applies those upgrades?",
-    "answer": "apt-get upgrade",
+    "answer": "apt upgrade",
+    "altAnswers": ["apt-get upgrade"],
     "explanation": "After refreshing the catalog of available packages, this command compares what you have installed against what's available and installs the newer versions. It's the equivalent of pressing \"Update All\" in an app store — applying security patches, bug fixes, and new features across everything on the system.",
     "usage": "Install all available security patches and updates after running 'sudo apt update' on an Ubuntu server.",
     "examples": [
@@ -3182,7 +3272,8 @@ export const questions: Question[] = [
   {
     "id": "pkg5",
     "question": "You need a tool to convert Markdown files to HTML but don't know the package name. What command searches the package catalog for packages related to 'markdown'?",
-    "answer": "apt-cache search markdown",
+    "answer": "apt search markdown",
+    "altAnswers": ["apt-cache search markdown"],
     "explanation": "When you know what you want to do but not which program does it, this command searches the package catalog's names and descriptions for your keyword and lists all matching packages. It's the command-line equivalent of searching the app store for a category of software.",
     "usage": "Search the APT package catalog for packages related to 'markdown' to find a tool that converts Markdown to HTML.",
     "examples": [
@@ -3200,7 +3291,8 @@ export const questions: Question[] = [
   {
     "id": "pkg6",
     "question": "Before installing the postgresql package you want to read its full description, version, and list of dependencies. What command displays this metadata for a package without installing it?",
-    "answer": "apt-cache show postgresql",
+    "answer": "apt show postgresql",
+    "altAnswers": ["apt-cache show postgresql"],
     "explanation": "Before committing to installing a package, this command shows you the full product description — what it does, who maintains it, what other packages it needs, and how much space it will use. It reads from the locally cached catalog so it works even offline.",
     "usage": "Display the full metadata for the postgresql package including version, dependencies, and description before deciding whether to install it.",
     "examples": [
@@ -3219,6 +3311,7 @@ export const questions: Question[] = [
     "id": "pkg7",
     "question": "A deployment script needs to check whether the curl package is installed before attempting to download files. What pipeline confirms whether a package is installed and exits with a meaningful status code?",
     "answer": "dpkg -l | grep curl",
+    "altAnswers": ["dpkg -l | grep -i curl"],
     "explanation": "This command looks up the local package database and shows the installation status of any package matching your keyword. Each line starts with a two-letter status code that tells you exactly what state the package is in — installed, config-only, or missing.",
     "usage": "Check whether the curl package is installed in a deployment script, exiting with failure if it is missing.",
     "examples": [
@@ -3255,6 +3348,7 @@ export const questions: Question[] = [
     "id": "pkg9",
     "question": "A Dockerfile's final layer is very large because APT cached the downloaded .deb files during installation. What command deletes those cached archives to shrink the image?",
     "answer": "apt-get clean",
+    "altAnswers": ["apt clean"],
     "explanation": "Every time APT installs a package, it saves a copy of the downloaded installer file in a cache folder — in case you need to reinstall later without downloading again. Over time this cache grows significantly. This command empties that folder, reclaiming the disk space without affecting any installed software.",
     "usage": "Delete all cached .deb archives from /var/cache/apt/archives/ to reduce a Docker image layer size.",
     "examples": [
@@ -3288,7 +3382,8 @@ export const questions: Question[] = [
   {
     "id": "pkg11",
     "question": "You downloaded the Google Chrome .deb file from Google's website to /tmp/google-chrome-stable_current_amd64.deb. What is the recommended command to install it, ensuring dependencies are resolved automatically?",
-    "answer": "dpkg -i package.deb",
+    "answer": "apt install /tmp/google-chrome-stable_current_amd64.deb",
+    "altAnswers": ["apt-get install /tmp/google-chrome-stable_current_amd64.deb"],
     "explanation": "Installing a package file you downloaded directly is slightly different from installing from the official repositories. The recommended approach uses APT rather than the low-level installer, because APT automatically figures out any other packages that are needed and downloads them from the internet.",
     "usage": "Install the downloaded Google Chrome .deb file from /tmp/, automatically resolving any missing dependencies.",
     "examples": [
@@ -3299,13 +3394,13 @@ export const questions: Question[] = [
       "dpkg-deb -I /tmp/google-chrome-stable_current_amd64.deb  # print the .deb's control/metadata file"
     ],
     "memoryTip": "Prefer `sudo apt install ./file.deb` over `dpkg -i` — APT resolves deps; dpkg doesn't. If you do use dpkg and it breaks: `sudo apt install -f` cleans up. Always `./` for a local file, otherwise APT looks in repos for that name.",
-    "outputExample": "$ sudo apt install ./google-chrome-stable_current_amd64.deb\nReading package lists... Done\nNote, selecting 'google-chrome-stable' instead of './google-chrome-stable_current_amd64.deb'\nThe following additional packages will be installed:\n  fonts-liberation libu2f-udev libvulkan1\nAfter this operation, 270 MB of additional disk space will be used.\nDo you want to continue? [Y/n] Y\nGet:1 http://archive.ubuntu.com/ubuntu noble/main amd64 libu2f-udev all 1.1.10-3 [9,160 B]\nSelecting previously unselected package google-chrome-stable.\nSetting up google-chrome-stable (124.0.6367.118-1) ...",
+    "outputExample": "$ sudo apt install /tmp/google-chrome-stable_current_amd64.deb\nReading package lists... Done\nNote, selecting 'google-chrome-stable' instead of '/tmp/google-chrome-stable_current_amd64.deb'\nThe following additional packages will be installed:\n  fonts-liberation libu2f-udev libvulkan1\nAfter this operation, 270 MB of additional disk space will be used.\nDo you want to continue? [Y/n] Y\nGet:1 http://archive.ubuntu.com/ubuntu noble/main amd64 libu2f-udev all 1.1.10-3 [9,160 B]\nSelecting previously unselected package google-chrome-stable.\nSetting up google-chrome-stable (124.0.6367.118-1) ...",
     "category": "PACKAGES"
   },
   {
     "id": "pkg12",
     "question": "Before removing libssl3 from a server, you need to know which other installed packages depend on it — removing it might break them. What command shows the reverse dependencies of a package?",
-    "answer": "apt-cache depends libssl3",
+    "answer": "apt-cache rdepends libssl3",
     "explanation": "Every package can declare that it needs other packages to work. This command shows that dependency graph — both forward (what this package needs) and backward (what other packages need this one). Before removing something, always check who depends on it to avoid accidentally breaking other software.",
     "usage": "List all installed packages that depend on libssl3 to assess the impact of removing it.",
     "examples": [
@@ -3322,7 +3417,8 @@ export const questions: Question[] = [
   {
     "id": "pkg13",
     "question": "You need Python 3.12 on Ubuntu 22.04 but the official repos only ship 3.10. A colleague says to use the deadsnakes PPA. What command adds that PPA and automatically updates the package catalog?",
-    "answer": "sudo add-apt-repository -y ppa:deadsnakes/ppa && sudo apt update",
+    "answer": "add-apt-repository ppa:deadsnakes/ppa",
+    "altAnswers": ["add-apt-repository -y ppa:deadsnakes/ppa", "add-apt-repository ppa:deadsnakes/ppa && sudo apt update", "add-apt-repository ppa:deadsnakes/ppa && apt update"],
     "explanation": "A PPA is a personal software repository hosted by a developer or team that contains packages not in the official Ubuntu repositories — often newer versions. Adding one makes those packages available to APT as if they were in the official repos, and this command handles the whole process in one step.",
     "usage": "Add the deadsnakes PPA to install Python 3.12 on Ubuntu 22.04 and automatically update the package catalog.",
     "examples": [
@@ -3338,8 +3434,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pkg16",
-    "question": "During a security audit you need to list every active APT repository configured on the server, including any third-party sources that were added. What command shows all active repo lines?",
+    "question": "During a security audit you need to list every active APT repository configured on the server, including any third-party sources that were added. Using grep -R with the pattern '^deb' across /etc/apt/sources.list and the .list files matched by /etc/apt/sources.list.d/*.list, what command shows all active repo lines?",
     "answer": "grep -R '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/*.list",
+    "altAnswers": ["grep -r '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/*.list"],
     "explanation": "Your server's software sources are configured in text files in two locations. This command reads all of them at once and shows every active repository line — both the official Ubuntu sources and any third-party repositories that have been added, so you can see exactly where software is coming from.",
     "usage": "List all active APT repository entries across both /etc/apt/sources.list and /etc/apt/sources.list.d/ for a security audit.",
     "examples": [
@@ -3392,7 +3489,7 @@ export const questions: Question[] = [
   {
     "id": "pkg15",
     "question": "The command 'htop' is not found and you need to know which package provides the /usr/bin/htop binary. What command searches repository metadata to find which package ships a specific file path?",
-    "answer": "apt-file list htop",
+    "answer": "apt-file search /usr/bin/htop",
     "explanation": "Sometimes you know the file or command you need but not which package to install to get it. This tool lets you search in reverse — give it a file path and it tells you which package contains that file, even if the package isn't currently installed.",
     "usage": "Find which package provides /usr/bin/htop so you can install the correct package.",
     "examples": [
@@ -3409,8 +3506,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash1",
-    "question": "You want to automate your project's build-and-deploy sequence as a shell script. The file will start with two lines: the shebang telling the kernel to use bash, and an echo statement. What do those two lines look like?",
+    "question": "You want to automate your project's build-and-deploy sequence as a shell script. The file will start with two lines: the shebang telling the kernel to use /bin/bash, followed by echo 'Hello World'. What do those two lines look like?",
     "answer": "#!/bin/bash\necho 'Hello World'",
+    "altAnswers": ["#!/bin/bash\necho Hello World"],
     "explanation": "A shell script is just a text file containing the same commands you'd type in the terminal, saved so you can replay them anytime. The first line is a special instruction telling the operating system which program to use to run the file — without it, the system doesn't know how to interpret the rest.",
     "usage": "Create a bash script that automates the project build-and-deploy sequence, starting with the shebang and a status echo.",
     "examples": [
@@ -3426,8 +3524,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash2",
-    "question": "A script needs to load /etc/myapp/config.sh only if that file actually exists. What bash if-statement checks whether a file exists before sourcing it?",
-    "answer": "if [ -f file ]; then echo 'exists'; fi",
+    "question": "A script needs to load /etc/myapp/config.sh only if that file actually exists. Using a single-line if-statement with the [ -f ] test and the source command (no else branch), how do you source the file only when it exists?",
+    "answer": "if [ -f /etc/myapp/config.sh ]; then source /etc/myapp/config.sh; fi",
+    "altAnswers": ["if [ -f /etc/myapp/config.sh ]; then . /etc/myapp/config.sh; fi", "[ -f /etc/myapp/config.sh ] && source /etc/myapp/config.sh", "if [[ -f /etc/myapp/config.sh ]]; then source /etc/myapp/config.sh; fi"],
     "explanation": "Before your script tries to use a file, you can ask a yes/no question: \"does this file exist?\" The if-statement runs the code inside only when the answer is yes. This prevents the script from crashing when an optional file is absent.",
     "usage": "Load /etc/myapp/config.sh only when that file exists, silently skipping the source if it is absent.",
     "examples": [
@@ -3438,13 +3537,14 @@ export const questions: Question[] = [
       "if [[ -f $file && -r $file ]]; then echo readable; fi  # [[ ]] = bash, no quoting needed"
     ],
     "memoryTip": "`-f` = File (regular), `-d` = Directory, `-e` = Exists (any type). Always spell it `if [ -f \"$x\" ]; then ... ; fi`. Mnemonic for the closers: `fi` ends `if`, `done` ends `do`, `esac` ends `case` — keywords spelled backwards.",
-    "outputExample": "$ touch /tmp/hello\n$ if [ -f /tmp/hello ]; then echo 'exists'; else echo 'missing'; fi\nexists\n$ if [ -f /tmp/nope ]; then echo 'exists'; else echo 'missing'; fi\nmissing",
+    "outputExample": "$ if [ -f /etc/myapp/config.sh ]; then source /etc/myapp/config.sh; fi\n$ echo $DB_HOST\ndb1.internal\n$ if [ -f /etc/myapp/missing.sh ]; then source /etc/myapp/missing.sh; fi\n$ # file absent — nothing sourced, no error",
     "category": "BASH SCRIPTING"
   },
   {
     "id": "bash3",
-    "question": "A script needs to compress every .log file in /var/log/myapp/ individually. What for-loop iterates over all matching files in a directory?",
-    "answer": "for file in *.txt; do echo $file; done",
+    "question": "A script needs to compress every .log file in /var/log/myapp/ individually. Using loop variable f and gzip \"$f\" as the body, what one-line for-loop iterates over /var/log/myapp/*.log?",
+    "answer": "for f in /var/log/myapp/*.log; do gzip \"$f\"; done",
+    "altAnswers": ["for f in /var/log/myapp/*.log; do gzip $f; done"],
     "explanation": "A for-loop is like handing each item in a list to a worker one at a time. The glob pattern expands to every matching filename before the loop starts, so each run of the loop body receives one specific file. It's the standard way to perform the same operation on a group of files.",
     "usage": "Iterate over every .log file in /var/log/myapp/ and compress each one with gzip.",
     "examples": [
@@ -3455,15 +3555,16 @@ export const questions: Question[] = [
       "for ((i=0; i<3; i++)); do echo \"i=$i\"; done  # C-style numeric loop"
     ],
     "memoryTip": "`for VAR in LIST; do ... done`. The glob `*.log` is expanded BEFORE the loop starts, not while it runs. Always QUOTE `\"$file\"` — filenames with spaces will betray you otherwise.",
-    "outputExample": "$ touch a.log b.log 'two words.log'\n$ for f in /var/log/myapp/*.log; do echo \"got: $f\"; done\ngot: /var/log/myapp/a.log\ngot: /var/log/myapp/b.log\ngot: /var/log/myapp/two words.log",
+    "outputExample": "$ ls /var/log/myapp/\napp.log  worker.log\n$ for f in /var/log/myapp/*.log; do gzip \"$f\"; done\n$ ls /var/log/myapp/\napp.log.gz  worker.log.gz",
     "category": "BASH SCRIPTING"
   },
   {
     "id": "bash4",
-    "question": "A script needs to ask the user to type a database password and store it without echoing the characters to the screen. What read command captures input silently?",
-    "answer": "read -p 'Enter name: ' name",
+    "question": "A script needs to show the prompt 'Password: ' and store the typed database password in a variable named password without echoing the characters to the screen. Using the combined flags -sp, what read command captures input silently?",
+    "answer": "read -sp 'Password: ' password",
+    "altAnswers": ["read -s -p 'Password: ' password", "read -srp 'Password: ' password"],
     "explanation": "This command pauses the script and waits for the user to type something and press Enter. With the silent flag, the typed characters don't appear on screen — essential for passwords. The typed text is stored in a variable for the script to use later.",
-    "usage": "Prompt for a database password and store it silently in a variable without echoing characters to the terminal.",
+    "usage": "Prompt with 'Password: ' and store the typed database password silently in the variable named password, without echoing characters to the terminal.",
     "examples": [
       "read -rp 'Enter your name: ' username\necho \"Hello $username\"  # always use -r in scripts",
       "read -srp 'Enter password: ' password; echo  # -s = silent, echo adds the missing newline",
@@ -3472,13 +3573,14 @@ export const questions: Question[] = [
       "while IFS= read -r line; do echo \"got: $line\"; done < /etc/hosts  # line-by-line file read"
     ],
     "memoryTip": "Flag cheat-sheet: `-p` PROMPT, `-r` RAW (use always), `-s` SILENT (password), `-n N` exactly N chars, `-t SECS` timeout, `-a ARR` into array. No variable name? Read into magic `$REPLY`. For file reading: `while IFS= read -r line` is the canonical safe loop.",
-    "outputExample": "$ read -rp 'Enter name: ' name\nEnter name: Alice\n$ echo \"Hello $name\"\nHello Alice\n$ read -srp 'Password: ' pw; echo\nPassword: \n$ echo \"got ${#pw} chars\"\ngot 12 chars",
+    "outputExample": "$ read -sp 'Password: ' password; echo\nPassword: \n$ echo \"captured ${#password} characters\"\ncaptured 12 characters",
     "category": "BASH SCRIPTING"
   },
   {
     "id": "bash5",
-    "question": "A deploy script needs to name a backup file with today's date, like 'db_backup_2026-05-19.sql'. How do you capture the output of 'date +%F' into a variable to use in the filename?",
-    "answer": "files=$(ls *.txt)",
+    "question": "A deploy script needs to name a backup file with today's date, like 'db_backup_2026-05-19.sql'. How do you capture the output of 'date +%F' into a variable named today using command substitution?",
+    "answer": "today=$(date +%F)",
+    "altAnswers": ["today=`date +%F`"],
     "explanation": "Command substitution lets you run a command and use its output as a value — like plugging the answer of one command directly into another. Wrapping a command in `$(...)` says \"run this, and replace this whole expression with whatever the command printed.\"",
     "usage": "Capture the current date in YYYY-MM-DD format into a variable and use it to construct a timestamped backup filename.",
     "examples": [
@@ -3494,7 +3596,7 @@ export const questions: Question[] = [
   },
   {
     "id": "bash6",
-    "question": "A deploy script is called as './deploy.sh web1.example.com /opt/myapp'. The script needs to access the hostname as the first argument and the path as the second. How does bash expose command-line arguments?",
+    "question": "A deploy script is called as './deploy.sh web1.example.com /opt/myapp'. The script needs to access the hostname as the first argument and the path as the second. What echo command prints the text 'First arg: ' followed by the value of the first positional parameter (in one double-quoted string)?",
     "answer": "echo \"First arg: $1\"",
     "explanation": "When you run a script with extra words after its name, those words are automatically available inside the script as numbered variables — the first word as $1, the second as $2, and so on. The script can check how many were passed and use each one independently.",
     "usage": "Access the first argument (hostname) as $1 and the second argument (deploy path) as $2 in the deploy.sh script.",
@@ -3511,8 +3613,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash7",
-    "question": "A nightly backup script runs 'mysqldump' and you want successful output saved to /var/log/backup.log while errors go separately to /var/log/backup.err. What redirection syntax achieves this?",
+    "question": "A nightly backup script runs 'mysqldump --all-databases' and you want successful output saved to /var/log/backup.log while errors go separately to /var/log/backup.err. What redirection syntax achieves this?",
     "answer": "mysqldump --all-databases > /var/log/backup.log 2> /var/log/backup.err",
+    "altAnswers": ["mysqldump --all-databases >/var/log/backup.log 2>/var/log/backup.err", "mysqldump --all-databases > /var/log/backup.log 2>/var/log/backup.err", "mysqldump --all-databases >/var/log/backup.log 2> /var/log/backup.err"],
     "explanation": "Every program has two separate output streams: one for normal results and one for error messages. By default both appear mixed together on the terminal. Redirection lets you route each stream to a different file, so you can review successes and failures independently.",
     "usage": "Run mysqldump, saving normal output to /var/log/backup.log and error messages to /var/log/backup.err.",
     "examples": [
@@ -3528,10 +3631,11 @@ export const questions: Question[] = [
   },
   {
     "id": "bash8",
-    "question": "Multiple scripts all need the same logging logic. You want to define a reusable 'log' function in a bash script that prints a timestamped message. What is the syntax for defining a bash function?",
-    "answer": "log_message() { echo \"[$(date)] $1\"; }",
+    "question": "Multiple scripts all need the same logging logic. You want a reusable function named log whose body is: echo \"[$(date)] $1\". Using the name() { ...; } syntax, what is the one-line definition?",
+    "answer": "log() { echo \"[$(date)] $1\"; }",
+    "altAnswers": ["function log { echo \"[$(date)] $1\"; }", "function log() { echo \"[$(date)] $1\"; }"],
     "explanation": "A function is a named block of reusable code. Once defined, you can call it by name just like any command, passing arguments to it. This is how scripts stay maintainable — you write complex logic once, give it a name, and reuse it throughout the script.",
-    "usage": "Define a reusable 'log' function that prepends a timestamp to every message and appends it to /var/log/myapp/deploy.log.",
+    "usage": "Define a reusable 'log' function that prints its first argument prefixed with the current date in square brackets.",
     "examples": [
       "log() { echo \"[$(date +%F\\ %T)] $*\" >> /var/log/myapp/deploy.log; }\nlog 'started deployment'  # reusable logger",
       "die() { echo \"FATAL: $*\" >&2; exit 1; }\n[ -f /etc/myapp/config.sh ] || die 'config missing'",
@@ -3540,32 +3644,34 @@ export const questions: Question[] = [
       "declare -F  # list all defined functions"
     ],
     "memoryTip": "`name() { ... }` defines, `name args` calls. `$1`..`$#` SHADOW the script's args inside. `local x=...` to avoid leaking variables. `return N` sets exit code (0-255), not a string — to 'return' data, echo it and let the caller use `$(...)`. Define before use.",
-    "outputExample": "$ greet() { local name=$1; echo \"Hello, ${name:-stranger}\"; }\n$ greet World\nHello, World\n$ greet\nHello, stranger\n$ declare -F\ndeclare -f greet",
+    "outputExample": "$ log() { echo \"[$(date)] $1\"; }\n$ log 'deploy started'\n[Tue May 19 14:35:02 UTC 2026] deploy started\n$ log 'deploy finished'\n[Tue May 19 14:36:10 UTC 2026] deploy finished\n$ declare -F\ndeclare -f log",
     "category": "BASH SCRIPTING"
   },
   {
     "id": "bash9",
-    "question": "A script needs to create a directory, and if mkdir fails, it should print an error and exit. What if-statement directly tests whether a command succeeded or failed?",
+    "question": "A script must create the directory /var/run/myapp. On success it should echo 'created'; if mkdir fails it should echo 'failed' to stderr (>&2) and exit 1. What if-statement tests the mkdir command's exit status directly (no [ ] brackets)?",
     "answer": "if mkdir /var/run/myapp; then echo 'created'; else echo 'failed' >&2; exit 1; fi",
+    "altAnswers": ["if mkdir /var/run/myapp; then echo created; else echo failed >&2; exit 1; fi"],
     "explanation": "In bash, the if-statement doesn't take a \"true or false\" expression — it runs a command and checks whether that command succeeded. Success means the command's exit code is 0; any non-zero exit code means failure. This lets you test the outcome of any command directly.",
-    "usage": "Attempt to create /opt/myapp/deployments and exit the script with an error message if mkdir fails.",
+    "usage": "Attempt to create /var/run/myapp and exit the script with an error message if mkdir fails.",
     "examples": [
-      "if mkdir /opt/myapp/deployments; then echo 'created'; else echo 'failed' >&2; exit 1; fi",
+      "if mkdir /var/run/myapp; then echo 'created'; else echo 'failed' >&2; exit 1; fi",
       "if command -v jq >/dev/null; then echo 'jq present'; fi  # is a command installed?",
       "if grep -q ERROR /var/log/app/app.log; then echo 'errors found'; fi  # -q for quiet",
       "cmd; rc=$?; if [ $rc -ne 0 ]; then echo \"cmd failed with $rc\"; fi  # capture $? if needed",
       "set -euo pipefail  # strict mode: exit on first failure, unset var, or pipe failure"
     ],
     "memoryTip": "`if CMD; then ... fi` — `if` takes a COMMAND, not an expression. Exit code: 0 = success/true, non-zero = failure/false. `$?` holds the LAST exit code. The clean idiom is `if cmd; then ...`; the messy alternative is `cmd; if [ $? -eq 0 ]; then ...`. Strict-mode top line: `set -euo pipefail`.",
-    "outputExample": "$ if mkdir /tmp/testdir; then echo created; else echo failed; fi\ncreated\n$ if mkdir /tmp/testdir; then echo created; else echo failed; fi\nmkdir: cannot create directory '/tmp/testdir': File exists\nfailed\n$ if grep -q ^root /etc/passwd; then echo 'root user exists'; fi\nroot user exists",
+    "outputExample": "$ if mkdir /var/run/myapp; then echo 'created'; else echo 'failed' >&2; exit 1; fi\ncreated\n$ if mkdir /var/run/myapp; then echo 'created'; else echo 'failed' >&2; exit 1; fi\nmkdir: cannot create directory '/var/run/myapp': File exists\nfailed",
     "category": "BASH SCRIPTING"
   },
   {
     "id": "bash10",
-    "question": "A script needs to process every line from /etc/hosts and print lines that contain a real IP address. What loop reads the file line-by-line without creating a subshell?",
+    "question": "A script needs to process every line from /etc/hosts, echoing each line as it goes. Using the canonical safe pattern with IFS= and read -r into a variable named line, what while-loop reads the file line-by-line without creating a subshell?",
     "answer": "while IFS= read -r line; do echo \"$line\"; done < /etc/hosts",
+    "altAnswers": ["while IFS= read -r line; do echo $line; done < /etc/hosts"],
     "explanation": "Reading a file line-by-line in bash requires a specific pattern to work correctly. This pattern uses a while loop with the \"read\" built-in, feeding the file as input from the right side. The key parts prevent common bugs: one flag stops backslash from being interpreted as an escape, and the IFS setting preserves leading whitespace on each line.",
-    "usage": "Read /etc/hosts line-by-line and print only the lines that contain a real IP address (not comments).",
+    "usage": "Read /etc/hosts line-by-line, echoing each line, without losing whitespace, backslashes, or variables to a subshell.",
     "examples": [
       "while IFS= read -r line; do echo \"got: $line\"; done < /etc/hosts  # safe canonical form",
       "while IFS=: read -r user _ uid _ _ home _; do echo \"$user $uid $home\"; done < /etc/passwd",
@@ -3574,13 +3680,14 @@ export const questions: Question[] = [
       "n=0; while read -r _; do n=$((n+1)); done < /etc/hosts; echo \"$n lines\""
     ],
     "memoryTip": "Memorize: `while IFS= read -r line; do ... done < file`. `IFS=` keeps whitespace, `-r` keeps backslashes. Avoid `cat file | while read`; that creates a subshell and variables LEAK away. For maximum filename safety with `find`, use `-print0` + `read -d ''`.",
-    "outputExample": "$ while IFS= read -r line; do echo \"checking: $line\"; done < /etc/hosts\nchecking: 127.0.0.1 localhost\nchecking: 127.0.1.1 myhostname\nchecking: # The following lines are for IPv6 capable hosts\nchecking: ::1     ip6-localhost ip6-loopback",
+    "outputExample": "$ while IFS= read -r line; do echo \"$line\"; done < /etc/hosts\n127.0.0.1 localhost\n127.0.1.1 myhostname\n# The following lines are for IPv6 capable hosts\n::1     ip6-localhost ip6-loopback",
     "category": "BASH SCRIPTING"
   },
   {
     "id": "arch1",
-    "question": "You need to bundle the entire /home/alice/code/myapp/ directory into a single file to send to a colleague, preserving the directory structure. What tar command creates an uncompressed archive?",
+    "question": "You need to bundle the entire /home/alice/code/myapp/ directory into a single uncompressed file named myapp.tar to send to a colleague, preserving the directory structure. What tar command (verbose) creates that archive?",
     "answer": "tar -cvf myapp.tar /home/alice/code/myapp",
+    "altAnswers": ["tar cvf myapp.tar /home/alice/code/myapp", "tar -cvf myapp.tar /home/alice/code/myapp/", "tar cvf myapp.tar /home/alice/code/myapp/"],
     "explanation": "The tar command is the packing tape of Linux — it takes a whole directory tree with all its subdirectories and files and wraps them into a single portable file. \"Archiving\" just means bundling; without a compression flag the resulting file is the same size as the original contents, just packaged together.",
     "usage": "Bundle the entire /home/alice/code/myapp/ directory into a single myapp.tar file, preserving all structure and permissions.",
     "examples": [
@@ -3598,6 +3705,7 @@ export const questions: Question[] = [
     "id": "arch2",
     "question": "A colleague sent you a release archive at /tmp/myapp-1.0.tar. What command extracts all its contents into the current directory?",
     "answer": "tar -xvf /tmp/myapp-1.0.tar",
+    "altAnswers": ["tar xvf /tmp/myapp-1.0.tar", "tar -xf /tmp/myapp-1.0.tar", "tar xf /tmp/myapp-1.0.tar"],
     "explanation": "Extracting a tar archive is the reverse of creating one. The command unpacks the bundled file and recreates all the original files and directories in your current location, showing you each file's name as it appears.",
     "usage": "Extract all contents of /tmp/myapp-1.0.tar into the current directory.",
     "examples": [
@@ -3632,6 +3740,7 @@ export const questions: Question[] = [
     "id": "arch4",
     "question": "A support ticket requires you to read /var/log/nginx/access.log.1.gz. What command decompresses it back to the original .log file?",
     "answer": "gunzip /var/log/nginx/access.log.1.gz",
+    "altAnswers": ["gzip -d /var/log/nginx/access.log.1.gz"],
     "explanation": "The reverse of compression — this takes a .gz compressed file and expands it back to its original form. The compressed version is removed and replaced by the decompressed original, just as if you'd never compressed it in the first place.",
     "usage": "Decompress /var/log/nginx/access.log.1.gz back to access.log.1 to allow reading with standard text tools.",
     "examples": [
@@ -3649,6 +3758,7 @@ export const questions: Question[] = [
     "id": "arch5",
     "question": "Before a major upgrade you want to create a compressed backup of /etc/nginx/ named 'nginx_backup_2026-05-19.tar.gz'. What tar command creates a gzip-compressed archive of that directory?",
     "answer": "tar -czvf nginx_backup_2026-05-19.tar.gz /etc/nginx",
+    "altAnswers": ["tar czvf nginx_backup_2026-05-19.tar.gz /etc/nginx", "tar -czvf nginx_backup_2026-05-19.tar.gz /etc/nginx/", "tar -cvzf nginx_backup_2026-05-19.tar.gz /etc/nginx", "tar -czf nginx_backup_2026-05-19.tar.gz /etc/nginx"],
     "explanation": "This is the most common archiving operation on Linux: bundle a directory and compress it in one step. The result is a single small file that contains your entire directory tree and can be unpacked later to restore everything exactly as it was.",
     "usage": "Create a gzip-compressed archive of /etc/nginx/ named nginx_backup_2026-05-19.tar.gz as a pre-upgrade backup.",
     "examples": [
@@ -3666,6 +3776,7 @@ export const questions: Question[] = [
     "id": "arch6",
     "question": "A deployment script downloads myapp-2.0.tar.gz from the release server and needs to extract it to /opt/myapp/. What command extracts a gzip-compressed tarball to a specific directory?",
     "answer": "tar -xzvf myapp-2.0.tar.gz -C /opt/myapp",
+    "altAnswers": ["tar xzvf myapp-2.0.tar.gz -C /opt/myapp", "tar -xvzf myapp-2.0.tar.gz -C /opt/myapp", "tar -xzf myapp-2.0.tar.gz -C /opt/myapp", "tar -xzvf myapp-2.0.tar.gz -C /opt/myapp/"],
     "explanation": "This is the reverse of creating a compressed archive — it both decompresses and unpacks the tarball in one step, recreating all the original files and directories. Specifying a target directory with -C tells tar where to put everything instead of dumping it in the current directory.",
     "usage": "Extract myapp-2.0.tar.gz into /opt/myapp/ during a deployment.",
     "examples": [
@@ -3699,6 +3810,7 @@ export const questions: Question[] = [
     "id": "daily1",
     "question": "You just SSH'd into a production server and want to know if it's been rebooted recently and whether it's currently under heavy CPU load. What single command gives you both pieces of information at a glance?",
     "answer": "uptime",
+    "altAnswers": ["w"],
     "explanation": "Running this command prints one line telling you how long the server has been on, how many people are logged in, and three numbers showing how busy the CPU has been over the last 1, 5, and 15 minutes. Think of it like glancing at a car's speedometer and fuel gauge at once — it's the fastest possible pulse-check before you start any real work.",
     "usage": "Run immediately on login to a server to verify uptime and spot CPU pressure before running expensive commands.",
     "examples": [
@@ -3768,6 +3880,7 @@ export const questions: Question[] = [
     "id": "daily5",
     "question": "Your Ubuntu server hasn't been patched in two months. What single compound command both refreshes the list of available packages from the internet AND installs all upgrades that are waiting?",
     "answer": "sudo apt update && sudo apt upgrade",
+    "altAnswers": ["sudo apt-get update && sudo apt-get upgrade"],
     "explanation": "This runs two commands in sequence, stopping if the first one fails. The first command doesn't install anything — it's like refreshing a news feed to see what's new. The second command actually downloads and installs the newer versions of everything you already have installed. The double-ampersand means \"only do step 2 if step 1 succeeded,\" which is safer than a plain semicolon.",
     "usage": "Patch all installed software on a Debian/Ubuntu system in one compound command.",
     "examples": [
@@ -3786,6 +3899,7 @@ export const questions: Question[] = [
     "id": "daily6",
     "question": "After upgrading the kernel on your Ubuntu server, you notice old kernel packages are still taking up ~500MB of disk space. What command finds and removes packages that were installed as dependencies but are no longer needed by anything?",
     "answer": "sudo apt autoremove",
+    "altAnswers": ["sudo apt-get autoremove"],
     "explanation": "When apt installs a program, it also pulls in any helper libraries that program needs and labels them \"auto-installed.\" If you later remove the program, those helpers are now orphaned — nobody needs them but they're still on disk. This command finds and removes all those orphans. After a kernel upgrade, multiple old kernel images typically get cleaned out this way, often recovering hundreds of megabytes.",
     "usage": "Remove leftover dependency packages after uninstalling software or upgrading the kernel.",
     "examples": [
@@ -3804,6 +3918,7 @@ export const questions: Question[] = [
     "id": "daily7",
     "question": "The `/var/cache/apt/archives` directory on your server has grown to over 400MB. What command removes only the cached `.deb` files for package versions that are no longer available to download, while keeping current cached packages intact?",
     "answer": "sudo apt autoclean",
+    "altAnswers": ["sudo apt-get autoclean"],
     "explanation": "Every time apt installs or upgrades a package, it keeps the downloaded installer file in a cache folder on disk. Over time that folder balloons. This command is the conservative cleanup: it only deletes cached packages whose version is so old that no enabled repository offers it anymore — the ones you could never reinstall without a manual download anyway. The current cached packages stay, so future reinstalls are still fast.",
     "usage": "Reclaim disk space taken by obsolete cached package files without deleting any currently-installable packages from the cache.",
     "examples": [
@@ -3822,6 +3937,7 @@ export const questions: Question[] = [
     "id": "daily8",
     "question": "You need to see every file in `/etc/nginx`, including hidden dotfiles, with their permissions, owner, size, and modification time all on one line each. What command does that?",
     "answer": "ls -la",
+    "altAnswers": ["ls -al", "ls -lah"],
     "explanation": "Adding two flags to the normal directory listing command gives you the full picture. One flag shows files that start with a dot — config files, git folders, environment files — which are hidden by default. The other flag switches from a simple name list to a detailed view: one file per line, showing who owns it, what the permissions are (who can read, write, or execute it), how big it is, and when it was last changed.",
     "usage": "List all files including hidden ones in long format to inspect permissions, owners, and modification times.",
     "examples": [
@@ -3894,7 +4010,7 @@ export const questions: Question[] = [
     "id": "daily12",
     "question": "You just cloned a TypeScript project from GitHub. The `src/` folder exists but nothing runs yet. What command reads `package.json` and downloads all the declared dependencies into `node_modules/`?",
     "answer": "npm install",
-    "explanation": "Shell directory navigation has a built-in stack. pushd /var/log saves your current directory AND moves you to /var/log simultaneously. popd returns you to where you were. dirs shows the entire stack. Unlike cd - which only remembers one previous location, the stack is unlimited depth. This makes it the right tool for scripts that temporarily change directories, or for interactive sessions where you ping-pong between several deeply nested directories. The stack persists for the entire session.",
+    "explanation": "This command reads the project's package.json file, resolves every package listed under dependencies and devDependencies (honoring package-lock.json when present), downloads them from the npm registry, and places them in the node_modules/ directory. It's the mandatory first step after cloning any Node.js or TypeScript project — nothing will run until the dependencies exist locally. The node_modules/ folder is never committed to git; it's fully reproducible from package.json.",
     "usage": "Install all Node.js project dependencies from package.json into node_modules — the first command to run in any cloned JS project.",
     "examples": [
       "npm install  # install everything from package.json + package-lock.json",
@@ -3948,7 +4064,7 @@ export const questions: Question[] = [
     "id": "daily15",
     "question": "You installed `htop` on a server and want to launch the color-coded interactive process monitor that shows per-CPU bars and supports mouse navigation. What command starts it?",
     "answer": "htop",
-    "explanation": "Running commands in the background lets your shell remain interactive. The ampersand (&) launches processes that run independently, perfect for long-running tasks.",
+    "explanation": "This launches the interactive process monitor that improves on plain `top`: color-coded per-CPU usage bars, a memory meter, scrollable process list, tree view, mouse support, and function-key shortcuts for sorting, searching, and killing processes. Unlike `top` it usually isn't preinstalled — you install it with your package manager — but once present, just typing its name starts it. Press q or F10 to quit.",
     "usage": "Launch an interactive color-coded process monitor with per-CPU bars and mouse support — the friendlier replacement for top.",
     "examples": [
       "htop  # interactive monitor — q to quit",
@@ -3965,6 +4081,7 @@ export const questions: Question[] = [
     "id": "daily16",
     "question": "Your application is throwing errors and you want to watch `/var/log/myapp/error.log` in real time as new lines are written, so you can see errors the moment they happen. What command keeps the file open and prints new lines continuously?",
     "answer": "tail -f /var/log/myapp/error.log",
+    "altAnswers": ["tail -F /var/log/myapp/error.log"],
     "explanation": "Watching a log file update in real-time is one of the most effective debugging techniques. tail -f opens the file, prints the last 10 lines, then keeps watching — any new bytes written to the file are immediately printed to your terminal. Press Ctrl+C to stop following. Use tail -F (capital F) when the log might be rotated: it reopens the file if it disappears and reappears under the same name. Filter live output with grep: tail -f app.log | grep ERROR shows only error lines as they arrive, cutting out the noise.",
     "usage": "Watch a log file in real time as new lines are appended — the first tool to reach for when investigating live issues.",
     "examples": [
@@ -3983,6 +4100,7 @@ export const questions: Question[] = [
     "id": "daily17",
     "question": "A colleague says 'port 5432 is already in use' on your server. What command shows every TCP port that is currently listening and which process is holding each one?",
     "answer": "ss -tlnp",
+    "altAnswers": ["netstat -tlnp"],
     "explanation": "This command asks the OS kernel directly for a list of every network port that a program is sitting on and waiting for connections. For each one it shows the port number and which program owns it. The flags mean: show TCP sockets, only listening ones, use raw numbers (not translated names), and include the process. You need `sudo` to see processes owned by other users.",
     "usage": "List every TCP listening port and the process holding it — the go-to for 'what is using port X' questions.",
     "examples": [
@@ -4018,7 +4136,7 @@ export const questions: Question[] = [
   {
     "id": "daily19",
     "question": "A config file at `/etc/myapp/settings.conf` uses `localhost` as the database host everywhere, but you need to change it to `db.internal`. What `sed` command replaces every occurrence on every line, printing the result to stdout first so you can verify before modifying the file?",
-    "answer": "sudo sed -i 's/localhost/db.internal/g' /etc/myapp/settings.conf",
+    "answer": "sed 's/localhost/db.internal/g' /etc/myapp/settings.conf",
     "explanation": "This stream editor reads text line by line and applies a substitution command to each line. The pattern `s/old/new/g` means \"substitute: find 'old', replace with 'new', g = do it globally (every match on the line, not just the first).\" Without the `-i` flag, the original file is untouched — the modified output goes to the screen. Once you're happy with what you see, re-run with `-i.bak` to edit the file in place and create a backup first.",
     "usage": "Replace text patterns across a file or stream — inspect output without `-i`, then add `-i.bak` to modify in place with a backup.",
     "examples": [
@@ -4053,7 +4171,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily21",
-    "question": "Your nginx access log has thousands of lines. You want to find the top 5 most repeated IP addresses in the first column. What pipeline produces a ranked frequency count of every unique first-column value?",
+    "question": "You've already extracted the IP-address column from your nginx access log and it's streaming through a pipe, one IP per line. What two-command pipeline (reading stdin) groups identical lines together and prefixes each unique line with a count of how many times it appeared?",
     "answer": "sort | uniq -c",
     "explanation": "This two-command pipeline first sorts all lines alphabetically so identical ones end up adjacent, then collapses adjacent duplicates into one line and prefixes each with a count of how many times it appeared. Adding a third step — sort the result numerically in reverse — makes the most common items bubble to the top. It's the shell's quick-and-dirty \"count how often each thing appears\" recipe.",
     "usage": "Count occurrences of each unique line in a stream — always preceded by `sort` and usually followed by `sort -rn | head` for a top-N frequency table.",
@@ -4091,6 +4209,7 @@ export const questions: Question[] = [
     "id": "daily23",
     "question": "After changing nginx's config file, you want to confirm whether the nginx service is currently running or stopped, see its PID, and check whether it's set to start automatically on reboot — all in one command.",
     "answer": "systemctl status nginx",
+    "altAnswers": ["systemctl status nginx.service"],
     "explanation": "This command is the dashboard for a single system service. It tells you in plain colored text whether the service is running (green dot) or stopped/failed (red dot), when it started, what process ID it has, whether it will start on the next reboot, and the last ten lines of its log output. It's the first command to run when something might not be working.",
     "usage": "Check a service's running state, PID, boot persistence, and recent log lines in one command.",
     "examples": [
@@ -4109,6 +4228,7 @@ export const questions: Question[] = [
     "id": "daily24",
     "question": "The nginx service failed silently overnight. You want to read all of its log output captured by systemd since the server was last rebooted, not just the last 10 lines. What command shows the full journal for the nginx service?",
     "answer": "journalctl -u nginx",
+    "altAnswers": ["journalctl -u nginx.service"],
     "explanation": "Modern Linux systems capture every service's output — what would normally scroll past in the terminal — into a structured database called the journal. This command reads all the saved output for a specific service from that database. By default it opens in a pager (like `less`) so you can scroll. Add flags to limit it to the last hour, follow it live, or filter only error messages.",
     "usage": "Read the full captured log output for a systemd service from the journal — goes deeper than `systemctl status`.",
     "examples": [
@@ -4145,6 +4265,7 @@ export const questions: Question[] = [
     "id": "daily26",
     "question": "In a shell script you want to run `cd /deploy/app`, then `tar -xzf release.tar.gz`, then `systemctl restart myapp` — all in sequence, regardless of whether any of the previous steps fail. How do you write all three on one line?",
     "answer": "cd /deploy/app ; tar -xzf release.tar.gz ; systemctl restart myapp",
+    "altAnswers": ["cd /deploy/app; tar -xzf release.tar.gz; systemctl restart myapp"],
     "explanation": "The semicolon is the simplest way to chain commands: run the first one, wait for it to finish, then run the second one — no matter what happened. It's like listing steps in a recipe where you continue to the next step regardless of whether the last one went well. Compare this to double-ampersand (`&&`), which stops the chain if any step fails.",
     "usage": "Chain commands that should all run sequentially regardless of success or failure — use `&&` instead when later steps depend on earlier ones succeeding.",
     "examples": [
@@ -4161,7 +4282,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily27",
-    "question": "Your deploy script does: pull the latest code, then install dependencies, then run tests. If any step fails, the remaining steps should be skipped. What operator chains these three commands so each one only runs if the previous one succeeded?",
+    "question": "Your deploy script runs `git pull`, then `npm install`, then `npm test`. If any step fails, the remaining steps should be skipped. How do you chain these three commands on one line so each one only runs if the previous one succeeded?",
     "answer": "git pull && npm install && npm test",
     "explanation": "The double-ampersand is the \"and then, but only if that worked\" operator. If the left command fails (returns a non-zero exit code), the right command is skipped — the whole chain short-circuits. Chain many commands: `cmd1 && cmd2 && cmd3` and the first failure stops everything. This is the safe way to write dependent steps.",
     "usage": "Chain dependent commands so each step only runs if the previous succeeded — the safe way to write multi-step sequences.",
@@ -4179,7 +4300,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily28",
-    "question": "In a bash script you want to download a config file from an internal server, but if the download fails you want to fall back to copying a local default instead of crashing. What operator runs the fallback command only when the primary command fails?",
+    "question": "In a bash script you want to run `curl -fsS https://internal/config > config.yml`, but if that download fails you want to fall back to running `cp /etc/myapp/default.yml config.yml` instead of crashing. Using the operator that runs its right side only when the left side fails, write the full one-liner.",
     "answer": "curl -fsS https://internal/config > config.yml || cp /etc/myapp/default.yml config.yml",
     "explanation": "The double-pipe is the \"or else\" operator — it runs the right command only when the left one fails. It's the fallback direction, the opposite of double-ampersand. Use it for error recovery, default-value patterns, and providing alternatives when something is unavailable.",
     "usage": "Run a fallback command only when the primary fails — the 'or else' direction for inline error handling.",
@@ -4216,7 +4337,8 @@ export const questions: Question[] = [
   {
     "id": "daily30",
     "question": "You need to kick off a 20-minute database reindex script called `reindex.sh` on a remote server but want the terminal prompt back immediately so you can do other work while it runs. How do you start the command so it runs in the background?",
-    "answer": "nohup ./reindex.sh &",
+    "answer": "./reindex.sh &",
+    "altAnswers": ["nohup ./reindex.sh &"],
     "explanation": "Adding an ampersand at the end of a command immediately returns your prompt, while the command continues running in the background. The shell prints a job number and process ID so you can refer to it later. Be aware: the command's output will still appear in your terminal interleaved with whatever else you type, so redirect it to a log file to keep things tidy.",
     "usage": "Start a long-running command in the background so the shell prompt returns immediately.",
     "examples": [
@@ -4233,7 +4355,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily31",
-    "question": "Your script `generate-report.sh` generates a report and you want to save it to `/tmp/daily-report.txt`, replacing the file's contents completely each time the script runs. What redirection operator writes to a file and truncates it first?",
+    "question": "You run `./generate-report.sh` to generate a report and want to save its output to `/tmp/daily-report.txt`, replacing the file's contents completely each time it runs. Using the redirection operator that truncates the file first, write the full command.",
     "answer": "./generate-report.sh > /tmp/daily-report.txt",
     "explanation": "The single right-angle bracket sends a command's output to a file. If the file already exists, its contents are erased first — then the new output is written. If the file doesn't exist, it's created. This is the basic \"save output to a file\" operator, but be careful: there's no undo if you overwrite something you needed.",
     "usage": "Redirect a command's output to a file, creating it if new or overwriting it if it exists.",
@@ -4251,7 +4373,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily32",
-    "question": "A cron job writes a timestamped entry to `/var/log/myapp/events.log` on each run and you need each run's entry to be added to the file without overwriting previous entries. What redirection operator appends to a file instead of overwriting it?",
+    "question": "A cron job runs `echo \"[$(date)] event\"` on each run, and its output must be added to the end of `/var/log/myapp/events.log` without overwriting previous entries. Using the redirection operator that appends instead of overwriting, write the full command.",
     "answer": "echo \"[$(date)] event\" >> /var/log/myapp/events.log",
     "explanation": "The double right-angle bracket is exactly like the single one, except it adds new output at the END of the file instead of erasing the existing content first. Every run accumulates another entry, building up a history. Use this for log files, audit trails, or any situation where you want to keep adding to a file over time.",
     "usage": "Append output to the end of a file without erasing existing content — for log files and accumulating records.",
@@ -4268,7 +4390,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily33",
-    "question": "You're running `find / -name 'config.yml'` but it floods the output with hundreds of 'Permission denied' lines for directories you can't read, drowning out the actual results. How do you redirect only the error messages away so only the real results appear on screen?",
+    "question": "You're running `find / -name 'config.yml'` but it floods the output with hundreds of 'Permission denied' lines for directories you can't read, drowning out the actual results. How do you redirect only the error messages into a file named `error.log` so only the real results appear on screen?",
     "answer": "find / -name 'config.yml' 2> error.log",
     "explanation": "Every program sends two separate streams of text to your terminal: normal output (results, data) and error output (warnings, problems). Normally both appear mixed together on the screen. This redirection sends only the error stream to a file (or to the void if you use `/dev/null`), while normal output continues to appear on screen — letting you see just the results you care about.",
     "usage": "Redirect only error output to a file or `/dev/null`, leaving normal output on screen.",
@@ -4286,7 +4408,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily34",
-    "question": "You're running a deploy script and want to save absolutely everything — both normal output and any error messages — into a single timestamped log file so you can review it afterward. What is the bash shorthand redirection that sends both stdout and stderr to one file?",
+    "question": "You're running `./deploy.sh` and want to save absolutely everything — both normal output and any error messages — into the dated log file `deploy-$(date +%F).log` so you can review it afterward. Using the bash shorthand redirection that sends both stdout and stderr to one file, write the full command.",
     "answer": "./deploy.sh &> deploy-$(date +%F).log",
     "explanation": "Programs produce two output streams — normal results and error messages. Usually both end up on screen mixed together. This shorthand captures both into a single file at once. It's the cleanest way to save the complete transcript of a script run for later review.",
     "usage": "Capture both normal output and errors into one file — use `&>` for overwrite or `&>>` to append.",
@@ -4323,7 +4445,7 @@ export const questions: Question[] = [
   {
     "id": "daily36",
     "question": "You have both system Python and a pyenv-managed Python installed. You want to confirm which `python` executable will actually run when you type `python`, and also see all other `python` executables in your PATH. What command shows the full resolution including any aliases or functions, and all alternatives?",
-    "answer": "which python",
+    "answer": "type -a python",
     "explanation": "When you type a command name, the shell searches through a list of directories to find the right executable to run. This command answers \"where exactly will that search stop and what will it run?\" — including whether the name is an alias, a shell function, or an actual binary on disk. The version shown here also finds ALL matches, not just the first winner.",
     "usage": "Find which executable (or alias/function) will run for a given command name, and see all alternatives in PATH order.",
     "examples": [
@@ -4341,7 +4463,7 @@ export const questions: Question[] = [
   {
     "id": "daily37",
     "question": "You remember running a long `rsync` command last week but can't recall the exact flags and paths. What command searches through your command history to find it?",
-    "answer": "history | grep keyword",
+    "answer": "history | grep rsync",
     "explanation": "Your shell remembers every command you've typed, stored in a file in your home directory. This two-command pipeline shows that history and then filters it to only lines containing your search word. Once you spot the right entry, you can re-run it by its number. For interactive searching without knowing the exact word, press Ctrl-R in the terminal and start typing.",
     "usage": "Search shell command history for a past command — the fastest way to recover a command you know you ran before.",
     "examples": [
@@ -4392,7 +4514,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily40",
-    "question": "You find yourself typing `git status` and `ls -lah` dozens of times per day. What command creates short aliases `gs` and `ll` for them so you can type less, and how do you make those aliases permanent?",
+    "question": "You find yourself typing `ls -la` dozens of times per day. What command defines a shortcut named `ll` for it in your current shell session, so typing `ll` runs `ls -la`?",
     "answer": "alias ll='ls -la'",
     "explanation": "An alias is a custom short name for a longer command. Once you define one, typing the short name runs the longer command automatically. The trick to making it permanent is adding the same definition to your `~/.bashrc` file — otherwise it disappears when you close the terminal. After editing the file, reload it with `source ~/.bashrc` to activate the aliases in your current session.",
     "usage": "Define a short alias for a long command, then save it to `~/.bashrc` to make it permanent.",
@@ -4483,6 +4605,7 @@ export const questions: Question[] = [
     "id": "nav25",
     "question": "Your script uses `../../configs/app.yml` as a path. You need to know what absolute path that resolves to from the script's current working directory, with all `..` components eliminated. What command prints the canonical absolute path?",
     "answer": "realpath ../../configs/app.yml",
+    "altAnswers": ["readlink -f ../../configs/app.yml"],
     "explanation": "Symlinks are aliases — they point to a real file or directory somewhere else on the filesystem. Commands like pwd show the logical path through the symlink, not the physical path where the file actually lives. realpath resolves every symlink in a path and gives you the canonical absolute path to the actual file on disk. This is critical in scripts that need to know where a file truly is, not just the name it was accessed through. It also expands relative paths to absolute, which is useful for logging and constructing reliable paths in scripts.",
     "usage": "Convert any path — relative, with `..`, with symlinks — to its single canonical absolute path.",
     "examples": [
@@ -4501,6 +4624,7 @@ export const questions: Question[] = [
     "id": "nav26",
     "question": "`/usr/bin/vim` is a symlink that points to another symlink, which eventually points to the actual binary. What command follows the entire chain of symlinks and prints the final real file path?",
     "answer": "readlink -f /usr/bin/vim",
+    "altAnswers": ["realpath /usr/bin/vim"],
     "explanation": "A symlink is a file whose entire content is \"go look over there instead.\" They can form chains — link A points to link B which points to the actual file. The basic version of this command shows only the first hop. Adding the flag makes it keep following until it reaches a real file and shows you that final destination.",
     "usage": "Follow an entire symlink chain to the final real file — goes deeper than a single `readlink` call.",
     "examples": [
@@ -4518,7 +4642,7 @@ export const questions: Question[] = [
     "id": "nav27",
     "question": "You're in `~/code/myapp` and want a listing that shows only directories (not regular files), without the command descending into them. What `ls` invocation filters to subdirectory names only?",
     "answer": "ls -d */",
-    "explanation": "Every action in the terminal happens relative to your current directory. cd changes that context. With an absolute path like /var/log you go directly there from anywhere. With a relative path like ../sibling you navigate based on where you are now. The shortcuts make common moves instant: bare cd or cd ~ goes home, cd - returns to the previous directory (a toggle between two locations), cd .. goes up one level. Mastering these shortcuts eliminates typing long paths dozens of times per session.",
+    "explanation": "The trick is the combination of a glob and a flag. The `*/` glob only matches entries that are directories (the trailing slash filters out regular files). Normally `ls` would then list the CONTENTS of each matched directory — the `-d` flag says 'show the directory entry itself, don't descend into it.' Together they produce a clean list of just the subdirectory names.",
     "usage": "List only subdirectory names in the current directory, ignoring regular files.",
     "examples": [
       "ls -d */  # visible subdirectories only",
@@ -4536,7 +4660,7 @@ export const questions: Question[] = [
     "id": "nav28",
     "question": "You're piping a file list into `wc -l` to count entries but `ls` is outputting multiple columns. What flag forces `ls` to output exactly one filename per line regardless of terminal width?",
     "answer": "ls -1",
-    "explanation": "The tilde is shell shorthand for your home directory — the full path stored in $HOME. It expands before the command runs, so ~/projects becomes /home/alice/projects transparently. You can use it in any argument: cp report.pdf ~/Desktop/, ls ~/bin/, vim ~/.bashrc. It also expands for other users: ~bob means bob's home directory if you have access. It is faster than typing the full path and works identically in any shell context.",
+    "explanation": "When `ls` writes to a terminal it arranges names in multiple columns to fit the screen width, but when it writes to a pipe it already switches to one-per-line automatically. The `-1` flag (the digit one) forces the single-column format explicitly, which makes your intent clear and guarantees consistent line-oriented output for tools like `wc -l` and `grep` regardless of where the output goes.",
     "usage": "Force `ls` to output one filename per line — useful for consistent output regardless of piping context.",
     "examples": [
       "ls -1  # one per line",
@@ -4552,9 +4676,10 @@ export const questions: Question[] = [
   },
   {
     "id": "nav29",
-    "question": "You want to see the top two levels of directory structure under `~/code/myapp` — direct subdirectories and their immediate children — but stop there so you don't descend into `node_modules` and hundreds of other deep paths. What `find` command limits recursion depth to 2 levels and shows only directories?",
+    "question": "You're in `~/code/myapp` and want to see the top two levels of directory structure under the current directory — direct subdirectories and their immediate children — but stop there so you don't descend into `node_modules` and hundreds of other deep paths. What `find` command limits recursion depth to 2 levels and shows only directories?",
     "answer": "find . -maxdepth 2 -type d",
-    "explanation": "The directory stack is a memory system for navigation. pushd /var/log does two things simultaneously: saves your current directory on a stack and changes to /var/log. Later, popd reverses it — returns you to exactly where you were before the push. dirs shows the full stack. This pattern is extremely useful in scripts that temporarily work in a different directory: push, do work, pop. It is cleaner and safer than manually storing $(pwd) in a variable and then cd-ing back.",
+    "altAnswers": ["find . -type d -maxdepth 2"],
+    "explanation": "By default `find` recurses without limit, which in a JavaScript project means drowning in node_modules paths. The `-maxdepth 2` test caps how deep it descends: the starting directory is depth 0, its children are depth 1, and their children are depth 2. Adding `-type d` filters the results to directories only, giving you a quick structural overview of the project without the noise.",
     "usage": "List directories up to 2 levels deep — the controlled-depth alternative to an unlimited recursive find.",
     "examples": [
       "find . -maxdepth 2 -type d  # the everyday shallow dir overview",
@@ -4571,6 +4696,7 @@ export const questions: Question[] = [
     "id": "nav30",
     "question": "You need to run `make` inside the `/opt/app/build` directory, but you don't want to change your shell's current directory permanently — your current location matters for subsequent commands. How do you run a command in another directory without affecting your shell's `$PWD`?",
     "answer": "(cd /opt/app/build && make)",
+    "altAnswers": ["(cd /opt/app/build; make)", "make -C /opt/app/build"],
     "explanation": "Wrapping commands in parentheses creates an isolated mini-shell that inherits your environment but runs independently. Any directory change inside the parentheses stays inside — when the command finishes, the outer shell's location is unchanged. The double-ampersand ensures the second command runs only if the `cd` succeeded.",
     "usage": "Run a command in a different directory without changing your shell's current working directory — the parentheses create an isolated subshell.",
     "examples": [
@@ -4588,7 +4714,8 @@ export const questions: Question[] = [
     "id": "file26",
     "question": "You wrote a deploy script at `script.sh` and want to copy it to `/usr/local/bin/` with owner-read/write/execute and group/other read-execute permissions (755) in one command, without a separate `chmod` step. What command does the copy and sets permissions atomically?",
     "answer": "install -m 755 script.sh /usr/local/bin",
-    "explanation": "Named after a T-shaped pipe fitting, tee splits a data stream in two directions. Data flows in from stdin, and tee sends identical copies to both stdout AND a file. This is essential when you want to see command output in real-time AND save it: make 2>&1 | tee build.log shows the build on screen while saving every line. Without tee you would have to choose. tee -a appends instead of overwriting. Multiple filenames accepted: command | tee file1.txt file2.txt writes to both simultaneously.",
+    "altAnswers": ["install -m 755 script.sh /usr/local/bin/"],
+    "explanation": "The install command combines copy, chmod, and (optionally) chown into a single atomic operation — it's what Makefiles use for their `make install` targets. The `-m 755` flag sets the permission bits on the destination copy at creation time, so there's no window where the file exists with wrong permissions. It can also create directories (`-d`) and set ownership (`-o`/`-g`), replacing a three-command sequence with one.",
     "usage": "Copy a file to a destination and set its permissions in one atomic step — the standard Makefile install idiom.",
     "examples": [
       "sudo install -m 755 ~/scripts/deploy.sh /usr/local/bin/",
@@ -4604,6 +4731,7 @@ export const questions: Question[] = [
     "id": "file27",
     "question": "Your nginx access log at `/var/log/nginx/access.log` has grown to 2GB and the nginx process has it open. You need to empty it without stopping nginx and without breaking nginx's open file handle. What command sets the file to zero bytes in place?",
     "answer": "truncate -s 0 /var/log/nginx/access.log",
+    "altAnswers": ["> /var/log/nginx/access.log", ": > /var/log/nginx/access.log"],
     "explanation": "Deleting and recreating a log file would break the running program's file handle — it would keep writing to the now-deleted file descriptor, and the new file would stay empty. This command empties the file without touching its inode, so the running program's file handle stays valid. It's like erasing all the writing from a whiteboard without swapping in a new whiteboard.",
     "usage": "Empty a log file in place without disrupting any processes that have it open.",
     "examples": [
@@ -4620,6 +4748,7 @@ export const questions: Question[] = [
     "id": "file28",
     "question": "You're benchmarking disk write performance and need to create a 10MB file filled with zeros as test data. What `dd` command generates exactly 10 megabytes of zero bytes from a system source and writes them to `test.bin`?",
     "answer": "dd if=/dev/zero of=test.bin bs=1M count=10",
+    "altAnswers": ["dd if=/dev/zero of=test.bin count=10 bs=1M"],
     "explanation": "This command reads zeros from a special device that the OS provides (which produces an endless supply of null bytes) and writes them to a file in 1-megabyte chunks, stopping after 10 chunks. The result is a 10MB file of zeros. It also reports exactly how fast the write happened, making it useful as a rough disk speed benchmark.",
     "usage": "Generate a file of exactly N megabytes of zeros — useful for disk benchmarks, swap file creation, and generating test data.",
     "examples": [
@@ -4636,7 +4765,8 @@ export const questions: Question[] = [
     "id": "file29",
     "question": "You need to set up a project directory structure with `app/logs/2026` and `app/data/2026`. What single `mkdir` command using brace expansion creates both subdirectory trees at once?",
     "answer": "mkdir -p app/{logs,data}/2026",
-    "explanation": "find with -exec is the standard way to run a command on every file matching a set of criteria. The {} placeholder is replaced by each matched filename. \\; runs the command once per file. + is faster: it batches multiple filenames into a single command call. Preview results first with -print before committing to a destructive -exec. Common patterns: find . -name \"*.log\" -mtime +30 -exec rm {} \\; deletes logs older than 30 days. find . -type f -exec chmod 644 {} + fixes permissions in bulk.",
+    "altAnswers": ["mkdir -p app/{data,logs}/2026"],
+    "explanation": "Brace expansion happens in the shell before mkdir ever runs: `app/{logs,data}/2026` expands to the two words `app/logs/2026 app/data/2026`. The `-p` flag then creates every missing parent along both paths and stays silent if any already exist. Braces can be nested and combined — `{a,b}/{x,y}` generates all four combinations — which makes scaffolding an entire project tree a one-liner.",
     "usage": "Create multiple parallel directory paths in one command using bash brace expansion.",
     "examples": [
       "mkdir -p app/{logs,data}/2026",
@@ -4669,7 +4799,8 @@ export const questions: Question[] = [
     "id": "file31",
     "question": "Your project directory has accumulated dozens of `.tmp` scratch files scattered across subdirectories. What `find` command recursively locates and immediately deletes all files matching `*.tmp` without piping to `xargs rm`?",
     "answer": "find . -name '*.tmp' -delete",
-    "explanation": "Every open file in Linux is tracked by the kernel. lsof (list open files) queries this information and shows which process has which file open. This is invaluable when trying to delete or unmount a filesystem and getting \"device or resource busy\" — lsof -u username or lsof /path shows exactly what is holding the file open. lsof -i :8080 shows what process is listening on port 8080. lsof -p PID shows all files a process has open. It is also useful for security auditing: what network connections is a suspicious process maintaining?",
+    "altAnswers": ["find . -type f -name '*.tmp' -delete"],
+    "explanation": "The `-delete` action makes find itself remove every file that matched the preceding tests, eliminating the `| xargs rm` or `-exec rm {} +` step entirely. It's efficient and handles odd filenames safely, but it's also irreversible — the universal safety habit is to run the identical command WITHOUT `-delete` first and eyeball the list of matches, then re-run with `-delete` appended. Note `-delete` must come after the tests, never before.",
     "usage": "Recursively find and delete all files matching a name pattern in one command — no pipe to `rm` needed.",
     "examples": [
       "find . -name '*.tmp' -delete",
@@ -4684,7 +4815,7 @@ export const questions: Question[] = [
   },
   {
     "id": "file32",
-    "question": "A file shows 0 bytes in `ls -l` but `du` says it's using 8KB of disk space. You need to see the inode-level metadata including exact byte size, allocated blocks, all three timestamps, and the inode number. What command shows all of that?",
+    "question": "A file named `server` in your current directory shows 0 bytes in `ls -l` but `du` says it's using 8KB of disk space. You need to see its inode-level metadata including exact byte size, allocated blocks, all three timestamps, and the inode number. What command shows all of that?",
     "answer": "stat server",
     "explanation": "ls -l shows file metadata but in a human-readable format that is hard to parse. stat shows the same information in a structured way designed for scripts and investigation. The output includes: inode number, block count, access/modify/change timestamps (three different times), file type, permissions in both octal and symbolic, owner UID/GID, and device information. The octal permissions (like 644) are what chmod expects, so stat saves you from mentally converting rwxr-xr-x. The three timestamps are: atime (last accessed), mtime (content modified), ctime (metadata changed).",
     "usage": "Show the complete inode-level metadata for a file — everything `ls -l` shows plus blocks, inode number, and all three timestamps.",
@@ -4702,8 +4833,9 @@ export const questions: Question[] = [
   {
     "id": "file33",
     "question": "Your deploy script needs to atomically switch `/opt/app/current` to point to the new release at `/opt/app/releases/v2.1.0`. The symlink already exists pointing to the old release. What `ln` command replaces the existing symlink without a 'file exists' error?",
-    "answer": "ln -sf newtarget linkname",
-    "explanation": "Adding -z to a tar command enables gzip compression, turning the archive operation into compress-and-bundle in one step. The resulting .tar.gz file (also written .tgz) is typically 40-70% smaller than the uncompressed .tar. The compression happens in a pipeline: tar streams the archive to gzip which compresses it on the fly. For better compression at the cost of speed use -j (bzip2) or -J (xz). The trade-off: compressed archives cannot be seeked randomly, so extracting a single file from a large compressed archive requires decompressing everything up to that point.",
+    "answer": "ln -sf /opt/app/releases/v2.1.0 /opt/app/current",
+    "altAnswers": ["ln -sfn /opt/app/releases/v2.1.0 /opt/app/current"],
+    "explanation": "Without `-f`, ln refuses to create a symlink where a file already exists. The `-f` flag forces replacement of the existing link, and `-s` makes it symbolic rather than a hard link. This replace-the-pointer pattern is the classic zero-downtime deploy cutover: build the new release in its own directory, then swap the `current` symlink to point at it. When the old target is a directory, add `-n` so the new link replaces the symlink itself instead of being created inside the directory it points to.",
     "usage": "Create or replace a symlink atomically — the standard pattern for deploy cutover.",
     "examples": [
       "ln -sf /opt/app/releases/v2.1.0 /opt/app/current  # deploy cutover",
@@ -4718,8 +4850,8 @@ export const questions: Question[] = [
   {
     "id": "file34",
     "question": "A script receives the full path `/var/log/nginx/access.log.1` as input and needs to extract just the filename `access.log.1` (without the directory prefix) to use as an output file name. What command strips the directory portion?",
-    "answer": "basename /var/log/syslog.1",
-    "explanation": "rsync is the standard tool for incremental file synchronization. Unlike cp which blindly copies everything, rsync computes differences and transfers only what has changed. -a (archive mode) enables recursive copy, preserves permissions, timestamps, symlinks, and owner. -v shows progress. --delete removes files from the destination that no longer exist in the source, making it a true mirror. --exclude patterns skip matching files. The source and destination can be local paths or remote paths using SSH notation (user@host:/path). rsync is idempotent: running it twice produces the same result.",
+    "answer": "basename /var/log/nginx/access.log.1",
+    "explanation": "basename strips everything up to and including the last slash, leaving just the final path component — here `access.log.1`. It's pure string manipulation: the file doesn't need to exist. An optional second argument removes a trailing suffix too, so `basename path/file.csv .csv` yields `file`. Its counterpart `dirname` returns the other half (the directory portion), and together they let scripts split any path cleanly.",
     "usage": "Extract just the filename from a full path — the inverse of `dirname`.",
     "examples": [
       "basename /var/log/nginx/access.log.1  # → access.log.1",
@@ -4735,8 +4867,9 @@ export const questions: Question[] = [
   {
     "id": "file35",
     "question": "Your script processes a file whose path is stored in `$INFILE`. Before writing output you need to create the directory that will hold the output file. You need just the directory portion of the input path. What command extracts that directory?",
-    "answer": "dirname /var/log/syslog.1",
-    "explanation": "find with -exec rm is the standard way to delete files matching multiple criteria in one command. But it is dangerous without a preview step: always run the same find command with -print first (or just without -exec) to see exactly what will be deleted. -name matches filenames with glob patterns. -type f restricts to regular files. -mtime +30 matches files older than 30 days. -size +100M matches large files. These criteria compose: find /tmp -type f -name \"*.tmp\" -mtime +7 -exec rm {} \\; deletes old temp files. Never use -exec rm -rf {} \\; without absolute certainty.",
+    "answer": "dirname \"$INFILE\"",
+    "altAnswers": ["dirname $INFILE"],
+    "explanation": "dirname strips the final path component and returns everything before the last slash — the directory that contains the file. Like basename it's pure string manipulation, so the path doesn't need to exist yet. The classic script pattern is `mkdir -p \"$(dirname \"$OUTFILE\")\"` to guarantee an output file's directory exists before writing. Quote the variable so paths containing spaces survive word splitting.",
     "usage": "Extract the directory portion of a path — the inverse of `basename`.",
     "examples": [
       "dirname /var/log/nginx/access.log  # → /var/log/nginx",
@@ -4752,6 +4885,7 @@ export const questions: Question[] = [
     "id": "view21",
     "question": "You have a CSV export from your database at `/tmp/users.csv` with columns `id,name,email,role` and the values are hard to read because the column widths vary wildly. What command reformats it into neatly aligned columns on the terminal?",
     "answer": "column -t -s, /tmp/users.csv",
+    "altAnswers": ["column -s, -t /tmp/users.csv", "cat /tmp/users.csv | column -t -s,"],
     "explanation": "This command reads your comma-separated file and automatically widens each column to fit the longest value in that column, producing a neatly aligned table. It's for display only — the original file is untouched. Pipe it into `less` for files longer than your screen.",
     "usage": "Align a CSV or delimited file into readable fixed-width columns for terminal display.",
     "examples": [
@@ -4768,6 +4902,7 @@ export const questions: Question[] = [
     "id": "view22",
     "question": "You received a compiled binary at `/opt/app/bin/server` and suspect it contains embedded credentials. What command displays its raw bytes as a hex dump with the ASCII interpretation alongside, so you can read any embedded text?",
     "answer": "xxd /opt/app/bin/server",
+    "altAnswers": ["hexdump -C /opt/app/bin/server"],
     "explanation": "This tool displays a file's raw bytes in two columns side-by-side: the left shows the bytes as hexadecimal numbers, and the right shows the same bytes as printable ASCII characters (with dots for bytes that don't print). Each row covers 16 bytes. You can see file format headers (the \"magic bytes\" that identify a PNG, PDF, ELF binary, etc.) and any embedded text strings.",
     "usage": "View a file's raw bytes as a hex+ASCII dump — essential for inspecting binary files and file headers.",
     "examples": [
@@ -4783,23 +4918,23 @@ export const questions: Question[] = [
   {
     "id": "view23",
     "question": "A bash script 'script.sh' copied from a Windows machine fails with mysterious errors. You suspect it has Windows-style CRLF line endings (carriage return + newline). What `cat` flag makes invisible characters like `^M` (carriage return) and trailing spaces visible?",
-    "answer": "cat -E script.sh",
-    "explanation": "This flag adds a visible dollar sign at the end of every line just before the newline character. In a clean Unix file you see `text$`. In a file with Windows line endings you see `text^M$` — the carriage return is exposed as `^M`. In a file with trailing spaces you see `text   $`. This immediately reveals the hidden characters that are breaking your script.",
+    "answer": "cat -A script.sh",
+    "explanation": "The `-A` flag (short for `-vET`) makes every invisible character printable: line ends are marked with `$`, tabs show as `^I`, and non-printing characters like the carriage return appear as `^M`. In a clean Unix file you see `text$`; in a file with Windows CRLF endings you see `text^M$`; trailing spaces become visible as spaces before the `$`. Note that `-E` alone only adds the `$` markers — you need `-v` (included in `-A`) to actually render the `^M`.",
     "usage": "Reveal invisible line endings and trailing whitespace that break scripts and config files.",
     "examples": [
-      "cat -E deploy.sh  # show $ at line ends — ^M$ means Windows line endings",
-      "cat -A deploy.sh  # show tabs (^I), line ends ($), and all non-print chars",
+      "cat -A deploy.sh  # show tabs (^I), line ends ($), and all non-print chars like ^M",
+      "cat -E deploy.sh  # only $ line-end markers (won't render ^M itself)",
       "cat -T deploy.sh  # show only tabs as ^I",
       "dos2unix deploy.sh  # FIX Windows line endings (install dos2unix first)",
       "sed -i 's/\\r//' deploy.sh  # fix CRLF without installing dos2unix"
     ],
-    "memoryTip": "-E = End-of-line $ marker.",
-    "outputExample": "$ cat -E deploy.sh\n#!/bin/bash^M$\nset -e^M$\ncd /opt/app^M$\n$ dos2unix deploy.sh\ndos2unix: converting file deploy.sh to Unix format...",
+    "memoryTip": "-A = All invisible chars (equals -vET): $ line ends, ^I tabs, ^M carriage returns.",
+    "outputExample": "$ cat -A script.sh\n#!/bin/bash^M$\nset -e^M$\ncd /opt/app^M$\n$ dos2unix script.sh\ndos2unix: converting file script.sh to Unix format...",
     "category": "VIEWING TEXT"
   },
   {
     "id": "view24",
-    "question": "You're debugging a 10,000-line log file and want to read it page by page in your terminal, with line numbers shown on the left so you can refer to specific lines. What command opens the file in a scrollable pager with persistent line numbers?",
+    "question": "You're debugging a 10,000-line log file named `debug.log` and want to read it page by page in your terminal, with line numbers shown on the left so you can refer to specific lines. What command opens the file in a scrollable pager with persistent line numbers?",
     "answer": "less -N debug.log",
     "explanation": "This opens the file in a viewer where you can scroll forward and backward through it a screen at a time, without loading the whole file into memory first. The `-N` flag adds line numbers on the left edge. Navigation keys: spacebar to page down, `b` to page back, `j`/`k` (or arrow keys) for line-by-line, `g` to go to start, `G` to go to end, `/pattern` to search, `n`/`N` for next/previous match, `q` to quit.",
     "usage": "Open a file in a scrollable pager with line numbers — the standard way to read large files in the terminal.",
@@ -4815,8 +4950,9 @@ export const questions: Question[] = [
   },
   {
     "id": "view25",
-    "question": "A CSV report file has a summary/totals section in the last 3 lines that you want to exclude from processing. What `head` flag prints all lines except the last N lines?",
+    "question": "A CSV report file named `report.csv` has a summary/totals section in its last 3 lines that you want to exclude from processing. What `head` command prints all of the file's lines except the last 3?",
     "answer": "head -n -3 report.csv",
+    "altAnswers": ["head -n-3 report.csv"],
     "explanation": "By default head prints the first 10 lines — enough to see a file's format, headers, or first few log entries without loading the entire file. The -n flag controls the count. The unusual syntax head -n -3 means \"all lines except the last 3\" — useful when the last lines are footers or incomplete records. -c reads bytes instead of lines, which matters for binary files or when you need exactly N bytes. Combine with tail to extract any range: head -n 50 file | tail -n 10 gets lines 41-50.",
     "usage": "Print all lines except the last N — strip trailers and footers before piping to processing tools.",
     "examples": [
@@ -4832,8 +4968,9 @@ export const questions: Question[] = [
   {
     "id": "view26",
     "question": "A CSV file at `/tmp/users.csv` has a header on line 1 that you want to skip before piping the data rows to `awk` for processing. What `tail` flag starts printing from line 2 instead of from the end?",
-    "answer": "tail -n +5 /tmp/users.csv",
-    "explanation": "Most useful for log files where the newest events are at the bottom. By default prints the last 10 lines. The -f flag makes it follow a file in real-time: it keeps watching and prints new lines as they arrive, the standard way to monitor a live service log. The unusual syntax tail -n +5 means \"start from line 5 and print everything to the end\" — skip a CSV header and dump the data section. -F (capital) handles log rotation by reopening the file if it gets replaced by a new one.",
+    "answer": "tail -n +2 /tmp/users.csv",
+    "altAnswers": ["tail -n+2 /tmp/users.csv"],
+    "explanation": "Most useful for log files where the newest events are at the bottom. By default prints the last 10 lines. The -f flag makes it follow a file in real-time: it keeps watching and prints new lines as they arrive, the standard way to monitor a live service log. The unusual syntax tail -n +2 means \"start from line 2 and print everything to the end\" — skip a CSV header and dump the data section. -F (capital) handles log rotation by reopening the file if it gets replaced by a new one.",
     "usage": "Skip the first N-1 lines and print everything from line N to the end — the standard header-skipping idiom.",
     "examples": [
       "tail -n +2 /tmp/users.csv  # skip CSV header, pipe data rows to awk",
@@ -4848,7 +4985,7 @@ export const questions: Question[] = [
   {
     "id": "view27",
     "question": "A configuration file at `/etc/myapp/settings.conf` has 500 lines. You need to quickly inspect only lines 50 through 65 without opening the file in an editor. What `sed` one-liner extracts just that range and exits?",
-    "answer": "sed -n '10,20p' /var/log/syslog",
+    "answer": "sed -n '50,65p' /etc/myapp/settings.conf",
     "explanation": "sed is a stream editor — it reads input line by line, applies text transformation rules, and writes the result. Unlike interactive editors you use it in pipelines and scripts without opening a file. The s/old/new/ substitution is the workhorse: substitute the first match per line; add g for all matches. -i edits in place with an optional backup suffix. -n suppresses default output, used with p to print only matching lines. -e allows multiple expressions in one command. Think of sed as find-and-replace for the terminal.",
     "usage": "Print a specific line range from a file without loading the whole file — faster than an editor for spot-checking.",
     "examples": [
@@ -4880,7 +5017,7 @@ export const questions: Question[] = [
   {
     "id": "view29",
     "question": "You have two sorted lists of server hostnames — `expected.txt` and `actual.txt` — and want to see which hostnames are only in the expected list, which are only in actual, and which are in both. What command produces this three-column comparison of two sorted files?",
-    "answer": "comm file1 file2",
+    "answer": "comm expected.txt actual.txt",
     "explanation": "This command compares two pre-sorted files and splits the result into three categories displayed in three columns: lines that only appear in the first file, lines that only appear in the second file, and lines that appear in both. You can suppress any column with flags. It's a fast set-comparison tool for sorted text lists.",
     "usage": "Three-column comparison of two sorted files — fast set operations without a full diff.",
     "examples": [
@@ -4891,13 +5028,13 @@ export const questions: Question[] = [
       "sort hosts1.txt > /tmp/s1.txt; sort hosts2.txt > /tmp/s2.txt; comm /tmp/s1.txt /tmp/s2.txt"
     ],
     "memoryTip": "comm = common; suppress columns with -1/-2/-3.",
-    "outputExample": "$ comm expected.txt actual.txt\nweb1.internal\n\tweb2.internal\n\t\tdb1.internal\n# Column 1: only in expected, Column 2: only in actual, Column 3: in both",
+    "outputExample": "$ comm expected.txt actual.txt\n\t\tdb1.internal\nweb1.internal\n\tweb2.internal\n# Column 1: only in expected, Column 2: only in actual, Column 3: in both",
     "category": "VIEWING TEXT"
   },
   {
     "id": "view30",
     "question": "After a build, you want to confirm that `dist/app.bin` is byte-for-byte identical to the previously verified `dist/app.bin.golden` reference file. What command checks binary equality and exits 0 if they match, non-zero if they differ?",
-    "answer": "cmp file1 file2",
+    "answer": "cmp dist/app.bin dist/app.bin.golden",
     "explanation": "This tool does a byte-for-byte comparison of two files and tells you immediately whether they're identical. If they match, it exits silently with a success code. If they differ, it prints the exact byte position and line number of the first difference. It's faster than `diff` for a simple yes/no identity check because it stops at the first difference.",
     "usage": "Verify two files are byte-for-byte identical — faster than diff for binary equality checks.",
     "examples": [
@@ -4912,8 +5049,9 @@ export const questions: Question[] = [
   },
   {
     "id": "perm21",
-    "question": "You've written a compiled C tool that needs to run as its owner (`root`) regardless of which user invokes it — similar to how `ping` or `passwd` work. What `chmod` command adds the setuid bit to the binary?",
+    "question": "Your compiled C tool installed at `/usr/local/bin/tool` needs to run as its owner (`root`) regardless of which user invokes it — similar to how `ping` or `passwd` work. What `chmod` command adds the setuid bit to that binary?",
     "answer": "chmod u+s /usr/local/bin/tool",
+    "altAnswers": ["chmod 4755 /usr/local/bin/tool"],
     "explanation": "The setuid bit is a special permission flag that makes an executable run as the user who OWNS the file, not as the user who runs it. When a file with setuid set is owned by root, anyone who executes it temporarily gains root's privileges for the duration of that program. This is how `passwd` lets ordinary users change their own passwords — it briefly becomes root to write to `/etc/shadow`, then gives up that privilege.",
     "usage": "Add the setuid bit so a compiled binary runs as its owner regardless of who invokes it.",
     "examples": [
@@ -4930,6 +5068,7 @@ export const questions: Question[] = [
     "id": "perm22",
     "question": "Your team shares a project directory at `/srv/projects/myapp`. When team members create files there, the files belong to their personal group instead of the shared `developers` group. What `chmod` sets the setgid bit so new files automatically inherit the directory's group?",
     "answer": "chmod g+s /srv/projects/myapp",
+    "altAnswers": ["chmod 2775 /srv/projects/myapp"],
     "explanation": "Normally a new file gets the primary group of whoever creates it. The setgid bit on a directory overrides this: any file or subdirectory created inside will automatically inherit the directory's group, not the creator's personal group. This ensures everyone on the team owns files under the same shared group without anyone needing to remember to `chgrp` after creating files.",
     "usage": "Set the setgid bit on a shared directory so all new files automatically inherit the directory's group.",
     "examples": [
@@ -4962,7 +5101,7 @@ export const questions: Question[] = [
   {
     "id": "perm24",
     "question": "You need to create files in `/srv/projects/myapp` that belong to the `developers` group, but your primary group is your personal group. Without logging out, what command switches your active primary group for the current shell session?",
-    "answer": "newgrp groupname",
+    "answer": "newgrp developers",
     "explanation": "This command starts a new sub-shell where your effective primary group has changed to the named group. Any files you create in that shell session will be owned by the new group instead of your personal one. When you're done, type `exit` to return to your previous shell with your original primary group restored.",
     "usage": "Switch your active primary group for the current shell session so new files are owned by that group.",
     "examples": [
@@ -5010,7 +5149,7 @@ export const questions: Question[] = [
   },
   {
     "id": "perm27",
-    "question": "You're setting up SSH key authentication to a new server and need to generate a key pair. What `ssh-keygen` command creates a modern ed25519 key pair with a comment identifying which machine it's from?",
+    "question": "You're setting up SSH key authentication to a new server and need to generate a key pair using the modern ed25519 algorithm. What `ssh-keygen` command creates it (accepting the default file location)?",
     "answer": "ssh-keygen -t ed25519",
     "explanation": "This command generates two mathematically linked files: a private key (which you keep on your machine and never share) and a public key (which you put on every server you want to access). Once the public key is in the server's authorized keys file, SSH uses the key pair to authenticate you without asking for a password. The comment helps you remember which device a key came from.",
     "usage": "Generate a modern ed25519 SSH key pair for passwordless authentication.",
@@ -5059,9 +5198,9 @@ export const questions: Question[] = [
   },
   {
     "id": "perm30",
-    "question": "Your web application is failing because it can't write to `/var/lib/myapp/data`. You want to test whether the `www-data` user can actually write to that directory without switching to that user's full shell. What `sudo` flag runs a single command as a specific non-root user?",
-    "answer": "sudo -u www-data chmod u+w /var/www/app",
-    "explanation": "Linux file permissions are stored as a 12-bit number. The lower 9 bits represent three groups of three: owner (user), group, others. Within each group: read=4, write=2, execute=1. Add them to get the octal digit for that group. 7=rwx (4+2+1), 6=rw- (4+2), 5=r-x (4+1), 4=r-- (4), 0=--- (none). So 644 = rw-r--r-- (owner can read/write, everyone can read), 755 = rwxr-xr-x (owner can do anything, everyone can read/execute), 600 = rw------- (owner only, private). The top 3 bits are setuid, setgid, sticky — handled separately.",
+    "question": "Your web application is failing because it can't write to `/var/lib/myapp/data`. You want to test whether the `www-data` user can actually write there — without switching to that user's full shell — by running `touch /var/lib/myapp/data/test` as `www-data`. What's the full command?",
+    "answer": "sudo -u www-data touch /var/lib/myapp/data/test",
+    "explanation": "The `-u` flag tells sudo to run the command as the named user instead of root. Creating a test file with touch is the most direct way to answer 'can this service account write here?' — if the permissions are wrong you get an immediate 'Permission denied' from the exact identity your application runs as. This avoids the guesswork of reading permission bits and mentally simulating what www-data can do, and it works even for accounts like www-data whose shell is set to nologin.",
     "usage": "Run a single command as a specific user — test service account permissions or run service-specific commands.",
     "examples": [
       "sudo -u www-data ls -la /var/lib/myapp/data  # can www-data list this dir?",
@@ -5078,6 +5217,7 @@ export const questions: Question[] = [
     "id": "pipe21",
     "question": "You're running `make` and the build is failing, but errors are going to stderr while the rest of the output goes to stdout. You want to pipe ALL output (both streams) into `grep` to search for the word 'error'. How do you merge stderr into stdout before the pipe?",
     "answer": "make 2>&1 | grep error",
+    "altAnswers": ["make |& grep error"],
     "explanation": "Programs send two separate output streams to your terminal: normal output (stdout) and error messages (stderr). A pipe only connects stdout by default — errors bypass it and appear separately on screen. The `2>&1` redirection, placed before the pipe, merges the error stream into the normal output stream so everything flows through the pipe together.",
     "usage": "Merge stderr into stdout so a pipe or grep sees both streams together.",
     "examples": [
@@ -5110,7 +5250,8 @@ export const questions: Question[] = [
     "id": "pipe23",
     "question": "You have a file `servers.txt` with one hostname per line. You want to run `ssh HOST uptime` for each hostname, substituting the hostname into the middle of the command. What `xargs` invocation uses a placeholder to insert each line into an arbitrary position in the command?",
     "answer": "xargs -I {} ssh {} uptime < servers.txt",
-    "explanation": "Redirection changes the source or destination of a command's input and output. Every process has three standard streams: stdin (0, keyboard by default), stdout (1, terminal by default), stderr (2, terminal by default). > redirects stdout to a file (overwrite). >> appends stdout to a file. < reads stdin from a file instead of keyboard. 2> redirects stderr. 2>&1 merges stderr into stdout. 2>/dev/null discards all errors. These can combine: command > output.txt 2>&1 sends both stdout and stderr to the file.",
+    "altAnswers": ["cat servers.txt | xargs -I {} ssh {} uptime"],
+    "explanation": "By default xargs appends its input tokens to the END of the command, but here the hostname must go in the middle — between `ssh` and `uptime`. The `-I {}` option defines a placeholder: for each input line, xargs substitutes that line wherever `{}` appears in the command template and runs it once per line. The `< servers.txt` feeds the file into xargs's stdin.",
     "usage": "Run a command for each input line with the line substituted into a specific position via a placeholder.",
     "examples": [
       "xargs -I {} ssh {} uptime < servers.txt  # run uptime on each server",
@@ -5124,9 +5265,10 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe24",
-    "question": "You have 200 log files to gzip and the process is CPU-bound. You want to compress up to 8 files simultaneously to use all CPU cores. What `xargs` flags enable parallel execution with exactly 8 concurrent workers and one file per invocation?",
+    "question": "You have 200 `.log` files in the current directory to gzip and the process is CPU-bound. Starting from `ls *.log`, write the pipeline that compresses up to 8 files simultaneously, one file per gzip invocation, using xargs.",
     "answer": "ls *.log | xargs -P 8 -n 1 gzip",
-    "explanation": "tee is inserted in the middle of a pipeline to branch the data stream. It reads from stdin, writes to stdout (continuing the pipeline), and simultaneously writes to a file. This solves the problem of wanting to both process data through more commands AND save the intermediate state. Example: curl api.example.com/data | tee raw.json | python3 process.py — saves the raw API response while also passing it to the processor. -a appends to the file. Multiple files can be given. Use process substitution for more branching: tee >(filter1) >(filter2) > combined.txt.",
+    "altAnswers": ["ls *.log | xargs -n 1 -P 8 gzip"],
+    "explanation": "Two xargs flags combine here: `-n 1` says pass exactly one filename per gzip invocation, and `-P 8` says keep up to 8 of those invocations running at the same time. As each gzip finishes, xargs launches the next, keeping 8 CPU cores busy until the queue is empty. For a CPU-bound task this gives close to an 8x speedup over compressing the files one at a time.",
     "usage": "Process a list of inputs in parallel with N simultaneous workers — dramatically speeds up batch tasks.",
     "examples": [
       "find . -name '*.log' | xargs -P 8 -n 1 gzip  # compress 8 files at a time",
@@ -5141,8 +5283,8 @@ export const questions: Question[] = [
   {
     "id": "pipe25",
     "question": "You want two separate processes — a data generator and a data consumer — to communicate through a named file in the filesystem instead of a shell pipe, so they can run independently and asynchronously. What command creates a named pipe at `/tmp/data_stream`?",
-    "answer": "mkfifo /tmp/myfifo",
-    "explanation": "xargs bridges commands that produce output (like find or grep -l) with commands that take filenames as arguments (like rm, chmod, wc). By default xargs reads whitespace-separated tokens from stdin and appends them as arguments. -n1 passes one argument per command invocation. -I{} lets you place the argument anywhere in the command: find . -name \"*.tmp\" | xargs -I{} mv {} /tmp/old/. -P4 runs 4 processes in parallel for speed. The -0 flag paired with find's -print0 handles filenames with spaces safely.",
+    "answer": "mkfifo /tmp/data_stream",
+    "explanation": "A named pipe (FIFO) is a pipe with a filename: it appears in the filesystem, but data written to it is passed directly in memory to whatever process reads it — nothing is stored on disk. This lets two unrelated processes, started at different times or from different terminals, stream data to each other just by opening the same path. Writers block until a reader connects (and vice versa), which naturally synchronizes the two sides.",
     "usage": "Create a named pipe in the filesystem so independent processes can communicate without a temporary file.",
     "examples": [
       "mkfifo /tmp/data_stream  # create the named pipe",
@@ -5157,8 +5299,9 @@ export const questions: Question[] = [
   {
     "id": "pipe26",
     "question": "You're writing a cron script and want ALL output (stdout and stderr) from every command in the script to go to `/var/log/myjob.log` automatically, without appending a redirect to every single line. What `exec` redirection at the top of the script achieves this?",
-    "answer": "exec > script.log 2>&1",
-    "explanation": "Command substitution $() captures the stdout of a command and injects it into another command or variable assignment as text. The inner command runs in a subshell, its output is stripped of trailing newlines, and the result is substituted in place. This is how you make commands talk to each other without intermediate files. Common uses: TODAY=$(date +%F) for timestamps, COUNT=$(wc -l < file.txt) for counting, DIR=$(dirname \"$0\") to find where a script is located. Can be nested: $(echo $(date +%Y)).",
+    "answer": "exec > /var/log/myjob.log 2>&1",
+    "altAnswers": ["exec >> /var/log/myjob.log 2>&1"],
+    "explanation": "Normally `exec` replaces the shell with another program, but when given only redirections it applies them to the CURRENT shell process permanently. Placed at the top of a script, `exec > /var/log/myjob.log 2>&1` reroutes stdout and then merges stderr into it, so every subsequent command's output lands in the log file automatically — no need to repeat the redirect on each line. Use `>>` instead of `>` if you want each run to append rather than overwrite.",
     "usage": "Redirect all subsequent output in a script to a log file with one line at the top.",
     "examples": [
       "exec > /var/log/myjob.log 2>&1  # overwrite on each run",
@@ -5173,6 +5316,7 @@ export const questions: Question[] = [
     "id": "pipe27",
     "question": "Your script initializes a log file called `app.log` at the start of each run. You want to create the file if it doesn't exist, or empty it if it does, using only bash built-in syntax without any external command. What shell construct does this?",
     "answer": ": > app.log",
+    "altAnswers": ["> app.log"],
     "explanation": ": is the bash no-op command — it always succeeds and produces no output. Combined with redirection, : > filename is an idiomatic way to create an empty file or truncate an existing one to zero bytes. It is marginally more explicit than just > filename which also works. The real power comes in scripts: : > \"$LOGFILE\" at the start of a script ensures a clean empty log file regardless of whether one existed before. Also used in script skeletons where a code block is syntactically required but should do nothing.",
     "usage": "Create or empty a file using only bash built-ins — no external commands required.",
     "examples": [
@@ -5189,6 +5333,7 @@ export const questions: Question[] = [
     "id": "pipe28",
     "question": "You're running `find / -name 'config.yml'` and the output is buried under hundreds of 'Permission denied' error lines. You want to see only the real results on screen and discard all the errors silently. How do you redirect only stderr to nowhere?",
     "answer": "find / -name 'config.yml' 2>/dev/null",
+    "altAnswers": ["find / -name config.yml 2>/dev/null"],
     "explanation": "Programs produce two separate output streams. Normal results go one way; error messages go another. This redirect sends the error stream into the void — a special system device that accepts and discards everything written to it. Your normal results still appear on screen as if the errors never existed. Use it when you're certain the errors are expected noise.",
     "usage": "Discard all error output from a command while keeping normal output — suppress expected noise.",
     "examples": [
@@ -5203,9 +5348,9 @@ export const questions: Question[] = [
   },
   {
     "id": "pipe29",
-    "question": "You're running a long deploy script and want to see its output live on screen while also saving a complete transcript to `deploy.log`, `/var/log/deploy.log` for postmortem review. What command does both simultaneously?",
+    "question": "You're running the long deploy script `./deploy.sh` and want to see its output live on screen while also appending it to the file `deploy.log` for postmortem review. What command does both simultaneously?",
     "answer": "./deploy.sh | tee -a deploy.log",
-    "explanation": "/dev/null is a special file that discards everything written to it and returns nothing when read. It is the trash bin of Unix. Redirecting stderr to /dev/null with 2>/dev/null silences error messages you do not care about. Redirecting stdout the same way runs a command for its side effects only. Redirecting both suppresses all output: command > /dev/null 2>&1. Reading from /dev/null gives instant EOF, useful for commands expecting input you want to skip. It has no size limit and writes are instantaneous.",
+    "explanation": "Named after a T-shaped pipe fitting, tee splits a data stream in two directions: it reads from stdin, prints everything to your terminal (stdout), and simultaneously writes an identical copy to the file. The `-a` flag appends to the file instead of overwriting it, so successive deploys accumulate in one log. Without tee you'd have to choose between watching the output live or capturing it. Add `2>&1` before the pipe if you also want error messages in the transcript.",
     "usage": "Write output to the terminal AND to a file simultaneously — watch live and keep a log.",
     "examples": [
       "./deploy.sh 2>&1 | tee -a /var/log/deploy.log  # capture everything, show live",
@@ -5221,6 +5366,7 @@ export const questions: Question[] = [
     "id": "pipe30",
     "question": "Your bash script needs to capture the output of `hostname -f` into a variable called `FQDN` so you can use it later in log messages and config file paths. What syntax captures a command's stdout into a variable?",
     "answer": "FQDN=$(hostname -f)",
+    "altAnswers": ["FQDN=`hostname -f`"],
     "explanation": "Variable assignment with command substitution captures command output for later use. VAR=$(command) runs command in a subshell, captures its stdout, strips trailing newlines, and stores the result. The variable can then be used in conditions, as arguments to other commands, or in string construction. This avoids temporary files for intermediate results. Important: always quote \"$VAR\" when using it to prevent word splitting if it contains spaces. Use local in functions to avoid polluting the global scope.",
     "usage": "Capture a command's standard output into a bash variable for use in subsequent commands.",
     "examples": [
@@ -5254,7 +5400,8 @@ export const questions: Question[] = [
     "id": "proc22",
     "question": "You started a background job with `&` and now realize you need to log out. The job is still running as `[1] 5678`. How do you detach it from your shell so it won't be killed when you exit?",
     "answer": "disown %1",
-    "explanation": "Every Linux process has a scheduling priority called niceness — from -20 (highest priority, greediest) to 19 (lowest priority, most polite). By default processes start at 0. nice -n 10 command starts the command at niceness 10, meaning the kernel will deprioritize it whenever other processes need CPU. This is essential when running CPU-intensive tasks like backups, compiles, or data processing on a production server — you want them to finish eventually but not starve the services users depend on. renice adjusts the priority of an already-running process.",
+    "altAnswers": ["disown"],
+    "explanation": "When you log out, the shell sends a hangup signal (SIGHUP) to every job it still tracks, which normally kills them. `disown` removes a job from the shell's job table, so the shell forgets about it and never sends it that signal — the process keeps running after you exit. It's the after-the-fact rescue for when you started something with `&` and only later realized you need it to survive logout (the before-the-fact tool is `nohup`).",
     "usage": "Remove a background job from the shell's job table so it won't be killed when you log out — the 'forgot nohup' rescue.",
     "examples": [
       "disown %1  # detach job 1 from shell",
@@ -5270,7 +5417,8 @@ export const questions: Question[] = [
   {
     "id": "proc23",
     "question": "You regularly work on a remote server via SSH and need a persistent named session you can detach from and reattach to later — even from a different machine. What command creates a new `tmux` session named `dev`?",
-    "answer": "tmux new -s work",
+    "answer": "tmux new -s dev",
+    "altAnswers": ["tmux new-session -s dev"],
     "explanation": "This creates a persistent terminal session managed by a background server. You do your work inside it, and when you're done (or your SSH drops), you detach with Ctrl+b then D. The session keeps running. Next time you connect, you reattach to find everything exactly as you left it — running commands, open files, shell history. It's like parking a car and picking up where you left off.",
     "usage": "Create a persistent named terminal session that survives SSH disconnects and can be reattached from anywhere.",
     "examples": [
@@ -5304,8 +5452,9 @@ export const questions: Question[] = [
   },
   {
     "id": "proc25",
-    "question": "A backup script is running at normal priority and making your interactive shell laggy. You want to lower its priority without stopping it. What `renice` command lowers the priority of an already-running process by raising its nice value to 15?",
-    "answer": "sudo renice -n 5 -p 1234",
+    "question": "A backup script running as PID 1234 at normal priority is making your interactive shell laggy. You want to lower its priority without stopping it. What `renice` command raises the nice value of PID 1234 to 15?",
+    "answer": "sudo renice -n 15 -p 1234",
+    "altAnswers": ["renice 15 -p 1234", "renice -n 15 1234"],
     "explanation": "Every process has a priority number called \"niceness\" that affects how much CPU time the scheduler gives it. Higher niceness means \"be nicer to everyone else\" — the process gets less CPU. Lower niceness means more CPU. This command changes the niceness of a process that's already running, without stopping or restarting it.",
     "usage": "Lower a running process's CPU priority without stopping it — the 'soft throttle' for resource contention.",
     "examples": [
@@ -5340,6 +5489,7 @@ export const questions: Question[] = [
     "id": "proc27",
     "question": "Starting your development server fails with 'address already in use' for port 8080. What command shows which process is holding that port, including the process name and PID?",
     "answer": "sudo lsof -i :8080",
+    "altAnswers": ["lsof -i:8080"],
     "explanation": "This command asks the OS for a list of every open \"socket\" (network endpoint) on a specific port. It shows you the program name, process ID, and username for each entry. Once you have the PID, you can kill it to free the port, or investigate why it's still running.",
     "usage": "Find which process holds a specific port — the first step when a 'port in use' error blocks your server from starting.",
     "examples": [
@@ -5355,7 +5505,7 @@ export const questions: Question[] = [
   },
   {
     "id": "proc28",
-    "question": "Your application process is mysteriously hanging. You want to see in real time which system calls it's making — file opens, reads, network calls — to understand where it's stuck. What command attaches to the running process and streams its system calls?",
+    "question": "Your application process (PID 1234) is mysteriously hanging. You want to see in real time which system calls it's making — file opens, reads, network calls — to understand where it's stuck. What command attaches to that running process by PID and streams its system calls?",
     "answer": "sudo strace -p 1234",
     "explanation": "Every action a program takes that involves the outside world — opening a file, reading a network socket, allocating memory — requires asking the OS kernel for help via a \"system call.\" This tool taps into that conversation and shows you every request the program makes and what the kernel responds. If a program is hung, this almost always reveals exactly what it's waiting for.",
     "usage": "Stream system calls from a running process to diagnose hangs, missing files, and permission errors.",
@@ -5367,14 +5517,14 @@ export const questions: Question[] = [
       "strace -tt -T -o /tmp/trace.log -p 1234  # timestamped trace saved to file"
     ],
     "memoryTip": "`strace -p PID` attach, `strace cmd` launch. `-f` follow children, `-e trace=GROUP` filter, `-c` summary, `-o file` save. Look for `= -1 ENOENT` lines for 'file not found'. Slow: turn it OFF in production.",
-    "outputExample": "$ sudo strace -p 4567 2>&1 | head\nstrace: Process 4567 attached\nepoll_wait(7, [], 1024, 100)            = 0\nrecvfrom(8, \"\", 4096, 0, NULL, NULL)    = 0\nread(9, 0x..., 4096)                    = -1 ENOENT (No such file or directory)",
+    "outputExample": "$ sudo strace -p 1234 2>&1 | head\nstrace: Process 1234 attached\nepoll_wait(7, [], 1024, 100)            = 0\nrecvfrom(8, \"\", 4096, 0, NULL, NULL)    = 0\nread(9, 0x..., 4096)                    = -1 ENOENT (No such file or directory)",
     "category": "PROCESSES"
   },
   {
     "id": "proc29",
-    "question": "You need a scriptable snapshot of processes sorted by CPU usage — something you can pipe to `grep`, log to a file, or embed in an alert script, unlike the interactive `top`. What `ps` command with custom columns outputs a sorted CPU ranking?",
+    "question": "You need a scriptable snapshot of processes sorted by CPU usage — something you can pipe to `grep`, log to a file, or embed in an alert script, unlike the interactive `top`. What command lists every process with exactly the columns `pid,user,%cpu,cmd`, sorted by descending `%cpu`, piped to `head` to keep just the top of the list?",
     "answer": "ps -eo pid,user,%cpu,cmd --sort=-%cpu | head",
-    "explanation": "When you press Ctrl+Z, the current foreground process is suspended — paused and moved to the job list. bg takes the most recently suspended job and restarts it running in the background so your terminal prompt returns immediately. bg %2 resumes job number 2 specifically. jobs lists all background and suspended jobs with their numbers. fg brings a background job back to the foreground. This trio — Ctrl+Z, bg, fg — is how you juggle multiple tasks in a single terminal session without opening multiple windows.",
+    "explanation": "`ps -e` selects every process on the system, and `-o pid,user,%cpu,cmd` outputs exactly the columns you name — no more, no less. `--sort=-%cpu` orders the rows by CPU usage; the leading minus means descending, so the hungriest processes come first. Piping to `head` keeps just the top of the ranking. Unlike the interactive `top`, this prints plain text once and exits, so you can pipe it to `grep`, redirect it to a log file, or embed it in a cron alert script.",
     "usage": "Produce a scriptable ranked list of processes by CPU usage — the `top`-alternative that can be piped and logged.",
     "examples": [
       "ps -eo pid,user,%cpu,cmd --sort=-%cpu | head  # top 9 CPU consumers",
@@ -5390,6 +5540,7 @@ export const questions: Question[] = [
     "id": "proc30",
     "question": "You just updated nginx's configuration to add a new virtual host. You want nginx to reload its config and start serving the new virtual host, without dropping any of the thousands of active connections it's currently handling. What command sends the 'reload config' signal to the nginx master process?",
     "answer": "sudo kill -HUP $(pidof nginx)",
+    "altAnswers": ["sudo kill -1 $(pidof nginx)", "sudo kill -SIGHUP $(pidof nginx)", "sudo nginx -s reload"],
     "explanation": "Many server daemons (nginx, sshd, rsyslog, and others) are programmed to respond to signal 1 (SIGHUP) by re-reading their configuration files while keeping existing connections alive. It's like telling a busy restaurant manager \"read the new menu\" without kicking out the customers who are already eating. Always test the config syntax first — a broken config means the reload silently does nothing and you're left wondering why it didn't work.",
     "usage": "Trigger a zero-downtime config reload in nginx (or other daemons) by sending SIGHUP to the master process.",
     "examples": [
@@ -5407,6 +5558,7 @@ export const questions: Question[] = [
     "id": "net21",
     "question": "You want to download the file at https://releases.example.com/app-v2.1.tar.gz and have it saved under whatever filename the server uses. Which command does this without you specifying a local filename?",
     "answer": "curl -O https://releases.example.com/app-v2.1.tar.gz",
+    "altAnswers": ["wget https://releases.example.com/app-v2.1.tar.gz"],
     "explanation": "This command downloads a file from the web and saves it using the same filename that appears at the end of the URL. You don't have to type out a destination name — it figures that out from the URL itself.",
     "usage": "Download a remote file and save it locally using the filename from the URL.",
     "examples": [
@@ -5419,7 +5571,7 @@ export const questions: Question[] = [
   },
   {
     "id": "net22",
-    "question": "A REST API at https://api.example.com/orders expects a POST request with a JSON body containing an order ID. How do you send that request from the command line and see the response?",
+    "question": "A REST API at https://api.example.com/orders expects a POST request with a `Content-Type: application/json` header and the exact JSON body `{\"order_id\":\"ORD-9981\"}`. Using curl's `-X`, `-H`, and `-d` flags in that order (URL last), how do you send that request and see the response?",
     "answer": "curl -X POST -H 'Content-Type: application/json' -d '{\"order_id\":\"ORD-9981\"}' https://api.example.com/orders",
     "explanation": "This command sends data to a web server using the POST method, the way a browser form or mobile app would. It also tells the server the data is in JSON format so the server parses it correctly.",
     "usage": "POST JSON data to a REST API endpoint and print the response to the terminal.",
@@ -5433,44 +5585,44 @@ export const questions: Question[] = [
   },
   {
     "id": "net23",
-    "question": "You are on your laptop and need to reach an internal web server at 10.10.5.20:80 that is only accessible from the jump host gateway.example.com. How do you make that internal server available at localhost:8080 on your laptop?",
-    "answer": "ssh -L 8080:10.10.5.20:80 user@gateway.example.com",
+    "question": "You are on your laptop and need to reach an internal web server at 10.10.5.20:80 that is only accessible from the jump host gateway.example.com, where your username is `alice`. How do you make that internal server available at localhost:8080 on your laptop?",
+    "answer": "ssh -L 8080:10.10.5.20:80 alice@gateway.example.com",
     "explanation": "This command creates a secure tunnel so that anything you open at port 8080 on your own machine gets forwarded through the SSH server to the internal machine on its network. It's like running a secret pipe from your laptop to a machine you can't normally reach.",
     "usage": "Forward a local port through an SSH jump host to reach an otherwise-unreachable internal service.",
     "examples": [
-      "ssh -L 8080:10.10.5.20:80 user@gateway.example.com  # browse localhost:8080 to reach internal server",
-      "ssh -L 5432:db.internal:5432 -N -f user@gateway.example.com  # background Postgres tunnel"
+      "ssh -L 8080:10.10.5.20:80 alice@gateway.example.com  # browse localhost:8080 to reach internal server",
+      "ssh -L 5432:db.internal:5432 -N -f alice@gateway.example.com  # background Postgres tunnel"
     ],
     "memoryTip": "`-L` = Local port forwarding; traffic flows Local → SSH server → destination",
-    "outputExample": "$ ssh -L 8080:10.10.5.20:80 -N user@gateway.example.com &\n[1] 84021\n# Now open http://localhost:8080 in your browser",
+    "outputExample": "$ ssh -L 8080:10.10.5.20:80 -N alice@gateway.example.com &\n[1] 84021\n# Now open http://localhost:8080 in your browser",
     "category": "NETWORKING"
   },
   {
     "id": "net24",
-    "question": "You are on a remote server behind a strict firewall and want to let a colleague on the internet reach your local development server running on port 3000. How do you expose your local port 3000 as port 9000 on the remote SSH server?",
-    "answer": "ssh -R 9000:localhost:3000 user@remote.example.com",
+    "question": "You want to let a colleague on the internet reach your local development server running on port 3000, by exposing it through the public SSH server remote.example.com where your username is `alice`. How do you expose your local port 3000 as port 9000 on that remote SSH server?",
+    "answer": "ssh -R 9000:localhost:3000 alice@remote.example.com",
     "explanation": "This command punches a hole outward through a firewall. Your local machine connects to a remote server and tells it: whenever someone connects to your port 9000, send that traffic back to my machine on port 3000.",
     "usage": "Expose a port on your local machine through a remote SSH server so outside parties can reach it.",
     "examples": [
-      "ssh -R 9000:localhost:3000 user@remote.example.com  # remote:9000 → local:3000",
-      "ssh -R 9000:localhost:3000 -N -f user@remote.example.com  # backgrounded tunnel"
+      "ssh -R 9000:localhost:3000 alice@remote.example.com  # remote:9000 → local:3000",
+      "ssh -R 9000:localhost:3000 -N -f alice@remote.example.com  # backgrounded tunnel"
     ],
     "memoryTip": "`-R` = Remote port forwarding; traffic flows Remote server → back to you",
-    "outputExample": "$ ssh -R 9000:localhost:3000 -N user@remote.example.com &\n# Colleague visits http://remote.example.com:9000 to see your local dev server",
+    "outputExample": "$ ssh -R 9000:localhost:3000 -N alice@remote.example.com &\n# Colleague visits http://remote.example.com:9000 to see your local dev server",
     "category": "NETWORKING"
   },
   {
     "id": "net25",
-    "question": "You just generated an SSH key pair on your laptop and want to log into deploy.example.com without a password from now on. What single command copies your public key to that server?",
-    "answer": "ssh-copy-id user@deploy.example.com",
+    "question": "You just generated an SSH key pair on your laptop and want to log into deploy.example.com as user `alice` without a password from now on. What single command copies your default public key to that server?",
+    "answer": "ssh-copy-id alice@deploy.example.com",
     "explanation": "This command copies the public half of your SSH key to the remote server and adds it to the list of keys allowed to log in. After running it once — using your password — you can SSH in without a password from then on.",
     "usage": "Install your SSH public key on a remote server to enable password-free login.",
     "examples": [
-      "ssh-copy-id user@deploy.example.com  # copies default public key",
-      "ssh-copy-id -i ~/.ssh/deploy_ed25519.pub user@deploy.example.com  # copies specific key"
+      "ssh-copy-id alice@deploy.example.com  # copies default public key",
+      "ssh-copy-id -i ~/.ssh/deploy_ed25519.pub alice@deploy.example.com  # copies specific key"
     ],
     "memoryTip": "`ssh-copy-id` = copy my ID (public key) to the remote machine",
-    "outputExample": "$ ssh-copy-id user@deploy.example.com\n/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed.\nuser@deploy.example.com's password:\nNumber of key(s) added: 1\nNow try logging in: ssh 'user@deploy.example.com'",
+    "outputExample": "$ ssh-copy-id alice@deploy.example.com\n/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed.\nalice@deploy.example.com's password:\nNumber of key(s) added: 1\nNow try logging in: ssh 'alice@deploy.example.com'",
     "category": "NETWORKING"
   },
   {
@@ -5491,6 +5643,7 @@ export const questions: Question[] = [
     "id": "net27",
     "question": "You need just the IP address that example.com resolves to — no extra lines, no TTL, no record type prefix. What command produces that clean output?",
     "answer": "dig +short example.com",
+    "altAnswers": ["dig example.com +short"],
     "explanation": "This command asks the DNS system for the IP address of a hostname and prints only the IP, with nothing else — no headers, no explanations. It's perfect when you need to grab the result in a script.",
     "usage": "Resolve a hostname to its IP address(es) with clean, script-friendly output.",
     "examples": [
@@ -5535,6 +5688,7 @@ export const questions: Question[] = [
     "id": "net30",
     "question": "You are troubleshooting why a server at 192.168.1.50 is unreachable on the local network and want to check whether the machine's ARP table has an entry for that IP. Which command displays the neighbor/ARP table?",
     "answer": "ip neigh",
+    "altAnswers": ["ip neighbor", "ip n", "arp -a"],
     "explanation": "This command shows the machine's ARP table — the list of IP-to-MAC address mappings the machine has discovered on the local network. If a machine's IP doesn't appear, or shows as \"FAILED,\" you know there's a layer-2 connectivity problem.",
     "usage": "Display the ARP/neighbor table to see IP-to-MAC address mappings on the local network.",
     "examples": [
@@ -5550,6 +5704,7 @@ export const questions: Question[] = [
     "id": "pkg18",
     "question": "You are about to migrate a Ubuntu 24.04 server to a new VM and need a manifest of every installed package. Which command lists all installed packages?",
     "answer": "apt list --installed",
+    "altAnswers": ["dpkg -l", "dpkg --list", "dpkg-query -l"],
     "explanation": "This command prints a list of every software package currently installed on the machine. You can use it to see everything that has been put on the system, or pipe it to other tools to filter or count packages.",
     "usage": "List every installed package on a Debian/Ubuntu system, optionally filtering to only manually-installed ones.",
     "examples": [
@@ -5567,6 +5722,7 @@ export const questions: Question[] = [
     "id": "pkg19",
     "question": "Before patching a production Ubuntu server you want to preview exactly which packages would be upgraded without actually upgrading anything. What command shows the list?",
     "answer": "apt list --upgradable",
+    "altAnswers": ["apt list --upgradeable", "apt-get -s upgrade", "apt-get --simulate upgrade"],
     "explanation": "After refreshing the package catalog, this command shows you exactly which packages have newer versions available — like a preview of what would change if you ran the upgrade. Use it to check for any surprises before touching a production system.",
     "usage": "Preview all packages that would be upgraded without actually making any changes to the system.",
     "examples": [
@@ -5584,6 +5740,7 @@ export const questions: Question[] = [
     "id": "pkg20",
     "question": "You installed nginx and want to find where its binary, config files, and documentation were placed on disk. Which command lists every file the package put on the system?",
     "answer": "dpkg -L nginx",
+    "altAnswers": ["dpkg-query -L nginx", "dpkg --listfiles nginx"],
     "explanation": "This command prints every file path that a package owns on the system — binaries, configuration files, documentation, and more. It's how you track down where a package installed things without having to search the whole filesystem.",
     "usage": "List every file an installed package placed on disk, useful for locating configs, binaries, and docs.",
     "examples": [
@@ -5601,6 +5758,7 @@ export const questions: Question[] = [
     "id": "pkg21",
     "question": "You found an unexpected binary at /usr/bin/nc and want to know which package installed it. What command tells you the owning package?",
     "answer": "dpkg -S /usr/bin/nc",
+    "altAnswers": ["dpkg-query -S /usr/bin/nc", "dpkg --search /usr/bin/nc"],
     "explanation": "This command answers the question \"which software package put this file here?\" You give it a file path, and it tells you the package name. This is useful when debugging, tracing unfamiliar files, or deciding which package to reinstall.",
     "usage": "Identify which installed package owns a given file path on a Debian/Ubuntu system.",
     "examples": [
@@ -5618,6 +5776,7 @@ export const questions: Question[] = [
     "id": "pkg22",
     "question": "You killed an apt upgrade mid-run and now every subsequent apt command fails with 'dpkg was interrupted'. What command recovers the system?",
     "answer": "sudo dpkg --configure -a",
+    "altAnswers": ["dpkg --configure --pending"],
     "explanation": "When an installation is interrupted halfway through, packages can get stuck in a half-configured state that blocks all future package management. This command resumes and finishes the configuration step for every package that was left incomplete.",
     "usage": "Finish configuring packages left in a half-configured state after an interrupted installation.",
     "examples": [
@@ -5669,6 +5828,7 @@ export const questions: Question[] = [
     "id": "pkg25",
     "question": "You want to read the source code for the curl package to understand how it was compiled and what patches Canonical applied. What command fetches and unpacks the source?",
     "answer": "apt source curl",
+    "altAnswers": ["apt-get source curl"],
     "explanation": "This command downloads the original source code for a package along with all the Debian-specific patches and build scripts, then unpacks everything into a directory in your current folder. You can then read the code, modify it, and rebuild a custom package.",
     "usage": "Download and unpack the source code and Debian packaging metadata for an installed package.",
     "examples": [
@@ -5686,6 +5846,7 @@ export const questions: Question[] = [
     "id": "pkg26",
     "question": "You added the deadsnakes PPA to test Python 3.12 but now want to remove it so its packages stop appearing. What command removes the PPA source?",
     "answer": "sudo add-apt-repository --remove ppa:deadsnakes/ppa",
+    "altAnswers": ["add-apt-repository -r ppa:deadsnakes/ppa"],
     "explanation": "This command removes the third-party software source you added earlier. After running it, APT will no longer know about packages from that PPA. However, any packages you already installed from it stay at their PPA versions until you explicitly downgrade or remove them.",
     "usage": "Remove a PPA repository source so APT stops seeing its packages on the next update.",
     "examples": [
@@ -5703,6 +5864,7 @@ export const questions: Question[] = [
     "id": "pkg27",
     "question": "You are choosing between nginx and apache2 and want to read the full description, version, dependencies, and homepage for nginx before installing. What command shows this information?",
     "answer": "apt show nginx",
+    "altAnswers": ["apt-cache show nginx", "apt info nginx"],
     "explanation": "This command shows the full information sheet for a package — its description, version, size, what other packages it needs, and a link to its project homepage. Read this before installing so there are no surprises about what gets pulled in alongside it.",
     "usage": "Display full package metadata — version, description, dependencies, and homepage — before installing.",
     "examples": [
@@ -5720,6 +5882,7 @@ export const questions: Question[] = [
     "id": "text21",
     "question": "A CSV file at /var/data/sales.csv has columns: date, region, revenue. You want to print only the region column for every row. Which awk command does this?",
     "answer": "awk -F, '{print $2}' /var/data/sales.csv",
+    "altAnswers": ["awk -F ',' '{print $2}' /var/data/sales.csv", "awk -F, '{ print $2 }' /var/data/sales.csv"],
     "explanation": "This command reads each line of a comma-separated file and prints only the second column. It is the quickest way to extract a specific column from CSV data without opening a spreadsheet.",
     "usage": "Extract a specific comma-separated column from a CSV file without a spreadsheet.",
     "examples": [
@@ -5733,8 +5896,9 @@ export const questions: Question[] = [
   },
   {
     "id": "text22",
-    "question": "A file /var/data/response_times.txt contains one millisecond value per line. You want to sum all the values to find the total. Which awk command produces that sum?",
+    "question": "A file /var/data/response_times.txt contains one millisecond value per line. You want to sum all the values to find the total, accumulating into an awk variable named sum. Which awk command produces that sum?",
     "answer": "awk '{sum+=$1} END {print sum}' /var/data/response_times.txt",
+    "altAnswers": ["awk '{sum += $1} END {print sum}' /var/data/response_times.txt", "awk '{sum+=$1}END{print sum}' /var/data/response_times.txt", "awk '{ sum += $1 } END { print sum }' /var/data/response_times.txt"],
     "explanation": "This command reads every number in the file, adds them all together, then prints the total once it reaches the end of the file. It is a one-liner way to sum a column of numbers without exporting to a spreadsheet.",
     "usage": "Sum a column of numbers in a text file using awk's accumulator pattern.",
     "examples": [
@@ -5780,6 +5944,7 @@ export const questions: Question[] = [
     "id": "text25",
     "question": "You are searching /var/log/app.log for 'PANIC' errors but the useful information is in the three lines following each match, not on the matching line itself. How do you see those context lines?",
     "answer": "grep -A 3 'PANIC' /var/log/app.log",
+    "altAnswers": ["grep -A3 'PANIC' /var/log/app.log", "grep -A 3 PANIC /var/log/app.log", "grep -A3 PANIC /var/log/app.log"],
     "explanation": "Normally grep only shows the line that contains your search term. With this flag, it also shows the next three lines after each match. This is essential when the interesting detail — like a stack trace — comes after the error line rather than on it.",
     "usage": "Print matching lines plus N lines of following context, useful for log stack traces.",
     "examples": [
@@ -5795,6 +5960,7 @@ export const questions: Question[] = [
     "id": "text26",
     "question": "You want to find which files in /etc/nginx/conf.d/ contain the string 'proxy_pass' so you know which configs to review. What grep flag shows only filenames?",
     "answer": "grep -l 'proxy_pass' /etc/nginx/conf.d/*.conf",
+    "altAnswers": ["grep -l proxy_pass /etc/nginx/conf.d/*.conf"],
     "explanation": "Normally grep prints the matching lines from every file mixed together. This flag changes it to print only the name of each file that contains at least one match — nothing else. This lets you see which files to open next.",
     "usage": "Find which files contain a pattern, returning filenames only rather than matching lines.",
     "examples": [
@@ -5808,8 +5974,9 @@ export const questions: Question[] = [
   },
   {
     "id": "text27",
-    "question": "An nginx access log at /var/log/nginx/access.log contains lines with IP addresses and you want to extract just the IP addresses, one per line, for analysis. What grep flag extracts only the matching portion?",
+    "question": "An nginx access log at /var/log/nginx/access.log contains lines with IP addresses and you want to extract just the IP addresses, one per line, using the extended regex '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+'. Which grep command prints only the matching portion of each line?",
     "answer": "grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' /var/log/nginx/access.log",
+    "altAnswers": ["grep -Eo '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' /var/log/nginx/access.log", "grep -o -E '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' /var/log/nginx/access.log", "grep -E -o '[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' /var/log/nginx/access.log"],
     "explanation": "Normally grep shows the entire line that contains a match. This flag changes it to print only the part of each line that matched the pattern — nothing else. If one line has multiple matches, each gets its own output line.",
     "usage": "Extract and print only the text that matched the pattern, discarding the rest of each line.",
     "examples": [
@@ -5823,7 +5990,7 @@ export const questions: Question[] = [
   },
   {
     "id": "text28",
-    "question": "You want to find all lines in /var/log/app.log where a 3-digit status code is followed by a 4-digit request ID, using \\d shorthand for digits. Which grep flag enables that shorthand?",
+    "question": "You want to find all lines in /var/log/app.log matching the Perl-compatible pattern '\\d{3}\\s+\\d{4}' — a 3-digit status code, whitespace, then a 4-digit request ID. Standard grep does not understand \\d. Which grep command enables that shorthand?",
     "answer": "grep -P '\\d{3}\\s+\\d{4}' /var/log/app.log",
     "explanation": "Standard grep does not understand \\d for digits — you would have to write [0-9] instead. Adding this flag switches grep to Perl-compatible regular expressions, which support \\d, \\w, \\s, lookaheads, and other powerful constructs unavailable in basic regex.",
     "usage": "Enable Perl-compatible regex in grep for shorthand classes and lookahead/lookbehind assertions.",
@@ -5833,12 +6000,12 @@ export const questions: Question[] = [
       "grep -Pi '\\bemail\\b.*@' /var/data/users.txt"
     ],
     "memoryTip": "-P = Perl regex flavor.",
-    "outputExample": "$ echo 'status=404 reqid=1234' | grep -P '\\d{3}\\s+\\w+=\\d{4}'\nstatus=404 reqid=1234",
+    "outputExample": "$ echo '404 1234 GET /index.html' | grep -P '\\d{3}\\s+\\d{4}'\n404 1234 GET /index.html\n$ echo '404 12' | grep -P '\\d{3}\\s+\\d{4}'\n$  # no match — request ID is not 4 digits",
     "category": "TEXT PROCESSING"
   },
   {
     "id": "text29",
-    "question": "An API returns a token that looks like 'Bearer abc 123 def' and you need to strip all whitespace before storing it. Which command removes every whitespace character from stdin?",
+    "question": "An API returned the token value 'abc 123 def' with embedded whitespace and you need to strip all whitespace before storing it. Which pipeline echoes the string 'abc 123 def' and removes every whitespace character with tr?",
     "answer": "echo 'abc 123 def' | tr -d '[:space:]'",
     "explanation": "This command removes every whitespace character — spaces, tabs, newlines — from the input. It is the fastest way to strip all spacing from a string in a shell pipeline.",
     "usage": "Delete all whitespace characters from stdin, producing a compact output string.",
@@ -5848,12 +6015,12 @@ export const questions: Question[] = [
       "echo 'Hello, World!' | tr -d '[:punct:]'  # Hello World"
     ],
     "memoryTip": "-d = delete; [:space:] = POSIX whitespace class.",
-    "outputExample": "$ echo ' a b c ' | tr -d '[:space:]'\nabc",
+    "outputExample": "$ echo 'abc 123 def' | tr -d '[:space:]'\nabc123def",
     "category": "TEXT PROCESSING"
   },
   {
     "id": "text30",
-    "question": "A CSV export from a European database uses accented characters like é and ü, but your downstream parser only accepts ASCII. Output the converted file as `/var/data/export_ascii.csv`. How do you convert the file to ASCII, substituting accented characters with their closest ASCII equivalents?",
+    "question": "A UTF-8 CSV export at /var/data/export.csv from a European database uses accented characters like é and ü, but your downstream parser only accepts ASCII. Output the converted file as `/var/data/export_ascii.csv`. How do you convert the file to ASCII with iconv, substituting accented characters with their closest ASCII equivalents?",
     "answer": "iconv -f UTF-8 -t ASCII//TRANSLIT /var/data/export.csv > /var/data/export_ascii.csv",
     "explanation": "Different systems, programs, and historical files use different character encodings. UTF-8 is the modern standard, but you will encounter Latin-1 (ISO-8859-1), Windows-1252, Shift-JIS, and others. iconv converts between them. -f specifies the FROM encoding, -t specifies the TO encoding. -l lists all supported encodings. Without knowing the source encoding the conversion is impossible — file --mime-encoding filename can often detect it. Incorrect encoding causes mojibake (garbled characters). UTF-8 with BOM (byte order mark) is a common Windows legacy that iconv can strip: convert from UTF-8-BOM to UTF-8.",
     "usage": "Convert a UTF-8 text file to ASCII, substituting accented characters with close ASCII equivalents.",
@@ -5901,6 +6068,7 @@ export const questions: Question[] = [
     "id": "sys23",
     "question": "You need the UUID of /dev/sdb1 to write a stable /etc/fstab entry that won't break if the drive order changes on reboot. Which command shows UUIDs and filesystem types?",
     "answer": "sudo blkid /dev/sdb1",
+    "altAnswers": ["lsblk -f /dev/sdb1"],
     "explanation": "This command shows the permanent UUID identifier and filesystem type for a storage partition. UUIDs are unique labels that never change, unlike device names like /dev/sdb1 which can shift if you plug in drives in a different order.",
     "usage": "Show the UUID and filesystem type of a block device for use in /etc/fstab.",
     "examples": [
@@ -5916,6 +6084,7 @@ export const questions: Question[] = [
     "id": "sys24",
     "question": "You mounted an NFS share but are not sure which filesystem /var/data is actually on or how it was mounted. Which command shows the mount entry for that specific path?",
     "answer": "findmnt /var/data",
+    "altAnswers": ["findmnt --target /var/data", "findmnt -T /var/data"],
     "explanation": "This command looks up where a path is mounted and shows you the source device or network share, the filesystem type, and the mount options. It is faster than reading /proc/mounts manually and shows exactly the entry relevant to a given path.",
     "usage": "Show the source device, filesystem type, and mount options for a given path.",
     "examples": [
@@ -5961,8 +6130,9 @@ export const questions: Question[] = [
   },
   {
     "id": "sys27",
-    "question": "CPU and memory look normal but the database server is still slow. You want to see per-disk read/write rates and utilization percentages updated every second. Which command shows extended disk I/O statistics?",
+    "question": "CPU and memory look normal but the database server is still slow. You want per-disk read/write rates and utilization percentages updated every second, with idle devices hidden. Which command shows extended disk I/O statistics while skipping idle devices?",
     "answer": "iostat -xz 1",
+    "altAnswers": ["iostat -zx 1", "iostat -x -z 1", "iostat -z -x 1"],
     "explanation": "This command shows a live table of disk activity — how many reads and writes per second each disk is handling, how fast data is moving, and what percentage of time each disk is busy. Hiding idle disks keeps the display focused on the ones actually doing work.",
     "usage": "Show live per-disk read/write throughput and utilization, hiding idle devices.",
     "examples": [
@@ -5993,8 +6163,9 @@ export const questions: Question[] = [
   },
   {
     "id": "sys29",
-    "question": "A Java process appears to have a memory leak. You want to see the kernel's raw memory accounting — total, free, available, and cached — beyond what the 'free' command shows. Which file holds that data?",
-    "answer": "grep -E 'MemTotal|MemFree|MemAvailable|Cached' /proc/meminfo",
+    "question": "A Java process appears to have a memory leak. You want to see the kernel's raw memory accounting — total, free, available, and cached — beyond what the 'free' command shows. What command prints the kernel's memory accounting file to the terminal?",
+    "answer": "cat /proc/meminfo",
+    "altAnswers": ["less /proc/meminfo", "cat /proc/meminfo | less"],
     "explanation": "The kernel maintains a running page-by-page account of every byte of memory in a virtual file. Reading it gives you detailed memory statistics including how much is cached and how much is truly available for new processes — a distinction the simpler 'free' command sometimes obscures.",
     "usage": "Read the kernel's detailed memory accounting file to see all memory categories in kilobytes.",
     "examples": [
@@ -6003,13 +6174,14 @@ export const questions: Question[] = [
       "watch -n 1 'grep -E \"Mem|Swap\" /proc/meminfo'  # live view"
     ],
     "memoryTip": "/proc/meminfo = the kernel's memory ledger. MemAvailable is what matters for OOM risk — not MemFree.",
-    "outputExample": "$ grep -E 'MemTotal|MemFree|MemAvailable|Cached' /proc/meminfo\nMemTotal:       16384000 kB\nMemFree:          512000 kB\nMemAvailable:    8192000 kB\nCached:          6144000 kB",
+    "outputExample": "$ cat /proc/meminfo | head -5\nMemTotal:       16384000 kB\nMemFree:          512000 kB\nMemAvailable:    8192000 kB\nBuffers:          256000 kB\nCached:          6144000 kB",
     "category": "SYSTEM INFO"
   },
   {
     "id": "sys30",
     "question": "The system journal is hundreds of megabytes long and you only care about lines that indicate actual errors or worse. Which journalctl filter shows only error-level and above entries?",
     "answer": "journalctl -p err",
+    "altAnswers": ["journalctl -p 3", "journalctl --priority=err"],
     "explanation": "This command filters the system journal to show only entries at the 'error' severity level and above — which includes errors, critical messages, alerts, and emergencies. Everything informational is hidden, leaving only the messages that indicate real problems.",
     "usage": "Filter the systemd journal to show only error, critical, alert, and emergency priority entries.",
     "examples": [
@@ -6026,6 +6198,7 @@ export const questions: Question[] = [
     "id": "bash11",
     "question": "You are writing a bash script that will run in a cron job. You want it to exit immediately on any failed command, error on unset variables, and not silently swallow pipeline failures. What three-option set command achieves all of this?",
     "answer": "set -euo pipefail",
+    "altAnswers": ["set -eu -o pipefail", "set -e -u -o pipefail", "set -o errexit -o nounset -o pipefail"],
     "explanation": "By default, bash keeps running even when commands fail — it just ignores the error and moves on. This single line at the top of your script activates three safety nets that together make the script exit with an error whenever something goes wrong, rather than continuing with broken state.",
     "usage": "Add as the first executable line of every non-trivial bash script to make failure explicit and loud.",
     "examples": [
@@ -6039,8 +6212,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash12",
-    "question": "Your script creates a temp directory at the start and you want it to be automatically deleted when the script exits, even if the script crashes partway through. What trap idiom achieves this?",
+    "question": "Your script needs a temp directory created with mktemp -d, stored in a variable named tmp, and automatically deleted (rm -rf) when the script exits — even if it crashes partway through. What one-line create-plus-trap idiom achieves this?",
     "answer": "tmp=$(mktemp -d); trap 'rm -rf \"$tmp\"' EXIT",
+    "altAnswers": ["tmp=$(mktemp -d); trap 'rm -rf $tmp' EXIT", "tmp=`mktemp -d`; trap 'rm -rf \"$tmp\"' EXIT", "tmp=`mktemp -d`; trap 'rm -rf $tmp' EXIT"],
     "explanation": "The trap command registers a cleanup action that runs whenever the script exits — whether it finishes normally, hits an error, or is killed. Combining it with mktemp ensures temporary files are always removed, even if something goes wrong halfway through.",
     "usage": "Register a cleanup function that runs automatically when the script exits for any reason.",
     "examples": [
@@ -6055,8 +6229,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash13",
-    "question": "You want your bash script to accept a -f filename flag and a -v verbose flag. Which builtin parses short flags like these, and what does the basic loop look like?",
+    "question": "You want your bash script to accept a -f filename flag and a -v verbose flag using the getopts builtin with optstring \"f:v\" and loop variable opt. Write the one-line while loop whose case statement stores -f's argument as file=$OPTARG and sets verbose=1 for -v.",
     "answer": "while getopts \"f:v\" opt; do case $opt in f) file=$OPTARG;; v) verbose=1;; esac; done",
+    "altAnswers": ["while getopts \"f:v\" opt; do case $opt in f) file=$OPTARG ;; v) verbose=1 ;; esac; done", "while getopts \"f:v\" opt; do case \"$opt\" in f) file=$OPTARG;; v) verbose=1;; esac; done", "while getopts \"f:v\" opt; do case \"$opt\" in f) file=$OPTARG ;; v) verbose=1 ;; esac; done"],
     "explanation": "This loop reads command-line flags one at a time. For each flag it finds, a case statement routes to the right action — storing the filename for -f or enabling verbose mode for -v. When all flags are consumed, the loop ends automatically.",
     "usage": "Parse short command-line flags in a bash script without external dependencies.",
     "examples": [
@@ -6069,8 +6244,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash14",
-    "question": "Your script reads a PORT variable from the environment but needs to default to 8080 if the variable is unset or empty. What parameter expansion achieves this without an if statement?",
+    "question": "Your script reads a PORT variable from the environment and must assign it to a lowercase variable named port, defaulting to 8080 if PORT is unset or empty. What parameter-expansion assignment achieves this without an if statement?",
     "answer": "port=\"${PORT:-8080}\"",
+    "altAnswers": ["port=${PORT:-8080}"],
     "explanation": "This shorthand checks whether a variable has a value and uses a fallback if it doesn't. You write the variable name and the default value in one expression, eliminating the need for a separate if-else block just to handle a missing value.",
     "usage": "Provide a fallback value when a variable is unset or empty, without an if statement.",
     "examples": [
@@ -6085,8 +6261,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash15",
-    "question": "Your deployment script requires the API_TOKEN environment variable to be set and must exit loudly with a clear message if it is not. What parameter expansion does this in one line?",
+    "question": "Your deployment script requires the API_TOKEN environment variable and must exit loudly with the message 'API_TOKEN env var is required' if it is missing. Using the null command : followed by a parameter expansion, what one line does this?",
     "answer": ": \"${API_TOKEN:?API_TOKEN env var is required}\"",
+    "altAnswers": [": ${API_TOKEN:?API_TOKEN env var is required}"],
     "explanation": "This line checks whether a required variable is set and exits the script with an informative error message if it is not. It is cleaner than writing a full if-then-exit block and communicates the requirement clearly to anyone reading the script.",
     "usage": "Exit the script with a clear error message if a required environment variable is missing.",
     "examples": [
@@ -6100,8 +6277,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash16",
-    "question": "A bash variable $filename contains 'My Photo 2026.JPG' and you want to replace all spaces with underscores using only bash, without spawning a sed process. What parameter expansion does this?",
+    "question": "A bash variable $filename contains 'My Photo 2026.JPG' and you want to echo it with all spaces replaced by underscores using only bash parameter expansion, without spawning a sed process. What echo command does this?",
     "answer": "echo \"${filename// /_}\"",
+    "altAnswers": ["echo ${filename// /_}"],
     "explanation": "Bash has a built-in string substitution that can replace characters inside a variable without running an external command. The double slash means 'replace all occurrences', the first space is what to find, and the underscore is the replacement.",
     "usage": "Replace all occurrences of a character or substring within a bash variable without forking sed.",
     "examples": [
@@ -6116,8 +6294,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash17",
-    "question": "Your script accepts a subcommand as its first argument — start, stop, or status — and should print usage for anything else. What bash construct handles multi-way branching on a string value?",
+    "question": "Your script accepts a subcommand as its first argument — start, stop, or status — calling functions start_service, stop_service, or status_service respectively. For anything else it must print 'usage: $0 {start|stop|status}' to stderr and exit 1. Write the one-line case statement on \"$1\" that does this.",
     "answer": "case \"$1\" in start) start_service ;; stop) stop_service ;; status) status_service ;; *) echo \"usage: $0 {start|stop|status}\" >&2; exit 1 ;; esac",
+    "altAnswers": ["case $1 in start) start_service ;; stop) stop_service ;; status) status_service ;; *) echo \"usage: $0 {start|stop|status}\" >&2; exit 1 ;; esac", "case \"$1\" in start) start_service;; stop) stop_service;; status) status_service;; *) echo \"usage: $0 {start|stop|status}\" >&2; exit 1;; esac", "case $1 in start) start_service;; stop) stop_service;; status) status_service;; *) echo \"usage: $0 {start|stop|status}\" >&2; exit 1;; esac"],
     "explanation": "The case statement is bash's version of a switch statement. It compares a value against several patterns and runs the matching block. It is much cleaner than a chain of if/elif/elif/else when testing one variable against many fixed values.",
     "usage": "Branch on one of several known string values more cleanly than a chain of if/elif statements.",
     "examples": [
@@ -6131,8 +6310,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash18",
-    "question": "Your script needs a lookup table mapping environment names to deployment URLs — dev to https://dev.example.com, prod to https://example.com. How do you declare a string-keyed associative array in bash?",
+    "question": "Your script needs a lookup table named url mapping environment names to deployment URLs — key dev to https://dev.example.com and key prod to https://example.com. How do you declare and initialize this string-keyed associative array in bash?",
     "answer": "declare -A url=([dev]=https://dev.example.com [prod]=https://example.com)",
+    "altAnswers": ["declare -A url=([dev]=\"https://dev.example.com\" [prod]=\"https://example.com\")", "declare -A url=( [dev]=https://dev.example.com [prod]=https://example.com )"],
     "explanation": "Bash supports two kinds of arrays: plain lists with numeric indexes and lookup tables with string keys. To use string keys you must explicitly declare the variable as an associative array before assigning to it, or bash will silently ignore the string keys and produce wrong results.",
     "usage": "Create a string-keyed map in bash for O(1) lookups by environment name, hostname, or any string key.",
     "examples": [
@@ -6147,8 +6327,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash19",
-    "question": "Your script needs to process every hostname from /etc/deploy/hosts.txt as an array element. What single command reads the file into a bash array with no trailing newlines on each element?",
+    "question": "Your script needs to process every hostname from /etc/deploy/hosts.txt as an element of a bash array named hosts. What single command reads the file into the array with no trailing newlines on each element?",
     "answer": "mapfile -t hosts < /etc/deploy/hosts.txt",
+    "altAnswers": ["readarray -t hosts < /etc/deploy/hosts.txt"],
     "explanation": "This command reads an entire file into a bash array, putting each line into its own array slot. The -t flag strips the newline character from the end of each element so you get clean strings rather than strings with a trailing newline.",
     "usage": "Read all lines of a file into a bash array, one line per element, without trailing newlines.",
     "examples": [
@@ -6166,6 +6347,7 @@ export const questions: Question[] = [
     "id": "bash20",
     "question": "Your script loops over a counter and you want to increment it using bash arithmetic without calling an external program. What syntax increments a variable named i in place?",
     "answer": "(( i++ ))",
+    "altAnswers": ["((i++))", "(( i+=1 ))", "((i+=1))", "i=$((i+1))"],
     "explanation": "Bash has a built-in arithmetic mode where you can write math expressions using the same style as C — no dollar signs needed on variable names, and C operators like ++ for increment all work. This is faster than calling expr or bc for simple integer math.",
     "usage": "Increment an integer counter variable in bash using built-in arithmetic without calling external tools.",
     "examples": [
@@ -6183,6 +6365,7 @@ export const questions: Question[] = [
     "id": "bash21",
     "question": "You want a daily cron job to back up /etc with a filename that includes today's date, like backup-2026-05-17.tar.gz. How do you create this timestamped compressed archive?",
     "answer": "tar -czf \"backup-$(date +%F).tar.gz\" /etc",
+    "altAnswers": ["tar -czf \"backup-$(date +%Y-%m-%d).tar.gz\" /etc", "tar czf \"backup-$(date +%F).tar.gz\" /etc", "tar czf \"backup-$(date +%Y-%m-%d).tar.gz\" /etc"],
     "explanation": "This command creates a compressed archive of a directory and names the file using today's date automatically inserted into the filename. Running the same command tomorrow produces a different filename, so daily backups don't overwrite each other.",
     "usage": "Create a date-stamped gzip-compressed tarball for use in automated backup scripts.",
     "examples": [
@@ -6199,6 +6382,7 @@ export const questions: Question[] = [
     "id": "bash22",
     "question": "Log files older than 7 days are piling up in /var/log/myapp/ and you want a cron command that deletes them. What find command removes only .log files older than 7 days?",
     "answer": "find /var/log/myapp -name '*.log' -type f -mtime +7 -delete",
+    "altAnswers": ["find /var/log/myapp -type f -name '*.log' -mtime +7 -delete", "find /var/log/myapp -name '*.log' -mtime +7 -type f -delete"],
     "explanation": "This command walks a directory tree, finds files matching the age and name criteria, and deletes them. The type filter ensures only regular files are deleted, not directories. Always run a preview first by removing the -delete to see what would be affected.",
     "usage": "Delete files matching a name pattern that are older than N days, as part of a log rotation job.",
     "examples": [
@@ -6213,8 +6397,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash23",
-    "question": "You just converted a directory of .txt files to Markdown and want to rename them all from .txt to .md. What for loop with parameter expansion renames all of them?",
+    "question": "You just converted a directory of .txt files to Markdown and want to rename them all from .txt to .md. Using a for loop with loop variable f and parameter expansion, what one-liner renames all of them?",
     "answer": "for f in *.txt; do mv \"$f\" \"${f%.txt}.md\"; done",
+    "altAnswers": ["for f in *.txt; do mv -- \"$f\" \"${f%.txt}.md\"; done"],
     "explanation": "This loop goes through every .txt file in the current directory and renames each one to have a .md extension instead. The parameter expansion strips the old extension and adds the new one — no external rename utility required.",
     "usage": "Batch-rename files by changing their extension using bash parameter expansion and a for loop.",
     "examples": [
@@ -6231,6 +6416,7 @@ export const questions: Question[] = [
     "id": "bash24",
     "question": "You want every line of output from a deploy script to appear both on the terminal and be appended to /var/log/deploy.log, including stderr. What exec redirect at the top of the script achieves this?",
     "answer": "exec > >(tee -a /var/log/deploy.log) 2>&1",
+    "altAnswers": ["exec &> >(tee -a /var/log/deploy.log)"],
     "explanation": "This line, placed near the top of a script, redirects all subsequent output to both the terminal and a log file simultaneously. It is the 'log everything' pattern — after this line runs, you never have to add redirection to individual commands in the script.",
     "usage": "Redirect all script output to both the terminal and a log file with a single line at the top.",
     "examples": [
@@ -6244,8 +6430,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash25",
-    "question": "Your script runs a curl command to fetch a config and must exit with an error message if the fetch fails. What idiom provides a clean fallback in a single line?",
+    "question": "Your script runs `curl -fsS https://config.example.com/config` and, if the fetch fails, must print 'fetch failed' to stderr and exit 1. What single line uses || with a brace command group to do this?",
     "answer": "curl -fsS https://config.example.com/config || { echo 'fetch failed' >&2; exit 1; }",
+    "altAnswers": ["curl -fsS https://config.example.com/config || { echo 'fetch failed' 1>&2; exit 1; }"],
     "explanation": "The double pipe means \"if the command on the left fails, run what is on the right\". Using curly braces lets you group multiple actions as the fallback, so you can both print an error message and exit in one logical block.",
     "usage": "Run a fallback action (print error and exit) if a command fails, using inline conditional syntax.",
     "examples": [
@@ -6261,7 +6448,7 @@ export const questions: Question[] = [
   },
   {
     "id": "bash26",
-    "question": "You want a cron job to run the script /usr/local/bin/backup.sh every day at 2:30 AM and log its output. What crontab line sets this up?",
+    "question": "You want a cron job to run the script /usr/local/bin/backup.sh every day at 2:30 AM, appending both stdout and stderr to /var/log/backup.log. What crontab line sets this up?",
     "answer": "30 2 * * * /usr/local/bin/backup.sh >> /var/log/backup.log 2>&1",
     "explanation": "A cron line has five time fields followed by the command to run. This one runs every night at exactly 2:30 AM and redirects all output to a log file so you can review it later.",
     "usage": "Schedule a script to run at a specific time daily and capture its output to a log file.",
@@ -6277,8 +6464,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash27",
-    "question": "You want `/opt/healthcheck.sh` to run every 15 minutes (logging to `/var/log/healthcheck.log`) but must ensure two instances never overlap if the script takes too long. What crontab line uses flock to prevent overlap?",
+    "question": "You want `/opt/healthcheck.sh` to run every 15 minutes, appending stdout and stderr to `/var/log/healthcheck.log`, but must ensure two instances never overlap if the script takes too long. What crontab line wraps the script with a non-blocking flock on `/var/lock/healthcheck.lock`?",
     "answer": "*/15 * * * * /usr/bin/flock -n /var/lock/healthcheck.lock /opt/healthcheck.sh >> /var/log/healthcheck.log 2>&1",
+    "altAnswers": ["*/15 * * * * flock -n /var/lock/healthcheck.lock /opt/healthcheck.sh >> /var/log/healthcheck.log 2>&1"],
     "explanation": "The */15 syntax means every 15 minutes. Wrapping the script with flock means the second instance will skip itself immediately if the first one is still running, preventing them from running at the same time and potentially corrupting shared state.",
     "usage": "Run a cron job every 15 minutes with overlap prevention using an exclusive file lock.",
     "examples": [
@@ -6293,8 +6481,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash28",
-    "question": "You need to keep /var/www/html/ on web1.example.com synchronized with your local ./site/ directory, deleting remote files that no longer exist locally, but want to preview first. How do you dry-run then apply?",
+    "question": "You need to keep /var/www/html/ on web1.example.com (SSH user alice) synchronized with your local ./site/ directory using rsync -avz with --delete for removed files. You want a --dry-run preview, then the real run, joined by &&. What is the full command line?",
     "answer": "rsync -avz --dry-run --delete ./site/ alice@web1.example.com:/var/www/html/ && rsync -avz --delete ./site/ alice@web1.example.com:/var/www/html/",
+    "altAnswers": ["rsync -avz --delete --dry-run ./site/ alice@web1.example.com:/var/www/html/ && rsync -avz --delete ./site/ alice@web1.example.com:/var/www/html/", "rsync -avzn --delete ./site/ alice@web1.example.com:/var/www/html/ && rsync -avz --delete ./site/ alice@web1.example.com:/var/www/html/"],
     "explanation": "rsync is a smarter file copy tool that only transfers files that have changed. The --delete flag makes the destination exactly mirror the source by removing any extra files. The --dry-run flag lets you preview what would happen without actually making any changes.",
     "usage": "Synchronize a local directory to a remote host, deleting files removed at the source, with dry-run preview.",
     "examples": [
@@ -6309,8 +6498,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash29",
-    "question": "Your script needs to handle both --file path/to/file and --verbose long flags. What loop pattern consumes arguments one at a time while supporting these long flags?",
+    "question": "Your script must handle the long flags --file (whose next argument is stored in a variable named file) and --verbose (which sets verbose=1), simply shifting past anything else. Write the one-line `while [[ $# -gt 0 ]]` loop with a case statement that consumes arguments this way.",
     "answer": "while [[ $# -gt 0 ]]; do case \"$1\" in --file) file=\"$2\"; shift 2 ;; --verbose) verbose=1; shift ;; *) shift ;; esac; done",
+    "altAnswers": ["while [[ $# -gt 0 ]]; do case $1 in --file) file=$2; shift 2 ;; --verbose) verbose=1; shift ;; *) shift ;; esac; done", "while [[ $# -gt 0 ]]; do case \"$1\" in --file) file=\"$2\"; shift 2;; --verbose) verbose=1; shift;; *) shift;; esac; done", "while [[ $# -gt 0 ]]; do case $1 in --file) file=$2; shift 2;; --verbose) verbose=1; shift;; *) shift;; esac; done"],
     "explanation": "This loop reads command-line arguments one at a time, matches each against known flag names, and advances past them. It handles both flags with values (like --file which needs the next argument) and boolean flags (like --verbose which stands alone).",
     "usage": "Parse long command-line flags by consuming arguments one at a time in a while loop.",
     "examples": [
@@ -6323,8 +6513,9 @@ export const questions: Question[] = [
   },
   {
     "id": "bash30",
-    "question": "A nightly backup cron job runs silently and you want to see its start and finish events in the system journal alongside other service logs. What command writes a tagged message to the journal?",
+    "question": "A nightly backup cron job runs silently and you want its events in the system journal. What command writes the message 'backup completed in 142s' to the journal, tagged mybackup, at priority user.notice?",
     "answer": "logger -t mybackup -p user.notice 'backup completed in 142s'",
+    "altAnswers": ["logger -p user.notice -t mybackup 'backup completed in 142s'"],
     "explanation": "This command writes a single message to the system log — the same place where all your services write their logs. Adding a tag makes all your script's messages easily searchable later. It is the shell equivalent of writing to a log file, but integrated with the system's unified logging infrastructure.",
     "usage": "Write a tagged, priority-labeled message to the system journal from a shell script or cron job.",
     "examples": [
@@ -6341,6 +6532,7 @@ export const questions: Question[] = [
     "id": "arch8",
     "question": "You need to compress a 2.4 GB SQL dump at /var/backups/db.sql to the smallest possible size for long-term cold storage and disk space is tight. Which compression tool typically produces the smallest output?",
     "answer": "xz /var/backups/db.sql",
+    "altAnswers": ["xz -9 /var/backups/db.sql"],
     "explanation": "The xz tool uses a more powerful compression algorithm than gzip or bzip2, producing files that are typically 25-30% smaller on text data like SQL dumps. The trade-off is that it is slower and uses more memory during compression.",
     "usage": "Compress a file to the smallest possible size using the xz algorithm, replacing the original.",
     "examples": [
@@ -6358,6 +6550,7 @@ export const questions: Question[] = [
     "id": "arch9",
     "question": "You received a compressed SQL dump at /tmp/db.sql.xz and need to restore it to the database. Which command decompresses it back to the original file?",
     "answer": "unxz /tmp/db.sql.xz",
+    "altAnswers": ["xz -d /tmp/db.sql.xz", "xz --decompress /tmp/db.sql.xz"],
     "explanation": "This command is the reverse of xz — it decompresses an .xz file back to its original contents. Like its companion xz, it replaces the compressed file with the decompressed one by default.",
     "usage": "Decompress an .xz file, replacing it with the original uncompressed file.",
     "examples": [
@@ -6375,6 +6568,7 @@ export const questions: Question[] = [
     "id": "arch10",
     "question": "You need to ship a tarball of your project source code that produces the smallest possible download for a public release page. Which tar command uses xz compression?",
     "answer": "tar -cJf project-v1.0.tar.xz project/",
+    "altAnswers": ["tar cJf project-v1.0.tar.xz project/", "tar -cJf project-v1.0.tar.xz project", "tar cJf project-v1.0.tar.xz project"],
     "explanation": "This command bundles an entire directory into a single compressed file using xz — the algorithm that produces the smallest archives. The capital J is the critical flag that tells tar to use xz instead of gzip.",
     "usage": "Create an xz-compressed tarball of a directory for maximum compression in a release archive.",
     "examples": [
@@ -6392,6 +6586,7 @@ export const questions: Question[] = [
     "id": "arch11",
     "question": "You downloaded an unfamiliar tarball at /tmp/vendor.tar.gz from the internet. Before extracting it, you want to check whether it has a top-level directory or will scatter files into your current directory. Which command lists its contents?",
     "answer": "tar -tf /tmp/vendor.tar.gz",
+    "altAnswers": ["tar tf /tmp/vendor.tar.gz", "tar -tzf /tmp/vendor.tar.gz", "tar tzf /tmp/vendor.tar.gz", "tar -tvf /tmp/vendor.tar.gz"],
     "explanation": "This command lists every file inside an archive without extracting anything to disk. Use it to preview what you're about to unpack — specifically to check whether all files are inside a top-level folder or whether they'll scatter loose files into your current directory.",
     "usage": "List the contents of a tarball without extracting it, to audit structure before unpacking.",
     "examples": [
@@ -6408,6 +6603,7 @@ export const questions: Question[] = [
     "id": "arch12",
     "question": "You want to extract the contents of /tmp/release.tar.gz into /opt/staging rather than your current directory. Which tar flag changes the extraction target directory?",
     "answer": "tar -xzf /tmp/release.tar.gz -C /opt/staging",
+    "altAnswers": ["tar xzf /tmp/release.tar.gz -C /opt/staging", "tar -C /opt/staging -xzf /tmp/release.tar.gz", "tar -xf /tmp/release.tar.gz -C /opt/staging"],
     "explanation": "By default tar extracts into the current directory. This flag tells tar to change to a different directory first before extracting, so the files land exactly where you want them without having to cd first.",
     "usage": "Extract a tarball into a specific target directory rather than the current working directory.",
     "examples": [
@@ -6424,6 +6620,7 @@ export const questions: Question[] = [
     "id": "arch13",
     "question": "A 10 GB backup tarball at /var/backups/full.tar.gz contains the file etc/nginx/nginx.conf somewhere inside it. You need only that one file without extracting everything. How do you extract just that one path?",
     "answer": "tar -xzf /var/backups/full.tar.gz etc/nginx/nginx.conf",
+    "altAnswers": ["tar xzf /var/backups/full.tar.gz etc/nginx/nginx.conf", "tar -xf /var/backups/full.tar.gz etc/nginx/nginx.conf"],
     "explanation": "You can extract a single file from a large archive by specifying its path inside the archive as an argument to tar. This avoids writing several gigabytes to disk just to recover one configuration file.",
     "usage": "Extract a single named file from a large tarball without decompressing the entire archive.",
     "examples": [
@@ -6441,6 +6638,7 @@ export const questions: Question[] = [
     "id": "arch14",
     "question": "You need to send a project directory to a Windows colleague who will open it on their PC. Which command creates a .zip archive that any operating system can open natively?",
     "answer": "zip -r project.zip project/",
+    "altAnswers": ["zip -r project.zip project"],
     "explanation": "The zip format is the universal archive that Windows, macOS, mobile devices, and email clients can all open without installing extra software. The -r flag is required to include the contents of directories — without it, only empty directories are stored.",
     "usage": "Create a universally-compatible .zip archive of a directory for cross-platform file sharing.",
     "examples": [
@@ -6458,6 +6656,7 @@ export const questions: Question[] = [
     "id": "arch15",
     "question": "You received project.zip from a colleague and need to extract it into /tmp/review rather than your current directory. Which unzip command extracts to a specific target?",
     "answer": "unzip project.zip -d /tmp/review",
+    "altAnswers": ["unzip -d /tmp/review project.zip"],
     "explanation": "This command opens a .zip archive and extracts its contents into a specific directory. The -d flag (not -C like tar uses) tells it where to put the files. Always preview the archive first to avoid accidentally scattering files into an unexpected location.",
     "usage": "Extract a .zip archive into a specific target directory rather than the current working directory.",
     "examples": [
@@ -6475,6 +6674,7 @@ export const questions: Question[] = [
     "id": "arch16",
     "question": "You need to create an encrypted archive of a confidential directory where even the filenames inside are hidden from anyone without the password. Which tool supports filename encryption?",
     "answer": "7z a -p -mhe=on secret.7z private/",
+    "altAnswers": ["7z a -mhe=on -p secret.7z private/", "7z a -p -mhe secret.7z private/", "7z a -mhe -p secret.7z private/"],
     "explanation": "This command creates an encrypted archive where both the file contents and the filenames are protected by a password. Without the password, an attacker cannot even see what files are inside. The standard zip encryption is much weaker — 7z with its native format provides real security.",
     "usage": "Create a 7z archive with AES-256 encryption that hides both file contents and filenames.",
     "examples": [
@@ -6492,6 +6692,7 @@ export const questions: Question[] = [
     "id": "arch17",
     "question": "A rotated log at /var/log/nginx/access.log.1.gz is taking up disk space. You want to count how many lines it contains without decompressing it to disk first. What command does this?",
     "answer": "zcat /var/log/nginx/access.log.1.gz | wc -l",
+    "altAnswers": ["gunzip -c /var/log/nginx/access.log.1.gz | wc -l", "gzip -dc /var/log/nginx/access.log.1.gz | wc -l", "zcat < /var/log/nginx/access.log.1.gz | wc -l"],
     "explanation": "zcat decompresses a .gz file and streams the output to your terminal — or in this case, into a pipe. Combining it with wc -l counts the lines without ever writing the uncompressed version to disk, saving both time and disk space.",
     "usage": "Read a gzipped file and stream its decompressed content to stdout for piping, without writing to disk.",
     "examples": [
@@ -6526,7 +6727,8 @@ export const questions: Question[] = [
     "id": "arch19",
     "question": "You are creating a tarball of a Node.js project but want to exclude the node_modules directory and all .log files. Which tar command uses --exclude to skip these patterns?",
     "answer": "tar --exclude='node_modules' --exclude='*.log' -czf project.tar.gz project/",
-    "explanation": "The --exclude flag tells tar to skip any file or directory matching a pattern. You can stack multiple --exclude flags for multiple patterns. The patterns must come BEFORE the source directory in the command.",
+    "altAnswers": ["tar --exclude='*.log' --exclude='node_modules' -czf project.tar.gz project/", "tar -czf project.tar.gz --exclude='node_modules' --exclude='*.log' project/", "tar -czf project.tar.gz --exclude='*.log' --exclude='node_modules' project/"],
+    "explanation": "The --exclude flag tells tar to skip any file or directory matching a pattern. You can stack multiple --exclude flags for multiple patterns. With GNU tar the --exclude options may appear anywhere among the options, but always quote the patterns so the shell doesn't expand them.",
     "usage": "Create a tarball while excluding specific directories and file patterns from the archive.",
     "examples": [
       "tar --exclude='node_modules' --exclude='*.log' -czf project.tar.gz project/",
@@ -6624,8 +6826,9 @@ export const questions: Question[] = [
   },
   {
     "id": "daily45",
-    "question": "You need a command to check disk space but can't remember its name — you only know it reports 'filesystem disk usage'. Which command searches man-page descriptions for a keyword?",
+    "question": "You need a command to check disk space but can't remember its name — you only know its man-page description mentions 'disk usage'. Which command searches man-page descriptions for that keyword phrase?",
     "answer": "apropos 'disk usage'",
+    "altAnswers": ["man -k 'disk usage'"],
     "explanation": "This command searches the short description lines of every installed man page for your keyword. It answers the question \"I know what I want to do — which command does it?\" and shows you a list of matching tools you might not have known existed.",
     "usage": "Search man-page descriptions by topic keyword to find the command name for a task.",
     "examples": [
@@ -6641,8 +6844,8 @@ export const questions: Question[] = [
   },
   {
     "id": "daily46",
-    "question": "Before your deployment script runs rsync, it needs to verify that rsync is installed and exit with an error if not. Which POSIX-portable command checks whether a command exists?",
-    "answer": "command -v rsync >/dev/null || { echo 'install rsync first' >&2; exit 1; }",
+    "question": "Before your deployment script runs rsync, it needs to check whether an `rsync` command exists (exit status 0 if present, non-zero if not, printing its path when found). Which POSIX-portable command performs this check?",
+    "answer": "command -v rsync",
     "explanation": "This check tests whether a command exists on the system before trying to use it. It is the standard portable way to do this in shell scripts — unlike 'which', it works consistently across all shells and also detects shell functions and aliases.",
     "usage": "Check whether a command is installed in a portable, script-safe way that works in all shells.",
     "examples": [
@@ -6657,8 +6860,9 @@ export const questions: Question[] = [
   },
   {
     "id": "daily47",
-    "question": "Kubernetes pods are being deployed and you want to watch them transition through Pending → Running status with the display updating every second. Which command re-runs a command on an interval?",
+    "question": "Kubernetes pods are being deployed and you want to re-run `kubectl get pods` every second with the display updating in place, so you can watch pods transition from Pending to Running. What command does this?",
     "answer": "watch -n 1 'kubectl get pods'",
+    "altAnswers": ["watch -n 1 kubectl get pods"],
     "explanation": "The watch command re-runs any command repeatedly on a timer and updates the display in place, turning a one-shot command into a live dashboard. The -n flag sets how often to refresh in seconds.",
     "usage": "Run a command on a timer and display its refreshing output as a live dashboard.",
     "examples": [
@@ -6674,7 +6878,7 @@ export const questions: Question[] = [
   },
   {
     "id": "daily48",
-    "question": "You are writing a 4 GB database dump to a USB drive with 'dd' and have no idea if it's progressing or how long it will take. What tool can you insert into the pipe to show throughput and ETA?",
+    "question": "You are writing the 4 GB database dump `/var/backups/db.sql` to a USB drive with `dd of=/dev/sdb bs=4M`, but dd is silent about progress. Write the pipeline that feeds the dump file through `pv` into that dd command so you get live throughput and ETA.",
     "answer": "pv /var/backups/db.sql | dd of=/dev/sdb bs=4M",
     "explanation": "pv (pipe viewer) sits inside a Unix pipe and shows you a live progress bar, current transfer speed, and estimated time to completion while passing all the data through unchanged. It transforms a silent, opaque operation into one you can monitor.",
     "usage": "Insert into any pipe to show live throughput, transfer progress, and estimated completion time.",
@@ -6692,6 +6896,7 @@ export const questions: Question[] = [
     "id": "daily49",
     "question": "Your root filesystem is almost full and you need to find which directories under /var are consuming the most space, sorted from smallest to largest. Which command shows this?",
     "answer": "sudo du -sh /var/* 2>/dev/null | sort -h",
+    "altAnswers": ["du -sh /var/* | sort -h"],
     "explanation": "This command calculates how much disk space each item in a directory uses and sorts them from smallest to largest. The human-readable flag makes sizes show as megabytes and gigabytes rather than raw bytes, and sort understands those unit suffixes.",
     "usage": "Show disk usage for each item in a directory sorted by size, with human-readable units.",
     "examples": [
@@ -6726,6 +6931,7 @@ export const questions: Question[] = [
     "id": "rhel1",
     "question": "You just SSH'd into a fresh Fedora 40 server and need to install nginx. What dnf command installs it from the configured repositories?",
     "answer": "sudo dnf install nginx",
+    "altAnswers": ["yum install nginx"],
     "explanation": "This command downloads nginx and all its required dependencies from Fedora's package repositories and installs them. It shows you what it will install and asks for confirmation before making any changes.",
     "usage": "Install a package and all its dependencies from the configured dnf repositories on RHEL/Fedora.",
     "examples": [
@@ -6734,7 +6940,7 @@ export const questions: Question[] = [
       "sudo dnf install ./local-pkg.rpm  # install a downloaded RPM with dep resolution",
       "sudo dnf reinstall nginx  # reinstall to repair a broken/modified package"
     ],
-    "memoryTip": "`dnf install` ~ `apt install`. Under dnf calls `rpm`, the way apt calls `dpkg`.",
+    "memoryTip": "`dnf install` ~ `apt install`. Under the hood dnf calls `rpm`, the way apt calls `dpkg`.",
     "outputExample": "$ sudo dnf install nginx\nDependencies resolved.\nInstalling:\n nginx  x86_64  1:1.24.0-1.fc40  fedora  34 k\nInstalling dependencies:\n nginx-core  x86_64  1:1.24.0-1.fc40  fedora  579 k\nIs this ok [y/N]: y\nComplete!",
     "category": "RHEL/FEDORA"
   },
@@ -6742,6 +6948,7 @@ export const questions: Question[] = [
     "id": "rhel2",
     "question": "You decommissioned the Apache httpd service and want to uninstall it and clean up any packages that were only installed as its dependencies. What command removes it?",
     "answer": "sudo dnf remove httpd",
+    "altAnswers": ["yum remove httpd", "dnf erase httpd"],
     "explanation": "This command uninstalls a package and also removes any dependency packages that were pulled in for it and are no longer needed by anything else. Unlike Debian's apt remove, dnf remove also deletes configuration files — it behaves like apt purge.",
     "usage": "Uninstall a package and its orphaned dependencies on RHEL/Fedora.",
     "examples": [
@@ -6758,6 +6965,7 @@ export const questions: Question[] = [
     "id": "rhel3",
     "question": "A Fedora server has been running for two months without updates. You want to upgrade every installed package to the newest available version in one command. What does this?",
     "answer": "sudo dnf upgrade",
+    "altAnswers": ["dnf update", "yum upgrade", "yum update"],
     "explanation": "This command checks every installed package against the repository and downloads and installs all newer versions available. It handles kernels, security patches, and dependency updates in one pass.",
     "usage": "Upgrade all installed packages to their newest available versions on RHEL/Fedora.",
     "examples": [
@@ -6775,6 +6983,7 @@ export const questions: Question[] = [
     "id": "rhel4",
     "question": "You want to find packages related to markdown rendering in the Fedora repositories but don't know exact package names. What dnf command searches by keyword?",
     "answer": "dnf search markdown",
+    "altAnswers": ["yum search markdown"],
     "explanation": "This command searches package names and short descriptions in all enabled repositories for your keyword and shows you matching packages. It is how you discover what is available when you know what you need to do but not what the package is called.",
     "usage": "Search repository metadata for packages matching a keyword in their name or description.",
     "examples": [
@@ -6791,6 +7000,7 @@ export const questions: Question[] = [
     "id": "rhel5",
     "question": "Before installing a package called podman from the Fedora repos, you want to read its full description, version, license, and project URL. What command shows this metadata?",
     "answer": "dnf info podman",
+    "altAnswers": ["yum info podman"],
     "explanation": "This command shows the full information sheet for a package before you install it — its version, architecture, size, license, project URL, and complete description. Use it to vet a package before committing to installing it.",
     "usage": "Display complete package metadata — version, description, license, and homepage — before installing.",
     "examples": [
@@ -6807,6 +7017,7 @@ export const questions: Question[] = [
     "id": "rhel6",
     "question": "Yesterday's dnf upgrade caused a service to break and you want to see what packages changed, and potentially undo just that transaction. What command shows the transaction history?",
     "answer": "dnf history",
+    "altAnswers": ["yum history", "dnf history list"],
     "explanation": "dnf keeps a numbered log of every installation, upgrade, and removal with the exact timestamp and what changed. You can inspect any transaction in detail and, crucially, undo a specific transaction to roll back changes it made.",
     "usage": "View and optionally undo past package installation, upgrade, and removal transactions.",
     "examples": [
@@ -6824,6 +7035,7 @@ export const questions: Question[] = [
     "id": "rhel7",
     "question": "A script failed with 'bash: jq: command not found' on a RHEL 8 server. You want to find which dnf package provides the /usr/bin/jq binary. What command does this repo-wide search?",
     "answer": "dnf provides /usr/bin/jq",
+    "altAnswers": ["yum provides /usr/bin/jq", "dnf whatprovides /usr/bin/jq", "yum whatprovides /usr/bin/jq"],
     "explanation": "This command searches all enabled repositories for any package that ships a file at a given path. It is how you translate 'command not found' into the package name you need to install — and it works even for packages not yet installed.",
     "usage": "Find which repository package ships a specific file path or binary on RHEL/Fedora.",
     "examples": [
@@ -6840,6 +7052,7 @@ export const questions: Question[] = [
     "id": "rhel8",
     "question": "dnf is failing with 'Error: Failed to download metadata' after a recent repo URL change. What command wipes the stale cached metadata and forces a fresh download?",
     "answer": "sudo dnf clean all",
+    "altAnswers": ["yum clean all"],
     "explanation": "dnf caches repository metadata and downloaded packages to speed up repeated operations. When this cache becomes stale or corrupted — especially after a repository URL change — cleaning it forces dnf to start fresh and re-download everything it needs.",
     "usage": "Wipe dnf's cached metadata and packages to force a fresh download from repositories.",
     "examples": [
@@ -6855,8 +7068,9 @@ export const questions: Question[] = [
   },
   {
     "id": "rhel9",
-    "question": "You need to set up a C/C++ build environment on a fresh Fedora server with gcc, make, autoconf, and related tools. Instead of installing them one-by-one, what group install command installs the full development toolchain?",
+    "question": "You need to set up a C/C++ build environment on a fresh Fedora server with gcc, make, autoconf, and related tools. Instead of installing them one-by-one, what command installs the whole \"Development Tools\" group?",
     "answer": "sudo dnf group install \"Development Tools\"",
+    "altAnswers": ["dnf groupinstall \"Development Tools\"", "yum groupinstall \"Development Tools\"", "yum group install \"Development Tools\""],
     "explanation": "dnf groups are named bundles of related packages. Installing a group installs a curated set of packages in one command — like a meta-package that brings in everything you need for a specific purpose such as a build environment or a desktop.",
     "usage": "Install a curated set of related packages in one command using a dnf group on RHEL/Fedora.",
     "examples": [
@@ -6924,6 +7138,7 @@ export const questions: Question[] = [
     "id": "rhel13",
     "question": "You installed nginx via dnf but it is not running. You need to start it immediately without affecting whether it starts at boot. What systemctl command does this?",
     "answer": "sudo systemctl start nginx",
+    "altAnswers": ["systemctl start nginx.service"],
     "explanation": "This command starts a service right now. It does not change whether the service will start automatically after a reboot — that is controlled by a separate 'enable' command. Think of start as 'run it now' and enable as 'run it always'.",
     "usage": "Start a systemd service immediately without changing its boot-time auto-start configuration.",
     "examples": [
@@ -6941,6 +7156,7 @@ export const questions: Question[] = [
     "id": "rhel14",
     "question": "After installing and testing nginx on a Fedora server, you want to make it start automatically at every boot AND start it right now in a single command. What does this?",
     "answer": "sudo systemctl enable --now nginx",
+    "altAnswers": ["systemctl enable --now nginx.service"],
     "explanation": "This single command both starts the service immediately and marks it to start automatically at every future boot. Without --now, enable would only schedule it for future boots but leave it stopped right now.",
     "usage": "Start a service immediately and configure it to auto-start at every subsequent boot.",
     "examples": [
@@ -6973,6 +7189,7 @@ export const questions: Question[] = [
     "id": "rhel16",
     "question": "nginx failed to start and 'systemctl status nginx' only shows a few lines. What journalctl command shows the full log for nginx with error explanations and jumps to the most recent entries?",
     "answer": "sudo journalctl -xeu nginx",
+    "altAnswers": ["journalctl -xe -u nginx", "journalctl -xeu nginx.service"],
     "explanation": "This command shows the complete log output from a specific service, jumps to the most recent entries, and adds explanatory hint lines for known systemd errors. It is the go-to debugging command after a service fails to start.",
     "usage": "View full systemd service logs with error explanations, jumping to the most recent entries.",
     "examples": [
@@ -7003,8 +7220,9 @@ export const questions: Question[] = [
   },
   {
     "id": "rhel18",
-    "question": "Your app server listens on TCP port 8080 and you need to permanently open it through firewalld so it survives a reboot. What two-step process achieves this?",
+    "question": "Your app server listens on TCP port 8080 and you need to permanently open it through firewalld so it survives a reboot. What single command line (two firewall-cmd commands chained with &&) achieves this?",
     "answer": "sudo firewall-cmd --add-port=8080/tcp --permanent && sudo firewall-cmd --reload",
+    "altAnswers": ["firewall-cmd --add-port=8080/tcp --permanent && firewall-cmd --reload", "sudo firewall-cmd --permanent --add-port=8080/tcp && sudo firewall-cmd --reload", "firewall-cmd --permanent --add-port=8080/tcp && firewall-cmd --reload"],
     "explanation": "firewalld has two separate configurations: one that is active right now (runtime) and one that is saved to disk (permanent). Changes to permanent don't take effect until you reload. Changes to runtime don't survive reboots. The two-step process writes the rule to disk and then loads it into the active firewall.",
     "usage": "Persistently open a TCP port through firewalld so it survives reboots on RHEL/Fedora.",
     "examples": [
@@ -7022,6 +7240,7 @@ export const questions: Question[] = [
     "id": "rhel19",
     "question": "nginx is returning 403 Forbidden on a RHEL server even though the file permissions look correct. You suspect SELinux might be blocking it. What command tells you the current SELinux enforcement mode?",
     "answer": "getenforce",
+    "altAnswers": ["sestatus"],
     "explanation": "This command prints a single word — Enforcing, Permissive, or Disabled — telling you whether SELinux is actively blocking actions or just logging them. If it says Enforcing and your permissions look correct, SELinux is likely the culprit behind unexpected 403 errors.",
     "usage": "Check whether SELinux is actively blocking access or running in audit-only mode.",
     "examples": [
@@ -7037,8 +7256,9 @@ export const questions: Question[] = [
   },
   {
     "id": "rhel20",
-    "question": "You copied website files from your home directory into /var/www/html/ but nginx is returning 403 Forbidden even though SELinux is enforcing and file permissions look correct. What command fixes the SELinux file context labels?",
+    "question": "You copied website files from your home directory into /var/www/html/ but nginx is returning 403 Forbidden even though file permissions look correct and SELinux is enforcing. What command recursively fixes the SELinux file context labels on /var/www/html?",
     "answer": "sudo restorecon -Rv /var/www/html",
+    "altAnswers": ["restorecon -R /var/www/html", "restorecon -vR /var/www/html", "restorecon -Rv /var/www/html/", "restorecon -R /var/www/html/"],
     "explanation": "When you copy files from one location to another, the files keep their original SELinux label — which may not match what is expected in the new location. This command resets those labels to the correct values according to the SELinux policy, fixing the 403 errors caused by incorrect file contexts.",
     "usage": "Reset SELinux file context labels on a directory tree to the policy-defined correct values.",
     "examples": [
@@ -7051,10 +7271,366 @@ export const questions: Question[] = [
     "memoryTip": "`restorecon` = RESTORE the CONtext. Workflow: `ls -Z` to see, `matchpathcon` to learn expected, `restorecon -Rv` to fix. `-Rv` = recurse + verbose, the everyday combo.",
     "outputExample": "$ ls -Z /var/www/html/index.html\nunconfined_u:object_r:user_home_t:s0 /var/www/html/index.html\n$ sudo restorecon -Rv /var/www/html\nRelabeled /var/www/html/index.html from user_home_t to httpd_sys_content_t\n$ ls -Z /var/www/html/index.html\nsystem_u:object_r:httpd_sys_content_t:s0 /var/www/html/index.html",
     "category": "RHEL/FEDORA"
+  },
+  {
+    "id": "term1",
+    "question": "Look at the command line `ls -l /var/log`. The first word, `ls`, is the name of the program being run. What is the general term for this first word of any command line?",
+    "answer": "command",
+    "altAnswers": ["the command", "command name", "program"],
+    "explanation": "Every line you type in a terminal starts the same way: the name of the thing you want to run. The shell takes that first word, looks it up (in its built-ins, aliases, and the directories listed in $PATH), and starts that program. Everything after the first word is just information handed to that program — the program decides what to do with it.",
+    "usage": "Understanding command-line anatomy is the foundation for reading documentation, error messages, and examples: docs always describe 'the command', its 'options', and its 'arguments'.",
+    "examples": [
+      "ls -l /var/log  # command: ls",
+      "grep -i error app.log  # command: grep",
+      "sudo apt install git  # sudo is the command; 'apt install git' is its argument list",
+      "type ls  # ask the shell what 'ls' actually resolves to",
+      "which ls  # show which file on disk provides the ls command"
+    ],
+    "memoryTip": "First word = WHO does the work. The rest = instructions FOR that worker. When a command line fails, read it left to right: is the worker's name even spelled right?",
+    "outputExample": "$ type ls\nls is aliased to `ls --color=auto'\n$ type cd\ncd is a shell builtin\n$ type python3\npython3 is /usr/bin/python3",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term2",
+    "question": "In the command `ls -l /var/log`, the `-l` part starts with a dash and switches on long-format output. What is the general one-word term for these dash-prefixed modifiers?",
+    "answer": "flag",
+    "altAnswers": ["option", "switch", "a flag"],
+    "explanation": "A flag is like a switch on a machine: the machine (command) does its basic job either way, but flipping switches changes HOW it does the job. `ls` lists files; `ls -l` lists them in long format; `ls -a` includes hidden ones. Flags are recognized because they start with a dash, which is how the program tells 'a setting' apart from 'a thing to operate on'.",
+    "usage": "Flags customize a command's behavior without changing what it fundamentally does — nearly every Linux command accepts them, and man pages are mostly long lists of available flags.",
+    "examples": [
+      "ls -l  # one short flag",
+      "ls -la  # two short flags combined into one cluster",
+      "rm -i file.txt  # -i makes rm interactive",
+      "sort -r names.txt  # -r reverses the sort order",
+      "grep --ignore-case error app.log  # the long-form spelling of -i"
+    ],
+    "memoryTip": "Think of raising a flag to signal something: `-l` signals 'long format, please'. Short flags = one dash + one letter. Long flags = two dashes + a word.",
+    "outputExample": "$ ls\nnotes.txt  reports\n$ ls -l\ntotal 8\n-rw-r--r-- 1 alice alice 120 Jul  1 09:00 notes.txt\ndrwxr-xr-x 2 alice alice 4096 Jun 30 17:22 reports",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term3",
+    "question": "In the command `ls -l /var/log`, the final part `/var/log` is the thing the command actually operates on. What is the general one-word term for these targets given to a command?",
+    "answer": "argument",
+    "altAnswers": ["an argument", "operand", "parameter"],
+    "explanation": "If the command is the worker and flags are its settings, arguments are the material handed to the worker: the files to list, the text to search for, the directory to enter. Unlike flags, arguments don't start with a dash — they're the actual data. Many commands accept several arguments at once and process them in order.",
+    "usage": "Recognizing what's an argument versus a flag lets you read any command in documentation: `cp [OPTIONS] SOURCE DEST` means cp takes flags, then two arguments.",
+    "examples": [
+      "cat /etc/hostname  # one argument: the file to print",
+      "cp report.txt backup.txt  # two arguments: source and destination",
+      "grep error app.log  # two arguments: the pattern and the file",
+      "mkdir docs src tests  # three arguments: three folders to create",
+      "man cp  # see cp's argument structure: cp [OPTION]... SOURCE DEST"
+    ],
+    "memoryTip": "Arguments answer 'on WHAT?'. `rm` — remove what? `cd` — go where? If a command 'is missing an operand', it means you forgot the argument.",
+    "outputExample": "$ cp\ncp: missing file operand\nTry 'cp --help' for more information.\n$ cp report.txt backup.txt\n$",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term4",
+    "question": "Shell command lines follow a conventional three-part structure, in a fixed order. Type the three part names in that order, separated by spaces (singular or plural is fine — use: command options arguments).",
+    "answer": "command options arguments",
+    "altAnswers": ["command flags arguments", "command option argument", "command flag argument"],
+    "explanation": "The convention is: first WHO does the work (the command), then HOW to do it (options/flags), then WHAT to do it on (arguments). Programs read their command line left to right, so putting the settings before the data is the pattern virtually all tools expect. Modern GNU tools often tolerate flags after arguments too, but the canonical order always works — which is why every man page synopsis is written as `command [OPTIONS] ARGUMENTS`.",
+    "usage": "Whenever a command misbehaves, check the order: a flag placed where an argument is expected gets treated as a filename, and vice versa.",
+    "examples": [
+      "ls -lh /var/log  # command, options, argument",
+      "grep -in 'error' app.log  # command, options, argument, argument",
+      "tar -czf backup.tar.gz project/  # order matters: -f must be directly before the archive name",
+      "rm -- -weirdfile  # the -- marker says 'no more options; everything after is an argument'",
+      "man tar | head  # synopsis line shows the expected structure"
+    ],
+    "memoryTip": "WHO, HOW, WHAT — in that order. `command -how what`. When in doubt, mimic the SYNOPSIS line at the top of the man page.",
+    "outputExample": "$ man cp | head -6\nCP(1)                    User Commands                   CP(1)\n\nNAME\n       cp - copy files and directories\n\nSYNOPSIS\n       cp [OPTION]... SOURCE... DEST",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term5",
+    "question": "Short flags use a single dash and a single letter, like `-h`. Most commands also accept full-word flags prefixed with two dashes. Type the two-dash long-form flag that asks a command to print its usage help.",
+    "answer": "--help",
+    "explanation": "Flags come in two spellings: cryptic-but-fast short form (`-h`) and readable long form (`--help`). The double dash exists so programs can tell `-help` (which would mean the four flags h, e, l, p clustered together) apart from the single word option 'help'. Long flags make scripts self-documenting; short flags save typing in interactive use.",
+    "usage": "Nearly every command supports --help as the fastest way to see its flags and expected arguments without opening the full manual.",
+    "examples": [
+      "cp --help  # usage summary for cp",
+      "ls --help | less  # page through ls's many options",
+      "grep --ignore-case  # long form of grep -i",
+      "rm --recursive --force  # readable spelling of rm -rf",
+      "tar --create --gzip --file=b.tar.gz dir/  # long-form tar is self-explanatory"
+    ],
+    "memoryTip": "One dash = one letter. Two dashes = whole word. `--help` is the universal 'how do I use you?' — try it on any unfamiliar command before reaching for the man page.",
+    "outputExample": "$ mkdir --help | head -4\nUsage: mkdir [OPTION]... DIRECTORY...\nCreate the DIRECTORY(ies), if they do not already exist.\n\n  -m, --mode=MODE   set file mode (as in chmod), not a=rwx - umask",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term6",
+    "question": "You want to run ls with three short flags at once: long format (-l), all files including hidden (-a), and human-readable sizes (-h). Type the command with all three combined into a single flag cluster starting with -l.",
+    "answer": "ls -lah",
+    "altAnswers": ["ls -lha"],
+    "explanation": "Short flags can be glued together behind one dash: `-l -a -h` becomes `-lah`. The program sees exactly the same three switches — clustering is purely a typing convenience the option-parsing convention provides. Order inside the cluster doesn't matter for independent flags (only flags that take a value, like tar's `-f`, must come last in a cluster).",
+    "usage": "Combining flags is how experienced users type quickly — `ls -lah`, `rm -rf`, `tar -xzvf` are all clusters of independent single-letter flags.",
+    "examples": [
+      "ls -l -a -h  # three separate flags — works",
+      "ls -lah  # identical meaning, less typing",
+      "rm -rf build/  # cluster of -r and -f",
+      "ps -ef  # cluster of -e and -f",
+      "tar -czf out.tar.gz dir/  # f LAST in the cluster because it takes a filename"
+    ],
+    "memoryTip": "One dash, many letters = many switches flipped at once. Rule of thumb: a flag that needs a value goes at the END of the cluster (or on its own).",
+    "outputExample": "$ ls -lah\ntotal 20K\ndrwxr-xr-x  3 alice alice 4.0K Jul  1 10:02 .\ndrwxr-x--- 12 alice alice 4.0K Jul  1 09:55 ..\n-rw-r--r--  1 alice alice   28 Jun 30 18:11 .env\n-rw-r--r--  1 alice alice 1.2K Jul  1 10:02 notes.txt",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term7",
+    "question": "You want to read the full built-in manual page for the ls command — the complete reference with every flag explained, opened in a scrollable viewer. What command opens it?",
+    "answer": "man ls",
+    "explanation": "Linux ships its documentation with the system: every standard command has a manual page. The man command opens that reference in a pager where you can scroll (arrow keys), search (press / then type), and quit (press q). Man pages follow a fixed layout — NAME, SYNOPSIS, DESCRIPTION, OPTIONS — so once you can read one, you can read them all.",
+    "usage": "The authoritative reference for any command's flags and behavior, available offline on every Linux system.",
+    "examples": [
+      "man ls  # the full ls reference",
+      "man -k copy  # search all man pages for 'copy' (same as apropos)",
+      "man 5 crontab  # section 5: the file FORMAT, not the command",
+      "man man  # the manual about the manual",
+      "MANPAGER='less -p OPTIONS' man ls  # open jumping straight to OPTIONS"
+    ],
+    "memoryTip": "`man` = MANual. Inside: `/word` to search, `n` for next hit, `q` to quit — the same keys as less. Read the SYNOPSIS line first; it shows the command/options/arguments structure.",
+    "outputExample": "$ man ls\nLS(1)                     User Commands                    LS(1)\n\nNAME\n       ls - list directory contents\n\nSYNOPSIS\n       ls [OPTION]... [FILE]...\n:",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term8",
+    "question": "You need a quick usage summary of cp's flags printed straight to the terminal — faster than opening the full manual. Using the long-form help flag, what command prints it?",
+    "answer": "cp --help",
+    "explanation": "Almost every command answers --help by printing a condensed cheat sheet: one usage line plus a list of its flags with one-line descriptions. Unlike man, it prints directly to the terminal (no pager) and reflects exactly the version of the tool you have installed. It's the fastest 'remind me how this works' available.",
+    "usage": "The quickest built-in reference: check a flag's spelling or a command's argument order without leaving your prompt.",
+    "examples": [
+      "cp --help  # cp's flag summary",
+      "cp --help | grep -- -r  # find just the recursive flag's description",
+      "python3 --help | head  # works for most non-GNU tools too",
+      "git commit --help  # git redirects --help to the full man page",
+      "help cd  # shell BUILTINS like cd use 'help' instead"
+    ],
+    "memoryTip": "`--help` prints and exits; `man` opens a book. Pipe --help through `grep` to find one flag fast. For shell builtins (cd, echo, type), use `help cd` — they have no man page of their own.",
+    "outputExample": "$ cp --help | head -5\nUsage: cp [OPTION]... [-T] SOURCE DEST\n  or:  cp [OPTION]... SOURCE... DIRECTORY\n  or:  cp [OPTION]... -t DIRECTORY SOURCE...\nCopy SOURCE to DEST, or multiple SOURCE(s) to DIRECTORY.\n",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term9",
+    "question": "You've seen the command grep mentioned but only want its one-line description from the manual database — not the whole man page. What command prints just that one-liner?",
+    "answer": "whatis grep",
+    "altAnswers": ["man -f grep"],
+    "explanation": "The manual system keeps an index of every command's NAME line — the one-sentence summary at the top of its man page. This command looks up a name in that index and prints only the summary. It's the dictionary-definition lookup: 'grep — print lines that match patterns' tells you instantly whether this is the tool you're looking for.",
+    "usage": "Identify an unfamiliar command in one line without opening its manual — great when reading someone else's script.",
+    "examples": [
+      "whatis grep  # one-line summary of grep",
+      "whatis ls cp mv rm  # several at once",
+      "man -f grep  # identical: -f means 'whatis lookup'",
+      "apropos pattern  # the reverse: search summaries by keyword",
+      "sudo mandb  # rebuild the index if whatis finds nothing"
+    ],
+    "memoryTip": "`whatis X` answers literally 'what is X?'. Pair-think: `whatis` = name → description; `apropos` = keyword → names.",
+    "outputExample": "$ whatis grep\ngrep (1)             - print lines that match patterns\n$ whatis tar\ntar (1)              - an archiving utility",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term10",
+    "question": "You can't remember what a command is called, but you know it has to do with renaming. What command searches all manual page descriptions for the keyword rename?",
+    "answer": "apropos rename",
+    "altAnswers": ["man -k rename"],
+    "explanation": "This is the reverse phone book of the manual system: instead of looking up a known name, you search the descriptions. It scans every man page's one-line summary for your keyword and lists all commands that mention it. It's how you discover tools you didn't know existed — the answer to 'there must be a command for this...'",
+    "usage": "Discover commands by topic when you know what you want to do but not what the tool is called.",
+    "examples": [
+      "apropos rename  # everything mentioning 'rename'",
+      "apropos -s 1 compress  # only section 1 (user commands)",
+      "apropos 'disk usage'  # multi-word phrase",
+      "man -k rename  # identical: -k means 'keyword search'",
+      "apropos . | wc -l  # count every documented command"
+    ],
+    "memoryTip": "apropos = 'concerning...' (French). Ask it a topic, get command names back. `man -k` is the same thing — k for Keyword.",
+    "outputExample": "$ apropos rename\nfile-rename (1p)     - renames multiple files\nmv (1)               - move (rename) files\nprename (1p)         - renames multiple files\nrename (1)           - rename files\nrename (2)           - change the name or location of a file",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term11",
+    "question": "When you type python3 the shell finds and runs an executable file somewhere on disk. What command prints the full path of the executable that would run, using the classic path-lookup tool?",
+    "answer": "which python3",
+    "altAnswers": ["command -v python3", "type -a python3"],
+    "explanation": "The shell doesn't magically know your commands — it searches the directories listed in your $PATH variable, in order, and runs the first match. This command performs the same search and shows you where it landed. That's invaluable when two versions of a tool are installed and you need to know which one you're actually running.",
+    "usage": "Find out which file on disk provides a command — the first debugging step for 'wrong version' problems.",
+    "examples": [
+      "which python3  # /usr/bin/python3",
+      "which -a python3  # ALL matches along $PATH, in order",
+      "command -v python3  # POSIX way; also reports aliases/builtins",
+      "type python3  # shell's own answer: alias? builtin? file?",
+      "readlink -f $(which python3)  # resolve symlinks to the real binary"
+    ],
+    "memoryTip": "'WHICH one runs?' — that's exactly the question it answers. For the full truth (aliases and builtins included) prefer `type`, because `which` only checks $PATH.",
+    "outputExample": "$ which python3\n/usr/bin/python3\n$ which -a python3\n/home/alice/.venv/bin/python3\n/usr/bin/python3",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term12",
+    "question": "You want to see the numbered list of commands you have previously typed in this shell. What command prints it?",
+    "answer": "history",
+    "explanation": "Your shell quietly records every command you run into a history list (saved to ~/.bash_history between sessions). This command prints that list with numbers. The numbers matter: you can re-run entry 105 by typing !105. The history is one of the terminal's biggest speed advantages over clicking — everything you ever figured out is retrievable.",
+    "usage": "Recall past commands: audit what you did, re-run complex one-liners, or copy a command you crafted last week.",
+    "examples": [
+      "history  # everything, numbered",
+      "history 10  # just the last 10",
+      "history | grep ssh  # every ssh command you've typed",
+      "!105  # re-run history entry number 105",
+      "history -c  # clear the current session's history"
+    ],
+    "memoryTip": "The shell remembers so you don't have to. Trio to memorize: `history` (list), `!N` (run entry N), `Ctrl+R` (interactive search).",
+    "outputExample": "$ history | tail -4\n  101  cd ~/code/myapp\n  102  git status\n  103  npm run build\n  104  history | tail -4",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term13",
+    "question": "You just ran a long command and want to run it again immediately, exactly as typed. What two-character history shortcut repeats the previous command?",
+    "answer": "!!",
+    "explanation": "The exclamation mark is the shell's history-expansion trigger, and doubled it means 'the entire previous command line'. When you type it and press Enter, the shell first prints what it expanded to, then runs it. On its own it saves a few keystrokes; embedded in a bigger line (like after sudo) it becomes genuinely powerful.",
+    "usage": "Instantly repeat the last command — most famously to re-run it with sudo prefixed after a permission-denied error.",
+    "examples": [
+      "!!  # run the previous command again",
+      "sudo !!  # previous command, this time as root",
+      "!$  # just the LAST ARGUMENT of the previous command",
+      "!105  # run history entry number 105",
+      "!ssh  # re-run the most recent command starting with 'ssh'"
+    ],
+    "memoryTip": "Bang-bang = 'that again!'. Family: `!!` whole line, `!$` last argument, `!N` history entry N. The shell echoes the expansion before running, so you can see what you triggered.",
+    "outputExample": "$ apt install htop\nE: Could not open lock file - open (13: Permission denied)\n$ sudo !!\nsudo apt install htop\n[sudo] password for alice:\nSetting up htop (3.3.0-4) ...",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term14",
+    "question": "You ran `apt install htop` and got 'Permission denied' because you forgot to elevate privileges. Using the repeat-last-command shortcut, what do you type to re-run it with sudo?",
+    "answer": "sudo !!",
+    "explanation": "This combines two ideas: sudo runs a command with administrator rights, and the double exclamation mark expands to your entire previous command line. Together they mean 'do that again, but as root'. The shell shows you the expanded command before executing it, so there's no mystery about what's being run. This is one of the most-typed lines on any Linux system.",
+    "usage": "The canonical recovery from 'Permission denied': repeat exactly what you just tried, elevated.",
+    "examples": [
+      "sudo !!  # previous command, as root",
+      "sudo apt install htop  # what it expands to in this scenario",
+      "sudo -i  # if you need a longer root session instead",
+      "history 2  # confirm what !! will expand to before using it"
+    ],
+    "memoryTip": "Forgot sudo? Don't retype — `sudo !!`. Read it as 'sudo THAT'.",
+    "outputExample": "$ apt install htop\nE: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)\n$ sudo !!\nsudo apt install htop\nReading package lists... Done\nSetting up htop (3.3.0-4) ...",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term15",
+    "question": "A command is running in your foreground and you want to cancel it right now by sending it an interrupt signal from the keyboard. What key combination do you press? (answer like: ctrl+x)",
+    "answer": "ctrl+c",
+    "altAnswers": ["ctrl-c", "ctrl c", "^c"],
+    "explanation": "This key combination makes the terminal send SIGINT (interrupt) to whatever is running in the foreground. Well-behaved programs stop what they're doing and exit, returning you to your prompt. It's the emergency brake of the terminal — not a graceful shutdown request like 'q' in a pager, but a 'stop now' signal. (It does NOT kill background jobs — only the foreground one.)",
+    "usage": "Cancel a runaway command, an accidental huge output, a hung network request — the universal 'make it stop'.",
+    "examples": [
+      "ping example.com  → Ctrl+C  # ping runs forever until interrupted",
+      "cat hugefile.log  → Ctrl+C  # stop the flood of output",
+      "Ctrl+Z  # different: SUSPEND (pause) instead of interrupt",
+      "kill -INT 1234  # send the same SIGINT signal to any PID",
+      "q  # pagers like less want q, not Ctrl+C"
+    ],
+    "memoryTip": "Ctrl+C = Cancel. Contrast: Ctrl+Z pauses (job control), Ctrl+D says 'end of input', q quits pagers. Four different 'stops' — Ctrl+C is the interrupter.",
+    "outputExample": "$ ping example.com\n64 bytes from 93.184.215.14: icmp_seq=1 ttl=56 time=11.2 ms\n64 bytes from 93.184.215.14: icmp_seq=2 ttl=56 time=10.8 ms\n^C\n--- example.com ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss\n$",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term16",
+    "question": "You typed a long rsync command three days ago and want to find it by interactively searching backwards through your shell history as you type. What key combination starts that reverse search? (answer like: ctrl+x)",
+    "answer": "ctrl+r",
+    "altAnswers": ["ctrl-r", "ctrl r", "^r"],
+    "explanation": "This opens reverse-incremental-search: the prompt changes and as you type any fragment, the shell live-searches backwards through your history for the most recent command containing it. Press the combination again to jump to older matches, Enter to run the found command, or Escape to edit it first. It turns your entire command history into an instantly searchable database.",
+    "usage": "Retrieve any past command by typing a fragment of it — dramatically faster than scrolling with the up-arrow.",
+    "examples": [
+      "Ctrl+R then 'rsync'  # most recent rsync command appears",
+      "Ctrl+R again  # step to the next-older match",
+      "Enter  # run the match; Esc/arrows to edit it first",
+      "history | grep rsync  # non-interactive alternative",
+      "Ctrl+G  # abort the search, keep your empty prompt"
+    ],
+    "memoryTip": "Ctrl+R = Reverse search. The workflow: R, type fragment, R-R-R to go further back, Enter. Once this is muscle memory you almost never retype a long command.",
+    "outputExample": "$ (press Ctrl+R)\n(reverse-i-search)`rsy': rsync -av --progress ~/code/myapp/ /backup/myapp/",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term17",
+    "question": "Your terminal is cluttered with old output and you want a fresh, empty screen with your prompt at the top. What command clears the terminal?",
+    "answer": "clear",
+    "explanation": "This command wipes the visible terminal and puts your prompt back at the top. Nothing is deleted — your scrollback buffer and history are untouched — it just gives you a clean workspace, like sweeping a desk before starting a new task. The keyboard shortcut Ctrl+L does the same thing without disturbing the line you're currently typing.",
+    "usage": "Declutter your screen between tasks so new output isn't visually mixed with old.",
+    "examples": [
+      "clear  # blank screen, prompt at top",
+      "Ctrl+L  # same effect as a keystroke",
+      "clear -x  # clear screen but keep scrollback reachable",
+      "reset  # stronger: reinitialize a garbled terminal (e.g. after catting a binary)"
+    ],
+    "memoryTip": "`clear` clears the VIEW, not your data. If the terminal is printing garbage symbols after you viewed a binary file, you need `reset` instead.",
+    "outputExample": "$ clear\n$ █  (screen is now empty, cursor at top)",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term18",
+    "question": "You type `ls -la` dozens of times a day and want the shortcut ll to run it, effective immediately in your current shell session. What command defines that shortcut?",
+    "answer": "alias ll='ls -la'",
+    "explanation": "An alias is a personal abbreviation the shell expands before running anything: with this defined, typing ll is exactly the same as typing ls -la. Aliases exist only in the current session unless you save them to ~/.bashrc, which every new shell reads at startup. They're the first step of shell customization — encoding your habits into shortcuts.",
+    "usage": "Define personal shortcuts for commands you type constantly; persist them in ~/.bashrc to make them permanent.",
+    "examples": [
+      "alias ll='ls -la'  # define the shortcut",
+      "alias  # list all currently defined aliases",
+      "type ll  # confirm what ll expands to",
+      "echo \"alias ll='ls -la'\" >> ~/.bashrc  # make it permanent",
+      "unalias ll  # remove it from the current session",
+      "\\ls  # backslash bypasses an alias for one invocation"
+    ],
+    "memoryTip": "alias NAME='command' — no spaces around the equals sign (a classic beginner error). Session-only until it lives in ~/.bashrc.",
+    "outputExample": "$ alias ll='ls -la'\n$ ll\ntotal 20\ndrwxr-xr-x  3 alice alice 4096 Jul  1 10:02 .\ndrwxr-x--- 12 alice alice 4096 Jul  1 09:55 ..\n-rw-r--r--  1 alice alice 1204 Jul  1 10:02 notes.txt",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term19",
+    "question": "The shell finds commands by searching a colon-separated list of directories stored in an environment variable. What command prints that list using echo?",
+    "answer": "echo $PATH",
+    "altAnswers": ["printenv PATH"],
+    "explanation": "When you type a command name, the shell walks through the directories in the PATH variable — left to right — and runs the first matching executable it finds. That's the entire magic of 'commands just working': they're ordinary files living in directories like /usr/bin, and PATH is the search route. 'command not found' usually means the program's directory isn't on this list.",
+    "usage": "Inspect your command search path — the first step when a freshly installed tool 'isn't found' or the wrong version runs.",
+    "examples": [
+      "echo $PATH  # show the search list",
+      "echo $PATH | tr ':' '\\n'  # one directory per line, easier to read",
+      "which -a python3  # see how PATH order picks a winner",
+      "export PATH=\"$HOME/bin:$PATH\"  # put your own scripts first (this session)",
+      "printenv PATH  # same value via the environment printer"
+    ],
+    "memoryTip": "PATH = the shell's search route, checked LEFT to RIGHT — first hit wins. New tool 'not found'? Its folder isn't on the route (or you need a new shell to re-read it).",
+    "outputExample": "$ echo $PATH\n/home/alice/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n$ echo $PATH | tr ':' '\\n' | head -3\n/home/alice/.local/bin\n/usr/local/sbin\n/usr/local/bin",
+    "category": "TERMINAL BASICS"
+  },
+  {
+    "id": "term20",
+    "question": "You are finished working in this shell session and want to end it cleanly with a command. What do you type?",
+    "answer": "exit",
+    "altAnswers": ["logout"],
+    "explanation": "This command terminates the current shell. If it's a local terminal window, the window typically closes; if you're logged into a remote server over SSH, you're returned to your local machine; if you're in a nested shell (after su or running bash inside bash), you pop back out one level. The keyboard shortcut Ctrl+D — 'end of input' — does the same thing at an empty prompt.",
+    "usage": "End shell sessions cleanly — especially important for remote SSH sessions and nested root shells you don't want to leave open.",
+    "examples": [
+      "exit  # leave the current shell",
+      "exit 1  # leave a script with a failure status code",
+      "Ctrl+D  # same effect at an empty prompt",
+      "logout  # login shells only (e.g. SSH sessions)",
+      "su - && ... && exit  # drop root privileges when done — don't linger as root"
+    ],
+    "memoryTip": "One `exit` = up one level. SSH inside su inside bash? Count your layers — it may take several exits to get all the way out. Ctrl+D is the silent twin.",
+    "outputExample": "$ ssh alice@web1\nalice@web1:~$ uptime\n 10:04:11 up 42 days,  3:17,  1 user,  load average: 0.03, 0.05, 0.01\nalice@web1:~$ exit\nlogout\nConnection to web1 closed.\n$",
+    "category": "TERMINAL BASICS"
   }
 ];
 
 export const categories = [
+  {
+    "id": "TERMINAL BASICS",
+    "name": "Terminal Basics",
+    "count": 20
+  },
   {
     "id": "NAVIGATION",
     "name": "Navigation",

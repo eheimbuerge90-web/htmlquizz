@@ -36,3 +36,22 @@ select {
   font-family: inherit;
 }
 
+/* Evolving avatar: quick pop whenever the score changes */
+@keyframes evo-pop {
+  0% {
+    transform: scale(1.14);
+  }
+  60% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.evo-pop {
+  animation: evo-pop 420ms ease-out;
+  transform-origin: 100px 100px;
+  transform-box: view-box;
+}
+
