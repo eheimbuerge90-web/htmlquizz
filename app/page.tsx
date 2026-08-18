@@ -124,7 +124,7 @@ const PenguinAvatar = () => (
     role="img"
     aria-label="Linux Drill penguin mascot"
     className="w-48 h-48 mx-auto mb-6"
-    style={{ filter: 'drop-shadow(0 0 18px rgba(56,189,248,0.55))' }}
+    style={{ filter: 'drop-shadow(0 0 22px rgba(92,214,251,0.35))' }}
   >
     <defs>
       <radialGradient id="bgGlow" cx="50%" cy="45%" r="55%">
@@ -146,7 +146,7 @@ const PenguinAvatar = () => (
     </defs>
 
     <circle cx="100" cy="100" r="96" fill="url(#bgGlow)" />
-    <circle cx="100" cy="100" r="92" fill="none" stroke="#38bdf8" strokeWidth="3" opacity="0.9" />
+    <circle cx="100" cy="100" r="92" fill="none" stroke="var(--ld-accent)" strokeWidth="3" opacity="0.9" />
 
     <ellipse cx="100" cy="120" rx="58" ry="68" fill="url(#body)" />
     <ellipse cx="100" cy="135" rx="36" ry="48" fill="url(#belly)" />
@@ -157,8 +157,8 @@ const PenguinAvatar = () => (
     <circle cx="114" cy="68" r="9" fill="#f8fafc" />
     <circle cx="88" cy="70" r="4" fill="#0b1220" />
     <circle cx="116" cy="70" r="4" fill="#0b1220" />
-    <circle cx="89" cy="69" r="1.4" fill="#38bdf8" />
-    <circle cx="117" cy="69" r="1.4" fill="#38bdf8" />
+    <circle cx="89" cy="69" r="1.4" fill="var(--ld-accent)" />
+    <circle cx="117" cy="69" r="1.4" fill="var(--ld-accent)" />
 
     <path d="M92 84 Q100 92 108 84 Q100 96 92 84 Z" fill="url(#beak)" stroke="#b45309" strokeWidth="0.8" />
 
@@ -168,7 +168,7 @@ const PenguinAvatar = () => (
     <ellipse cx="86" cy="184" rx="14" ry="5" fill="url(#beak)" />
     <ellipse cx="114" cy="184" rx="14" ry="5" fill="url(#beak)" />
 
-    <circle cx="100" cy="100" r="92" fill="none" stroke="#38bdf8" strokeWidth="1" opacity="0.35" />
+    <circle cx="100" cy="100" r="92" fill="none" stroke="var(--ld-accent)" strokeWidth="1" opacity="0.35" />
   </svg>
 );
 
@@ -213,8 +213,8 @@ const EVOLUTIONS: Evolution[] = [
     name: 'Terminal Belly',
     node: (
       <g>
-        <rect x="87" y="124" width="26" height="16" rx="3" fill="#0b1220" stroke="#38bdf8" strokeWidth="1.2" />
-        <text x="92" y="136" fontSize="10" fontFamily="monospace" fill="#38bdf8">{'>_'}</text>
+        <rect x="87" y="124" width="26" height="16" rx="3" fill="#0b1220" stroke="var(--ld-accent)" strokeWidth="1.2" />
+        <text x="92" y="136" fontSize="10" fontFamily="monospace" fill="var(--ld-accent)">{'>_'}</text>
       </g>
     ),
   },
@@ -259,11 +259,11 @@ const EVOLUTIONS: Evolution[] = [
     name: 'Mech Keyboard',
     node: (
       <g>
-        <rect x="74" y="152" width="52" height="17" rx="3" fill="#0b1220" stroke="#38bdf8" strokeWidth="1.3" />
+        <rect x="74" y="152" width="52" height="17" rx="3" fill="#0b1220" stroke="var(--ld-accent)" strokeWidth="1.3" />
         {[78, 86, 94, 102, 110, 118].map((x) => (
-          <rect key={x} x={x} y="156" width="6" height="4" rx="1" fill="#38bdf8" opacity="0.8" />
+          <rect key={x} x={x} y="156" width="6" height="4" rx="1" fill="var(--ld-accent)" opacity="0.8" />
         ))}
-        <rect x="84" y="162" width="32" height="4" rx="1" fill="#38bdf8" opacity="0.6" />
+        <rect x="84" y="162" width="32" height="4" rx="1" fill="var(--ld-accent)" opacity="0.6" />
       </g>
     ),
   },
@@ -309,7 +309,7 @@ const EVOLUTIONS: Evolution[] = [
     name: 'Kernel Graduate',
     node: (
       <g>
-        <polygon points="100,24 142,40 100,56 58,40" fill="#0b1220" stroke="#38bdf8" strokeWidth="1.5" />
+        <polygon points="100,24 142,40 100,56 58,40" fill="#0b1220" stroke="var(--ld-accent)" strokeWidth="1.5" />
         <path d="M132 44 L132 58" stroke="#fbbf24" strokeWidth="2" />
         <circle cx="132" cy="61" r="3" fill="#fbbf24" />
       </g>
@@ -318,7 +318,7 @@ const EVOLUTIONS: Evolution[] = [
   {
     name: 'Aura of Uptime',
     node: (
-      <g fill="none" stroke="#38bdf8">
+      <g fill="none" stroke="var(--ld-accent)">
         <circle cx="100" cy="100" r="97" strokeWidth="1.5" opacity="0.55" />
         <circle cx="100" cy="100" r="90" strokeWidth="1" strokeDasharray="4 6" opacity="0.45" />
       </g>
@@ -466,7 +466,7 @@ const EvolvingAvatar = ({ score, total, size = 'w-36 h-36' }: { score: number; t
               cy="100"
               r={ringRadius}
               fill="none"
-              stroke="#38bdf8"
+              stroke="var(--ld-accent)"
               strokeWidth="4"
               strokeLinecap="round"
               strokeDasharray={`${ringLength * ratio} ${ringLength}`}
@@ -497,8 +497,8 @@ const EvolvingAvatar = ({ score, total, size = 'w-36 h-36' }: { score: number; t
             <circle cx="114" cy="68" r="9" fill="#f8fafc" />
             <circle cx="88" cy="70" r="4" fill="#0b1220" />
             <circle cx="116" cy="70" r="4" fill="#0b1220" />
-            <circle cx="89" cy="69" r="1.4" fill="#38bdf8" />
-            <circle cx="117" cy="69" r="1.4" fill="#38bdf8" />
+            <circle cx="89" cy="69" r="1.4" fill="var(--ld-accent)" />
+            <circle cx="117" cy="69" r="1.4" fill="var(--ld-accent)" />
             <path d="M92 84 Q100 92 108 84 Q100 96 92 84 Z" fill="url(#evBeak)" stroke="#b45309" strokeWidth="0.8" />
             <path d="M48 110 Q38 140 56 168 Q62 150 60 130 Z" fill="url(#evBody)" />
             <path d="M152 110 Q162 140 144 168 Q138 150 140 130 Z" fill="url(#evBody)" />
@@ -512,8 +512,8 @@ const EvolvingAvatar = ({ score, total, size = 'w-36 h-36' }: { score: number; t
           </g>
         </g>
       </svg>
-      <div className="text-xs font-bold mt-1 text-center" style={{ color: '#38bdf8' }}>
-        EVO {unlocked}/{EVOLUTIONS.length} · {stageName}
+      <div className="ld-eyebrow mt-2 text-center">
+        evo {unlocked}/{EVOLUTIONS.length} · {stageName}
       </div>
     </div>
   );
@@ -776,85 +776,126 @@ export default function Home() {
     const dailyProgress = store['DAILY TIPS'];
     const allProgress = store[ALL_KEY];
 
+    const totalQuestions = questions.length;
+    // Daily Tips has its own featured card above, so it is kept out of the grid.
+    // Insertion order of the categories array defines the section order.
+    const groupedCategories = Array.from(
+      categories
+        .filter((category) => category.id !== 'DAILY TIPS')
+        .reduce((acc, category) => {
+          const list = acc.get(category.group) ?? [];
+          list.push(category);
+          acc.set(category.group, list);
+          return acc;
+        }, new Map<string, typeof categories>())
+    );
+
     return (
-      <div className="min-h-screen p-8" style={{ background: '#111827' }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
+      <div className="min-h-screen px-5 py-10 sm:px-8 sm:py-14">
+        <div className="max-w-5xl mx-auto ld-enter">
+          <header className="text-center mb-12">
             <PenguinAvatar />
-            <h1 className="text-6xl font-bold mb-4" style={{ color: '#38bdf8', textShadow: '0 0 20px #38bdf8' }}>
-              LINUX DRILL
+            <h1 className="ld-title text-5xl sm:text-6xl mb-3">
+              linux<span className="ld-caret">·</span>drill
             </h1>
-            <p className="text-xl mb-2 font-mono" style={{ color: '#38bdf8' }}>
-              {`// TERMINAL MASTERY THROUGH BRUTE FORCE REPETITION //`}
+            <p className="ld-subtitle max-w-xl mx-auto">
+              Terminal fluency through deliberate practice. Type the real command —
+              no multiple choice.
             </p>
-            <p className="text-lg" style={{ color: '#38bdf8' }}>
-              v3.5.0 — EVOLVING AVATAR + ALT ANSWERS + AUDITED QUESTIONS
-            </p>
-          </div>
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-5">
+              <span className="ld-chip">{totalQuestions} questions</span>
+              <span className="ld-chip">{categories.length} categories</span>
+              <span className="ld-chip">progress saved locally</span>
+            </div>
+          </header>
 
-          <div className="flex flex-col items-center gap-2 mb-10">
-            <button
-              onClick={() => enterCategory('DAILY TIPS')}
-              className="px-8 py-4 rounded-xl transition-all transform hover:scale-105 shadow-lg"
-              style={{ background: '#38bdf8', color: '#111827', fontWeight: 'bold', border: '2px solid #38bdf8' }}
-            >
-              📚 Daily Linux Tips & Best Practices Quiz
-            </button>
-            <CategoryMeta
-              progress={dailyProgress}
-              onReset={() => resetCategory('DAILY TIPS', 'Daily Linux Tips')}
-            />
-          </div>
+          <section className="mb-10">
+            <div className="ld-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-5">
+              <div className="flex-1">
+                <div className="ld-eyebrow mb-1">Start here</div>
+                <h2 className="text-lg font-semibold mb-1">Daily Linux Tips &amp; Best Practices</h2>
+                <p className="ld-body text-sm">
+                  A rotating set of habits and shortcuts worth knowing cold.
+                </p>
+                <CategoryMeta
+                  progress={dailyProgress}
+                  onReset={() => resetCategory('DAILY TIPS', 'Daily Linux Tips')}
+                />
+              </div>
+              <button onClick={() => enterCategory('DAILY TIPS')} className="ld-btn ld-btn-primary sm:w-auto w-full">
+                {dailyProgress?.resume ? 'Resume' : 'Start'} daily drill
+              </button>
+            </div>
+          </section>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {categories.filter((category) => category.id !== 'DAILY TIPS').map((category) => {
-              const progress = store[category.id];
-              return (
-                <div
-                  key={category.id}
-                  className="p-6 rounded-xl shadow-lg transition-all"
-                  style={{
-                    background: '#111827',
-                    border: '2px solid #38bdf8',
-                    boxShadow: '0 0 10px rgba(56,189,248,0.2)',
-                  }}
-                >
-                  <button
-                    onClick={() => enterCategory(category.id)}
-                    className="text-left w-full transition-transform hover:scale-[1.01]"
-                  >
-                    <h3 className="text-lg font-semibold mb-1" style={{ color: '#38bdf8' }}>
-                      {category.name}
-                    </h3>
-                    <p className="text-sm mb-3" style={{ color: '#38bdf8', opacity: 0.85 }}>
-                      {category.count} questions
-                    </p>
-                    <div style={{ color: '#38bdf8', fontWeight: 'bold' }}>
-                      {progress?.resume ? '▶ RESUME DRILL' : '▶ START DRILL'}
-                    </div>
-                  </button>
-                  <CategoryMeta
-                    progress={progress}
-                    onReset={() => resetCategory(category.id, category.name)}
-                  />
+          {/* Sectioned rather than one flat grid. The bank went from 15 to 26
+              categories; as a single wall of near-identical tiles it gives a
+              learner no sense of where to start or how the topics relate. */}
+          {groupedCategories.map(([group, cats]) => (
+            <section key={group} className="mb-9">
+              <div className="flex items-baseline gap-3 mb-3">
+                <div className="ld-eyebrow">{group}</div>
+                <div className="flex-1 h-px" style={{ background: 'var(--ld-border)' }} />
+                <div className="ld-eyebrow">
+                  {cats.reduce((n, c) => n + c.count, 0)}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {cats.map((category) => {
+                  const progress = store[category.id];
+                  const pct = progress?.best
+                    ? Math.round((progress.best.score / Math.max(progress.best.total, 1)) * 100)
+                    : null;
+                  return (
+                    <div key={category.id} className="ld-tile p-5 flex flex-col">
+                      <button
+                        onClick={() => enterCategory(category.id)}
+                        className="text-left w-full flex-1"
+                      >
+                        <h3 className="font-semibold mb-1">{category.name}</h3>
+                        <p className="ld-body text-sm mb-4">{category.count} questions</p>
+                        {pct !== null && (
+                          <div className="mb-4">
+                            <div className="ld-progress">
+                              <div className="ld-progress-fill" style={{ width: `${pct}%` }} />
+                            </div>
+                            <div className="ld-eyebrow mt-1.5">best {pct}%</div>
+                          </div>
+                        )}
+                        <span
+                          className="ld-mono text-sm font-semibold"
+                          style={{ color: 'var(--ld-accent)' }}
+                        >
+                          {progress?.resume ? 'resume →' : 'start →'}
+                        </span>
+                      </button>
+                      <CategoryMeta
+                        progress={progress}
+                        onReset={() => resetCategory(category.id, category.name)}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
 
-          <div className="flex flex-col items-center gap-2">
-            <button
-              onClick={() => enterCategory(ALL_KEY)}
-              className="px-12 py-6 rounded-xl transition-all transform hover:scale-105 shadow-lg text-xl font-bold"
-              style={{ background: '#38bdf8', color: '#111827', border: '2px solid #38bdf8' }}
-            >
-              🔥 DRILL ALL CATEGORIES — RANDOM MIX — FULL GAUNTLET 🔥
+          <section className="ld-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-5">
+            <div className="flex-1">
+              <div className="ld-eyebrow mb-1">Full gauntlet</div>
+              <h2 className="text-lg font-semibold mb-1">All categories, shuffled</h2>
+              <p className="ld-body text-sm">
+                Every question in the bank, mixed and ramped from easy to hard.
+              </p>
+              <CategoryMeta
+                progress={allProgress}
+                onReset={() => resetCategory(ALL_KEY, 'All Categories')}
+              />
+            </div>
+            <button onClick={() => enterCategory(ALL_KEY)} className="ld-btn ld-btn-secondary sm:w-auto w-full">
+              {allProgress?.resume ? 'Resume' : 'Start'} full run
             </button>
-            <CategoryMeta
-              progress={allProgress}
-              onReset={() => resetCategory(ALL_KEY, 'All Categories')}
-            />
-          </div>
+          </section>
         </div>
       </div>
     );
@@ -864,44 +905,39 @@ export default function Home() {
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen p-8 flex items-center justify-center" style={{ background: '#111827' }}>
-        <div
-          className="rounded-xl shadow-lg p-8 text-center max-w-md"
-          style={{ border: '2px solid #38bdf8', boxShadow: '0 0 20px rgba(56,189,248,0.3)', background: '#111827' }}
-        >
-          <div className="mb-4 flex justify-center">
-            <EvolvingAvatar score={score} total={currentQuestions.length} size="w-44 h-44" />
+      <div className="min-h-screen px-5 py-10 flex items-center justify-center">
+        <div className="ld-card p-8 text-center max-w-md w-full ld-enter">
+          <div className="mb-5 flex justify-center">
+            <EvolvingAvatar score={score} total={currentQuestions.length} size="w-40 h-40" />
           </div>
-          <h2 className="text-3xl font-bold mb-4" style={{ color: '#38bdf8' }}>
-            🎉 Quiz Complete!
-          </h2>
-          <div className="space-y-2 mb-6">
-            <p className="text-lg" style={{ color: '#38bdf8' }}>
-              Score: <span className="font-bold">{score}/{totalAnswered}</span>
-            </p>
-            <p className="text-lg" style={{ color: '#38bdf8' }}>
-              Accuracy: <span className="font-bold">{accuracy}%</span>
-            </p>
-            <p className="text-lg" style={{ color: '#38bdf8' }}>
-              Best Streak: <span className="font-bold">{bestStreak}</span>
-            </p>
+          <div className="ld-eyebrow mb-2">Run complete</div>
+          <h2 className="ld-title text-3xl mb-6">{selectedCategory}</h2>
+
+          <div className="grid grid-cols-3 gap-3 mb-7">
+            <div className="ld-stat">
+              <div className="ld-stat-label">Score</div>
+              <div className="ld-stat-value">{score}/{totalAnswered}</div>
+            </div>
+            <div className="ld-stat">
+              <div className="ld-stat-label">Accuracy</div>
+              <div className={`ld-stat-value ${accuracy >= 80 ? 'is-success' : accuracy >= 50 ? 'is-warn' : ''}`}>
+                {accuracy}%
+              </div>
+            </div>
+            <div className="ld-stat">
+              <div className="ld-stat-label">Best streak</div>
+              <div className="ld-stat-value is-accent">{bestStreak}</div>
+            </div>
           </div>
+
           <div className="space-y-3">
             {wrongQueue.length > 0 && (
-              <button
-                onClick={retryWrongQuestions}
-                className="w-full py-3 rounded-lg transition-colors"
-                style={{ background: '#38bdf8', color: '#111827', fontWeight: 'bold', border: '1px solid #38bdf8' }}
-              >
-                Retry Wrong Questions ({wrongQueue.length})
+              <button onClick={retryWrongQuestions} className="ld-btn ld-btn-primary w-full">
+                Retry {wrongQueue.length} missed
               </button>
             )}
-            <button
-              onClick={exitQuiz}
-              className="w-full py-3 rounded-lg transition-colors"
-              style={{ background: '#38bdf8', color: '#111827', fontWeight: 'bold', border: '1px solid #38bdf8' }}
-            >
-              Back to Categories
+            <button onClick={exitQuiz} className="ld-btn ld-btn-ghost w-full">
+              Back to categories
             </button>
           </div>
         </div>
@@ -910,62 +946,50 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen p-8" style={{ background: '#111827' }}>
-      <div className="max-w-4xl mx-auto">
-        <div
-          className="rounded-xl shadow-lg p-6 mb-6"
-          style={{ border: '2px solid #38bdf8', boxShadow: '0 0 20px rgba(56,189,248,0.3)', background: '#111827' }}
-        >
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold" style={{ color: '#38bdf8' }}>
-              LINUX DRILL
-            </h1>
-            <button
-              onClick={exitQuiz}
-              className="px-4 py-2 rounded-lg transition-colors"
-              style={{ background: '#38bdf8', color: '#111827', fontWeight: 'bold', border: '1px solid #38bdf8' }}
-            >
-              Exit Quiz
+    <div className="min-h-screen px-5 py-8 sm:px-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="ld-card p-5 sm:p-6 mb-5">
+          <div className="flex justify-between items-start gap-4 mb-5">
+            <div className="min-w-0">
+              <div className="ld-eyebrow mb-1">{selectedCategory}</div>
+              <h1 className="ld-title text-xl">
+                linux<span className="ld-caret">·</span>drill
+              </h1>
+            </div>
+            <button onClick={exitQuiz} className="ld-btn ld-btn-ghost shrink-0">
+              Exit
             </button>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-5">
             <EvolvingAvatar score={score} total={currentQuestions.length} />
-            <div className="flex-1 w-full grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <StatTile label="SCORE" value={`${score}/${totalAnswered}`} />
-              <StatTile label="ACCURACY" value={`${accuracy}%`} />
-              <StatTile label="STREAK 🔥" value={`${streak}`} />
-              <StatTile label="WRONG QUEUE" value={`${wrongQueue.length}`} />
+            <div className="flex-1 w-full grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <StatTile label="Score" value={`${score}/${totalAnswered}`} />
+              <StatTile
+                label="Accuracy"
+                value={`${accuracy}%`}
+                tone={accuracy >= 80 ? 'is-success' : accuracy >= 50 ? 'is-warn' : ''}
+              />
+              <StatTile label="Streak" value={`${streak}`} tone="is-accent" />
+              <StatTile label="Missed" value={`${wrongQueue.length}`} />
             </div>
           </div>
 
-          <div className="mt-4">
-            <div className="text-sm mb-1" style={{ color: '#38bdf8' }}>
-              Category: <span className="font-semibold">{selectedCategory}</span>
-            </div>
-            <div
-              className="w-full rounded-full h-2"
-              style={{ background: '#1f2937', border: '1px solid #38bdf8' }}
-            >
+          <div className="mt-5">
+            <div className="ld-progress">
               <div
-                className="h-2 rounded-full transition-all duration-300"
-                style={{
-                  width: `${((currentQuestionIndex + 1) / currentQuestions.length) * 100}%`,
-                  background: '#38bdf8',
-                }}
+                className="ld-progress-fill"
+                style={{ width: `${((currentQuestionIndex + 1) / currentQuestions.length) * 100}%` }}
               />
             </div>
-            <div className="text-sm mt-1" style={{ color: '#38bdf8' }}>
-              Question {currentQuestionIndex + 1} of {currentQuestions.length}
+            <div className="ld-eyebrow mt-2">
+              Question {currentQuestionIndex + 1} / {currentQuestions.length}
             </div>
           </div>
         </div>
 
-        <div
-          className="rounded-xl shadow-lg p-8 mb-6"
-          style={{ border: '2px solid #38bdf8', boxShadow: '0 0 20px rgba(56,189,248,0.3)', background: '#111827' }}
-        >
-          <h2 className="text-xl font-semibold mb-6" style={{ color: '#38bdf8' }}>
+        <div className="ld-card p-5 sm:p-7 mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold mb-6 leading-snug">
             {currentQuestion.question}
           </h2>
 
@@ -975,98 +999,83 @@ export default function Home() {
                 type="text"
                 value={userAnswer}
                 onChange={(e) => setUserAnswer(e.target.value)}
-                placeholder="Type your answer here... (Press Enter to submit)"
-                className="w-full px-4 py-3 rounded-lg font-mono text-lg"
-                style={{
-                  background: '#1f2937',
-                  border: '2px solid #38bdf8',
-                  color: '#38bdf8',
-                }}
+                placeholder="type the command…"
+                className="ld-input"
                 autoFocus
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
               />
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={checkAnswer}
                   disabled={!userAnswer.trim()}
-                  className="flex-1 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50"
-                  style={{
-                    background: userAnswer.trim() ? '#38bdf8' : '#64748b',
-                    color: '#111827',
-                  }}
+                  className="ld-btn ld-btn-primary flex-1"
                 >
-                  Check Answer
+                  Check answer
                 </button>
-                <button
-                  onClick={revealAnswer}
-                  className="flex-1 py-3 rounded-lg font-semibold transition-colors"
-                  style={{ background: '#64748b', color: '#111827' }}
-                >
-                  Reveal Answer
+                <button onClick={revealAnswer} className="ld-btn ld-btn-ghost flex-1">
+                  Reveal
                 </button>
               </div>
+              <p className="ld-eyebrow text-center">Enter to submit</p>
             </div>
           ) : (
-            <div className="space-y-6">
-              <div
-                className="p-4 rounded-lg"
-                style={{
-                  background: isCorrect ? '#065f46' : '#7c2d12',
-                  border: `2px solid ${isCorrect ? '#38bdf8' : '#f97316'}`,
-                }}
-              >
-                <div
-                  style={{ color: isCorrect ? '#86efac' : '#fed7aa' }}
-                  className="font-semibold text-lg mb-2"
-                >
-                  {isCorrect ? '✅ Correct!' : '❌ Incorrect'}
+            <div className="space-y-6 ld-enter">
+              <div className={`ld-verdict ${isCorrect ? 'ld-verdict-correct' : 'ld-verdict-wrong'}`}>
+                <div className="ld-verdict-title mb-3">
+                  {isCorrect ? 'Correct' : 'Not quite'}
                 </div>
-                <div
-                  style={{ color: isCorrect ? '#d1fae5' : '#fed7aa' }}
-                  className="font-mono text-sm"
-                >
-                  Correct Answer: <span className="font-bold">{currentQuestion.answer}</span>
+                <div className="text-sm mb-1.5">
+                  <span className="ld-eyebrow">Answer</span>{' '}
+                  <code className="ld-cmd ml-1">{currentQuestion.answer}</code>
                 </div>
-                {userAnswer !== '(revealed)' && (
-                  <div
-                    style={{ color: isCorrect ? '#a7f3d0' : '#fbddc6' }}
-                    className="font-mono text-sm mt-2"
-                  >
-                    Your Answer: <span className="font-bold">{userAnswer || '(blank)'}</span>
+                {userAnswer !== '(revealed)' && !isCorrect && (
+                  <div className="text-sm">
+                    <span className="ld-eyebrow">You typed</span>{' '}
+                    <code className="ld-cmd ml-1">{userAnswer || '(blank)'}</code>
                   </div>
                 )}
               </div>
 
-              <div style={{ color: '#38bdf8' }}>
-                <h3 className="font-semibold mb-2">Explanation:</h3>
-                <p className="mb-4">{currentQuestion.explanation}</p>
-                <h3 className="font-semibold mb-2">When to Use:</h3>
-                <p className="mb-4">{currentQuestion.usage}</p>
+              <div>
+                <div className="ld-section-label">What it does</div>
+                <p className="ld-body mb-5">{currentQuestion.explanation}</p>
+
+                <div className="ld-section-label">When to reach for it</div>
+                <p className="ld-body mb-5">{currentQuestion.usage}</p>
+
                 {currentQuestion.outputExample && (
                   <>
-                    <h3 className="font-semibold mb-2">Example Output:</h3>
-                    <div className="bg-black bg-opacity-40 p-3 rounded font-mono text-sm mb-4 border border-cyan-900 overflow-auto max-h-32">
-                      <pre style={{ color: '#86efac' }}>{currentQuestion.outputExample}</pre>
-                    </div>
+                    <div className="ld-section-label">Example output</div>
+                    <div className="ld-code mb-5 max-h-44">{currentQuestion.outputExample}</div>
                   </>
                 )}
+
                 {currentQuestion.examples && currentQuestion.examples.length > 0 && (
                   <>
-                    <h3 className="font-semibold mb-2">More Examples:</h3>
-                    <ul style={{ color: '#a7f3d0' }} className="text-sm space-y-1 list-disc list-inside">
+                    <div className="ld-section-label">Variations</div>
+                    <ul className="space-y-1.5 mb-5">
                       {currentQuestion.examples.map((ex, i) => (
-                        <li key={i}>{ex}</li>
+                        <li key={i} className="ld-mono text-sm ld-body">
+                          <span style={{ color: 'var(--ld-text-dim)' }}>$ </span>
+                          {ex}
+                        </li>
                       ))}
                     </ul>
                   </>
                 )}
+
+                {currentQuestion.memoryTip && (
+                  <div className="ld-card-quiet p-4">
+                    <div className="ld-section-label">Remember it</div>
+                    <p className="ld-body text-sm">{currentQuestion.memoryTip}</p>
+                  </div>
+                )}
               </div>
 
-              <button
-                onClick={nextQuestion}
-                className="w-full py-4 rounded-lg font-bold text-lg transition-colors"
-                style={{ background: '#38bdf8', color: '#111827' }}
-              >
-                Continue (or press Enter)
+              <button onClick={nextQuestion} className="ld-btn ld-btn-primary w-full">
+                Continue
               </button>
             </div>
           )}
@@ -1076,18 +1085,11 @@ export default function Home() {
   );
 }
 
-function StatTile({ label, value }: { label: string; value: string }) {
+function StatTile({ label, value, tone = '' }: { label: string; value: string; tone?: string }) {
   return (
-    <div
-      className="p-4 rounded-lg"
-      style={{ border: '2px solid #38bdf8', boxShadow: '0 0 10px rgba(56,189,248,0.2)', background: '#1f2937' }}
-    >
-      <div className="text-xs font-bold mb-1" style={{ color: '#38bdf8', opacity: 0.7 }}>
-        {label}
-      </div>
-      <div className="text-2xl font-bold" style={{ color: '#38bdf8' }}>
-        {value}
-      </div>
+    <div className="ld-stat">
+      <div className="ld-stat-label">{label}</div>
+      <div className={`ld-stat-value ${tone}`}>{value}</div>
     </div>
   );
 }
@@ -1096,20 +1098,16 @@ function CategoryMeta({ progress, onReset }: { progress?: CategoryProgress; onRe
   if (!progress?.best && !progress?.resume) return null;
 
   return (
-    <div className="mt-3 space-y-1 text-xs" style={{ color: '#38bdf8', opacity: 0.7 }}>
+    <div className="mt-4 pt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5"
+         style={{ borderTop: '1px solid var(--ld-border)' }}>
       {progress.best && (
-        <>
-          <div>Best: {progress.best.score}/{progress.best.total} ({progress.best.accuracy}%)</div>
-          <div>Streak: {progress.best.bestStreak}</div>
-        </>
+        <span className="ld-eyebrow">
+          best {progress.best.score}/{progress.best.total} · streak {progress.best.bestStreak}
+        </span>
       )}
-      {progress.resume && <div>📌 Progress saved</div>}
-      <button
-        onClick={onReset}
-        className="text-xs underline hover:opacity-100 transition-opacity"
-        style={{ color: '#38bdf8', opacity: 0.6 }}
-      >
-        Reset
+      {progress.resume && <span className="ld-chip">saved</span>}
+      <button onClick={onReset} className="ld-btn-link ml-auto">
+        reset
       </button>
     </div>
   );

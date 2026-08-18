@@ -1,52 +1,405 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   LINUX DRILL — SHARED DESIGN SYSTEM
+   --------------------------------------------------------------------------
+   This block is mirrored verbatim in linuxdrill-mobile/src/index.css so the
+   web app and the Android app read as one product. Change it in both places.
+
+   Direction: "modern terminal". The old look was monochrome — one cyan
+   (#38bdf8) used for headings, body copy, borders, buttons and stat values
+   alike, every surface ringed with a 2px neon glow. That flattens hierarchy
+   (nothing can stand out when everything shouts) and cyan body text on a dark
+   field is tiring to read for long sessions.
+
+   The rules here: neutral high-contrast text carries the reading load, accent
+   is spent only on interaction and emphasis, semantic colour is reserved for
+   right/wrong, borders are 1px and quiet, and elevation comes from layered
+   surfaces rather than glow.
+   ========================================================================== */
+
 :root {
-  --background: #0f172a;
-  --surface: #111827;
-  --surface-soft: #1f2937;
-  --foreground: #cbd5e1;
-  --accent: #38bdf8;
-  --accent-soft: rgba(56, 189, 248, 0.18);
-  --text-dark: #0f172a;
+  /* Surfaces — four steps of elevation, each a real step you can see */
+  --ld-bg: #0a0e15;
+  --ld-surface: #111826;
+  --ld-surface-2: #172032;
+  --ld-surface-3: #1e293d;
+
+  /* Borders */
+  --ld-border: #253044;
+  --ld-border-strong: #33415a;
+
+  /* Text — neutral, so the accent stays meaningful */
+  --ld-text: #e9eff8;
+  --ld-text-muted: #a3b3ca;
+  --ld-text-dim: #6d7f99;
+
+  /* Accent + semantics */
+  --ld-accent: #5cd6fb;
+  --ld-accent-strong: #22b6e0;
+  --ld-accent-soft: rgba(92, 214, 251, 0.12);
+  --ld-success: #4ade80;
+  --ld-success-soft: rgba(74, 222, 128, 0.12);
+  --ld-danger: #fb7185;
+  --ld-danger-soft: rgba(251, 113, 133, 0.12);
+  --ld-warn: #fbbf24;
+
+  --ld-radius: 14px;
+  --ld-radius-sm: 10px;
+  --ld-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.7);
+  --ld-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.4), 0 16px 40px -16px rgba(0, 0, 0, 0.8);
+
+  --ld-font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --ld-font-mono: var(--font-geist-mono), ui-monospace, "JetBrains Mono",
+    "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: "VT323", monospace;
-  --font-mono: "Share Tech Mono", monospace;
-}
-
-body {
-  background: radial-gradient(circle at top, rgba(56, 189, 248, 0.08), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.06), transparent 20%),
-    var(--background);
-  color: var(--foreground);
-  font-family: "Share Tech Mono", "VT323", monospace;
+  --color-background: var(--ld-bg);
+  --color-foreground: var(--ld-text);
+  --font-sans: var(--ld-font-sans);
+  --font-mono: var(--ld-font-mono);
 }
 
 * {
-  text-shadow: none;
+  box-sizing: border-box;
 }
 
-button,
-input,
-textarea,
-select {
-  font-family: inherit;
+body {
+  /* Two very soft washes instead of the old hard radial rings */
+  background:
+    radial-gradient(1000px 560px at 12% -8%, rgba(92, 214, 251, 0.07), transparent 62%),
+    radial-gradient(820px 520px at 96% 4%, rgba(124, 156, 255, 0.06), transparent 60%),
+    var(--ld-bg);
+  background-attachment: fixed;
+  color: var(--ld-text);
+  font-family: var(--ld-font-sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
 }
 
-/* Evolving avatar: quick pop whenever the score changes */
+/* Keyboard users get a visible ring everywhere; mouse users never see it.
+   The old UI had no focus styling at all, which made the quiz genuinely hard
+   to run from the keyboard — the one input mode it is designed around. */
+:focus-visible {
+  outline: 2px solid var(--ld-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- Typography ---------- */
+
+.ld-title {
+  font-family: var(--ld-font-mono);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ld-text);
+  line-height: 1.1;
+}
+
+.ld-title .ld-caret {
+  color: var(--ld-accent);
+  font-weight: 400;
+}
+
+.ld-subtitle {
+  color: var(--ld-text-muted);
+  font-size: 0.975rem;
+}
+
+.ld-eyebrow {
+  font-family: var(--ld-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ld-text-dim);
+}
+
+.ld-mono {
+  font-family: var(--ld-font-mono);
+}
+
+/* ---------- Surfaces ---------- */
+
+.ld-card {
+  background: var(--ld-surface);
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-radius);
+  box-shadow: var(--ld-shadow);
+}
+
+.ld-card-quiet {
+  background: var(--ld-surface-2);
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-radius-sm);
+}
+
+/* Category tiles: the whole tile is the target, so it gets the hover state */
+.ld-tile {
+  background: var(--ld-surface);
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-radius);
+  box-shadow: var(--ld-shadow);
+  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.ld-tile:hover {
+  border-color: var(--ld-accent);
+  background: var(--ld-surface-2);
+  transform: translateY(-2px);
+  box-shadow: var(--ld-shadow-lift);
+}
+
+.ld-tile:has(button:focus-visible) {
+  border-color: var(--ld-accent);
+}
+
+/* ---------- Buttons ---------- */
+
+.ld-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.15rem;
+  border-radius: var(--ld-radius-sm);
+  border: 1px solid transparent;
+  font-family: var(--ld-font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease,
+    color 140ms ease, transform 140ms ease;
+  /* Comfortable touch target — matters for the Capacitor build */
+  min-height: 44px;
+}
+
+.ld-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.ld-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ld-btn-primary {
+  background: var(--ld-accent);
+  color: #06121b;
+  border-color: var(--ld-accent);
+}
+
+.ld-btn-primary:hover:not(:disabled) {
+  background: #7ce0ff;
+  border-color: #7ce0ff;
+}
+
+.ld-btn-secondary {
+  background: var(--ld-surface-3);
+  color: var(--ld-text);
+  border-color: var(--ld-border-strong);
+}
+
+.ld-btn-secondary:hover:not(:disabled) {
+  background: #26334c;
+  border-color: var(--ld-accent);
+}
+
+.ld-btn-ghost {
+  background: transparent;
+  color: var(--ld-text-muted);
+  border-color: var(--ld-border);
+}
+
+.ld-btn-ghost:hover:not(:disabled) {
+  color: var(--ld-text);
+  border-color: var(--ld-border-strong);
+  background: var(--ld-surface-2);
+}
+
+.ld-btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 0;
+  color: var(--ld-text-dim);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  transition: color 140ms ease;
+}
+
+.ld-btn-link:hover {
+  color: var(--ld-danger);
+}
+
+/* ---------- Input ---------- */
+
+.ld-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: var(--ld-bg);
+  border: 1px solid var(--ld-border-strong);
+  border-radius: var(--ld-radius-sm);
+  color: var(--ld-text);
+  font-family: var(--ld-font-mono);
+  font-size: 1.0625rem;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+  min-height: 48px;
+}
+
+.ld-input::placeholder {
+  color: var(--ld-text-dim);
+}
+
+.ld-input:focus {
+  outline: none;
+  border-color: var(--ld-accent);
+  box-shadow: 0 0 0 3px var(--ld-accent-soft);
+}
+
+/* ---------- Stats ---------- */
+
+.ld-stat {
+  background: var(--ld-surface-2);
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-radius-sm);
+  padding: 0.75rem 0.9rem;
+}
+
+.ld-stat-label {
+  font-family: var(--ld-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ld-text-dim);
+}
+
+.ld-stat-value {
+  font-family: var(--ld-font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ld-text);
+  line-height: 1.2;
+  /* Stats update constantly; tabular figures stop the row twitching */
+  font-variant-numeric: tabular-nums;
+}
+
+.ld-stat-value.is-accent { color: var(--ld-accent); }
+.ld-stat-value.is-success { color: var(--ld-success); }
+.ld-stat-value.is-warn { color: var(--ld-warn); }
+
+/* ---------- Progress ---------- */
+
+.ld-progress {
+  width: 100%;
+  height: 6px;
+  background: var(--ld-surface-3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ld-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ld-accent-strong), var(--ld-accent));
+  transition: width 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- Verdict (right / wrong) ---------- */
+
+.ld-verdict {
+  border-radius: var(--ld-radius-sm);
+  padding: 1rem 1.1rem;
+  border: 1px solid;
+}
+
+.ld-verdict-correct {
+  background: var(--ld-success-soft);
+  border-color: rgba(74, 222, 128, 0.4);
+}
+
+.ld-verdict-wrong {
+  background: var(--ld-danger-soft);
+  border-color: rgba(251, 113, 133, 0.4);
+}
+
+.ld-verdict-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ld-verdict-correct .ld-verdict-title { color: var(--ld-success); }
+.ld-verdict-wrong .ld-verdict-title { color: var(--ld-danger); }
+
+/* ---------- Code / terminal output ---------- */
+
+.ld-code {
+  background: #05080d;
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-radius-sm);
+  padding: 0.85rem 1rem;
+  font-family: var(--ld-font-mono);
+  font-size: 0.85rem;
+  color: #9ff5c4;
+  overflow-x: auto;
+  white-space: pre;
+  line-height: 1.55;
+}
+
+.ld-cmd {
+  font-family: var(--ld-font-mono);
+  background: var(--ld-surface-3);
+  border: 1px solid var(--ld-border-strong);
+  border-radius: 6px;
+  padding: 0.12em 0.45em;
+  color: var(--ld-accent);
+  font-size: 0.92em;
+  word-break: break-word;
+}
+
+/* ---------- Section headings inside the explanation ---------- */
+
+.ld-section-label {
+  font-family: var(--ld-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ld-accent);
+  margin-bottom: 0.4rem;
+}
+
+.ld-body {
+  color: var(--ld-text-muted);
+}
+
+.ld-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--ld-surface-3);
+  border: 1px solid var(--ld-border);
+  font-family: var(--ld-font-mono);
+  font-size: 0.7rem;
+  color: var(--ld-text-muted);
+}
+
+/* ---------- Avatar pop (kept from the original) ---------- */
+
 @keyframes evo-pop {
-  0% {
-    transform: scale(1.14);
-  }
-  60% {
-    transform: scale(0.97);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(1.14); }
+  60% { transform: scale(0.97); }
+  100% { transform: scale(1); }
 }
 
 .evo-pop {
@@ -55,3 +408,21 @@ select {
   transform-box: view-box;
 }
 
+@keyframes ld-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ld-enter {
+  animation: ld-fade-up 240ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
