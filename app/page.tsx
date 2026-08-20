@@ -36,6 +36,12 @@ const shuffleArray = <T,>(items: T[]) => {
   return arr;
 };
 
+// Splits a category into thirds (easy / medium / hard) by POSITION in the
+// array, then shuffles within each third — never across thirds. This relies
+// on questions.ts already listing each category's questions in roughly
+// easy-to-hard order (true of every category as authored); shuffling the
+// whole category instead would occasionally open a run on its hardest
+// question, which defeats the "progressive difficulty" the app advertises.
 const prepareCategoryQuestions = (categoryQuestions: Question[]) => {
   const total = categoryQuestions.length;
   const easyCount = Math.ceil(total / 3);
@@ -65,6 +71,11 @@ const normalizeAnswer = (text: string) =>
   text
     .trim()
     .toLowerCase()
+    // A leading `sudo` is a privilege-escalation prefix, not part of the
+    // command being tested — `apt update` and `sudo apt update` grade the
+    // same. Quote style is likewise not what's being tested; the mobile
+    // app's grader normalizes both the same way, and the two must agree or
+    // the same typed answer could pass on one platform and fail on the other.
     .replace(/^sudo\s+/, '')
     .replace(/"/g, "'")
     .replace(/\s+/g, ' ');
@@ -75,6 +86,16 @@ const isAnswerCorrect = (typed: string, question: Question) => {
   return (question.altAnswers ?? []).some((alt) => normalized === normalizeAnswer(alt));
 };
 
+// PROGRESS STORE — a hand-rolled external store (read via useSyncExternalStore
+// below) instead of plain useState + a localStorage-writing useEffect. Two
+// reasons: (1) Next.js prerenders this page on the server, where
+// localStorage doesn't exist, so the very first read must be able to return
+// a stable empty snapshot without throwing or mismatching what the client
+// then hydrates with; getServerStoreSnapshot exists for exactly that. (2) A
+// single JS-module-level cache (not per-component state) means every
+// component reading progress — the category grid, the in-progress header,
+// the completion screen — sees the same object identity and updates in
+// lockstep the instant writeStore() runs, with no prop drilling or context.
 const EMPTY_STORE: Store = {};
 let cachedStore: Store | null = null;
 const storeListeners = new Set<() => void>();
@@ -534,21 +555,6 @@ export default function Home() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        if (showExplanation) {
-          nextQuestion();
-        } else if (userAnswer.trim()) {
-          checkAnswer();
-        }
-      }
-    };
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [showExplanation, userAnswer, currentQuestionIndex, currentQuestions, wrongQueue]);
-
   const writeResume = (categoryId: string, snapshot: {
     list: Question[];
     index: number;
@@ -769,6 +775,26 @@ export default function Home() {
   const exitQuiz = () => {
     setSelectedCategory(null);
   };
+
+  // checkAnswer/nextQuestion are deliberately left out of the dependency
+  // array — they're plain consts re-created every render (not memoized), so
+  // listing them would re-subscribe on every render instead of only when the
+  // state the closure actually reads changes.
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (showExplanation) {
+          nextQuestion();
+        } else if (userAnswer.trim()) {
+          checkAnswer();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showExplanation, userAnswer, currentQuestionIndex, currentQuestions, wrongQueue]);
 
   const accuracy = totalAnswered > 0 ? Math.round((score / totalAnswered) * 100) : 0;
 

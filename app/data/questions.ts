@@ -6648,7 +6648,7 @@ export const questions: Question[] = [
       "curl -w '%{http_code}\\n' -o /dev/null -s https://example.com  # just the status code"
     ],
     "memoryTip": "`-fsSL` = Fail + Silent + Show-errors + Follow-redirects. `-I` HEAD. `-X` method. `-d` body. `-H` header. `-u user:pass` basic auth. `-w` extract field. The fail-fast pattern: `curl -fsSL URL` exits non-zero on 4xx/5xx — never silently use HTML error pages as data.",
-    "outputExample": "$ curl -I https://example.com\nHTTP/2 200\ncontent-type: text/html; charset=UTF-8\ncontent-length: 1256\ndate: Sat, 17 May 2026 14:35:22 GMT\nlast-modified: Thu, 17 Oct 2019 07:18:26 GMT\n\n$ curl -w '%{http_code} %{time_total}s %{size_download}b\\n' -o /dev/null -s https://example.com\n200 0.103s 1256b\n$ curl -fsS https://api.github.com/users/torvalds | jq -r '.public_repos'\n9",
+    "outputExample": "$ curl -I https://example.com\nHTTP/2 200\ncontent-type: text/html; charset=UTF-8\ncontent-length: 1256\ndate: Sun, 17 May 2026 14:35:22 GMT\nlast-modified: Thu, 17 Oct 2019 07:18:26 GMT\n\n$ curl -w '%{http_code} %{time_total}s %{size_download}b\\n' -o /dev/null -s https://example.com\n200 0.103s 1256b\n$ curl -fsS https://api.github.com/users/torvalds | jq -r '.public_repos'\n9",
     "category": "NETWORKING",
     "altAnswers": [
       "curl --fail --silent --location https://api.github.com",
@@ -6675,7 +6675,7 @@ export const questions: Question[] = [
       "dig +trace example.com  # walk delegation from root — diagnose propagation"
     ],
     "memoryTip": "`dig` = DNS power tool. `+short` for scripts, `TYPE` (MX/TXT/NS/CNAME/SOA) at end, `@SERVER` to query a specific resolver, `+trace` to walk delegation, `-x IP` reverse lookup. Concise alt: `host`. Both ship in dnsutils/bind-utils package.",
-    "outputExample": "$ dig +short google.com\n142.250.185.46\n$ dig google.com MX +short\n10 smtp.google.com.\n$ dig google.com\n; <<>> DiG 9.18.28 <<>> google.com\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12345\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; QUESTION SECTION:\n;google.com.\t\t\tIN\tA\n\n;; ANSWER SECTION:\ngoogle.com.\t\t300\tIN\tA\t142.250.185.46\n\n;; Query time: 14 msec\n;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)\n;; WHEN: Sat May 17 14:35:22 UTC 2026\n;; MSG SIZE  rcvd: 55",
+    "outputExample": "$ dig +short google.com\n142.250.185.46\n$ dig google.com MX +short\n10 smtp.google.com.\n$ dig google.com\n; <<>> DiG 9.18.28 <<>> google.com\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12345\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; QUESTION SECTION:\n;google.com.\t\t\tIN\tA\n\n;; ANSWER SECTION:\ngoogle.com.\t\t300\tIN\tA\t142.250.185.46\n\n;; Query time: 14 msec\n;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)\n;; WHEN: Sun May 17 14:35:22 UTC 2026\n;; MSG SIZE  rcvd: 55",
     "category": "NETWORKING"
   },
   {
@@ -8220,7 +8220,7 @@ export const questions: Question[] = [
       "systemctl --user status myapp  # for user (non-root) services"
     ],
     "memoryTip": "`systemctl status` = the service dashboard. Verbs: `start/stop` (now), `enable/disable` (boot), `--now` (both), `restart/reload`. Scripts: `is-active`, `is-enabled`. Health check: `systemctl list-units --failed`. Pair with `journalctl -xeu SERVICE` for deep logs.",
-    "outputExample": "$ systemctl status nginx\n● nginx.service - A high performance web server and a reverse proxy server\n     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; preset: enabled)\n     Active: active (running) since Sat 2026-05-17 09:32:01 UTC; 1h 14min ago\n   Main PID: 2402 (nginx)\n      Tasks: 3 (limit: 9468)\n     Memory: 4.8M\nMay 17 09:32:01 server1 systemd[1]: Starting nginx.service ...\nMay 17 09:32:01 server1 systemd[1]: Started nginx.service.",
+    "outputExample": "$ systemctl status nginx\n● nginx.service - A high performance web server and a reverse proxy server\n     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; preset: enabled)\n     Active: active (running) since Sun 2026-05-17 09:32:01 UTC; 1h 14min ago\n   Main PID: 2402 (nginx)\n      Tasks: 3 (limit: 9468)\n     Memory: 4.8M\nMay 17 09:32:01 server1 systemd[1]: Starting nginx.service ...\nMay 17 09:32:01 server1 systemd[1]: Started nginx.service.",
     "category": "DAILY TIPS"
   },
   {
@@ -8262,7 +8262,7 @@ export const questions: Question[] = [
       "git pull; git submodule update; npm install  # three independent steps"
     ],
     "memoryTip": "`;` = unconditional sequence (no matter what). `&&` = continue ONLY on success. `||` = continue ONLY on failure. `&` = run in background. `{ a; b; c; }` groups (note spaces and trailing `;`). For ANY destructive second step, prefer `&&` over `;` for safety.",
-    "outputExample": "$ false ; echo 'still runs'\nstill runs\n$ false && echo 'this would NOT run'\n$ { date; uptime; } > /tmp/snap.txt\n$ cat /tmp/snap.txt\nSat May 17 11:14:22 UTC 2026\n 11:14:22 up 2 days,  5:48,  1 user,  load average: 0.42, 0.31, 0.28",
+    "outputExample": "$ false ; echo 'still runs'\nstill runs\n$ false && echo 'this would NOT run'\n$ { date; uptime; } > /tmp/snap.txt\n$ cat /tmp/snap.txt\nSun May 17 11:14:22 UTC 2026\n 11:14:22 up 2 days,  5:48,  1 user,  load average: 0.42, 0.31, 0.28",
     "category": "DAILY TIPS"
   },
   {
